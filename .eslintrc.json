@@ -1,0 +1,29 @@
+{
+    "env": {
+        "browser": true,
+        "mocha": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "prettier"
+    ],
+    "plugins": [
+        "react",
+        "prettier"
+    ],
+     "settings": {
+        "import/resolver": "babel-plugin-root-import"
+    },
+    "rules": {
+        "no-console": "warn",
+        "react/jsx-filename-extension": [0],
+        "prettier/prettier": [
+            "error",
+            {
+              "singleQuote": true,
+              "semi": false
+            }
+        ]
+    }
+}
