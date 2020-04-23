@@ -4,6 +4,8 @@
   "description": "GitWize - Engineering Intelligence Tool - FrontEnd",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.19.2",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "webpack": "^4.42.1",
@@ -13,9 +15,12 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
+    "babel-jest": "^25.4.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-root-import": "^6.5.0",
+    "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.4.4",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.9.0",
@@ -26,8 +31,10 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "husky": "^4.2.5",
+    "jest": "^25.4.0",
     "lint-staged": "^10.1.6",
     "prettier": "~1.19.1",
+    "react-test-renderer": "^16.13.1",
     "styled-components": "^5.1.0",
     "webpack-dev-server": "^3.10.3"
   },
@@ -36,7 +43,10 @@
     "start": "webpack --mode=development",
     "build": "webpack --mode=production",
     "lint": "./node_modules/.bin/eslint .",
-    "lint:fix": "./node_modules/.bin/eslint --fix ."
+    "lint:fix": "./node_modules/.bin/eslint --fix .",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "updateSnapshot": "jest --updateSnapshot"
   },
   "husky": {
     "hooks": {
