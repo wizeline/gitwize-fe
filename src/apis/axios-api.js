@@ -1,9 +1,5 @@
 import axios from 'axios'
 
-const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL
-})
-
 const isHandlerEnabled = (config = {}) => {
   return Object.prototype.hasOwnProperty.call(config, 'handlerEnabled') && !config.handlerEnabled
 }
@@ -15,13 +11,11 @@ const requestHandler = request => {
   return request
 }
 
-axiosInstance.interceptors.request.use(request => requestHandler(request))
-
 const errorHandler = error => {
   if (isHandlerEnabled(error.config)) {
     // handler error
   }
-  return Promise.reject({ ...error })
+  return Promise.reject(new { ...error }())
 }
 
 const successHandler = response => {
@@ -31,7 +25,26 @@ const successHandler = response => {
   return response
 }
 
-axiosInstance.interceptors.response.use(
-  response => successHandler(response),
-  error => errorHandler(error)
-)
+const AxiosApi = (function create() {
+  let axiosInstance
+
+  function getAxiosApi() {
+    if (!axiosInstance) {
+      axiosInstance = axios.create({
+        baseURL: process.env.REACT_APP_BASE_URL
+      })
+      axiosInstance.interceptors.request.use(request => requestHandler(request))
+      axiosInstance.interceptors.response.use(
+        response => successHandler(response),
+        error => errorHandler(error)
+      )
+    }
+
+    return axiosInstance
+  }
+  return {
+    getAxiosApi
+  }
+})()
+
+export default AxiosApi

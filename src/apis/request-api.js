@@ -1,3 +1,3 @@
-const BASE_URL = process.env.REACT_APP_BASE_URL
+import AxiosApi from './axios-api'
 
-await axiosInstance.get('/api/v1/search?query=react', {handlerEnabled: false})
+AxiosApi.getAxiosApi.get('/api/v1/search?query=react', { handlerEnabled: false })

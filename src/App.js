@@ -1,74 +1,37 @@
-import React, { useState, useEffect, useReducer } from 'react'
-import PropTypes from 'prop-types'
-import axios from 'axios'
+import React from 'react'
+import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom'
+import { Security, SecureRoute, LoginCallback } from '@okta/okta-react'
+import { Container } from 'semantic-ui-react'
+import config from './config'
+import Navbar from './views/Navbar'
+import Dashboard from './views/Dashboard';
+import Profile from './views/Profile';
 
-export const dataReducer = (state, action) => {
-  if (action.type === 'SET_ERROR') {
-    return { ...state, list: [], error: true }
+const HasAccessToRouter = () => {
+  const history = useHistory()
+
+  const customAuthHandler = () => {
+    history.push('/login')
   }
-
-  if (action.type === 'SET_LIST') {
-    return { ...state, list: action.list, error: null }
-  }
-
-  throw new Error()
-}
-
-const initialData = {
-  list: [],
-  error: null
-}
-
-function App() {
-  const [counter, setCounter] = useState(0)
-  const [data, dispatch] = useReducer(dataReducer, initialData)
-
-  useEffect(() => {
-    axios
-      .get('http://hn.algolia.com/api/v1/search?query=react')
-      .then(response => {
-        dispatch({ type: 'SET_LIST', list: response.data.hits })
-      })
-      .catch(() => {
-        dispatch({ type: 'SET_ERROR' })
-      })
-  }, [])
 
   return (
-    <div>
-      <h1>My Counter</h1>
-      <Counter counter={counter} />
-
-      <button type="button" onClick={() => setCounter(counter + 1)}>
-        Increment
-      </button>
-
-      <button type="button" onClick={() => setCounter(counter - 1)}>
-        Decrement
-      </button>
-
-      <h2>My Async Data</h2>
-
-      {data.error && <div className="error">Error</div>}
-
-      <ul>
-        {data.list.map(item => (
-          <li key={item.objectID}>{item.title}</li>
-        ))}
-      </ul>
-    </div>
+    <Security {...config.oidc}>
+      <Navbar />
+      <Container text style={{ marginTop: '7em' }}>
+        <Route path="/" exact component={Dashboard} />
+        <Route path="/implicit/callback" component={LoginCallback} />
+        <Route path="/profile" component={Profile} />
+      </Container>
+    </Security>
   )
 }
 
-export const Counter = ({ counter }) => (
+const App = () => (
   <div>
-    <p>{counter}</p>
+    <Router>
+      <HasAccessToRouter />
+    </Router>
   </div>
 )
 
-Counter.propTypes = {
-  counter: PropTypes.number.isRequired
-}
-
-App.displayName = 'App'
 export default App
