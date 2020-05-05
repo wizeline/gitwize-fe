@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom'
+import { Switch, BrowserRouter as Router, Route, useHistory } from 'react-router-dom'
 import { Security, SecureRoute, LoginCallback } from '@okta/okta-react'
 import { Container } from 'semantic-ui-react'
 import config from './config'
@@ -11,17 +11,17 @@ const HasAccessToRouter = () => {
   const history = useHistory()
 
   const customAuthHandler = () => {
-    history.push('/login')
+    history.push('/profile')
   }
 
   return (
     <Security {...config.oidc}>
       <Navbar />
-      <Container text style={{ marginTop: '7em' }}>
+      <Switch> 
         <Route path="/" exact component={Dashboard} />
         <Route path="/implicit/callback" component={LoginCallback} />
         <Route path="/profile" component={Profile} />
-      </Container>
+      </Switch>
     </Security>
   )
 }
