@@ -17,7 +17,6 @@ const Dashboard = () => {
   }, [authState, authService])
 
   const login = async () => {
-      alert('login')
     authService.login('/')
   }
 
@@ -28,12 +27,12 @@ const Dashboard = () => {
   return (
     <div>
       <div>
-        <Header as="h1">PKCE Flow w/ Okta Hosted Login Page</Header>
+        <Header as="h1">Login page</Header>
       </div>
       {authState.isAuthenticated && userInfo && (
         <div>
           <p>
-            Welcome back,
+            Logged in, Welcome back, 
             {userInfo.name}
           </p>
           <p>

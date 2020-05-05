@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
+import {Table } from 'semantic-ui-react'
 
 const Profile = () => {
   const { authState, authService } = useOktaAuth()
