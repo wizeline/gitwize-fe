@@ -1,11 +1,12 @@
-import React from 'react'
-import MyChart from './MyChart'
+import React, { useEffect, useState } from 'react'
+import Chart from './Chart'
+
 
 function App() {
-
+	
 	return (
 		<div>
-			<MyChart />
+			<Chart />
 		</div>
 	)
 }

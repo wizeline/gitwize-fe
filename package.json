@@ -45,8 +45,10 @@
     "husky": "^4.2.5",
     "jest": "^25.4.0",
     "lint-staged": "^10.1.6",
+    "papaparse": "^5.2.0",
     "prettier": "~1.19.1",
     "react-test-renderer": "^16.13.1",
+    "recharts": "^1.8.5",
     "styled-components": "^5.1.0",
     "webpack-dev-server": "^3.10.3"
   },
