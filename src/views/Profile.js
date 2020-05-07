@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
-import {Table } from 'semantic-ui-react'
+import { Table } from 'semantic-ui-react'
 
 const Profile = () => {
   const { authState, authService } = useOktaAuth()
   const [userInfo, setUserInfo] = useState(null)
+  const { accessToken } = authState
 
   useEffect(() => {
     if (!authState.isAuthenticated) {
@@ -44,6 +45,10 @@ const Profile = () => {
             </tr>
           )
         })}
+        <tr>
+          <td>Token</td>
+          <td>{accessToken}</td>
+        </tr>
       </tbody>
     </Table>
   )

@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const dotenv = require('dotenv')
 
 module.exports = {
   entry: './src/index.js',
@@ -19,13 +20,17 @@ module.exports = {
       {
         test: /\.(jpg|png|gif|jpeg|woff|woff2|eot|ttf|svg)$/,
         loader: 'url-loader?limit=100000'
-    }
+      }
     ]
   },
   resolve: {
     extensions: ['*', '.js', '.jsx', 'css']
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+    'process.env': JSON.stringify(dotenv.config().parsed)
+  })],
   devtool: 'cheap-module-eval-source-map',
   devServer: {
     contentBase: path.join(__dirname, 'public'),
