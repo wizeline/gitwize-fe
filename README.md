@@ -15,7 +15,7 @@ npm install
 then run the project in your local machine:
 
 ```shell
-npm run dev
+npm run start
 ```
 
 For building a production, you can run the following commande to make a build:
