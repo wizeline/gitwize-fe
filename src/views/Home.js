@@ -32,11 +32,13 @@ const Dashboard = () => {
       {authState.isAuthenticated && userInfo && (
         <div>
           <p>
-            Logged in, Welcome back, 
+            Logged in, Welcome back,
             {userInfo.name}
           </p>
           <p>
-            <a href="/profile">My Profile</a>
+            Token:
+            <br />
+            {authState.accessToken}
           </p>
         </div>
       )}

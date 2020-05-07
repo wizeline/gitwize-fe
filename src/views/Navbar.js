@@ -16,11 +16,6 @@ const Navbar = () => {
             GitWize
           </Menu.Item>
           {authState.isAuthenticated && (
-            <Menu.Item id="profile-button" as="a" href="/profile">
-              Profile
-            </Menu.Item>
-          )}
-          {authState.isAuthenticated && (
             <Menu.Item id="logout-button" as="a" onClick={logout}>
               Logout
             </Menu.Item>

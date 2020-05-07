@@ -5,7 +5,6 @@ import { Container } from 'semantic-ui-react'
 import config from './config'
 import Navbar from './views/Navbar'
 import Home from './views/Home'
-import Profile from './views/Profile'
 
 const App = () => (
   <Router>
@@ -14,7 +13,6 @@ const App = () => (
       <Container text style={{ marginTop: '7em' }}>
         <Route path="/" exact component={Home} />
         <Route path="/implicit/callback" component={LoginCallback} />
-        <SecureRoute path="/profile" component={Profile} />
       </Container>
     </Security>
   </Router>
