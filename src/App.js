@@ -5,13 +5,13 @@ import { Container } from 'semantic-ui-react'
 import config from './config'
 import Navbar from './views/Navbar'
 import Home from './views/Home'
+import RepositoryList from './views/RepositoryList'
 
 const App = () => (
   <Router>
     <Security {...config.oidc}>
-      <Navbar />
       <Container text style={{ marginTop: '7em' }}>
-        <Route path="/" exact component={Home} />
+        <Route path="/" exact component={RepositoryList} />
         <Route path="/implicit/callback" component={LoginCallback} />
       </Container>
     </Security>
