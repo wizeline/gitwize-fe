@@ -1,6 +1,7 @@
 import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
 import { Button, Header } from 'semantic-ui-react'
+import styles from './Home.module.css'
 
 const Dashboard = () => {
   const { authState, authService } = useOktaAuth()
@@ -25,7 +26,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
+    <div className={styles.login}>
       <div>
         <Header as="h1">Login page</Header>
       </div>
