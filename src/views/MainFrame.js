@@ -4,12 +4,12 @@ import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Typography from '@material-ui/core/Typography'
 import ListItem from '@material-ui/core/ListItem'
-import { ListItemText, ListItemIcon } from '@material-ui/core'
+import { ListItemText, Button } from '@material-ui/core'
 import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
 import DashboardIcon from '@material-ui/icons/DashboardOutlined'
 import CallToActionIcon from '@material-ui/icons/CallToActionOutlined'
+import RepositoryList from '../components/RepositoryList'
 
 const drawerWidth = 68
 
@@ -46,6 +46,10 @@ const useStyles = makeStyles(theme => ({
   logoTextBold: {
     fontWeight: 'bold'
   },
+  button: {
+    padding: 0,
+    minWidth: 0
+  },
   icon: {
     color: '#F2F2F2'
   },
@@ -54,11 +58,15 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3)
+    height: '100vh',
+    alignItems: 'center',
+    justifyContent: 'center',
+    display: 'flex',
+    backgroundColor: 'white'
   }
 }))
 
-export default function RepositoryList() {
+export default function MainFrame() {
   const classes = useStyles()
 
   return (
@@ -77,28 +85,26 @@ export default function RepositoryList() {
             <ListItemText classes={{ primary: classes.logoText }}>Wize</ListItemText>
           </ListItem>
           <ListItem>
-            <ListItemIcon>
+            <Button className={classes.button}>
               <PermIdentityIcon className={classes.icon} />
-            </ListItemIcon>
+            </Button>
           </ListItem>
           <ListItem>
-            <ListItemIcon>
+            <Button className={classes.button}>
               <DashboardIcon className={classes.icon} />
-            </ListItemIcon>
+            </Button>
           </ListItem>
         </List>
         <List>
           <ListItem>
-            <ListItemIcon>
+            <Button className={classes.button}>
               <CallToActionIcon className={clsx(classes.icon, classes.iconRotate)} />
-            </ListItemIcon>
+            </Button>
           </ListItem>
         </List>
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Typography paragraph>content 1</Typography>
-        <Typography paragraph>content 2</Typography>
+        <RepositoryList />
       </main>
     </div>
   )
