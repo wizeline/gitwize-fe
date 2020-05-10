@@ -4,12 +4,32 @@ import { Button } from '@material-ui/core'
 import GetStartedImg from '../assets/images/getstarted.png'
 import styles from './RepositoryList.module.css'
 import RepositoryCard from './RepositoryCard'
+import AddRepositoryDialog from './AddRepositoryDialog'
 
 export default function RepositoryList() {
-  const [isEmpty] = useState(false)
+  const [repoList, setRepoList] = useState([])
+  const [isOpen, setOpen] = useState(false)
+
+  const handleAddDialog = () => {
+    setOpen(true)
+  }
+
+  const handleCloseAddDialog = () => {
+    setOpen(false)
+  }
+
+  const handleAddRepo = (newRepo = {}) => {
+    repoList.push({
+      name: newRepo.url,
+      lastUpdated: new Date().toLocaleDateString(),
+      type: 'GitHub'
+    })
+    setRepoList(repoList)
+    setOpen(false)
+  }
   return (
-    <div className={clsx(styles.root, isEmpty ? styles.empty : styles.notEmpty)}>
-      {isEmpty ? (
+    <div className={clsx(styles.root, repoList.length === 0 ? styles.empty : styles.notEmpty)}>
+      {repoList.length === 0 ? (
         <>
           <img alt="GetStarted" src={GetStartedImg} />
           <p className={styles.textMedium}>Get Started</p>
@@ -17,23 +37,29 @@ export default function RepositoryList() {
             Welcome to Gitwize. To get you started, first add a new repository.
           </p>
           <div style={{ height: '100px' }} />
-          <Button className={styles.button}>Add Repository</Button>
+          <Button onClick={handleAddDialog} className={styles.button}>
+            Add Repository
+          </Button>
         </>
       ) : (
         <>
           <div className={styles.rowAlign}>
             <p className={styles.textMedium}>Active Repositories</p>
-            <Button className={styles.button}>Add a repository</Button>
+            <Button onClick={handleAddDialog} className={styles.button}>
+              Add a repository
+            </Button>
           </div>
           <p className={styles.textSmallDisabled}>Most recent</p>
-          {[
-            { name: 'repository 1', lastUpdated: '23/02/2020', type: 'GitHub' },
-            { name: 'repository 2', lastUpdated: '21/02/2020', type: 'GitHub' }
-          ].map(item => (
-            <RepositoryCard repo={item} />
+          {repoList.map(item => (
+            <RepositoryCard key={item.name} repo={item} />
           ))}
         </>
       )}
+      <AddRepositoryDialog
+        isOpen={isOpen}
+        handleClose={() => handleCloseAddDialog()}
+        handleAdd={item => handleAddRepo(item)}
+      />
     </div>
   )
 }
