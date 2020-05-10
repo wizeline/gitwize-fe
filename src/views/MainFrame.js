@@ -66,7 +66,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function MainFrame() {
+export default function MainFrame(props) {
   const classes = useStyles()
 
   return (
@@ -97,7 +97,7 @@ export default function MainFrame() {
         </List>
         <List>
           <ListItem>
-            <Button className={classes.button}>
+            <Button className={classes.button} onClick={props.handleLogout}>
               <CallToActionIcon className={clsx(classes.icon, classes.iconRotate)} />
             </Button>
           </ListItem>

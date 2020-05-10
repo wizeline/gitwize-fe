@@ -6,12 +6,13 @@ import config from './config'
 import Navbar from './views/Navbar'
 import Home from './views/Home'
 import MainFrame from './views/MainFrame'
+import Login from './views/Login'
 
 const App = () => (
   <Router>
     <Security {...config.oidc}>
       <Container>
-        <Route path="/" exact component={MainFrame} />
+        <Route path="/" exact component={Home} />
         <Route path="/implicit/callback" component={LoginCallback} />
       </Container>
     </Security>

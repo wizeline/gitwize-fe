@@ -1,7 +1,8 @@
 import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
-import { Button, Header } from 'semantic-ui-react'
-import styles from './Home.module.css'
+import { CssBaseline } from '@material-ui/core'
+import MainFrame from './MainFrame'
+import Login from './Login'
 
 const Dashboard = () => {
   const { authState, authService } = useOktaAuth()
@@ -21,33 +22,19 @@ const Dashboard = () => {
     authService.login('/')
   }
 
+  const logout = async () => {
+    authService.logout('/')
+  }
+
   if (authState.isPending) {
     return <div> Loading ...</div>
   }
 
   return (
-    <div className={styles.login}>
-      <div>
-        <Header as="h1">Login page</Header>
-      </div>
-      {authState.isAuthenticated && userInfo && (
-        <div>
-          <p>
-            Logged in, Welcome back,
-            {userInfo.name}
-          </p>
-          <p>
-            Token:
-            <br />
-            {authState.accessToken}
-          </p>
-        </div>
-      )}
-      {!authState.isAuthenticated && (
-        <Button id="login-button" primary onClick={login}>
-          Login
-        </Button>
-      )}
+    <div>
+      <CssBaseline />
+      {authState.isAuthenticated && userInfo && <MainFrame handleLogout={() => logout()} />}
+      {!authState.isAuthenticated && <Login handleLogin={() => login()} />}
     </div>
   )
 }
