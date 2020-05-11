@@ -17,13 +17,16 @@ const localStorageService = (function() {
   function getAccessToken() {
     return localStorage.getItem('access_token')
   }
+
   function getRefreshToken() {
     return localStorage.getItem('refresh_token')
   }
+
   function clearToken() {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
   }
+
   return {
     getService,
     setToken,

@@ -15,10 +15,10 @@ npm install
 then run the project in your local machine:
 
 ```shell
-npm run start
+npm run dev
 ```
 
-For building a production, you can run the following commande to make a build:
+For building a production, you can run the following command to make a build:
 
 ```shell
 npm run build

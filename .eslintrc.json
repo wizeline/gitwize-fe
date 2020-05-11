@@ -16,8 +16,11 @@
         "import/resolver": "babel-plugin-root-import"
     },
     "rules": {
+        "no-plusplus": "off",
         "no-console": "warn",
-        "react/jsx-filename-extension": [0],
+        "import/prefer-default-export": "off",
+        "react/jsx-filename-extension": "off",
+        "react/jsx-props-no-spreading": "off",
         "prettier/prettier": [
             "error",
             {

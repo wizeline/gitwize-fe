@@ -1,57 +1,66 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
-  LineChart,
+  ComposedChart,
   Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Bar,
+  Legend
 } from 'recharts'
-import { formatData, readDataFromFile } from '../utils.js'
-import Papa from 'papaparse'
-import 'babel-polyfill'
-
-const fileName = 'HIVData.csv'
+import PropTypes from 'prop-types'
+import { getChartColor } from '../utils/chartUtils'
 
 function Chart(props) {
-  const [finalData, setFinalData] = useState([])
-
-  useEffect(() => {
-
-    const fetchData = async () => {
-      let data = await  readDataFromFile(fileName)
-      setFinalData(formatData(data))
-    } 
-
-    fetchData()
-
-  }, [])
-
-
+  const { xAxis, data, lines, bars } = props
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <LineChart cx="50%" cy="50%" outerRadius="80%" data={finalData}>
-        <XAxis dataKey="year" />
+      <ComposedChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+        <XAxis dataKey={xAxis} />
         <YAxis />
         <CartesianGrid strokeDasharray="3 3" />
+        <Legend />
         <Tooltip />
-        <Line connectNulls type="monotone" dataKey="Zambia" stroke="black" isAnimationActive={false}/>
-        <Line connectNulls type="monotone" dataKey="Bangladesh" stroke="green" isAnimationActive={false}/>
-        <Line
-          connectNulls
-          type="monotone"
-          dataKey="Bolivia (Plurinational State of)"
-          stroke="purple"
-        />
-        <Line connectNulls type="monotone" dataKey="Cameroon" stroke="orange" isAnimationActive={false}/>
-        <Line connectNulls type="monotone" dataKey="Ghana" stroke="brown" isAnimationActive={false}/>
-        <Line connectNulls type="monotone" dataKey="Malawi" stroke="#C90016" isAnimationActive={false}/>
-        <Line connectNulls type="monotone" dataKey="Nepal" stroke="red" isAnimationActive={false}/>
-      </LineChart>
+
+        {bars.map(bar => (
+          <Bar
+            dataKey={bar}
+            fill={getChartColor(bar)}
+            barSize={10}
+            isAnimationActive={false}
+            key={bar}
+          />
+        ))}
+
+        {lines.map((line, index) => (
+          <Line
+            connectNulls
+            type="monotone"
+            dataKey={line}
+            isAnimationActive={false}
+            stroke={getChartColor(line)}
+            strokeDasharray={lines.length > 1 && index + 1 === lines.length ? '4 4' : ''}
+            key={line}
+          />
+        ))}
+      </ComposedChart>
     </ResponsiveContainer>
   )
+}
+
+Chart.propTypes = {
+  data: PropTypes.instanceOf(Array).isRequired,
+  xAxis: PropTypes.string.isRequired,
+  lines: PropTypes.instanceOf(Array),
+  bars: PropTypes.instanceOf(Array)
+}
+
+Chart.defaultProps = {
+  lines: [],
+  bars: []
 }
 
 export default Chart
