@@ -12,6 +12,12 @@
     "css-loader": "^3.5.3",
     "dotenv": "^8.2.0",
     "file-loader": "^6.0.0",
+    "papaparse": "^5.2.0",
+    "recharts": "^1.8.5",
+    "babel-polyfill": "^6.26.0",
+    "css-loader": "^3.5.3",
+    "dotenv": "^8.2.0",
+    "file-loader": "^6.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -51,8 +57,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "scripts": {
-    "start": "webpack-dev-server",
-    "dev": "webpack --mode=development",
+    "dev": "webpack-dev-server",
     "build": "webpack --mode=production",
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint --fix .",
