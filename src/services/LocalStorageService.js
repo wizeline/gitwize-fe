@@ -1,4 +1,4 @@
-const LocalStorageService = (function() {
+const localStorageService = (function() {
   let service
 
   function getService() {
@@ -33,4 +33,4 @@ const LocalStorageService = (function() {
   }
 })()
 
-export default LocalStorageService
+export default localStorageService
