@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button } from '@material-ui/core'
-import styles from './Login.module.css'
+
 import OktaImg from '../assets/images/okta.png'
+
+import styles from './Login.module.css'
 
 function Login({ handleLogin }) {
   return (
@@ -18,7 +20,7 @@ function Login({ handleLogin }) {
 }
 
 Login.propTypes = {
-  handleLogin: PropTypes.func,
+  handleLogin: PropTypes.func.isRequired,
 }
 
 Login.defaultProps = {

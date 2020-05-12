@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Chart from '../Chart'
+import Chart from '../index'
 
 const data = [
   {
