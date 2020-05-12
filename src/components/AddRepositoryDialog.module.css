@@ -1,0 +1,40 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.header {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 42px;
+  letter-spacing: 0.01em;
+
+  /* black */
+
+  color: #192a3e;
+}
+
+.button {
+  background-color: #000000 !important;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.24);
+  border-radius: 4px;
+
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 19px;
+  /* identical to box height */
+
+  text-align: center;
+  letter-spacing: 0.01em;
+
+  /* white */
+
+  color: #ffffff !important;
+  margin: 30px !important;
+}
