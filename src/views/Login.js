@@ -8,7 +8,9 @@ export default function Login(props) {
     <div className={styles.root}>
       <div className={styles.content}>
         <img className={styles.logo} alt="okta" src={OktaImg} />
-        <Button className={styles.button} onClick={props.handleLogin}>Login with Okta</Button>
+        <Button className={styles.button} onClick={props.handleLogin}>
+          Login with Okta
+        </Button>
       </div>
     </div>
   )

@@ -81,3 +81,7 @@ p {
 
   color: #707683;
 }
+
+.clickable {
+  cursor: pointer
+}
