@@ -9,9 +9,39 @@ jobs:
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
+  deploy:
+    docker: 
+      - image: circleci/node:latest # the primary container, where your job's commands are run
+    steps:
+      - checkout # check out the code in the project directory
+      - run:
+          name: Yarn build 
+          command: |
+            yarn install
+            yarn build
+      - run:
+          name: Deploy to CloudFront
+          command: |
+            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            unzip awscli-bundle.zip
+            sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+            aws s3 sync --acl bucket-owner-full-control public	${DEV_S3}  --delete --region ${DEV_AWS_REGION} 
+            aws cloudfront create-invalidation --distribution-id ${DEV_CLOUDFRONT_ID} --paths "/*"
+
+      - slack/status:
+          fail_only: false
+          webhook: '${SLACK_WEBHOOK}' 
 orbs:
   slack: circleci/slack@3.4.2
 workflows:
-  your-workflow:
+  ci-workflow:
     jobs:
       - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: 
+                - master
+                - /deploy-.*/
