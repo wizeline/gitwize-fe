@@ -3,7 +3,7 @@ import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveCo
 import PropTypes from 'prop-types'
 import { getChartColor } from '../../utils/chartUtils'
 
-function Chart(props) {
+export default function Chart(props) {
   const { xAxis, data, lines, bars } = props
 
   return (
@@ -46,5 +46,3 @@ Chart.defaultProps = {
   lines: [],
   bars: [],
 }
-
-export default Chart

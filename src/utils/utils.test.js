@@ -249,10 +249,10 @@ describe('transformRepositoryStatsApiResponse', () => {
   test('Value is within the object', () => {
     const transformedData = transformRepositoryStatsApiResponse(data)
 
-    expect(Object.values(transformedData)[0].commits).toBe(2400)
-    expect(Object.values(transformedData)[0].lines_added).toBe(2300)
-    expect(Object.values(transformedData)[0].lines_removed).toBe(2300)
-    expect(Object.values(transformedData)[0].loc).toBe(2000)
-    expect(Object.values(transformedData)[0].prs).toBe(2700)
+    expect(Object.values(transformedData)[0].Commits).toBe(2400)
+    expect(Object.values(transformedData)[0].Additions).toBe(2300)
+    expect(Object.values(transformedData)[0].Deletions).toBe(2300)
+    expect(Object.values(transformedData)[0]['Total lines of code']).toBe(2000)
+    expect(Object.values(transformedData)[0]['Pull requests']).toBe(2700)
   })
 })
