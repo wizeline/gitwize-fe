@@ -16,7 +16,7 @@ function App() {
         <Container>
           <Route path="/" exact component={Home} />
           <Route path="/implicit/callback" component={LoginCallback} />
-          <Route path="/repository-stats" component={RepostiryStats}/>
+          <Route path="/repository-stats" component={RepostiryStats} />
         </Container>
       </Security>
     </Router>

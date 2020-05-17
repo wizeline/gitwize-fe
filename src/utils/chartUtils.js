@@ -1,19 +1,19 @@
 import Papa from 'papaparse'
 
-export const readDataFromFile = filePath => {
-  return new Promise(resolve => {
+export const readDataFromFile = (filePath) => {
+  return new Promise((resolve) => {
     Papa.parse(filePath, {
       download: true,
       header: true,
       dynamicTyping: true,
       complete(result) {
         resolve(result.data)
-      }
+      },
     })
   })
 }
 
-export const getChartColor = data => {
+export const getChartColor = (data) => {
   switch (data) {
     case 'Commits':
       return '#000000'

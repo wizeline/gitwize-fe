@@ -10,7 +10,7 @@ describe('Navbar component', () => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},
-        authService: {}
+        authService: {},
       }
     })
     const component = shallow(<Navbar />)
@@ -22,7 +22,7 @@ describe('Navbar component', () => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},
-        authService: {}
+        authService: {},
       }
     })
     const component = shallow(<Navbar />)
@@ -34,7 +34,7 @@ describe('Navbar component', () => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: { isAuthenticated: true },
-        authService: {}
+        authService: {},
       }
     })
     const component = shallow(<Navbar />)

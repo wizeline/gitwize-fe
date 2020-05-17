@@ -1,14 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import { Link } from 'react-router-dom'
 import styles from './RepositoryCard.module.css'
 
-export default function RepositoryCard(props) {
+function RepositoryCard(props) {
   const { repo } = props
   return (
-    <Link to='/repository-stats' style={{ width: '100%' }}>
+    <Link to="/repository-stats" style={{ width: '100%' }}>
       <Card className={styles.root}>
         <CardContent className={styles.clickable}>
           <p className={styles.repoName}>{repo.name}</p>
@@ -25,3 +26,17 @@ export default function RepositoryCard(props) {
     </Link>
   )
 }
+
+RepositoryCard.propTypes = {
+  repo: PropTypes.shape({
+    name: PropTypes.string,
+    lastUpdated: PropTypes.string,
+    type: PropTypes.string,
+  }),
+}
+
+RepositoryCard.defaultProps = {
+  repo: {},
+}
+
+export default RepositoryCard

@@ -9,6 +9,6 @@ export default {
     redirectUri: 'http://localhost:8080/implicit/callback',
     scopes: ['openid', 'profile', 'email'],
     pkce: true,
-    disableHttpsCheck: OKTA_TESTING_DISABLEHTTPSCHECK
-  }
+    disableHttpsCheck: OKTA_TESTING_DISABLEHTTPSCHECK,
+  },
 }

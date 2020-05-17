@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -7,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import styles from './AddRepositoryDialog.module.css'
 
-export default function AddRepositoryDialog(props) {
+function AddRepositoryDialog(props) {
   const { isOpen, handleClose, handleAdd } = props
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
@@ -39,7 +40,7 @@ export default function AddRepositoryDialog(props) {
             type="text"
             fullWidth
             value={userName}
-            onChange={e => setUserName(e.target.value)}
+            onChange={(e) => setUserName(e.target.value)}
           />
           <TextField
             autoFocus
@@ -49,7 +50,7 @@ export default function AddRepositoryDialog(props) {
             type="password"
             fullWidth
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <TextField
             autoFocus
@@ -59,7 +60,7 @@ export default function AddRepositoryDialog(props) {
             type="text"
             fullWidth
             value={url}
-            onChange={e => setUrl(e.target.value)}
+            onChange={(e) => setUrl(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
@@ -74,3 +75,17 @@ export default function AddRepositoryDialog(props) {
     </div>
   )
 }
+
+AddRepositoryDialog.propTypes = {
+  isOpen: PropTypes.bool,
+  handleClose: PropTypes.func,
+  handleAdd: PropTypes.func,
+}
+
+AddRepositoryDialog.defaultProps = {
+  isOpen: false,
+  handleClose: () => {},
+  handleAdd: () => {},
+}
+
+export default AddRepositoryDialog

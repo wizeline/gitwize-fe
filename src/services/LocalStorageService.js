@@ -1,4 +1,4 @@
-const localStorageService = (function() {
+const localStorageService = (function () {
   let service
 
   function getService() {
@@ -32,7 +32,7 @@ const localStorageService = (function() {
     setToken,
     getAccessToken,
     getRefreshToken,
-    clearToken
+    clearToken,
   }
 })()
 

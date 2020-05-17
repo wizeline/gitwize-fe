@@ -8,12 +8,17 @@ function RepositoryStats() {
   const [chartData, setChartData] = useState([])
 
   useEffect(() => {
-    readDataFromFile(fileName).then(data => setChartData(data))
+    readDataFromFile(fileName).then((data) => setChartData(data))
   }, [])
 
   return (
     <div>
-      <Chart data={chartData} xAxis={'Date'} lines={['Commits', 'Additions', 'Deletions']} bars={['Total lines of code', 'Pull requests']}/>
+      <Chart
+        data={chartData}
+        xAxis="Date"
+        lines={['Commits', 'Additions', 'Deletions']}
+        bars={['Total lines of code', 'Pull requests']}
+      />
     </div>
   )
 }

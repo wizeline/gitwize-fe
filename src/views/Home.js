@@ -12,7 +12,7 @@ const Dashboard = () => {
     if (!authState.isAuthenticated) {
       setUserInfo(null)
     } else {
-      authService.getUser().then(info => {
+      authService.getUser().then((info) => {
         setUserInfo(info)
       })
     }
