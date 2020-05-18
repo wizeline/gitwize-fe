@@ -1,8 +1,8 @@
 import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
 import { CssBaseline } from '@material-ui/core'
-import MainFrame from './MainFrame'
-import Login from './Login'
+import MainFrame from '../views/MainFrame'
+import Login from '../views/Login'
 
 const Dashboard = () => {
   const { authState, authService } = useOktaAuth()

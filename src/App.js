@@ -4,9 +4,7 @@ import { Security, LoginCallback } from '@okta/okta-react'
 import { Container } from 'semantic-ui-react'
 
 import RepostiryStats from './pages/RepositoryStats'
-
-import Home from './views/Home'
-
+import Home from './pages/Home'
 import config from './config'
 
 function App() {

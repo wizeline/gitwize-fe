@@ -6,6 +6,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+
 import styles from './AddRepositoryDialog.module.css'
 
 function AddRepositoryDialog(props) {
@@ -77,9 +78,9 @@ function AddRepositoryDialog(props) {
 }
 
 AddRepositoryDialog.propTypes = {
-  isOpen: PropTypes.bool,
-  handleClose: PropTypes.func,
-  handleAdd: PropTypes.func,
+  isOpen: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  handleAdd: PropTypes.func.isRequired,
 }
 
 AddRepositoryDialog.defaultProps = {

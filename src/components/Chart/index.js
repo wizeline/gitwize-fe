@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, Legend } from 'recharts'
 import PropTypes from 'prop-types'
-import { getChartColor } from '../utils/chartUtils'
+import { getChartColor } from '../../utils/chartUtils'
 
 function Chart(props) {
   const { xAxis, data, lines, bars } = props
