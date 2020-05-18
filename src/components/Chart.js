@@ -1,15 +1,5 @@
 import React from 'react'
-import {
-  ComposedChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Bar,
-  Legend
-} from 'recharts'
+import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, Legend } from 'recharts'
 import PropTypes from 'prop-types'
 import { getChartColor } from '../utils/chartUtils'
 
@@ -25,14 +15,8 @@ function Chart(props) {
         <Legend />
         <Tooltip />
 
-        {bars.map(bar => (
-          <Bar
-            dataKey={bar}
-            fill={getChartColor(bar)}
-            barSize={10}
-            isAnimationActive={false}
-            key={bar}
-          />
+        {bars.map((bar) => (
+          <Bar dataKey={bar} fill={getChartColor(bar)} barSize={10} isAnimationActive={false} key={bar} />
         ))}
 
         {lines.map((line, index) => (
@@ -55,12 +39,12 @@ Chart.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   xAxis: PropTypes.string.isRequired,
   lines: PropTypes.instanceOf(Array),
-  bars: PropTypes.instanceOf(Array)
+  bars: PropTypes.instanceOf(Array),
 }
 
 Chart.defaultProps = {
   lines: [],
-  bars: []
+  bars: [],
 }
 
 export default Chart

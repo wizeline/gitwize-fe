@@ -22,7 +22,7 @@ export default function RepositoryList() {
     repoList.push({
       name: newRepo.url,
       lastUpdated: new Date().toLocaleDateString(),
-      type: 'GitHub'
+      type: 'GitHub',
     })
     setRepoList(repoList)
     setOpen(false)
@@ -50,7 +50,7 @@ export default function RepositoryList() {
             </Button>
           </div>
           <p className={styles.textSmallDisabled}>Most recent</p>
-          {repoList.map(item => (
+          {repoList.map((item) => (
             <RepositoryCard key={item.name} repo={item} />
           ))}
         </>
@@ -58,7 +58,7 @@ export default function RepositoryList() {
       <AddRepositoryDialog
         isOpen={isOpen}
         handleClose={() => handleCloseAddDialog()}
-        handleAdd={item => handleAddRepo(item)}
+        handleAdd={(item) => handleAddRepo(item)}
       />
     </div>
   )

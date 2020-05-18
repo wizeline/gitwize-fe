@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Security, LoginCallback } from '@okta/okta-react'
 import { Container } from 'semantic-ui-react'
 
-import RepostiryStats from '../pages/RepositoryStats'
+import RepostiryStats from './pages/RepositoryStats'
 
-import Home from '../views/Home'
+import Home from './views/Home'
 
-import config from '../config'
+import config from './config'
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         <Container>
           <Route path="/" exact component={Home} />
           <Route path="/implicit/callback" component={LoginCallback} />
-          <Route path="/repository-stats" component={RepostiryStats}/>
+          <Route path="/repository-stats" component={RepostiryStats} />
         </Container>
       </Security>
     </Router>

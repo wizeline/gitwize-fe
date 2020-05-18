@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
@@ -13,17 +14,17 @@ import RepositoryList from '../components/RepositoryList'
 
 const drawerWidth = 68
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
-    display: 'flex'
+    display: 'flex',
   },
   hide: {
-    display: 'none'
+    display: 'none',
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
   },
   paper: {
     background: '#000',
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     boxShadow: '6px 0px 18px rgba(0, 0, 0, 0.06)',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   logoText: {
     fontFamily: 'Open Sans',
@@ -41,20 +42,20 @@ const useStyles = makeStyles(theme => ({
     lineHeight: '15px',
     /* identical to box height */
     textAlign: 'center',
-    color: '#F2F2F2'
+    color: '#F2F2F2',
   },
   logoTextBold: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   button: {
     padding: 0,
-    minWidth: 0
+    minWidth: 0,
   },
   icon: {
-    color: '#F2F2F2'
+    color: '#F2F2F2',
   },
   iconRotate: {
-    transform: 'rotate(90deg)'
+    transform: 'rotate(90deg)',
   },
   content: {
     flexGrow: 1,
@@ -62,26 +63,20 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     display: 'flex',
-    backgroundColor: 'white'
-  }
+    backgroundColor: 'white',
+  },
 }))
 
-export default function MainFrame(props) {
+function MainFrame({ handleLogout }) {
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Drawer
-        variant="permanent"
-        className={classes.drawer}
-        PaperProps={{ className: classes.paper }}
-      >
+      <Drawer variant="permanent" className={classes.drawer} PaperProps={{ className: classes.paper }}>
         <List>
           <ListItem>
-            <ListItemText classes={{ primary: clsx(classes.logoText, classes.logoTextBold) }}>
-              Git
-            </ListItemText>
+            <ListItemText classes={{ primary: clsx(classes.logoText, classes.logoTextBold) }}>Git</ListItemText>
             <ListItemText classes={{ primary: classes.logoText }}>Wize</ListItemText>
           </ListItem>
           <ListItem>
@@ -97,7 +92,7 @@ export default function MainFrame(props) {
         </List>
         <List>
           <ListItem>
-            <Button className={classes.button} onClick={props.handleLogout}>
+            <Button className={classes.button} onClick={handleLogout}>
               <CallToActionIcon className={clsx(classes.icon, classes.iconRotate)} />
             </Button>
           </ListItem>
@@ -109,3 +104,13 @@ export default function MainFrame(props) {
     </div>
   )
 }
+
+MainFrame.propTypes = {
+  handleLogout: PropTypes.func,
+}
+
+MainFrame.defaultProps = {
+  handleLogout: () => {},
+}
+
+export default MainFrame
