@@ -23,8 +23,4 @@ Login.propTypes = {
   handleLogin: PropTypes.func.isRequired,
 }
 
-Login.defaultProps = {
-  handleLogin: () => {},
-}
-
 export default Login
