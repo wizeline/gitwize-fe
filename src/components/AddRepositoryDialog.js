@@ -83,10 +83,4 @@ AddRepositoryDialog.propTypes = {
   handleAdd: PropTypes.func.isRequired,
 }
 
-AddRepositoryDialog.defaultProps = {
-  isOpen: false,
-  handleClose: () => {},
-  handleAdd: () => {},
-}
-
 export default AddRepositoryDialog
