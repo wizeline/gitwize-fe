@@ -4,21 +4,23 @@ import Chart from '../components/Chart'
 import { fetchRepositoryStatsDataFromServer } from '../services/dataFetchingService'
 import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
+import TableData from '../components/TableData'
 
 function RepositoryStats() {
-  const [chartData, setChartData] = useState([])
+  const [branchData, setBranchData] = useState([])
 
   useEffect(() => {
-    fetchRepositoryStatsDataFromServer().then(data => setChartData(data))
+    fetchRepositoryStatsDataFromServer().then(data => setBranchData(data))
   }, [])
 
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>membership-web-view</PageTitle>
       <BranchFilter />
+      <TableData data={branchData}/>
       <Chart
-        data={chartData}
-        xAxis="asOfDate"
+        data={branchData}
+        xAxis="Date"
         lines={['Commits', 'Additions', 'Deletions']}
         bars={['Total lines of code', 'Pull requests']}
       />

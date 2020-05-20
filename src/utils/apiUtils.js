@@ -28,6 +28,6 @@ export const transformRepositoryStatsApiResponse = data => {
 
   return Object.keys(dataByDate).map(date => ({
     ...dataByDate[date],
-    asOfDate: date
+    Date: date
   }))
 }

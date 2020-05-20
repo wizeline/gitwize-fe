@@ -14,7 +14,6 @@ export default function BranchPicker() {
     fetchBranchesFromServer().then(data => setBranches(data))
   }, [])
 
-  console.log(branches)
   return (
     <Grid container>
       <Grid item xs={6}>
