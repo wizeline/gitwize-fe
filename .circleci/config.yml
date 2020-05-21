@@ -2,10 +2,14 @@ version: 2.1
 jobs:
   build:
     docker: 
-      - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
+      - image: circleci/node:latest # the primary container, where your job's commands are run
     steps:
       - checkout # check out the code in the project directory
-      - run: echo "hello world" # run the `echo` command
+      - run: 
+          name: Yarn build
+          command: |
+            yarn install
+            yarn build
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
@@ -17,15 +21,30 @@ jobs:
       - run:
           name: Yarn build 
           command: |
+            export BUILD_INFO=build-info.txt
+            echo "${CIRCLE_BUILD_NUM}" >> $BUILD_INFO  
+            echo "${CIRCLE_SHA1}"      >> $BUILD_INFO 
+            echo "$(date -u)"          >> $BUILD_INFO
+            sed "\
+            s|^REACT_APP_BASE_URL=.*$|REACT_APP_BASE_URL=${REACT_APP_BASE_URL}|g;
+            s|^REACT_APP_API_URL=.*$|REACT_APP_API_URL=${REACT_APP_API_URL}|g;
+            s|^REACT_APP_OKTA_CLIENT_ID=.*$|REACT_APP_OKTA_CLIENT_ID=${REACT_APP_OKTA_CLIENT_ID}|g;
+            s|^REACT_APP_OKTA_ISSUER=.*$|REACT_APP_OKTA_ISSUER =${REACT_APP_OKTA_ISSUER}|g;
+            s|^REACT_APP_OKTA_DISABLE_HTTPS_CHECK=.*$|REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${REACT_APP_OKTA_DISABLE_HTTPS_CHECK}|g;
+            " .env.example > .env
+            cat .env
             yarn install
             yarn build
+            cp -f .env build/.env
+            cp -f $BUILD_INFO build/$BUILD_INFO
+            
       - run:
           name: Deploy to CloudFront
           command: |
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-            aws s3 sync --acl bucket-owner-full-control public	${DEV_S3}  --delete --region ${DEV_AWS_REGION} 
+            aws s3 sync --acl bucket-owner-full-control build ${DEV_S3}  --delete --region ${DEV_AWS_REGION} 
             aws cloudfront create-invalidation --distribution-id ${DEV_CLOUDFRONT_ID} --paths "/*"
 
       - slack/status:
