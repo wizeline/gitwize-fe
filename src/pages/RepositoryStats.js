@@ -7,22 +7,29 @@ import PageTitle from '../components/PageTitle'
 import TableData from '../components/TableData'
 
 function RepositoryStats() {
-  const [branchData, setBranchData] = useState([])
+  const [repoData, setRepoData] = useState([])
 
   useEffect(() => {
-    fetchRepositoryStatsDataFromServer().then(data => setBranchData(data))
+    fetchRepositoryStatsDataFromServer().then(data => setRepoData(data))
   }, [])
 
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>membership-web-view</PageTitle>
       <BranchFilter />
-      <TableData data={branchData}/>
+      <TableData tableData={repoData} show={["Date", "Commits", "Additions", "Deletions", "Total lines of code"]}/>
       <Chart
-        data={branchData}
+        data={repoData}
         xAxis="Date"
-        lines={['Commits', 'Additions', 'Deletions']}
-        bars={['Total lines of code', 'Pull requests']}
+        lines={['Commits', 'Additions']}
+        bars={['Total lines of code', 'Deletions']}
+      />
+      <TableData tableData={repoData} show={["Date", "Merged", "Rejected", "Created"]}/>
+      <Chart
+        data={repoData}
+        xAxis="Date"
+        lines={['Merged']}
+        bars={['Created', 'Rejected']}
       />
     </div>
   )

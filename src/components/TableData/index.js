@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -9,6 +9,8 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
+
+import { filterObjectByKey } from '../../utils/dataUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,15 +23,17 @@ const useStyles = makeStyles((theme) => ({
   headTextColor: {
     color: '#334D6E',
     opacity: 0.5,
-    fontWeight: 500
+    fontWeight: 500,
   },
   bodyTextColor: {
-    color: '#707683'
+    color: '#707683',
+    borderBottom: '1px solid #EBEFF2'
   }
 }))
 
-export default function TableData({data}) {
+export default function TableData({tableData, show}) {
   const classes = useStyles()
+  const data = filterObjectByKey(tableData, show)
 
   const headRow = () => {
     if(data.length !== 0) {
@@ -79,6 +83,7 @@ export default function TableData({data}) {
 }
 
 TableData.propTypes = {
-  data: PropTypes.instanceOf(Array).isRequired,
+  tableData: PropTypes.instanceOf(Array).isRequired,
+  show: PropTypes.instanceOf(Array).isRequired,
 }
 

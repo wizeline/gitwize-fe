@@ -16,10 +16,13 @@ export const readDataFromFile = (filePath) => {
 export const getChartColor = (data) => {
   switch (data) {
     case 'Commits':
+    case 'Merged':
       return '#000000'
     case 'Additions':
+    case 'Rejected':
       return '#00000052'
     case 'Deletions':
+    case 'Created':
       return '#0000008f'
     case 'Pull requests':
       return '#0000008f'
