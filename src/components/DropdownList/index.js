@@ -9,7 +9,6 @@ import PropTypes from 'prop-types'
 const useFilterBarStyles = makeStyles(theme => ({
   formControl: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(8),
     paddingRight: theme.spacing(5),
     width: '100%'
   },

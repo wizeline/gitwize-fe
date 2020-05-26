@@ -10,16 +10,17 @@ import styles from './RepositoryList.module.css'
 import RepositoryCard from './RepositoryCard'
 import AddRepositoryDialog from './AddRepositoryDialog'
 
+const apiClient = new ApiClient()
+
 export default function RepositoryList() {
   const { authState } = useOktaAuth()
   const [repoList, setRepoList] = useState([])
   const [isOpen, setOpen] = useState(false)
-  const apiClient = new ApiClient()
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     apiClient.repos.listRepo().then(repoList => setRepoList(repoList))
-  }, [apiClient, authState])
+  }, [authState.accessToken])
 
   const handleAddDialog = () => {
     setOpen(true)
@@ -38,10 +39,9 @@ export default function RepositoryList() {
       ...repoDetail,
       id: response.id,
       name: repoDetail.url,
-      lastUpdated: new Date().toLocaleDateString(),
+      lastUpdated: '',
       type: 'GitHub',
     }
-    console.log('newRepo', newRepo)
 
     repoList.push(newRepo)
     setRepoList(repoList)

@@ -15,7 +15,8 @@ import { filterObjectByKey } from '../../utils/dataUtils'
 const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: '0px 6px 18px rgba(0, 0, 0, 0.1)',
-    borderRadius: 4
+    borderRadius: 4,
+    marginBottom: theme.spacing(5)
   },
   table: {
     minWidth: 650

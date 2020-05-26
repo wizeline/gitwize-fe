@@ -6,10 +6,12 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { getChartColor } from '../../utils/chartUtils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: '0px 6px 18px rgba(0, 0, 0, 0.1)',
-    borderRadius: 4
+    borderRadius: 4,
+    marginBottom: theme.spacing(6),
+    padding:'30px 40px 30px 10px'
   }
 }))
 
@@ -23,7 +25,7 @@ export default function Chart(props) {
       <ComposedChart cx="50%" cy="50%" outerRadius="80%" data={data}>
         <XAxis dataKey={xAxis} />
         <YAxis />
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="3 3" vertical={false}/>
         <Legend />
         <Tooltip />
 
