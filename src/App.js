@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Security, LoginCallback } from '@okta/okta-react'
 
 import Home from './pages/Home'
-import LandingPage from './pages/LandingPage'
 import config from './config'
 
 function App() {

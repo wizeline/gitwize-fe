@@ -2,7 +2,6 @@ import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
 import { CssBaseline } from '@material-ui/core'
 import MainLayout from '../views/MainLayout'
-import Login from '../views/Login'
 import LandingPage from './LandingPage'
 
 const Dashboard = () => {

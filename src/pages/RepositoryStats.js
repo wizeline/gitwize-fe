@@ -23,7 +23,7 @@ function RepositoryStats() {
     <div style={{ width: '100%' }}>
       <PageTitle>membership-web-view</PageTitle>
       <BranchFilter />
-      <TableData tableData={repoData} show={["Date", "Commits", "Additions", "Deletions", "Total lines of code"]}/>
+      <TableData tableData={repoData} show={["Date", "Commits", "Additions", "Deletions", "Total lines of code", "Change percent %"]}/>
       <Chart
         data={repoData}
         xAxis="Date"

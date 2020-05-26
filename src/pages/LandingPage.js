@@ -1,5 +1,4 @@
 import React from 'react'
-import { useOktaAuth } from '@okta/okta-react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core'
@@ -77,7 +76,6 @@ const Text = styled.p`
 
 export default function LandingPage({ handleLogin }) { 
   const styles = useStyles();
-  const { authState, authService } = useOktaAuth()
 
   return (
       <Grid container spacing={2} className={styles.root}>

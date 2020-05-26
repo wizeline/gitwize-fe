@@ -1,6 +1,6 @@
-import { DateTime } from "luxon"
+import { DateTime } from 'luxon'
 
-export const convertApiKeyName = name => {
+export const convertApiKeyName = (name) => {
   switch (name) {
     case 'commits':
       return 'Commits'
@@ -23,10 +23,10 @@ export const convertApiKeyName = name => {
   }
 }
 
-export const transformRepositoryStatsApiResponse = data => {
+export const transformRepositoryStatsApiResponse = (data) => {
   const dataByDate = {}
 
-  Object.keys(data).forEach(metric => {
+  Object.keys(data).forEach((metric) => {
     data[metric].forEach(({ as_of_date: date, value }) => {
       date = DateTime.fromISO(date).toLocaleString()
       dataByDate[date] = dataByDate[date]
@@ -35,9 +35,17 @@ export const transformRepositoryStatsApiResponse = data => {
     })
   })
 
-  return Object.keys(dataByDate).map(date => ({
+  return Object.keys(dataByDate).map((date) => ({
     Date: date,
-    ...dataByDate[date]
+    ...dataByDate[date],
+    'Change percent %': calculateChangePercent(
+      dataByDate[date].Additions,
+      dataByDate[date].Deletions,
+      dataByDate[date]['Total lines of code']
+    ),
   }))
 }
 
+export const calculateChangePercent = (additions, deletions, loc) => {
+  return (((additions + deletions) / loc) * 100).toFixed(2)
+}
