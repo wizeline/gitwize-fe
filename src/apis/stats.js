@@ -1,6 +1,6 @@
 import { BaseApiClient } from './base'
 
-const GET_REPO_STATS_PATH = (repoId) => `/api/v1/repositories/${repoId}/stats`
+const GET_REPO_STATS_PATH = (repoId) => `/repositories/${repoId}/stats`
 
 export default class StatsApiClient extends BaseApiClient {
   getRepoStats(repoId) {

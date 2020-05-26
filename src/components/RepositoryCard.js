@@ -9,18 +9,19 @@ import styles from './RepositoryCard.module.css'
 
 function RepositoryCard(props) {
   const { repo } = props
+  console.log(repo)
   return (
     <Link to="/repository-stats" style={{ width: '100%' }}>
       <Card className={styles.root}>
         <CardContent className={styles.clickable}>
-          <p className={styles.repoName}>{repo.name}</p>
+          <p className={styles.repoName}>{repo.url}</p>
           <div className={styles.detail}>
-            <p className={styles.header}>Last Updated:</p>
+            <p className={styles.header}>Last Updated: 05/26/2020</p>
             <p className={styles.value}>{repo.lastUpdated}</p>
           </div>
           <div className={styles.detailType}>
             <GitHubIcon />
-            <p className={styles.type}>{repo.type}</p>
+            <p className={styles.type}>GitHub</p>
           </div>
         </CardContent>
       </Card>

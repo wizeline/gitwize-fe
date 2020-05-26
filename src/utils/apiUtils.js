@@ -1,3 +1,5 @@
+import { DateTime } from "luxon"
+
 export const convertApiKeyName = name => {
   switch (name) {
     case 'commits':
@@ -26,6 +28,7 @@ export const transformRepositoryStatsApiResponse = data => {
 
   Object.keys(data).forEach(metric => {
     data[metric].forEach(({ as_of_date: date, value }) => {
+      date = DateTime.fromISO(date).toLocaleString()
       dataByDate[date] = dataByDate[date]
         ? { ...dataByDate[date], [convertApiKeyName(metric)]: value }
         : { [convertApiKeyName(metric)]: value }
