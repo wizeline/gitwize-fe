@@ -1,12 +1,24 @@
 import React from 'react'
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, Legend } from 'recharts'
 import PropTypes from 'prop-types'
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+
 import { getChartColor } from '../../utils/chartUtils'
+
+const useStyles = makeStyles(() => ({
+  root: {
+    boxShadow: '0px 6px 18px rgba(0, 0, 0, 0.1)',
+    borderRadius: 4
+  }
+}))
 
 export default function Chart(props) {
   const { xAxis, data, lines, bars } = props
+  const classes = useStyles()
 
   return (
+    <Paper className={classes.root}>
     <ResponsiveContainer width="100%" height={300}>
       <ComposedChart cx="50%" cy="50%" outerRadius="80%" data={data}>
         <XAxis dataKey={xAxis} />
@@ -32,6 +44,7 @@ export default function Chart(props) {
         ))}
       </ComposedChart>
     </ResponsiveContainer>
+    </Paper>
   )
 }
 
