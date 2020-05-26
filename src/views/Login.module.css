@@ -22,12 +22,17 @@
 }
 
 .logo {
-    margin: 75px 136px 75px 136px;
-
+    margin: 75px 136px 25px 136px;
 }
 
+.image {
+  width: 30% !important;
+  height: 300% !important;
+  color: #777777
+}
 
 .button{
+  padding: 5px 20px !important;
   background-color: #000000 !important;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.24);
   border-radius: 4px;
