@@ -21,7 +21,7 @@ const useFilterBarStyles = makeStyles(theme => ({
 export default function DropdownList(props) {
   const [selectedValue, setSelectedValue] = useState('')
   const classes = useFilterBarStyles()
-  const { data, label } = props
+  const { data, label, placeholder } = props
 
   const handleChange = e => {
     setSelectedValue(e.target.value)
@@ -42,7 +42,7 @@ export default function DropdownList(props) {
           className={classes.selectEmpty}
         >
           <MenuItem value="" disabled>
-            Select a branch
+            {placeholder}
           </MenuItem>
           {data.map(item => (
             <MenuItem value={item} key={item}>

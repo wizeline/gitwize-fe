@@ -17,10 +17,10 @@ export default function BranchPicker() {
   return (
     <Grid container>
       <Grid item xs={6}>
-        <DropdownList label="Branch" data={branches} />
+        <DropdownList label="Branch" data={branches} placeholder={"Select a branch"}/>
       </Grid>
       <Grid item xs={2}>
-        <DropdownList label="Show" data={showDate} />
+        <DropdownList label="Show" data={showDate} placeholder={"Select a period"}/>
       </Grid>
       <Grid item xs={2}>
         <DatePicker label="From" />
