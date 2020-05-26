@@ -1,6 +1,6 @@
 export const filterObjectByKey = (objects, allowed = []) => {
   let filteredData = []
-  objects.map(row => {
+  objects.forEach(row => {
     const filteredRow = Object.keys(row)
       .filter(key => allowed.includes(key))
       .reduce((obj, key) => {

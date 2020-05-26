@@ -8,15 +8,16 @@ import TableData from '../components/TableData'
 import { ApiClient } from '../apis' 
 import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
 
+const apiClient = new ApiClient() 
+
 function RepositoryStats() {
   const [repoData, setRepoData] = useState([])
-  const apiClient = new ApiClient() 
   const { authState } = useOktaAuth()
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     apiClient.stats.getRepoStats(1).then(data => {setRepoData(transformRepositoryStatsApiResponse(data.metric))})
-  }, [])
+  }, [authState.accessToken])
 
   return (
     <div style={{ width: '100%' }}>

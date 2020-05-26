@@ -1,5 +1,4 @@
 import { readDataFromFile } from '../utils/chartUtils'
-import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
 
 export const fetchRepositoryStatsDataFromFile = async (fileName) => {
   const data = await readDataFromFile(fileName)
