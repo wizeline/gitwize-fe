@@ -56,31 +56,28 @@ const useStyles = makeStyles((theme) => ({
     /* identical to box height */
     textAlign: 'center',
     color: '#000000',
-    fontSize: '25px'
+    fontSize: '28px'
   },
   logoTextBold: {
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
-    fontSize: '25px'
+    fontSize: '28px'
   }
 }))
 
 const Title = styled.h1`
-  font-size: 28px;
+  font-size: 2.6rem;
   font-style: medium
 `
 
 const Text = styled.p`
-  color: #AAAAAA
+  color: #AAAAAA;
+  font-size: 1.3rem
 `
 
-export default function LandingPage() { 
+export default function LandingPage({ handleLogin }) { 
   const styles = useStyles();
   const { authState, authService } = useOktaAuth()
-
-  const handleLogin = async () => {
-    authService.login('/')
-  }
 
   return (
       <Grid container spacing={2} className={styles.root}>

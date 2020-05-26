@@ -1,7 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Security, LoginCallback } from '@okta/okta-react'
-import { Container } from 'semantic-ui-react'
 
 import Home from './pages/Home'
 import LandingPage from './pages/LandingPage'
