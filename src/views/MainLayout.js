@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
@@ -10,7 +11,10 @@ import { ListItemText, Button } from '@material-ui/core'
 import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
 import DashboardIcon from '@material-ui/icons/DashboardOutlined'
 import CallToActionIcon from '@material-ui/icons/CallToActionOutlined'
+import Container from '@material-ui/core/Container'
+
 import RepositoryList from '../components/RepositoryList'
+import RepositoryStats from '../pages/RepositoryStats'
 
 const drawerWidth = 68
 
@@ -67,7 +71,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-function MainFrame({ handleLogout }) {
+function MainLayout({ handleLogout }) {
   const classes = useStyles()
 
   return (
@@ -98,19 +102,21 @@ function MainFrame({ handleLogout }) {
           </ListItem>
         </List>
       </Drawer>
-      <main className={classes.content}>
-        <RepositoryList />
-      </main>
+
+      <Container>
+        <Router>
+          <Switch>
+            <Route path="/" exact component={RepositoryList} />
+            <Route path="/repository-stats" component={RepositoryStats} />
+          </Switch>
+        </Router>
+      </Container>
     </div>
   )
 }
 
-MainFrame.propTypes = {
-  handleLogout: PropTypes.func,
+MainLayout.propTypes = {
+  handleLogout: PropTypes.func.isRequired
 }
 
-MainFrame.defaultProps = {
-  handleLogout: () => {},
-}
-
-export default MainFrame
+export default MainLayout

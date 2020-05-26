@@ -1,7 +1,7 @@
 import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
 import { CssBaseline } from '@material-ui/core'
-import MainFrame from '../views/MainFrame'
+import MainLayout from '../views/MainLayout'
 import Login from '../views/Login'
 
 const Dashboard = () => {
@@ -33,7 +33,7 @@ const Dashboard = () => {
   return (
     <div>
       <CssBaseline />
-      {authState.isAuthenticated && userInfo && <MainFrame handleLogout={() => logout()} />}
+      {authState.isAuthenticated && userInfo && <MainLayout handleLogout={() => logout()} />}
       {!authState.isAuthenticated && <Login handleLogin={() => login()} />}
     </div>
   )

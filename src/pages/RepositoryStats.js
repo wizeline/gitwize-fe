@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import Chart from '../components/Chart'
-import { readDataFromFile } from '../utils/chartUtils'
 
-const fileName = 'GITStats.csv'
+import Chart from '../components/Chart'
+import { fetchRepositoryStatsDataFromServer } from '../services/dataFetchingService'
+import BranchFilter from '../components/BranchFilter'
+import PageTitle from '../components/PageTitle'
 
 function RepositoryStats() {
   const [chartData, setChartData] = useState([])
 
   useEffect(() => {
-    readDataFromFile(fileName).then((data) => setChartData(data))
+    fetchRepositoryStatsDataFromServer().then(data => setChartData(data))
   }, [])
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
+      <PageTitle>membership-web-view</PageTitle>
+      <BranchFilter />
       <Chart
         data={chartData}
-        xAxis="Date"
+        xAxis="asOfDate"
         lines={['Commits', 'Additions', 'Deletions']}
         bars={['Total lines of code', 'Pull requests']}
       />
