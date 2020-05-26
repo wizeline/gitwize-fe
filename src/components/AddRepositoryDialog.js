@@ -20,12 +20,14 @@ function AddRepositoryDialog(props) {
     setPassword('')
     setUrl('')
   }
+
   const handleSubmit = () => {
     // get data
     const data = { userName, password, url }
     reset()
     handleAdd(data)
   }
+
   return (
     <div className={styles.root}>
       <Dialog open={isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">

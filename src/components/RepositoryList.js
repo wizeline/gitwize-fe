@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
+import { useOktaAuth } from '@okta/okta-react'
 import { Button } from '@material-ui/core'
+
+import { ApiClient } from '../apis'
 import GetStartedImg from '../assets/images/getstarted.png'
+
 import styles from './RepositoryList.module.css'
 import RepositoryCard from './RepositoryCard'
 import AddRepositoryDialog from './AddRepositoryDialog'
 
 export default function RepositoryList() {
+  const { authState } = useOktaAuth()
   const [repoList, setRepoList] = useState([])
   const [isOpen, setOpen] = useState(false)
+  const apiClient = new ApiClient()
+
+  useEffect(() => {
+    apiClient.setAccessToken(authState.accessToken)
+    apiClient.repos.listRepo().then(repoList => setRepoList(repoList))
+  }, [apiClient, authState])
 
   const handleAddDialog = () => {
     setOpen(true)
@@ -18,15 +29,25 @@ export default function RepositoryList() {
     setOpen(false)
   }
 
-  const handleAddRepo = (newRepo = {}) => {
-    repoList.push({
-      name: newRepo.url,
+  const handleAddRepo = async (repoDetail = {}) => {
+    apiClient.setAccessToken(authState.accessToken)
+    
+    const response = await apiClient.repos.createRepo(repoDetail)
+    // TODO: those data should be returned by the API
+    const newRepo = {
+      ...repoDetail,
+      id: response.id,
+      name: repoDetail.url,
       lastUpdated: new Date().toLocaleDateString(),
       type: 'GitHub',
-    })
+    }
+    console.log('newRepo', newRepo)
+
+    repoList.push(newRepo)
     setRepoList(repoList)
     setOpen(false)
   }
+
   return (
     <div className={clsx(styles.root, repoList.length === 0 ? styles.empty : styles.notEmpty)}>
       {repoList.length === 0 ? (
