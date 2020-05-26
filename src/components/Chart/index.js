@@ -6,10 +6,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { getChartColor } from '../../utils/chartUtils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: '0px 6px 18px rgba(0, 0, 0, 0.1)',
-    borderRadius: 4
+    borderRadius: 4,
+    marginBottom: theme.spacing(6)
   }
 }))
 

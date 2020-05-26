@@ -9,7 +9,6 @@ import PropTypes from 'prop-types'
 const useFilterBarStyles = makeStyles(theme => ({
   formControl: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(8),
     paddingRight: theme.spacing(5),
     width: '100%'
   },
@@ -21,7 +20,7 @@ const useFilterBarStyles = makeStyles(theme => ({
 export default function DropdownList(props) {
   const [selectedValue, setSelectedValue] = useState('')
   const classes = useFilterBarStyles()
-  const { data, label } = props
+  const { data, label, placeholder } = props
 
   const handleChange = e => {
     setSelectedValue(e.target.value)
@@ -42,7 +41,7 @@ export default function DropdownList(props) {
           className={classes.selectEmpty}
         >
           <MenuItem value="" disabled>
-            Select a branch
+            {placeholder}
           </MenuItem>
           {data.map(item => (
             <MenuItem value={item} key={item}>

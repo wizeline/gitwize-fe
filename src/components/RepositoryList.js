@@ -19,7 +19,7 @@ export default function RepositoryList() {
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     apiClient.repos.listRepo().then(repoList => setRepoList(repoList))
-  }, [apiClient, authState])
+  }, [])
 
   const handleAddDialog = () => {
     setOpen(true)

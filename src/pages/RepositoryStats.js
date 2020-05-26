@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react'
+import { useOktaAuth } from '@okta/okta-react'
 
 import Chart from '../components/Chart'
-import { fetchRepositoryStatsDataFromServer } from '../services/dataFetchingService'
 import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
 import TableData from '../components/TableData'
+import { ApiClient } from '../apis' 
+import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
 
 function RepositoryStats() {
   const [repoData, setRepoData] = useState([])
+  const apiClient = new ApiClient() 
+  const { authState } = useOktaAuth()
 
   useEffect(() => {
-    fetchRepositoryStatsDataFromServer().then(data => setRepoData(data))
+    apiClient.setAccessToken(authState.accessToken)
+    apiClient.stats.getRepoStats(1).then(data => {setRepoData(transformRepositoryStatsApiResponse(data.metric))})
   }, [])
 
   return (
