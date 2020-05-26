@@ -34,8 +34,7 @@ function RepositoryStats() {
       <Chart
         data={repoData}
         xAxis="Date"
-        lines={['Merged']}
-        bars={['Created', 'Rejected']}
+        bars={['Created', 'Rejected', 'Merged']}
       />
     </div>
   )
