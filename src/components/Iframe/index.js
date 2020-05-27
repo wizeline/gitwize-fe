@@ -22,6 +22,7 @@ export default function Iframe() {
         }}
         src={`https://www.youtube.com/embed/RFq7gfvhtCk`}
         frameBorder="0"
+        title="introduction video"
       />
     </div>
   );
