@@ -117,7 +117,9 @@ function MainLayout({ handleLogout }) {
                   </ListItem>);
     arrowBack = (<Link to="/" style={{ width: '100%' }}>
                   <ListItem>
-                    <Button className={classes.button} onClick = {() => setStateDashBoard(false)}>
+                    <Button className={classes.button} onClick = {() => {
+                      setStateDashBoard(false);
+                      toggleSubMenu()}}>
                       <ArrowBackIcon className={classes.icon} />
                     </Button>
                   </ListItem>
