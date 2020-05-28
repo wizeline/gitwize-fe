@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { useOktaAuth } from '@okta/okta-react'
 import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 
 import { ApiClient } from '../apis'
 import GetStartedImg from '../assets/images/getstarted.png'
@@ -82,6 +83,7 @@ export default function RepositoryList() {
   const [repoList, setRepoList] = useState([])
   const [isOpen, setOpen] = useState(false)
   const styles = useStyles()
+  const defaultPages = 'repository-stats';
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
@@ -137,8 +139,10 @@ export default function RepositoryList() {
             </Button>
           </div>
           <p className={styles.textSmallDisabled}>Most recent</p>
-          {repoList.map((item) => (
-            <RepositoryCard key={item.name} repo={item} />
+          {repoList.map((item, index) => (
+            <Link key ={index} to={`/repository/${item.id}/${defaultPages}/`} style={{ width: '100%' }}>
+              <RepositoryCard key={item.name} repo={item} />
+            </Link>
           ))}
         </>
       )}
