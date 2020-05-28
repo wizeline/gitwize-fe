@@ -24,7 +24,7 @@ function RepositoryStats(props) {
     })
     mainLayout.handleDisplaySubMenu(true);
     mainLayout.handleChangeRepositoryId(id);
-  }, [authState.accessToken])
+  }, [authState.accessToken, id, mainLayout])
 
   return (
     <div style={{ width: '100%' }}>

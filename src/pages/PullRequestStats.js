@@ -18,7 +18,7 @@ function PullRequestStats(props) {
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     apiClient.stats.getRepoStats(id).then(data => {setRepoData(transformRepositoryStatsApiResponse(data.metric))})
-  }, [authState.accessToken])
+  }, [authState.accessToken, id])
 
   return (
     <div style={{ width: '100%' }}>
