@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: '0px 6px 18px rgba(0, 0, 0, 0.1)',
     borderRadius: 4,
-    marginBottom: theme.spacing(5)
+    marginBottom: theme.spacing(5),
   },
   table: {
-    minWidth: 650
+    minWidth: 650,
   },
   headTextColor: {
     color: '#334D6E',
@@ -28,63 +28,55 @@ const useStyles = makeStyles((theme) => ({
   },
   bodyTextColor: {
     color: '#707683',
-    borderBottom: '1px solid #EBEFF2'
-  }
+    borderBottom: '1px solid #EBEFF2',
+  },
 }))
 
-export default function TableData({tableData, show}) {
+export default function TableData({ tableData, show }) {
   const classes = useStyles()
   const data = filterObjectByKey(tableData, show)
 
   const headRow = () => {
-    if(data.length !== 0) {
+    if (data.length !== 0) {
       return (
         <TableRow>
-          {
-            Object.keys(data[0]).map((value) => (
-              <TableCell key={value} className={classes.headTextColor}>{value}</TableCell>
-            ))
-          }
+          {Object.keys(data[0]).map((value) => (
+            <TableCell key={value} className={classes.headTextColor}>
+              {value}
+            </TableCell>
+          ))}
         </TableRow>
       )
     }
-    return
   }
 
   const bodyContent = () => {
     return (
-      <React.Fragment>
-      {
-        data.map((row, index) => (
+      <>
+        {data.map((row, index) => (
           <TableRow key={index}>
-            {
-              Object.entries(row).map(([key, value]) => (
-                <TableCell component="th" scope="row" className={classes.bodyTextColor}>{value}</TableCell>
-              ))
-            }
+            {Object.entries(row).map(([key, value]) => (
+              <TableCell component="th" scope="row" className={classes.bodyTextColor}>
+                {value}
+              </TableCell>
+            ))}
           </TableRow>
-        ))
-      }
-      </React.Fragment>
+        ))}
+      </>
     )
   }
 
   return (
     <TableContainer component={Paper} className={classes.root}>
       <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          {headRow()}
-        </TableHead>
-        <TableBody>
-          {bodyContent()}
-        </TableBody>
+        <TableHead>{headRow()}</TableHead>
+        <TableBody>{bodyContent()}</TableBody>
       </Table>
     </TableContainer>
-  );
+  )
 }
 
 TableData.propTypes = {
   tableData: PropTypes.instanceOf(Array).isRequired,
   show: PropTypes.instanceOf(Array).isRequired,
 }
-

@@ -23,6 +23,10 @@ export const convertApiKeyName = (name) => {
   }
 }
 
+export const calculateChangePercent = (additions, deletions, loc) => {
+  return (((additions + deletions) / loc) * 100).toFixed(2)
+}
+
 export const transformRepositoryStatsApiResponse = (data) => {
   const dataByDate = {}
 
@@ -44,8 +48,4 @@ export const transformRepositoryStatsApiResponse = (data) => {
       dataByDate[date]['Total lines of code']
     ),
   }))
-}
-
-export const calculateChangePercent = (additions, deletions, loc) => {
-  return (((additions + deletions) / loc) * 100).toFixed(2)
 }

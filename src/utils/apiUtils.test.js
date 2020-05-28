@@ -2,17 +2,16 @@ import { transformRepositoryStatsApiResponse } from './apiUtils'
 import { data } from './data'
 
 describe('transformRepositoryStatsApiResponse', () => {
-
   test('Create instace of Array', () => {
     expect(transformRepositoryStatsApiResponse(data)).toBeInstanceOf(Array)
   })
 
   test('Return enough data', () => {
-    expect(transformRepositoryStatsApiResponse(data).length).toBe(9)
+    expect(transformRepositoryStatsApiResponse(data).length).toBe(3)
   })
 
   test('Return correct data', () => {
-    expect(Object.values(transformRepositoryStatsApiResponse(data))[0].Date).toBe('12/10/2020')
+    expect(Object.values(transformRepositoryStatsApiResponse(data))[0].Date).toBe('4/29/2020')
   })
 
   test('Value is within the object', () => {

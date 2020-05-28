@@ -7,7 +7,7 @@ const { REACT_APP_API_URL } = process.env
 export class ApiClient {
   constructor() {
     this.httpClient = new ApiHttpClient({
-      baseURL: REACT_APP_API_URL
+      baseURL: REACT_APP_API_URL,
     })
     this.repos = new ReposApiClient(this.httpClient)
     this.stats = new StatsApiClient(this.httpClient)

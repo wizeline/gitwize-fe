@@ -6,14 +6,47 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import { makeStyles } from '@material-ui/core/styles'
 
-import styles from './AddRepositoryDialog.module.css'
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  header: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 500,
+    fontSize: '28px',
+    lineHeight: '42px',
+    letterSpacing: '0.01em',
+    color: '#192a3e',
+  },
+  button: {
+    backgroundColor: '#000000 !important',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.24)',
+    borderRadius: '4px',
+
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '13px',
+    lineHeight: '19px',
+    textAlign: 'center',
+    letterSpacing: '0.01em',
+    color: '#ffffff !important',
+    margin: '30px !important',
+  },
+}))
 
 function AddRepositoryDialog(props) {
   const { isOpen, handleClose, handleAdd } = props
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [url, setUrl] = useState('')
+  const styles = useStyles()
 
   const reset = () => {
     setUserName('')
