@@ -7,8 +7,8 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginRight: theme.spacing(5)
-  }
+    marginRight: theme.spacing(5),
+  },
 }))
 
 export default function DatePicker(props) {
@@ -16,7 +16,7 @@ export default function DatePicker(props) {
   const { label, minDate, maxDate } = props
   const styles = useStyles()
 
-  const handleDateChange = date => {
+  const handleDateChange = (date) => {
     setSelectedDate(date)
   }
 
@@ -34,7 +34,7 @@ export default function DatePicker(props) {
         maxDate={maxDate}
         onChange={handleDateChange}
         KeyboardButtonProps={{
-          'aria-label': 'change date'
+          'aria-label': 'change date',
         }}
         keyboardIcon={<Icon>arrow_drop_down</Icon>}
         className={styles.root}
@@ -44,5 +44,5 @@ export default function DatePicker(props) {
 }
 
 DatePicker.propTypes = {
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
 }

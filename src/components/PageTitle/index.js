@@ -11,5 +11,5 @@ export default function PageTitle({ children }) {
 }
 
 PageTitle.propTypes = {
-  children: PropTypes.string.isRequired
+  children: PropTypes.string.isRequired,
 }

@@ -13,7 +13,7 @@ import DashboardIcon from '@material-ui/icons/DashboardOutlined'
 import CallToActionIcon from '@material-ui/icons/CallToActionOutlined'
 import Container from '@material-ui/core/Container'
 
-import RepositoryList from '../components/RepositoryList'
+import RepositoryList from './RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
 
 const drawerWidth = 68
@@ -116,7 +116,7 @@ function MainLayout({ handleLogout }) {
 }
 
 MainLayout.propTypes = {
-  handleLogout: PropTypes.func.isRequired
+  handleLogout: PropTypes.func.isRequired,
 }
 
 export default MainLayout

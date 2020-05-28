@@ -7,7 +7,7 @@ const Navbar = () => {
 
   const login = async () => authService.login('/')
   const logout = async () => authService.logout('/')
-  
+
   return (
     <div>
       <Menu fixed="top" inverted>

@@ -6,15 +6,15 @@ import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import PropTypes from 'prop-types'
 
-const useFilterBarStyles = makeStyles(theme => ({
+const useFilterBarStyles = makeStyles((theme) => ({
   formControl: {
     marginTop: theme.spacing(2),
     paddingRight: theme.spacing(5),
-    width: '100%'
+    width: '100%',
   },
   selectEmpty: {
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }))
 
 export default function DropdownList(props) {
@@ -22,7 +22,7 @@ export default function DropdownList(props) {
   const classes = useFilterBarStyles()
   const { data, label, placeholder } = props
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setSelectedValue(e.target.value)
   }
 
@@ -43,7 +43,7 @@ export default function DropdownList(props) {
           <MenuItem value="" disabled>
             {placeholder}
           </MenuItem>
-          {data.map(item => (
+          {data.map((item) => (
             <MenuItem value={item} key={item}>
               {item}
             </MenuItem>
@@ -56,5 +56,6 @@ export default function DropdownList(props) {
 
 DropdownList.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
 }
