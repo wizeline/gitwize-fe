@@ -119,7 +119,9 @@ function MainLayout({ handleLogout }) {
                   <ListItem>
                     <Button className={classes.button} onClick = {() => {
                       setStateDashBoard(false);
-                      toggleSubMenu()}}>
+                      if(isSubMenuOpen) {
+                        toggleSubMenu()
+                      }}}>
                       <ArrowBackIcon className={classes.icon} />
                     </Button>
                   </ListItem>
