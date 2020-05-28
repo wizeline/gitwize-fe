@@ -19,7 +19,7 @@ function RepositoryStats(props) {
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
-    apiClient.stats.getRepoStats(1).then((data) => {
+    apiClient.stats.getRepoStats(id).then((data) => {
       setRepoData(transformRepositoryStatsApiResponse(data.metric))
     })
     mainLayout.handleDisplaySubMenu(true);
