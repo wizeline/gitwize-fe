@@ -26,10 +26,10 @@ export default function BranchPicker() {
   return (
     <Grid container className={styles.root}>
       <Grid item xs={6}>
-        <DropdownList label="Branch" data={branches} placeholder="Select a branch" />
+        <DropdownList label="Branch" data={branches} />
       </Grid>
       <Grid item xs={2}>
-        <DropdownList label="Show" data={showDate} placeholder="Select a period" />
+        <DropdownList label="Show" data={showDate} />
       </Grid>
       <Grid item xs={2}>
         <DatePicker label="From" />

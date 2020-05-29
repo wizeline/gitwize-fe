@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
+import NativeSelect from '@material-ui/core/NativeSelect'
 import PropTypes from 'prop-types'
 
 const useFilterBarStyles = makeStyles((theme) => ({
@@ -20,7 +19,7 @@ const useFilterBarStyles = makeStyles((theme) => ({
 export default function DropdownList(props) {
   const [selectedValue, setSelectedValue] = useState('')
   const classes = useFilterBarStyles()
-  const { data, label, placeholder } = props
+  const { data, label } = props
 
   const handleChange = (e) => {
     setSelectedValue(e.target.value)
@@ -32,23 +31,20 @@ export default function DropdownList(props) {
         <InputLabel shrink htmlFor="age-native-label-placeholder">
           {label}
         </InputLabel>
-        <Select
-          labelId="demo-simple-select-placeholder-label-label"
-          id="demo-simple-select-placeholder-label"
+        <NativeSelect
           value={selectedValue}
           onChange={handleChange}
-          displayEmpty
-          className={classes.selectEmpty}
+          inputProps={{
+            name: 'name',
+            id: 'uncontrolled-native',
+          }}
         >
-          <MenuItem value="" disabled>
-            {placeholder}
-          </MenuItem>
           {data.map((item) => (
-            <MenuItem value={item} key={item}>
+            <option value={item} key={item}>
               {item}
-            </MenuItem>
+            </option>
           ))}
-        </Select>
+        </NativeSelect>
       </FormControl>
     </div>
   )
@@ -57,5 +53,4 @@ export default function DropdownList(props) {
 DropdownList.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
 }
