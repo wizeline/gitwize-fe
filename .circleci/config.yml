@@ -6,10 +6,11 @@ jobs:
     steps:
       - checkout # check out the code in the project directory
       - run: 
-          name: Yarn build
+          name: Yarn install, build, and test
           command: |
             yarn install
             yarn build
+            yarn test
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
@@ -19,7 +20,7 @@ jobs:
     steps:
       - checkout # check out the code in the project directory
       - run:
-          name: Yarn build 
+          name: Build Package 
           command: |
             export BUILD_INFO=build-info.txt
             echo "${CIRCLE_BUILD_NUM}" >> $BUILD_INFO  
