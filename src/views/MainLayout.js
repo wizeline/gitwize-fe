@@ -46,7 +46,7 @@ const useStyles = makeStyles(() => ({
   subMenu: {
     width: drawerWidth,
   },
-  subMenu_paper: {
+  subMenuPaper: {
     left: drawerWidth,
     overflow: 'hidden',
     boxShadow: '6px 0px 18px rgba(0, 0, 0, 0.06)',
@@ -155,7 +155,7 @@ function MainLayout({ handleLogout }) {
               </ListItem>
             </List>
           </Drawer>
-          <Drawer variant="persistent" className={classes.subMenu} PaperProps={{ className: classes.subMenu_paper }}
+          <Drawer variant="persistent" className={classes.subMenu} PaperProps={{ className: classes.subMenuPaper }}
             anchor={sideMenuPosition} open={isSubMenuOpen}>
             <List>
               {subMenuItem.map((subMenuItem, index) => (
@@ -172,7 +172,7 @@ function MainLayout({ handleLogout }) {
               <Switch>
                 <Route path="/" exact component={RepositoryList} />
                 {subMenuItem.map((subMenuItem, index) =>(
-                  <Route key={index} path={'/repository/:id' + subMenuItem.uri} component={subMenuItem.component} />
+                  <Route key={subMenuItem.uri} path={'/repository/:id' + subMenuItem.uri} component={subMenuItem.component} />
                 ))}
               </Switch>
           </Container>

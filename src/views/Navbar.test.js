@@ -6,7 +6,7 @@ import Navbar from './Navbar'
 jest.mock('@okta/okta-react')
 
 describe('Navbar component', () => {
-  it('renders without crashing', () => {
+  fit('renders without crashing', () => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},

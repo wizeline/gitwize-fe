@@ -83,7 +83,7 @@ export default function RepositoryList() {
   const [repoList, setRepoList] = useState([])
   const [isOpen, setOpen] = useState(false)
   const styles = useStyles()
-  const defaultPages = 'repository-stats';
+  const defaultPage = 'repository-stats';
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
@@ -140,7 +140,7 @@ export default function RepositoryList() {
           </div>
           <p className={styles.textSmallDisabled}>Most recent</p>
           {repoList.map((item, index) => (
-            <Link key ={index} to={`/repository/${item.id}/${defaultPages}/`} style={{ width: '100%' }}>
+            <Link key ={item.id} to={`/repository/${item.id}/${defaultPage}/`} style={{ width: '100%' }}>
               <RepositoryCard key={item.name} repo={item} />
             </Link>
           ))}
