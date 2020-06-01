@@ -105,7 +105,7 @@ export default function RepositoryList() {
     const newRepo = {
       ...repoDetail,
       id: response.id,
-      name: response.url,
+      name: response.name,
       last_updated: response.last_updated,
       type: 'GitHub',
     }

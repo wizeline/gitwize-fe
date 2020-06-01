@@ -8,6 +8,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 
+import { getRepositoryNameFromGitHubUrl } from '../utils/apiUtils'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -57,8 +59,9 @@ function AddRepositoryDialog(props) {
   const handleSubmit = () => {
     // get data
     const data = { userName, password, url }
+    const name = getRepositoryNameFromGitHubUrl(url)
     reset()
-    handleAdd(data)
+    handleAdd({ ...data, name})
   }
 
   return (
