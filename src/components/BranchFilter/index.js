@@ -13,10 +13,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function BranchPicker(props) {
-  const {showDate, onPeriodChange} = props
+  const {showDate, onPeriodChange, customFilters = []} = props
   const [branches, setBranches] = useState([])
   const today = new Date()
   const styles = useStyles()
+  const defaultItemSize = 2;
+  let branchFilterSize =  12 - (customFilters.length*2 + defaultItemSize*3);
+  branchFilterSize = branchFilterSize < 2 ? 2 : branchFilterSize;
 
   useEffect(() => {
     fetchBranchesFromServer().then((data) => setBranches(data))
@@ -32,18 +35,19 @@ export default function BranchPicker(props) {
 
   return (
     <Grid container className={styles.root}>
-      <Grid item xs={6}>
+      <Grid item xs={branchFilterSize}>
         <DropdownList label="Branch" data={branches} onChange={(value) => handleChangeBranchValue(value)}/>
       </Grid>
-      <Grid item xs={2}>
-        <DropdownList label="Show" data={showDate} onChange={(value) => handleChangePeriodValue(value)}/>
+      <Grid item xs={defaultItemSize}>
+        <DropdownList label="Period" data={showDate} value={''} onChange={(value) => handleChangePeriodValue(value)}/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={defaultItemSize}>
         <DatePicker label="From" />
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={defaultItemSize}>
         <DatePicker label="To" maxDate={today} />
       </Grid>
+      {customFilters}
     </Grid>
   )
 }

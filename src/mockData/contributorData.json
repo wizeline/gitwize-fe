@@ -1,0 +1,37 @@
+{
+    "metric": [
+        {
+            "name": "Mr. A",
+            "commits": 100,
+            "additions": 100,
+            "deletions": 30,
+            "netChanges": 50,
+            "newCodePercents": 30,
+            "changePercent": 50,
+            "activeDays": 10,
+            "filesChange": 20
+        },
+        {
+            "name": "Ms. B",
+            "commits": 123,
+            "additions": 345,
+            "deletions": 20,
+            "netChanges": 50,
+            "newCodePercents": 30,
+            "changePercent": 30,
+            "activeDays": 5,
+            "filesChange": 10
+        },
+        {
+            "name": "Mrs. C",
+            "commits": 234,
+            "additions": 333,
+            "deletions": 23,
+            "netChanges": 30,
+            "newCodePercents": 50,
+            "changePercent": 20,
+            "activeDays": 10,
+            "filesChange": 20
+        }
+    ]
+}

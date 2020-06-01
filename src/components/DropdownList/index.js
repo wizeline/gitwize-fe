@@ -17,8 +17,8 @@ const useFilterBarStyles = makeStyles((theme) => ({
 }))
 
 export default function DropdownList(props) {
-  const {data, label, onChange} = props
-  const [selectedValue, setSelectedValue] = useState('')
+  const {data, label, onChange, value} = props
+  const [selectedValue, setSelectedValue] = useState(value)
   const classes = useFilterBarStyles()
 
   const handleChange = (e) => {
