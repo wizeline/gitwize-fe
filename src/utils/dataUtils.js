@@ -13,3 +13,9 @@ export const filterObjectByKey = (objects, allowed = []) => {
 
   return filteredData
 }
+
+export const createReversedArray = (array) => {
+  const reversedArray = array.reduce((acc, b) => [b, ...acc], [])
+
+  return reversedArray
+}

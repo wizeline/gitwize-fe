@@ -6,6 +6,7 @@ import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
 import TableData from '../components/TableData'
 import { ApiClient } from '../apis'
+import { createReversedArray } from '../utils/dataUtils'
 import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 
@@ -35,7 +36,7 @@ function RepositoryStats(props) {
         show={['Date', 'Commits', 'Additions', 'Deletions', 'Total lines of code', 'Change percent %']}
       />
       <Chart
-        data={repoData}
+        data={createReversedArray(repoData)}
         xAxis="Date"
         lines={['Commits', 'Additions']}
         bars={['Total lines of code', 'Deletions']}
