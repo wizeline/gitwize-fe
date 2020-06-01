@@ -102,12 +102,11 @@ export default function RepositoryList() {
     apiClient.setAccessToken(authState.accessToken)
 
     const response = await apiClient.repos.createRepo(repoDetail)
-    // TODO: those data should be returned by the API
     const newRepo = {
       ...repoDetail,
       id: response.id,
-      name: repoDetail.url,
-      lastUpdated: '',
+      name: response.url,
+      last_updated: response.last_updated,
       type: 'GitHub',
     }
 
@@ -139,11 +138,14 @@ export default function RepositoryList() {
             </Button>
           </div>
           <p className={styles.textSmallDisabled}>Most recent</p>
-          {repoList.map((item, index) => (
-            <Link key={item.id} to={`/repository/${item.id}/${defaultPage}/`} style={{ width: '100%' }}>
-              <RepositoryCard key={item.name} repo={item} />
-            </Link>
-          ))}
+          {repoList
+            .slice(0)
+            .reverse()
+            .map((item, index) => (
+              <Link key={item.id} to={`/repository/${item.id}/${defaultPage}/`} style={{ width: '100%' }}>
+                <RepositoryCard key={item.name} repo={item} />
+              </Link>
+            ))}
         </>
       )}
       <AddRepositoryDialog
