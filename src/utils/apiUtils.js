@@ -29,6 +29,7 @@ export const calculateChangePercent = (additions, deletions, loc) => {
 
 export const transformRepositoryStatsApiResponse = (data) => {
   const dataByDate = {}
+  const dataFields = ['Commits', 'Additions', 'Deletions', 'Total lines of code', 'Created', 'Merged', 'Rejected']
 
   Object.keys(data).forEach((metric) => {
     data[metric].forEach(({ as_of_date: date, value }) => {
@@ -39,13 +40,30 @@ export const transformRepositoryStatsApiResponse = (data) => {
     })
   })
 
-  return Object.keys(dataByDate).map((date) => ({
+  Object.keys(dataByDate).forEach((date) => {
+    dataFields.forEach((field) => {
+      if (!dataByDate[date].hasOwnProperty(field)) {
+        dataByDate[date][field] = 0
+        return dataByDate[date]
+      }
+    })
+  })
+
+  const dataOrderedByDate = {}
+  Object.keys(dataByDate)
+    .sort()
+    .reverse()
+    .forEach((date) => {
+      dataOrderedByDate[date] = dataByDate[date]
+    })
+
+  return Object.keys(dataOrderedByDate).map((date) => ({
     Date: date,
-    ...dataByDate[date],
+    ...dataOrderedByDate[date],
     'Change percent %': calculateChangePercent(
-      dataByDate[date].Additions,
-      dataByDate[date].Deletions,
-      dataByDate[date]['Total lines of code']
+      dataOrderedByDate[date].Additions,
+      dataOrderedByDate[date].Deletions,
+      dataOrderedByDate[date]['Total lines of code']
     ),
   }))
 }

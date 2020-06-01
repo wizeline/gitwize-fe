@@ -25,4 +25,17 @@ describe('transformRepositoryStatsApiResponse', () => {
     expect(Object.values(transformedData)[0].Created).toBe(1304)
     expect(Object.values(transformedData)[0].Rejected).toBe(1200)
   })
+
+  test('Missing field will be replaced by 0', () => {
+    delete data.loc[0]
+    delete data.lines_added[0]
+    delete data.commits[1]
+    delete data.lines_removed[1]
+    const transformedData = transformRepositoryStatsApiResponse(data)
+
+    expect(Object.values(transformedData)[0]['Total lines of code']).toBe(0)
+    expect(Object.values(transformedData)[0].Additions).toBe(0)
+    expect(Object.values(transformedData)[1].Commits).toBe(0)
+    expect(Object.values(transformedData)[1].Deletions).toBe(0)
+  })
 })

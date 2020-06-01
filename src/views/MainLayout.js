@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import clsx from 'clsx'
@@ -11,14 +11,14 @@ import { ListItemText, Button } from '@material-ui/core'
 import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
 import DashboardIcon from '@material-ui/icons/DashboardOutlined'
 import CallToActionIcon from '@material-ui/icons/CallToActionOutlined'
-import ArrowBackIcon from '@material-ui/icons/ArrowBackOutlined';
+import ArrowBackIcon from '@material-ui/icons/ArrowBackOutlined'
 import Container from '@material-ui/core/Container'
 
 import RepositoryList from './RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
 import PullRequestStats from '../pages/PullRequestStats'
-import useToggle from '../hooks/useToggle';
-import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
+import useToggle from '../hooks/useToggle'
+import { MainLayoutContexProvider } from '../contexts/MainLayoutContext'
 
 const drawerWidth = 68
 
@@ -87,50 +87,63 @@ const useStyles = makeStyles(() => ({
 }))
 
 function MainLayout({ handleLogout }) {
-  const classes = useStyles();
-  const [isDisplayDashBoard, setStateDashBoard] = useState(false);
-  const [repositoryId, setRepositoryId] = useState();
-  const sideMenuPosition = 'left';
-  const [isSubMenuOpen, toggleSubMenu] = useToggle(false);
-  let dashBoard, arrowBack;
+  const classes = useStyles()
+  const [isDisplayDashBoard, setStateDashBoard] = useState(false)
+  const [repositoryId, setRepositoryId] = useState()
+  const sideMenuPosition = 'left'
+  const [isSubMenuOpen, toggleSubMenu] = useToggle(false)
+  let dashBoard
+  let arrowBack
 
   const subMenuItem = [
-    {name: 'Repository stats', uri: '/repository-stats', component: RepositoryStats},
-    {name: 'Pull request stats', uri: '/pull-request-stats', component: PullRequestStats}, 
-    {name: 'Contributor stats', uri: '/contributor-stats'},
-    {name: 'Inactivity', uri: '/inactivity'},
-    {name: 'Code churn/frequency', uri: '/code-churn-frequency'},
-    {name: 'Commit activity trend', uri: '/commit-activity-trend'},
-    {name: 'Velocity', uri: '/velocity'}
-  ];
+    { name: 'Repository stats', uri: '/repository-stats', component: RepositoryStats },
+    { name: 'Pull request stats', uri: '/pull-request-stats', component: PullRequestStats },
+    { name: 'Contributor stats', uri: '/contributor-stats' },
+    { name: 'Inactivity', uri: '/inactivity' },
+    { name: 'Code churn/frequency', uri: '/code-churn-frequency' },
+    { name: 'Commit activity trend', uri: '/commit-activity-trend' },
+    { name: 'Velocity', uri: '/velocity' },
+  ]
 
   const mainLayOutContextValue = {
-    handleDisplaySubMenu: (isDisplayDashBoard) => {setStateDashBoard(isDisplayDashBoard)},
-    handleChangeRepositoryId: (repositoryId) => {setRepositoryId(repositoryId)}
+    handleDisplaySubMenu: (isDisplayDashBoard) => {
+      setStateDashBoard(isDisplayDashBoard)
+    },
+    handleChangeRepositoryId: (repositoryId) => {
+      setRepositoryId(repositoryId)
+    },
   }
 
-  if(isDisplayDashBoard) {
-    dashBoard =  (<ListItem>
-                    <Button className={classes.button} onClick = {() => toggleSubMenu()}>
-                      <DashboardIcon className={classes.icon} />
-                    </Button>
-                  </ListItem>);
-    arrowBack = (<Link to="/" style={{ width: '100%' }}>
-                  <ListItem>
-                    <Button className={classes.button} onClick = {() => {
-                      setStateDashBoard(false);
-                      if(isSubMenuOpen) {
-                        toggleSubMenu()
-                      }}}>
-                      <ArrowBackIcon className={classes.icon} />
-                    </Button>
-                  </ListItem>
-                </Link>);
+  if (isDisplayDashBoard) {
+    dashBoard = (
+      <ListItem>
+        <Button className={classes.button} onClick={() => toggleSubMenu()}>
+          <DashboardIcon className={classes.icon} />
+        </Button>
+      </ListItem>
+    )
+    arrowBack = (
+      <Link to="/" style={{ width: '100%' }}>
+        <ListItem>
+          <Button
+            className={classes.button}
+            onClick={() => {
+              setStateDashBoard(false)
+              if (isSubMenuOpen) {
+                toggleSubMenu()
+              }
+            }}
+          >
+            <ArrowBackIcon className={classes.icon} />
+          </Button>
+        </ListItem>
+      </Link>
+    )
   }
 
   return (
     <div className={classes.root}>
-      <MainLayoutContexProvider value ={mainLayOutContextValue}>
+      <MainLayoutContexProvider value={mainLayOutContextValue}>
         <Router>
           <CssBaseline />
           <Drawer variant="permanent" className={classes.drawer} PaperProps={{ className: classes.paper }}>
@@ -155,11 +168,16 @@ function MainLayout({ handleLogout }) {
               </ListItem>
             </List>
           </Drawer>
-          <Drawer variant="persistent" className={classes.subMenu} PaperProps={{ className: classes.subMenuPaper }}
-            anchor={sideMenuPosition} open={isSubMenuOpen}>
+          <Drawer
+            variant="persistent"
+            className={classes.subMenu}
+            PaperProps={{ className: classes.subMenuPaper }}
+            anchor={sideMenuPosition}
+            open={isSubMenuOpen}
+          >
             <List>
               {subMenuItem.map((subMenuItem, index) => (
-                <Link key={index} to={'/repository/'+repositoryId+subMenuItem.uri} style={{ width: '100%' }}>
+                <Link key={index} to={`/repository/${repositoryId}${subMenuItem.uri}`} style={{ width: '100%' }}>
                   <ListItem button key={subMenuItem.name} onClick={() => toggleSubMenu()}>
                     <ListItemText primary={subMenuItem.name} />
                   </ListItem>
@@ -169,12 +187,16 @@ function MainLayout({ handleLogout }) {
           </Drawer>
 
           <Container>
-              <Switch>
-                <Route path="/" exact component={RepositoryList} />
-                {subMenuItem.map((subMenuItem, index) =>(
-                  <Route key={subMenuItem.uri} path={'/repository/:id' + subMenuItem.uri} component={subMenuItem.component} />
-                ))}
-              </Switch>
+            <Switch>
+              <Route path="/" exact component={RepositoryList} />
+              {subMenuItem.map((subMenuItem, index) => (
+                <Route
+                  key={subMenuItem.uri}
+                  path={`/repository/:id${subMenuItem.uri}`}
+                  component={subMenuItem.component}
+                />
+              ))}
+            </Switch>
           </Container>
         </Router>
       </MainLayoutContexProvider>
