@@ -62,19 +62,19 @@ function RepositoryCard(props) {
   const styles = useStyles()
 
   return (
-      <Card className={styles.root}>
-        <CardContent className={styles.clickable}>
-          <p className={styles.repoName}>{repo.url}</p>
-          <div className={styles.detail}>
-            <p className={clsx(styles.header, styles.value)}>Last Updated: 05/26/2020</p>
-            <p className={styles.value}>{repo.lastUpdated}</p>
-          </div>
-          <div className={styles.detailType}>
-            <GitHubIcon />
-            <p className={styles.type}>GitHub</p>
-          </div>
-        </CardContent>
-      </Card>
+    <Card className={styles.root}>
+      <CardContent className={styles.clickable}>
+        <p className={styles.repoName}>{repo.url}</p>
+        <div className={styles.detail}>
+          <p className={clsx(styles.header, styles.value)}>Last Updated: 05/26/2020</p>
+          <p className={styles.value}>{repo.lastUpdated}</p>
+        </div>
+        <div className={styles.detailType}>
+          <GitHubIcon />
+          <p className={styles.type}>GitHub</p>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 

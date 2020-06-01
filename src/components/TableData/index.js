@@ -32,22 +32,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function TableData({ tableData, show }) {
+export default function TableData({ tableData, tabelColumn }) {
   const classes = useStyles()
-  const data = filterObjectByKey(tableData, show)
+  const data = filterObjectByKey(tableData, tabelColumn)
 
   const headRow = () => {
-    if (data.length !== 0) {
-      return (
-        <TableRow>
-          {Object.keys(data[0]).map((value) => (
-            <TableCell key={value} className={classes.headTextColor}>
-              {value}
-            </TableCell>
-          ))}
-        </TableRow>
-      )
-    }
+    return (
+      <TableRow>
+        {tabelColumn.map((value) => (
+          <TableCell key={value} className={classes.headTextColor}>
+            {value}
+          </TableCell>
+        ))}
+      </TableRow>
+    )
   }
 
   const bodyContent = () => {
@@ -55,9 +53,9 @@ export default function TableData({ tableData, show }) {
       <>
         {data.map((row, index) => (
           <TableRow key={index}>
-            {Object.entries(row).map(([key, value]) => (
-              <TableCell component="th" scope="row" className={classes.bodyTextColor}>
-                {value}
+            {tabelColumn.map((column) => (
+              <TableCell component="th" scope="row" key={column} className={classes.headTextColor}>
+                {row[column]}
               </TableCell>
             ))}
           </TableRow>
@@ -78,5 +76,5 @@ export default function TableData({ tableData, show }) {
 
 TableData.propTypes = {
   tableData: PropTypes.instanceOf(Array).isRequired,
-  show: PropTypes.instanceOf(Array).isRequired,
+  tabelColumn: PropTypes.instanceOf(Array).isRequired,
 }
