@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
+import { DateTime } from 'luxon'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -51,6 +52,7 @@ const useStyles = makeStyles(() => ({
     lineHeight: '19px',
     letterSpacing: '0.01em',
     color: '#707683',
+    marginLeft: '5px',
   },
   clickable: {
     cursor: 'pointer',
@@ -66,8 +68,10 @@ function RepositoryCard(props) {
       <CardContent className={styles.clickable}>
         <p className={styles.repoName}>{repo.url}</p>
         <div className={styles.detail}>
-          <p className={clsx(styles.header, styles.value)}>Last Updated: 05/26/2020</p>
-          <p className={styles.value}>{repo.lastUpdated}</p>
+          <p className={clsx(styles.header, styles.value)}>
+            Last Updated:
+            {DateTime.fromISO(repo.last_updated).toLocaleString()}
+          </p>
         </div>
         <div className={styles.detailType}>
           <GitHubIcon />
