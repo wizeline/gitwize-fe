@@ -69,8 +69,10 @@ export const transformRepositoryStatsApiResponse = (data) => {
 }
 
 export const getRepositoryNameFromGitHubUrl = (url) => {
-  const pattern = "([^/]+)(?=.git)"
+  const splittedUrl = url.split("/")
+  const finalPart = splittedUrl[splittedUrl.length - 1]
 
-  const repoName = url.match(pattern)
-  return repoName === null ? url : repoName[0]
+  const repoName = finalPart.replace(".git", "")
+  
+  return repoName === null ? url : repoName
 }
