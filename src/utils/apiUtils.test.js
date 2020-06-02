@@ -52,4 +52,16 @@ describe('getRepositoryNameFromGitHubUrl', () => {
 
     expect(getRepositoryNameFromGitHubUrl(url)).toBe(url)
   })
+
+  test('GitHub URL with SSH format', () => {
+    const url = "git@github.com:wizeline/gitwize-fe.git"
+
+    expect(getRepositoryNameFromGitHubUrl(url)).toBe("gitwize-fe")
+  })
+
+  test('URL without .git', () => {
+    const urlHttp = "https://github.com/thinguyenwizeline/wizeline-nightwatch-automation.git" 
+    
+    expect(getRepositoryNameFromGitHubUrl(urlHttp)).toBe("wizeline-nightwatch-automation")
+  })
 })
