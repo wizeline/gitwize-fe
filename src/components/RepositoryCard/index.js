@@ -1,11 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import GitHubIcon from '@material-ui/icons/GitHub'
+import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles'
+import { useOktaAuth } from '@okta/okta-react'
+import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { DateTime } from 'luxon'
+import { ApiClient } from '../../apis'
+import ConfirmationDialog from '../confirmation/ConfirmationDialog'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -34,7 +38,10 @@ const useStyles = makeStyles(() => ({
   detailType: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'baseline',
+  },
+  deleteBtn: {
+    // alignSelf: 'flex-end'
   },
   header: {
     opacity: 0.5,
@@ -60,13 +67,37 @@ const useStyles = makeStyles(() => ({
 }))
 
 function RepositoryCard(props) {
-  const { repo } = props
+  const statsPage = "repository-stats"
+  const { repo, handleDeletionOK, handleDeletionCancel } = props
   const styles = useStyles()
+  const { authState } = useOktaAuth()
+  const [deletionConfirmOpen, setDeletionConfirmOpen] = useState(false)
+  const apiClient = new ApiClient()
+
+
+  const handleDeletionConfirmationOK = async (repoDetail = {}) => {
+    apiClient.setAccessToken(authState.accessToken)
+    await apiClient.repos.deleteRepo(repo.id)
+    // TODO error handling
+    handleDeletionOK(repo)
+    setDeletionConfirmOpen(false)
+  }
+
+  const handleDeletionConfirmationCancel = () => {
+    setDeletionConfirmOpen(false)
+    handleDeletionCancel()
+  }
+
+  const showDeletionConfirmationDialog = () => {
+    setDeletionConfirmOpen(true)
+  }
 
   return (
     <Card className={styles.root}>
       <CardContent className={styles.clickable}>
-        <p className={styles.repoName}>{repo.name}</p>
+        <Link key ={repo.id} to={`/repository/${repo.id}/${statsPage}/`} style={{ width: '100%' }}>
+          <p className={styles.repoName}>{repo.name}</p>
+        </Link>
         <div className={styles.detail}>
           <p className={clsx(styles.header, styles.value)}>
             Last Updated:
@@ -76,18 +107,17 @@ function RepositoryCard(props) {
         <div className={styles.detailType}>
           <GitHubIcon />
           <p className={styles.type}>GitHub</p>
+          <div className={styles.deleteBtn} onClick={() => showDeletionConfirmationDialog()}>
+              <DeleteIcon />
+          </div>
         </div>
       </CardContent>
+      <ConfirmationDialog
+      isOpen={deletionConfirmOpen}
+      handleCancel={() => handleDeletionConfirmationCancel()}
+      handleOK={() => handleDeletionConfirmationOK()}/>
     </Card>
   )
-}
-
-RepositoryCard.propTypes = {
-  repo: PropTypes.shape({
-    name: PropTypes.string,
-    lastUpdated: PropTypes.string,
-    type: PropTypes.string,
-  }),
 }
 
 RepositoryCard.defaultProps = {

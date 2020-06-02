@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import { useOktaAuth } from '@okta/okta-react'
 import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
 
 import { ApiClient } from '../apis'
 import GetStartedImg from '../assets/images/getstarted.png'
@@ -83,7 +82,6 @@ export default function RepositoryList() {
   const [repoList, setRepoList] = useState([])
   const [isOpen, setOpen] = useState(false)
   const styles = useStyles()
-  const defaultPage = 'repository-stats'
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
@@ -98,6 +96,14 @@ export default function RepositoryList() {
     setOpen(false)
   }
 
+  const removeRepo = (item) => {
+    const removed = repoList.filter(x => x.id !== item.id)
+
+    setRepoList(removed)
+  }
+
+  const handleDeletionCancel = () => {}
+
   const handleAddRepo = async (repoDetail = {}) => {
     apiClient.setAccessToken(authState.accessToken)
 
@@ -110,8 +116,7 @@ export default function RepositoryList() {
       type: 'GitHub',
     }
 
-    repoList.push(newRepo)
-    setRepoList(repoList)
+    setRepoList([...repoList, newRepo])
     setOpen(false)
   }
 
@@ -142,9 +147,9 @@ export default function RepositoryList() {
             .slice(0)
             .reverse()
             .map((item, index) => (
-              <Link key={item.id} to={`/repository/${item.id}/${defaultPage}/`} style={{ width: '100%' }}>
-                <RepositoryCard key={item.name} repo={item} />
-              </Link>
+              <div key={item.id} style={{width: '100%'}}>
+                <RepositoryCard key={item.id} repo={item} handleDeletionOK={(item) => removeRepo(item)} handleDeletionCancel={() => handleDeletionCancel()}/>
+              </div>
             ))}
         </>
       )}
