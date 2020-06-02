@@ -1,4 +1,4 @@
-import { transformRepositoryStatsApiResponse } from './apiUtils'
+import { transformRepositoryStatsApiResponse, getRepositoryNameFromGitHubUrl } from './apiUtils'
 import { data } from './data'
 
 describe('transformRepositoryStatsApiResponse', () => {
@@ -37,5 +37,19 @@ describe('transformRepositoryStatsApiResponse', () => {
     expect(Object.values(transformedData)[0].Additions).toBe(0)
     expect(Object.values(transformedData)[1].Commits).toBe(0)
     expect(Object.values(transformedData)[1].Deletions).toBe(0)
+  })
+})
+
+describe('getRepositoryNameFromGitHubUrl', () => {
+  test('Return reponame from github url', () => {
+    const url = "https://github.com/thinguyenwizeline/wizeline-nightwatch-automation.git"
+
+    expect(getRepositoryNameFromGitHubUrl(url)).toBe("wizeline-nightwatch-automation")
+  })
+
+  test('Invalid github url', () => {
+    const url = "wizeline_academy"
+
+    expect(getRepositoryNameFromGitHubUrl(url)).toBe(url)
   })
 })

@@ -66,7 +66,7 @@ function RepositoryCard(props) {
   return (
     <Card className={styles.root}>
       <CardContent className={styles.clickable}>
-        <p className={styles.repoName}>{repo.url}</p>
+        <p className={styles.repoName}>{repo.name}</p>
         <div className={styles.detail}>
           <p className={clsx(styles.header, styles.value)}>
             Last Updated:
