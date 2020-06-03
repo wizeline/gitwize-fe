@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import GitHubIcon from '@material-ui/icons/GitHub'
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { makeStyles } from '@material-ui/core/styles'
 import { useOktaAuth } from '@okta/okta-react'
 import { Link } from 'react-router-dom'
@@ -115,7 +115,7 @@ function RepositoryCard(props) {
             <p className={styles.typeText}>GitHub</p>
           </div>
           <div className={styles.deleteBtn} onClick={() => showDeletionConfirmationDialog()}>
-              <DeleteIcon />
+              <DeleteOutlineIcon />
           </div>
         </div>
       </CardContent>
