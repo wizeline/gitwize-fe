@@ -79,6 +79,9 @@ function RepositoryCard(props) {
   const [deletionConfirmOpen, setDeletionConfirmOpen] = useState(false)
   const apiClient = new ApiClient()
 
+  const alertHeader = "Repository Deletion"
+  const alertText = "Are you sure that you want to delete this repository?"
+
 
   const handleDeletionConfirmationOK = async (repoDetail = {}) => {
     apiClient.setAccessToken(authState.accessToken)
@@ -122,7 +125,8 @@ function RepositoryCard(props) {
       <ConfirmationDialog
       isOpen={deletionConfirmOpen}
       handleCancel={() => handleDeletionConfirmationCancel()}
-      handleOK={() => handleDeletionConfirmationOK()}/>
+      handleOK={() => handleDeletionConfirmationOK()}
+      alertHeader={alertHeader} alertText={alertText}/>
     </Card>
   )
 }

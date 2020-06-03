@@ -41,18 +41,18 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function ConfirmationDialog(props) {
-  const { isOpen, handleCancel, handleOK } = props
+  const { isOpen, alertHeader, alertText, handleCancel, handleOK } = props
   const styles = useStyles()
 
   return (
     <div className={styles.root}>
       <Dialog open={isOpen} onClose={handleCancel} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title" className={styles.header}>
-          Repository Deletion
+          {alertHeader}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-          Are you sure you want to remove this repository?
+          {alertText}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
