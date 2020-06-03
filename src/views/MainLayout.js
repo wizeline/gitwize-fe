@@ -69,16 +69,20 @@ const useStyles = makeStyles(() => ({
     minWidth: 0,
   },
   chosenButton: {
-    padding: 0,
-    minWidth: 0,
+    fontWeight: 'bold',
+  },
+  wrapperButton: {
     background: '#FDEFEF',
-    borderRadius: '8px'
+    borderRadius: '8px',
+    width: '100%',
+    marginRight: '1vh',
+    marginTop: '5px'
   },
   icon: {
     color: '#ec5d5c'
   },
   buttonText: {
-    marginLeft: '2vh',
+    marginLeft: '1vh',
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -87,10 +91,9 @@ const useStyles = makeStyles(() => ({
     color: '#EC5D5C'
   },
   buttonSubMenutext: {
-    marginLeft: '4.5vh',
+    marginLeft: '2.5vh',
     fontFamily: 'Poppins',
     fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: '15px',
     lineHeight: '21px',
     color: '#202020'
@@ -157,12 +160,13 @@ function MainLayout(props) {
       toggleSubMenu();
     }
     setStateDashBoard(false);
+    setRepositoryId(undefined);
   }
 
   if(isDisplayDashBoard) {
     dashBoard = (
-      <ListItem>
-        <Button className={classes.button} onClick={() => toggleSubMenu()}>
+      <ListItem className={classes.button}>
+        <Button className={clsx(classes.buttonText, classes.wrapperButton)} onClick={() => toggleSubMenu()}>
           <DashboardIcon className={classes.icon} />
           <ListItemText classes={{primary: classes.buttonText}} primary={repositoryName}/>
           {isSubMenuOpen ? <ExpandLess /> : <ExpandMore />}
@@ -171,8 +175,8 @@ function MainLayout(props) {
     )
   } else {
     dashBoard = (
-      <ListItem>
-        <Button className={classes.button}>
+      <ListItem className={classes.button}>
+        <Button className={clsx(classes.buttonText, classes.wrapperButton)}>
           <DashboardIcon className={classes.icon} />
           <ListItemText classes={{primary: classes.buttonText}} primary={'Active Repositories'}/>
         </Button>
@@ -209,8 +213,9 @@ function MainLayout(props) {
               <List>
                 {subMenuItem.map((subMenuItem, index) => (
                   <ListItem button key={subMenuItem.name}>
-                  <NavLink activeClassName={classes.chosenButton} key={index} to={`/repository/${repositoryId}${subMenuItem.uri}`} style={{ width: '100%' }}>
-                    <ListItemText classes={{primary: classes.buttonSubMenutext}}  primary={subMenuItem.name}/>
+                  <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={index} to={`/repository/${repositoryId}${subMenuItem.uri}`} style={{ width: '100%' }}>
+                  {subMenuItem.name}
+                    {/* <ListItemText classes={{primary: classes.buttonSubMenutext}}  primary={subMenuItem.name}/> */}
                   </NavLink>
                 </ListItem>
                 ))}
