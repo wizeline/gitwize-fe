@@ -35,10 +35,11 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'row',
     marginBottom: '27px',
   },
-  detailType: {
+  footer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'baseline',
+    justifyContent: 'space-between'
   },
   deleteBtn: {
     // alignSelf: 'flex-end'
@@ -54,6 +55,10 @@ const useStyles = makeStyles(() => ({
     color: '#4c5862',
   },
   type: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  typeText: {
     fontWeight: 'normal',
     fontSize: '13px',
     lineHeight: '19px',
@@ -104,9 +109,11 @@ function RepositoryCard(props) {
             {DateTime.fromISO(repo.last_updated).toLocaleString()}
           </p>
         </div>
-        <div className={styles.detailType}>
-          <GitHubIcon />
-          <p className={styles.type}>GitHub</p>
+        <div className={styles.footer}>
+          <div className={styles.type}>
+            <GitHubIcon />
+            <p className={styles.typeText}>GitHub</p>
+          </div>
           <div className={styles.deleteBtn} onClick={() => showDeletionConfirmationDialog()}>
               <DeleteIcon />
           </div>
