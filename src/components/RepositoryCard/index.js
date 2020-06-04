@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { DateTime } from 'luxon'
 import { ApiClient } from '../../apis'
-import ConfirmationDialog from '../confirmation/ConfirmationDialog'
+import ConfirmationDialog from '../Confirmation/ConfirmationDialog'
 
 const useStyles = makeStyles(() => ({
   root: {
