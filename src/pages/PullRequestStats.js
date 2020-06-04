@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 
-import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
@@ -29,7 +28,6 @@ function PullRequestStats(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>Pull Request Stats</PageTitle>
-      <BranchFilter />
       <DataStats tableData={repoData} chartData={repoData} xAxis={'Date'} 
                     tableColumn={tableColumn} chartBars={chartBars}/>
     </div>

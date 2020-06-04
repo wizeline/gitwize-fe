@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 
-import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { createReversedArray } from '../utils/dataUtils'
@@ -31,9 +30,8 @@ function RepositoryStats(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>Repository Request Stats</PageTitle>
-      <BranchFilter />
       <DataStats tableData={repoData} chartData={createReversedArray(repoData)} xAxis={'Date'} 
-                    tableColumn={tableColumn} chartLines={chartLines} chartBars={chartBars}/>
+                      tableColumn={tableColumn} chartLines={chartLines} chartBars={chartBars}/>
     </div>
   )
 }

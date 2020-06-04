@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { getChartColor } from '../../utils/chartUtils'
+// import {Bar} from 'react-chartjs-2'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +29,6 @@ export default function Chart(props) {
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <Legend />
           <Tooltip />
-
           {bars.map((bar) => (
             <Bar dataKey={bar} fill={getChartColor(bar)} barSize={10} isAnimationActive={false} key={bar} />
           ))}
