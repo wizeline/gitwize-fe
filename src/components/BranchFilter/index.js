@@ -15,10 +15,10 @@ const useStyles = makeStyles((theme) => ({
 export default function BranchPicker(props) {
   const {showDate, onPeriodChange, customFilters = []} = props
   const [branches, setBranches] = useState([])
-  const today = new Date()
   const styles = useStyles()
   const defaultItemSize = 2;
-  let branchFilterSize =  12 - (customFilters.length*2 + defaultItemSize*3);
+  const datePickerSize = 3;
+  let branchFilterSize =  12 - (customFilters.length*2 + defaultItemSize + datePickerSize);
   branchFilterSize = branchFilterSize < 2 ? 2 : branchFilterSize;
 
   useEffect(() => {
@@ -41,11 +41,8 @@ export default function BranchPicker(props) {
       <Grid item xs={defaultItemSize}>
         <DropdownList label="Period" data={showDate} value={''} onChange={(value) => handleChangePeriodValue(value)}/>
       </Grid>
-      <Grid item xs={defaultItemSize}>
+      <Grid item xs={datePickerSize}>
         <DatePicker label="From" />
-      </Grid>
-      <Grid item xs={defaultItemSize}>
-        <DatePicker label="To" maxDate={today} />
       </Grid>
       {customFilters}
     </Grid>
