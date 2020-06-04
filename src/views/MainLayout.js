@@ -149,6 +149,9 @@ function MainLayout(props) {
     },
     handleChangeRepositoryId: (repositoryId) => {
       setRepositoryId(repositoryId)
+      if(!isSubMenuOpen && repositoryId) {
+        toggleSubMenu()
+      }
     },
     handleChangeRepositoryName: (repositoryName) => {
       setRepositoryName(repositoryName)
