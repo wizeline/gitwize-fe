@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 
-import Chart from '../components/Chart'
 import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
-import TableData from '../components/TableData'
 import { ApiClient } from '../apis'
 import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
+import DataStats from '../components/DataStats'
 
 const apiClient = new ApiClient()
-const tabelColumn = ['Date', 'Merged', 'Rejected', 'Created']
+const tableColumn = ['Date', 'Merged', 'Rejected', 'Created']
 const chartBars = ['Created', 'Rejected', 'Merged']
 
 function PullRequestStats(props) {
@@ -31,8 +30,8 @@ function PullRequestStats(props) {
     <div style={{ width: '100%' }}>
       <PageTitle>Pull Request Stats</PageTitle>
       <BranchFilter />
-      <TableData tableData={repoData} tabelColumn={tabelColumn} />
-      <Chart data={repoData} xAxis="Date" bars={chartBars} />
+      <DataStats tableData={repoData} chartData={repoData} xAxis={'Date'} 
+                    tableColumn={tableColumn} chartBars={chartBars}/>
     </div>
   )
 }
