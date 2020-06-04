@@ -33,7 +33,7 @@ const Dashboard = () => {
   return (
     <div>
       <CssBaseline />
-      {authState.isAuthenticated && userInfo && <MainLayout handleLogout={() => logout()} />}
+      {authState.isAuthenticated && userInfo && <MainLayout userInfor={userInfo} handleLogout={() => logout()} />}
       {!authState.isAuthenticated && <LandingPage handleLogin={() => login()} />}
     </div>
   )

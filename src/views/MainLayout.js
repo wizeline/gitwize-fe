@@ -1,18 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useOktaAuth } from '@okta/okta-react'
 import PropTypes from 'prop-types'
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, NavLink, Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem'
 import { ListItemText, Button } from '@material-ui/core'
 import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
 import DashboardIcon from '@material-ui/icons/DashboardOutlined'
 import CallToActionIcon from '@material-ui/icons/CallToActionOutlined'
-import ArrowBackIcon from '@material-ui/icons/ArrowBackOutlined'
-import Container from '@material-ui/core/Container'
+import Collapse from '@material-ui/core/Collapse';
+import Container from '@material-ui/core/Container';
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import { ApiClient } from '../apis'
 
 import RepositoryList from './RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
@@ -20,7 +25,8 @@ import PullRequestStats from '../pages/PullRequestStats'
 import useToggle from '../hooks/useToggle'
 import { MainLayoutContexProvider } from '../contexts/MainLayoutContext'
 
-const drawerWidth = 68
+const drawerWidth = (256)
+const apiClient = new ApiClient()
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -35,24 +41,13 @@ const useStyles = makeStyles(() => ({
     whiteSpace: 'nowrap',
   },
   paper: {
-    background: '#000',
+    background: '#FFF',
     width: drawerWidth,
     overflow: 'hidden',
     boxShadow: '6px 0px 18px rgba(0, 0, 0, 0.06)',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  subMenu: {
-    width: drawerWidth,
-  },
-  subMenuPaper: {
-    left: drawerWidth,
-    overflow: 'hidden',
-    boxShadow: '6px 0px 18px rgba(0, 0, 0, 0.06)',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   logoText: {
     fontFamily: 'Open Sans',
@@ -61,17 +56,47 @@ const useStyles = makeStyles(() => ({
     lineHeight: '15px',
     /* identical to box height */
     textAlign: 'center',
-    color: '#F2F2F2',
+    color: '#cccccc',
+    flex:'none !important',
   },
   logoTextBold: {
+    flex:'none !important',
     fontWeight: 'bold',
+    color: '#b5b5b5'
   },
   button: {
     padding: 0,
     minWidth: 0,
   },
+  chosenButton: {
+    fontWeight: 'bold',
+  },
+  wrapperButton: {
+    background: '#FDEFEF',
+    borderRadius: '8px',
+    width: '100%',
+    marginRight: '1vh',
+    marginTop: '5px'
+  },
   icon: {
-    color: '#F2F2F2',
+    color: '#ec5d5c'
+  },
+  buttonText: {
+    marginLeft: '1vh',
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 500,
+    fontSize: '13px',
+    lineHeight: '21px',
+    color: '#EC5D5C'
+  },
+  buttonSubMenutext: {
+    marginLeft: '2.5vh',
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontSize: '15px',
+    lineHeight: '21px',
+    color: '#202020'
   },
   iconRotate: {
     transform: 'rotate(90deg)',
@@ -84,16 +109,29 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     backgroundColor: 'white',
   },
+  textRoot: {
+    flex: 'none'
+  }
 }))
 
-function MainLayout({ handleLogout }) {
+function MainLayout(props) {
+  const {handleLogout, userInfor} = props;
   const classes = useStyles()
-  const [isDisplayDashBoard, setStateDashBoard] = useState(false)
   const [repositoryId, setRepositoryId] = useState()
-  const sideMenuPosition = 'left'
+  const [repositoryName, setRepositoryName] = useState()
+  const [isDisplayDashBoard, setStateDashBoard] = useState(false)
   const [isSubMenuOpen, toggleSubMenu] = useToggle(false)
+  const { authState } = useOktaAuth()
+  useEffect(() => {
+    if(repositoryId) {
+      apiClient.setAccessToken(authState.accessToken)
+      apiClient.stats.getRepoStats(repositoryId).then((data) => {
+        setRepositoryName(data.name)
+        setStateDashBoard(true)
+      })
+    }
+  }, [authState.accessToken, repositoryId])
   let dashBoard
-  let arrowBack
 
   const subMenuItem = [
     { name: 'Repository stats', uri: '/repository-stats', component: RepositoryStats },
@@ -111,35 +149,44 @@ function MainLayout({ handleLogout }) {
     },
     handleChangeRepositoryId: (repositoryId) => {
       setRepositoryId(repositoryId)
+      if(!isSubMenuOpen && repositoryId) {
+        toggleSubMenu()
+      }
     },
+    handleChangeRepositoryName: (repositoryName) => {
+      setRepositoryName(repositoryName)
+    }
+  }
+  
+  const handleBackToRepo = () => {
+    if(isSubMenuOpen) {
+      toggleSubMenu();
+    }
+    setStateDashBoard(false);
+    setRepositoryId(undefined);
   }
 
-  if (isDisplayDashBoard) {
+  if(isDisplayDashBoard) {
     dashBoard = (
-      <ListItem>
-        <Button className={classes.button} onClick={() => toggleSubMenu()}>
+      <ListItem className={classes.button}>
+        <Button className={clsx(classes.buttonText, classes.wrapperButton)} onClick={() => toggleSubMenu()}>
           <DashboardIcon className={classes.icon} />
+          <ListItemText classes={{primary: classes.buttonText}} primary={repositoryName}/>
+          {isSubMenuOpen ? <ExpandLess /> : <ExpandMore />}
         </Button>
       </ListItem>
     )
-    arrowBack = (
-      <Link to="/" style={{ width: '100%' }}>
-        <ListItem>
-          <Button
-            className={classes.button}
-            onClick={() => {
-              setStateDashBoard(false)
-              if (isSubMenuOpen) {
-                toggleSubMenu()
-              }
-            }}
-          >
-            <ArrowBackIcon className={classes.icon} />
-          </Button>
-        </ListItem>
-      </Link>
+  } else {
+    dashBoard = (
+      <ListItem className={classes.button}>
+        <Button className={clsx(classes.buttonText, classes.wrapperButton)}>
+          <DashboardIcon className={classes.icon} />
+          <ListItemText classes={{primary: classes.buttonText}} primary={'Active Repositories'}/>
+        </Button>
+      </ListItem>
     )
   }
+  
 
   return (
     <div className={classes.root}>
@@ -148,42 +195,43 @@ function MainLayout({ handleLogout }) {
           <CssBaseline />
           <Drawer variant="permanent" className={classes.drawer} PaperProps={{ className: classes.paper }}>
             <List>
-              <ListItem>
-                <ListItemText classes={{ primary: clsx(classes.logoText, classes.logoTextBold) }}>Git</ListItemText>
-                <ListItemText classes={{ primary: classes.logoText }}>Wize</ListItemText>
-              </ListItem>
+              <Link to="/" style={{ width: '100%' }}>
+                <Button onClick={handleBackToRepo}>
+                  <ListItem>
+                    <ListItemText classes={{ primary: clsx(classes.logoText, classes.logoTextBold), root: classes.textRoot }}>Git</ListItemText>
+                    <ListItemText classes={{ primary: classes.logoText, root: classes.textRoot }}>Wize</ListItemText>
+                  </ListItem>
+                </Button>
+              </Link>
               <ListItem>
                 <Button className={classes.button}>
                   <PermIdentityIcon className={classes.icon} />
+                  <ListItemText classes={{primary: classes.buttonText}} primary={userInfor.name}/>
                 </Button>
               </ListItem>
+              <Divider />
               {dashBoard}
-              {arrowBack}
             </List>
-            <List>
+            <Collapse in={isSubMenuOpen}>
+              <List>
+                {subMenuItem.map((subMenuItem, index) => (
+                  <ListItem button key={subMenuItem.name}>
+                  <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={index} to={`/repository/${repositoryId}${subMenuItem.uri}`} style={{ width: '100%' }}>
+                  {subMenuItem.name}
+                    {/* <ListItemText classes={{primary: classes.buttonSubMenutext}}  primary={subMenuItem.name}/> */}
+                  </NavLink>
+                </ListItem>
+                ))}
+              </List>
+            </Collapse>
+            <List  style={{marginTop: 'auto'}}>
               <ListItem>
                 <Button className={classes.button} onClick={handleLogout}>
                   <CallToActionIcon className={clsx(classes.icon, classes.iconRotate)} />
                 </Button>
               </ListItem>
             </List>
-          </Drawer>
-          <Drawer
-            variant="persistent"
-            className={classes.subMenu}
-            PaperProps={{ className: classes.subMenuPaper }}
-            anchor={sideMenuPosition}
-            open={isSubMenuOpen}
-          >
-            <List>
-              {subMenuItem.map((subMenuItem, index) => (
-                <Link key={index} to={`/repository/${repositoryId}${subMenuItem.uri}`} style={{ width: '100%' }}>
-                  <ListItem button key={subMenuItem.name} onClick={() => toggleSubMenu()}>
-                    <ListItemText primary={subMenuItem.name} />
-                  </ListItem>
-                </Link>
-              ))}
-            </List>
+            
           </Drawer>
 
           <Container>
