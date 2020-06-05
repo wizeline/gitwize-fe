@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext} from 'react'
+import React, { useState, useEffect, useContext, useRef} from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 import * as cloneDeep from 'lodash/cloneDeep';
 
@@ -49,7 +49,7 @@ function ContributorStatsPage(props) {
   const [chartData, setChartData] = useState([]);
   const [userFilterList, setUserFilterList] = useState([]);
   const { authState } = useOktaAuth();
-  const mainLayout = useContext(MainLayoutContex)
+  const mainLayout = useRef(useContext(MainLayoutContex))
 
   const handleChangeUser = (userName) =>  {
     console.log(userName);
@@ -61,7 +61,7 @@ function ContributorStatsPage(props) {
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
-    mainLayout.handleChangeRepositoryId(id)
+    mainLayout.current.handleChangeRepositoryId(id)
     apiClient.contributor.getContributorStats(id).then((data) => {
       const tableData = tranformData(data.metric, true);
       let userList = ['Average'];

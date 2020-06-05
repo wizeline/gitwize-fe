@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 
 import PageTitle from '../components/PageTitle'
@@ -16,14 +16,14 @@ const chartBars = ['Total lines of code', 'Deletions']
 function RepositoryStats(props) {
   const [repoData, setRepoData] = useState([])
   const { authState } = useOktaAuth()
-  const mainLayout = useContext(MainLayoutContex)
   const [{ dateRange }] = useContext(PageContext)
+  const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
-      mainLayout.handleChangeRepositoryId(id)
+      mainLayout.current.handleChangeRepositoryId(id)
       setRepoData(transformMetricsDataApiResponse(data.metric, dateRange))
     })
   }, [authState.accessToken, id, mainLayout, dateRange])
