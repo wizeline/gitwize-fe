@@ -71,13 +71,14 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
+const apiClient = new ApiClient()
+
 function RepositoryCard(props) {
   const statsPage = "repository-stats"
   const { repo, handleDeletionOK, handleDeletionCancel } = props
   const styles = useStyles()
   const { authState } = useOktaAuth()
   const [deletionConfirmOpen, setDeletionConfirmOpen] = useState(false)
-  const apiClient = new ApiClient()
 
   const alertHeader = "Repository Deletion"
   const alertText = "Are you sure that you want to delete this repository?"
