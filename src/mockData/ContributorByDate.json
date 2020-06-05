@@ -1,0 +1,48 @@
+{
+    "metric": [
+        {
+            "date": "2018-10-19T08:00:00.000Z",
+            "commits": 100,
+            "additions": 100,
+            "deletions": 30,
+            "netChanges": 50,
+            "newCodePercents": 30,
+            "changePercent": 50,
+            "activeDays": 10,
+            "filesChange": 20
+        },
+        {
+            "date": "2018-10-20T08:00:00.000Z",
+            "commits": 123,
+            "additions": 345,
+            "deletions": 20,
+            "netChanges": 50,
+            "newCodePercents": 30,
+            "changePercent": 30,
+            "activeDays": 5,
+            "filesChange": 10
+        },
+        {
+            "date": "2018-10-21T08:00:00.000Z",
+            "commits": 234,
+            "additions": 333,
+            "deletions": 23,
+            "netChanges": 30,
+            "newCodePercents": 50,
+            "changePercent": 20,
+            "activeDays": 10,
+            "filesChange": 20
+        },
+        {
+            "date": "2018-10-22T08:00:00.000Z",
+            "commits": 234,
+            "additions": 333,
+            "deletions": 23,
+            "netChanges": 30,
+            "newCodePercents": 50,
+            "changePercent": 20,
+            "activeDays": 10,
+            "filesChange": 20
+        }
+    ]
+}

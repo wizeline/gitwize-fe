@@ -22,8 +22,9 @@ import { ApiClient } from '../apis'
 import RepositoryList from './RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
 import PullRequestStats from '../pages/PullRequestStats'
-import useToggle from '../hooks/useToggle'
-import { MainLayoutContexProvider } from '../contexts/MainLayoutContext'
+import useToggle from '../hooks/useToggle';
+import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
+import ContributorStatsPage from '../pages/ContributorStatsPage'
 
 const drawerWidth = (256)
 const apiClient = new ApiClient()
@@ -134,14 +135,14 @@ function MainLayout(props) {
   let dashBoard
 
   const subMenuItem = [
-    { name: 'Repository stats', uri: '/repository-stats', component: RepositoryStats },
-    { name: 'Pull request stats', uri: '/pull-request-stats', component: PullRequestStats },
-    { name: 'Contributor stats', uri: '/contributor-stats' },
-    { name: 'Inactivity', uri: '/inactivity' },
-    { name: 'Code churn/frequency', uri: '/code-churn-frequency' },
-    { name: 'Commit activity trend', uri: '/commit-activity-trend' },
-    { name: 'Velocity', uri: '/velocity' },
-  ]
+    {name: 'Repository stats', uri: '/repository-stats', component: RepositoryStats},
+    {name: 'Pull request stats', uri: '/pull-request-stats', component: PullRequestStats}, 
+    {name: 'Contributor stats', uri: '/contributor-stats', component: ContributorStatsPage},
+    {name: 'Inactivity', uri: '/inactivity'},
+    {name: 'Code churn/frequency', uri: '/code-churn-frequency'},
+    {name: 'Commit activity trend', uri: '/commit-activity-trend'},
+    {name: 'Velocity', uri: '/velocity'}
+  ];
 
   const mainLayOutContextValue = {
     handleDisplaySubMenu: (isDisplayDashBoard) => {

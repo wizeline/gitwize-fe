@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 function DataStats(props) {
-    const {tableData, chartData, xAxis, tableColumn, chartLines, chartBars} = props
+    const {tableData, chartData, xAxis, tableColumn, chartLines, chartBars, isDisplayMaterialTable, customFilters} = props
     const [isDisplayChart, toggleChartTable] = useToggle(true);
     const classes = useStyles();
     const [headerTxt, setHeaderTxt] = useState(showDate[0])
@@ -47,7 +47,7 @@ function DataStats(props) {
     }
     return (
         <>
-          <BranchFilter showDate={showDate} onPeriodChange={(headerTxt) => handleChangeHeaderTxt(headerTxt)}/>
+          <BranchFilter showDate={showDate} onPeriodChange={(headerTxt) => handleChangeHeaderTxt(headerTxt)} customFilters={customFilters}/>
           <Grid container className={classes.root}>
             <Grid className={classes.gridItem} item xs={6}>
               <Paper className={classes.textStyle} elevation={0} square={true} variant="elevation">{headerTxt}</Paper>
@@ -56,7 +56,7 @@ function DataStats(props) {
               <Button className={classes.button} variant="outlined" onClick={handleToggleView}>{isDisplayChart ? 'View Table' : 'View Chart'}</Button>
             </Grid>
           </Grid>
-          {!isDisplayChart && <TableData tableData={tableData} tabelColumn={tableColumn} />}
+          {!isDisplayChart && <TableData tableData={tableData} tableColumn={tableColumn} isDisplayMaterialTable={isDisplayMaterialTable}/>}
           {isDisplayChart && <Chart data={chartData} xAxis={xAxis} lines={chartLines} bars={chartBars} />}
         </>
       )

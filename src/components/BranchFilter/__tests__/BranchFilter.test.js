@@ -19,6 +19,6 @@ describe('BranchFilter', () => {
     const filter = shallow(<BranchFilter />)
     const dropdown = filter.find('DropdownList')
 
-    expect(dropdown.at(1).props().label).toBe('Show')
+    expect(dropdown.at(1).props().label).toBe('Period')
   })
 })
