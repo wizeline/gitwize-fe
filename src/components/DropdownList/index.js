@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -17,12 +17,13 @@ const useFilterBarStyles = makeStyles((theme) => ({
 }))
 
 export default function DropdownList(props) {
+  const {data, label, onChange} = props
   const [selectedValue, setSelectedValue] = useState('')
   const classes = useFilterBarStyles()
-  const { data, label } = props
 
   const handleChange = (e) => {
     setSelectedValue(e.target.value)
+    onChange(e.target.value)
   }
 
   return (
@@ -52,5 +53,5 @@ export default function DropdownList(props) {
 
 DropdownList.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired
 }

@@ -6,15 +6,14 @@ import DropdownList from '../DropdownList'
 import { fetchBranchesFromServer } from '../../services/dataFetchingService'
 import DatePicker from '../DatePicker'
 
-const showDate = ['Last 90 Days', 'Last 60 Days', 'Last 30 Days', 'Last 7 Days']
-
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(5),
   },
 }))
 
-export default function BranchPicker() {
+export default function BranchPicker(props) {
+  const {showDate, onPeriodChange} = props
   const [branches, setBranches] = useState([])
   const today = new Date()
   const styles = useStyles()
@@ -23,13 +22,21 @@ export default function BranchPicker() {
     fetchBranchesFromServer().then((data) => setBranches(data))
   }, [])
 
+  const handleChangePeriodValue = (value) => {
+    onPeriodChange(value);
+  }
+  const handleChangeBranchValue = (value) => {
+    //DO NOTHING
+    return;
+  }
+
   return (
     <Grid container className={styles.root}>
       <Grid item xs={6}>
-        <DropdownList label="Branch" data={branches} />
+        <DropdownList label="Branch" data={branches} onChange={(value) => handleChangeBranchValue(value)}/>
       </Grid>
       <Grid item xs={2}>
-        <DropdownList label="Show" data={showDate} />
+        <DropdownList label="Show" data={showDate} onChange={(value) => handleChangePeriodValue(value)}/>
       </Grid>
       <Grid item xs={2}>
         <DatePicker label="From" />

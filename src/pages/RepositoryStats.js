@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 
-import Chart from '../components/Chart'
-import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
-import TableData from '../components/TableData'
 import { ApiClient } from '../apis'
 import { createReversedArray } from '../utils/dataUtils'
 import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
+import DataStats from '../views/DataStats'
 
 const apiClient = new ApiClient()
-const tabelColumn = ['Date', 'Commits', 'Additions', 'Deletions', 'Total lines of code', 'Change percent %']
+const tableColumn = ['Date', 'Commits', 'Additions', 'Deletions', 'Total lines of code', 'Change percent %']
 const chartLines = ['Commits', 'Additions']
 const chartBars = ['Total lines of code', 'Deletions']
 
@@ -32,9 +30,8 @@ function RepositoryStats(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>Repository Request Stats</PageTitle>
-      <BranchFilter />
-      <TableData tableData={repoData} tabelColumn={tabelColumn} />
-      <Chart data={createReversedArray(repoData)} xAxis="Date" lines={chartLines} bars={chartBars} />
+      <DataStats tableData={repoData} chartData={createReversedArray(repoData)} xAxis={'Date'} 
+                      tableColumn={tableColumn} chartLines={chartLines} chartBars={chartBars}/>
     </div>
   )
 }

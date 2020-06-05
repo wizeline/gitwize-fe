@@ -28,7 +28,6 @@ export default function Chart(props) {
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <Legend />
           <Tooltip />
-
           {bars.map((bar) => (
             <Bar dataKey={bar} fill={getChartColor(bar)} barSize={10} isAnimationActive={false} key={bar} />
           ))}
