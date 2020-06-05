@@ -5,7 +5,7 @@ import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import DataStats from '../components/DataStats'
+import DataStats from '../views/DataStats'
 
 const apiClient = new ApiClient()
 const tableColumn = ['Date', 'Merged', 'Rejected', 'Created']

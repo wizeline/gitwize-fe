@@ -6,7 +6,7 @@ import { ApiClient } from '../apis'
 import { createReversedArray } from '../utils/dataUtils'
 import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import DataStats from '../components/DataStats'
+import DataStats from '../views/DataStats'
 
 const apiClient = new ApiClient()
 const tableColumn = ['Date', 'Commits', 'Additions', 'Deletions', 'Total lines of code', 'Change percent %']

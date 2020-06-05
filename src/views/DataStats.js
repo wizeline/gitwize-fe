@@ -3,10 +3,10 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
-import TableData from '../TableData'
-import Chart from '../Chart'
-import useToggle from '../../hooks/useToggle'
-import BranchFilter from '../../components/BranchFilter'
+import TableData from '../components/TableData'
+import Chart from '../components/Chart'
+import useToggle from '../hooks/useToggle'
+import BranchFilter from '../components/BranchFilter'
 
 const showDate = ['Last 90 Days', 'Last 60 Days', 'Last 30 Days', 'Last 7 Days']
 const useStyles = makeStyles(() => ({
