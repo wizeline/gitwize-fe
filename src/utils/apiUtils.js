@@ -1,71 +1,43 @@
-import { DateTime } from 'luxon'
-
-export const convertApiKeyName = (name) => {
-  switch (name) {
-    case 'commits':
-      return 'Commits'
-    case 'lines_added':
-      return 'Additions'
-    case 'lines_removed':
-      return 'Deletions'
-    case 'prs':
-      return 'Pull requests'
-    case 'loc':
-      return 'Total lines of code'
-    case 'prs_created':
-      return 'Created'
-    case 'prs_merged':
-      return 'Merged'
-    case 'prs_rejected':
-      return 'Rejected'
-    default:
-      return 'No thing'
-  }
-}
-
 export const calculateChangePercent = (additions, deletions, loc) => {
-  return (((additions + deletions) / loc) * 100).toFixed(2)
+  return loc ? (((additions + deletions) / loc) * 100).toFixed(2) : 0
 }
 
-export const transformRepositoryStatsApiResponse = (data) => {
+export const transformMetricsDataApiResponse = (data, dateRange) => {
+  let { date_from, date_to } = dateRange
   const dataByDate = {}
-  const dataFields = ['Commits', 'Additions', 'Deletions', 'Total lines of code', 'Created', 'Merged', 'Rejected']
 
   Object.keys(data).forEach((metric) => {
-    data[metric].forEach(({ as_of_date: date, value }) => {
-      date = DateTime.fromISO(date).toLocaleString()
-      dataByDate[date] = dataByDate[date]
-        ? { ...dataByDate[date], [convertApiKeyName(metric)]: value }
-        : { [convertApiKeyName(metric)]: value }
-    })
+    if(data[metric] !== null) {
+      data[metric].forEach(({ as_of_date: date, value }) => {
+        dataByDate[date] = dataByDate[date]
+          ? { ...dataByDate[date], [metric]: value }
+          : { [metric]: value }
+      })
+    }
   })
 
-  Object.keys(dataByDate).forEach((date) => {
-    dataFields.forEach((field) => {
-      if (!dataByDate[date].hasOwnProperty(field)) {
-        dataByDate[date][field] = 0
-        return dataByDate[date]
-      }
-    })
-  })
+  const dateList = []
+  while(date_from <= date_to) {
+    const date = (new Date(date_from*1000)).toLocaleDateString()
+    
+    const metricByDate = dataByDate[date] ? dataByDate[date] : {}
 
-  const dataOrderedByDate = {}
-  Object.keys(dataByDate)
-    .sort()
-    .reverse()
-    .forEach((date) => {
-      dataOrderedByDate[date] = dataByDate[date]
+    dateList.push({
+      Date: date,
+      Commits: metricByDate.commits ? metricByDate.commits : 0,
+      Additions: metricByDate.lines_added !== undefined ? metricByDate.lines_added : 0,
+      Deletions: metricByDate.lines_removed !== undefined ? metricByDate.lines_removed : 0,
+      'Total lines of code': metricByDate.loc !== undefined ? metricByDate.loc : 0,
+      'Change percent %': calculateChangePercent(metricByDate.lines_added, metricByDate.lines_removed, metricByDate.loc),
+      Created: metricByDate.prs_created !== undefined ? metricByDate.prs_created : 0,
+      Merged: metricByDate.prs_merged !== undefined ? metricByDate.prs_merged : 0,
+      Rejected:metricByDate.prs_rejected !== undefined ? metricByDate.prs_rejected : 0
     })
 
-  return Object.keys(dataOrderedByDate).map((date) => ({
-    Date: date,
-    ...dataOrderedByDate[date],
-    'Change percent %': calculateChangePercent(
-      dataOrderedByDate[date].Additions,
-      dataOrderedByDate[date].Deletions,
-      dataOrderedByDate[date]['Total lines of code']
-    ),
-  }))
+    date_from = date_from + (24*3600)
+  }
+
+  return dateList
 }
 
 export const getRepositoryNameFromGitHubUrl = (url) => {
@@ -75,4 +47,8 @@ export const getRepositoryNameFromGitHubUrl = (url) => {
   const repoName = finalPart.replace(".git", "")
   
   return repoName === null ? url : repoName
+}
+
+export const convertDateToSecond = (date) => {
+  return Math.floor(date.getTime()/1000)
 }

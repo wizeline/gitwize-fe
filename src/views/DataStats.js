@@ -7,8 +7,9 @@ import TableData from '../components/TableData'
 import Chart from '../components/Chart'
 import useToggle from '../hooks/useToggle'
 import BranchFilter from '../components/BranchFilter'
+import { createReversedArray } from '../utils/dataUtils'
 
-const showDate = ['Last 90 Days', 'Last 60 Days', 'Last 30 Days', 'Last 7 Days']
+const showDate = ['Last 7 Days', 'Last 14 Days', 'Last 21 Days', 'Last 30 Days', 'Custom']
 const useStyles = makeStyles(() => ({
     root: {
       justifyContent: 'space-between',
@@ -56,7 +57,7 @@ function DataStats(props) {
               <Button className={classes.button} variant="outlined" onClick={handleToggleView}>{isDisplayChart ? 'View Table' : 'View Chart'}</Button>
             </Grid>
           </Grid>
-          {!isDisplayChart && <TableData tableData={tableData} tableColumn={tableColumn} isDisplayMaterialTable={isDisplayMaterialTable}/>}
+          {!isDisplayChart && <TableData tableData={createReversedArray(tableData)} tableColumn={tableColumn} isDisplayMaterialTable={isDisplayMaterialTable}/>}
           {isDisplayChart && <Chart data={chartData} xAxis={xAxis} lines={chartLines} bars={chartBars} />}
         </>
       )

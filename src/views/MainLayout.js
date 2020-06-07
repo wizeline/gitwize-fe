@@ -25,6 +25,7 @@ import PullRequestStats from '../pages/PullRequestStats'
 import useToggle from '../hooks/useToggle';
 import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
 import ContributorStatsPage from '../pages/ContributorStatsPage'
+import { PageProvider } from '../contexts/PageContext'
 
 const drawerWidth = (256)
 const apiClient = new ApiClient()
@@ -191,6 +192,7 @@ function MainLayout(props) {
 
   return (
     <div className={classes.root}>
+      <PageProvider>
       <MainLayoutContexProvider value={mainLayOutContextValue}>
         <Router>
           <CssBaseline />
@@ -249,6 +251,7 @@ function MainLayout(props) {
           </Container>
         </Router>
       </MainLayoutContexProvider>
+      </PageProvider>
     </div>
   )
 }

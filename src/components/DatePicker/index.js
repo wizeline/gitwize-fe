@@ -3,9 +3,9 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import Paper from '@material-ui/core/Paper'
 import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -25,39 +25,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function DatePicker() {
-  const [dateRange, setDateRange] = useState({
+export default function DatePicker(props) {
+  const { label, onChange } = props
+  const [pickedDate, setPickedDate] = useState({
     from: undefined,
     to: undefined
   })
-  const [openDatePicker, setOpenDatePicker] = useState(false)
-
+  const [openDayPickerTable, setOpenDayPickerTable] = useState(false)
   const styles = useStyles()
-  
-  const getInitialState = () => {
-    return {
-      from: undefined,
-      to: undefined,
-    };
-  }
 
-  const handleDayClick = (day) => {
-    const range = DateUtils.addDayToRange(day, dateRange)
-    if(range.to !== undefined)
-      setOpenDatePicker(false)
-    setDateRange(range);
-  }
-
-  const handleResetClick = () => {
-    setDateRange(getInitialState)
+  const handleClickAway = () => {
+    setOpenDayPickerTable(false)
   }
 
   const toggleDatePicker = () => {
-    setOpenDatePicker(!openDatePicker)
+    setOpenDayPickerTable((prev) => !prev);
   }
 
-    const { from, to } = dateRange
-    const modifiers = { start: from, end: to };
+  const handleDayClick = (day) => {
+    const range = DateUtils.addDayToRange(day, pickedDate)
+    setPickedDate(range)
+    onChange(range)
+  }
+
+    const { from, to } = pickedDate
+    const modifiers = { start: pickedDate.from, end: pickedDate.to };
 
     const selectedDateRange = () => {
       if(!from && !to)
@@ -69,10 +61,11 @@ export default function DatePicker() {
     }
 
     return (
+      <ClickAwayListener onClickAway={handleClickAway}>
       <FormControl className={styles.formControl}>
         <TextField
           id='standard-helperText'
-          label={'Date range'}
+          label={label}
           value={selectedDateRange()}
           InputProps={{
             readOnly: true,
@@ -81,7 +74,7 @@ export default function DatePicker() {
         />
 
       <div className='RangeExample'>
-        <Paper style={{display: `${openDatePicker ? "block" : "none"}` }} 
+        <Paper style={{display: `${openDayPickerTable ? "block" : "none"}` }} 
           className={styles.datePicker}>
         <DayPicker
           className='Selectable'
@@ -117,5 +110,6 @@ export default function DatePicker() {
 `}</style>
       </div>
       </FormControl>
+      </ClickAwayListener>
     );
 }
