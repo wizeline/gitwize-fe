@@ -1,6 +1,7 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import Chart from '../index'
+import {tranformToChartData} from '../../../utils/dataUtils'
 
 const data = [
   {
@@ -47,39 +48,42 @@ const data = [
   },
 ]
 
-describe('Chart', () => {
-  test('render withour crashing', () => {
-    const wrapper = shallow(<Chart xAxis="name" data={data} lines={['uv', 'pv']} bars={['amt']} />)
-
-    expect(wrapper.find('ComposedChart').length).toBe(1)
+fdescribe('Chart', () => {
+  it('render withour crashing', () => {
+    const chartData = tranformToChartData([{name: 'uv'}, {name: 'pv'}], [{name: 'amt'}], data, "name")
+    const wrapper = mount(<Chart data={chartData}/>)
+    expect(wrapper.find('Bar').length).toBe(1)
   })
 
   it('should match snapshot renders', () => {
-    const component = shallow(<Chart xAxis="name" data={data} lines={['uv', 'pv']} bars={['amt']} />)
+    const chartData = tranformToChartData([{name: 'uv'}, {name: 'pv'}], [{name: 'amt'}], data, "name")
+    const component = mount(<Chart data={chartData} />)
     expect(component).toMatchSnapshot()
   })
 
-  test('There should be a combination of bar and Line Chart', () => {
-    const wrapper = shallow(<Chart xAxis="name" data={data} lines={['uv']} bars={['amt']} />)
-    expect(wrapper.find('Line').length).toBe(1)
-    expect(wrapper.find('Bar').length).toBe(1)
+  it('There should be a combination of bar and Line Chart', () => {
+    const chartData = tranformToChartData([{name: 'uv'}], [{name: 'amt'}], data, "name")
+    const wrapper = mount(<Chart data={chartData} />)
+    const bar = (wrapper.find('Bar'))
+    const dataSets = bar.props().data.datasets
+    expect(dataSets[0].type).toBe('line')
+    expect(dataSets[1].type).toBe('bar')
   })
 
   test('There should be only 2 lines of Line Chart', () => {
-    const wrapper = shallow(<Chart xAxis="name" data={data} lines={['uv']} />)
-    expect(wrapper.find('Line').length).toBe(1)
-    expect(wrapper.find('Bar').length).toBe(0)
+    const chartData = tranformToChartData([{name: 'uv'}, {name: 'pv'}], [], data, "name")
+    const wrapper = mount(<Chart data={chartData}/>)
+    const bar = (wrapper.find('Bar'))
+    const dataSets = bar.props().data.datasets
+    expect(dataSets[0].type).toBe('line')
+    expect(dataSets[1].type).toBe('line')
   })
 
   test('There should be only bars of Bar Chart', () => {
-    const wrapper = shallow(<Chart xAxis="name" data={data} bars={['amt']} />)
-    expect(wrapper.find('Line').length).toBe(0)
-    expect(wrapper.find('Bar').length).toBe(1)
-  })
-
-  test('Draw correct data', () => {
-    const wrapper = shallow(<Chart xAxis="name" data={data} lines={['uv', 'pv']} bars={['amt']} />)
-    expect(wrapper.find('Line').length).toBe(2)
-    expect(wrapper.find('Bar').length).toBe(1)
+    const chartData = tranformToChartData([], [{name: 'amt'}], data, "name")
+    const wrapper = mount(<Chart data={chartData}/>)
+    const bar = (wrapper.find('Bar'))
+    const dataSets = bar.props().data.datasets
+    expect(dataSets[0].type).toBe('bar')
   })
 })

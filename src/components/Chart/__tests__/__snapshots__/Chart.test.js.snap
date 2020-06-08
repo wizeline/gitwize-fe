@@ -1,254 +1,382 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Chart should match snapshot renders 1`] = `
-<WithStyles(ForwardRef(Paper))
-  className="makeStyles-root-1"
->
-  <ResponsiveContainer
-    debounce={0}
-    height={300}
-    width="100%"
-  >
-    <ComposedChart
-      barCategoryGap="10%"
-      barGap={4}
-      cx="50%"
-      cy="50%"
-      data={
-        Array [
-          Object {
-            "amt": 2400,
-            "name": "Page A",
-            "pv": 2400,
-            "uv": 4000,
-          },
-          Object {
-            "amt": 2210,
-            "name": "Page B",
-            "pv": 1398,
-            "uv": 3000,
-          },
-          Object {
-            "amt": 2290,
-            "name": "Page C",
-            "pv": 9800,
-            "uv": 2000,
-          },
-          Object {
-            "amt": 2000,
-            "name": "Page D",
-            "pv": 3908,
-            "uv": 2780,
-          },
-          Object {
-            "amt": 2181,
-            "name": "Page E",
-            "pv": 4800,
-            "uv": 1890,
-          },
-          Object {
-            "amt": 2500,
-            "name": "Page F",
-            "pv": 3800,
-            "uv": 2390,
-          },
-          Object {
-            "amt": 2100,
-            "name": "Page G",
-            "pv": 4300,
-            "uv": 3490,
-          },
-        ]
-      }
-      layout="horizontal"
-      margin={
+<Chart
+  data={
+    Object {
+      "datasets": Array [
         Object {
-          "bottom": 5,
-          "left": 5,
-          "right": 5,
-          "top": 5,
+          "backgroundColor": undefined,
+          "borderColor": undefined,
+          "borderDash": undefined,
+          "data": Array [
+            4000,
+            3000,
+            2000,
+            2780,
+            1890,
+            2390,
+            3490,
+          ],
+          "fill": false,
+          "label": "uv",
+          "pointBackgroundColor": undefined,
+          "pointBorderColor": undefined,
+          "pointHoverBackgroundColor": undefined,
+          "pointHoverBorderColor": undefined,
+          "type": "line",
+        },
+        Object {
+          "backgroundColor": undefined,
+          "borderColor": undefined,
+          "borderDash": undefined,
+          "data": Array [
+            2400,
+            1398,
+            9800,
+            3908,
+            4800,
+            3800,
+            4300,
+          ],
+          "fill": false,
+          "label": "pv",
+          "pointBackgroundColor": undefined,
+          "pointBorderColor": undefined,
+          "pointHoverBackgroundColor": undefined,
+          "pointHoverBorderColor": undefined,
+          "type": "line",
+        },
+        Object {
+          "backgroundColor": undefined,
+          "borderColor": undefined,
+          "data": Array [
+            2400,
+            2210,
+            2290,
+            2000,
+            2181,
+            2500,
+            2100,
+          ],
+          "fill": false,
+          "hoverBackgroundColor": undefined,
+          "hoverBorderColor": undefined,
+          "label": "amt",
+          "type": "bar",
+        },
+      ],
+      "labels": Array [
+        "Page A",
+        "Page B",
+        "Page C",
+        "Page D",
+        "Page E",
+        "Page F",
+        "Page G",
+      ],
+    }
+  }
+>
+  <WithStyles(ForwardRef(Paper))
+    className="makeStyles-root-1"
+  >
+    <ForwardRef(Paper)
+      className="makeStyles-root-1"
+      classes={
+        Object {
+          "elevation0": "MuiPaper-elevation0",
+          "elevation1": "MuiPaper-elevation1",
+          "elevation10": "MuiPaper-elevation10",
+          "elevation11": "MuiPaper-elevation11",
+          "elevation12": "MuiPaper-elevation12",
+          "elevation13": "MuiPaper-elevation13",
+          "elevation14": "MuiPaper-elevation14",
+          "elevation15": "MuiPaper-elevation15",
+          "elevation16": "MuiPaper-elevation16",
+          "elevation17": "MuiPaper-elevation17",
+          "elevation18": "MuiPaper-elevation18",
+          "elevation19": "MuiPaper-elevation19",
+          "elevation2": "MuiPaper-elevation2",
+          "elevation20": "MuiPaper-elevation20",
+          "elevation21": "MuiPaper-elevation21",
+          "elevation22": "MuiPaper-elevation22",
+          "elevation23": "MuiPaper-elevation23",
+          "elevation24": "MuiPaper-elevation24",
+          "elevation3": "MuiPaper-elevation3",
+          "elevation4": "MuiPaper-elevation4",
+          "elevation5": "MuiPaper-elevation5",
+          "elevation6": "MuiPaper-elevation6",
+          "elevation7": "MuiPaper-elevation7",
+          "elevation8": "MuiPaper-elevation8",
+          "elevation9": "MuiPaper-elevation9",
+          "outlined": "MuiPaper-outlined",
+          "root": "MuiPaper-root",
+          "rounded": "MuiPaper-rounded",
         }
       }
-      outerRadius="80%"
-      reverseStackOrder={false}
-      stackOffset="none"
     >
-      <XAxis
-        allowDataOverflow={false}
-        allowDecimals={true}
-        allowDuplicatedCategory={true}
-        dataKey="name"
-        domain={
-          Array [
-            0,
-            "auto",
-          ]
-        }
-        height={30}
-        hide={false}
-        mirror={false}
-        orientation="bottom"
-        padding={
-          Object {
-            "left": 0,
-            "right": 0,
+      <div
+        className="MuiPaper-root makeStyles-root-1 MuiPaper-elevation1 MuiPaper-rounded"
+      >
+        <Bar
+          data={
+            Object {
+              "datasets": Array [
+                Object {
+                  "backgroundColor": undefined,
+                  "borderColor": undefined,
+                  "borderDash": undefined,
+                  "data": Array [
+                    4000,
+                    3000,
+                    2000,
+                    2780,
+                    1890,
+                    2390,
+                    3490,
+                  ],
+                  "fill": false,
+                  "label": "uv",
+                  "pointBackgroundColor": undefined,
+                  "pointBorderColor": undefined,
+                  "pointHoverBackgroundColor": undefined,
+                  "pointHoverBorderColor": undefined,
+                  "type": "line",
+                },
+                Object {
+                  "backgroundColor": undefined,
+                  "borderColor": undefined,
+                  "borderDash": undefined,
+                  "data": Array [
+                    2400,
+                    1398,
+                    9800,
+                    3908,
+                    4800,
+                    3800,
+                    4300,
+                  ],
+                  "fill": false,
+                  "label": "pv",
+                  "pointBackgroundColor": undefined,
+                  "pointBorderColor": undefined,
+                  "pointHoverBackgroundColor": undefined,
+                  "pointHoverBorderColor": undefined,
+                  "type": "line",
+                },
+                Object {
+                  "backgroundColor": undefined,
+                  "borderColor": undefined,
+                  "data": Array [
+                    2400,
+                    2210,
+                    2290,
+                    2000,
+                    2181,
+                    2500,
+                    2100,
+                  ],
+                  "fill": false,
+                  "hoverBackgroundColor": undefined,
+                  "hoverBorderColor": undefined,
+                  "label": "amt",
+                  "type": "bar",
+                },
+              ],
+              "labels": Array [
+                "Page A",
+                "Page B",
+                "Page C",
+                "Page D",
+                "Page E",
+                "Page F",
+                "Page G",
+              ],
+            }
           }
-        }
-        reversed={false}
-        scale="auto"
-        tickCount={5}
-        type="category"
-        width={0}
-        xAxisId={0}
-      />
-      <YAxis
-        allowDataOverflow={false}
-        allowDecimals={true}
-        allowDuplicatedCategory={true}
-        domain={
-          Array [
-            0,
-            "auto",
-          ]
-        }
-        height={0}
-        hide={false}
-        mirror={false}
-        orientation="left"
-        padding={
-          Object {
-            "bottom": 0,
-            "top": 0,
+          options={
+            Object {
+              "elements": Object {
+                "line": Object {
+                  "fill": false,
+                },
+              },
+              "legend": Object {
+                "position": "bottom",
+              },
+              "responsive": true,
+              "scales": Object {
+                "xAxes": Array [
+                  Object {
+                    "display": true,
+                    "gridLines": Object {
+                      "display": true,
+                    },
+                    "stacked": true,
+                  },
+                ],
+                "yAxes": Array [
+                  Object {
+                    "display": true,
+                    "gridLines": Object {
+                      "display": true,
+                    },
+                    "id": "y-axis-1",
+                    "labels": Object {
+                      "show": true,
+                    },
+                    "position": "left",
+                    "stacked": true,
+                    "type": "linear",
+                  },
+                ],
+              },
+              "tooltips": Object {
+                "mode": "label",
+              },
+            }
           }
-        }
-        reversed={false}
-        scale="auto"
-        tickCount={5}
-        type="number"
-        width={60}
-        yAxisId={0}
-      />
-      <CartesianGrid
-        fill="none"
-        horizontal={true}
-        horizontalFill={Array []}
-        horizontalPoints={Array []}
-        stroke="#ccc"
-        strokeDasharray="3 3"
-        vertical={false}
-        verticalFill={Array []}
-        verticalPoints={Array []}
-      />
-      <Legend
-        align="center"
-        iconSize={14}
-        layout="horizontal"
-        verticalAlign="bottom"
-      />
-      <Tooltip
-        active={false}
-        allowEscapeViewBox={
-          Object {
-            "x": false,
-            "y": false,
-          }
-        }
-        animationDuration={400}
-        animationEasing="ease"
-        contentStyle={Object {}}
-        coordinate={
-          Object {
-            "x": 0,
-            "y": 0,
-          }
-        }
-        cursor={true}
-        cursorStyle={Object {}}
-        filterNull={true}
-        isAnimationActive={true}
-        itemStyle={Object {}}
-        labelStyle={Object {}}
-        offset={10}
-        separator=" : "
-        useTranslate3d={false}
-        viewBox={
-          Object {
-            "x1": 0,
-            "x2": 0,
-            "y1": 0,
-            "y2": 0,
-          }
-        }
-        wrapperStyle={Object {}}
-      />
-      <Bar
-        animationBegin={0}
-        animationDuration={400}
-        animationEasing="ease"
-        barSize={10}
-        data={Array []}
-        dataKey="amt"
-        fill="#000000"
-        hide={false}
-        isAnimationActive={false}
-        key="amt"
-        layout="vertical"
-        legendType="rect"
-        minPointSize={0}
-        onAnimationEnd={[Function]}
-        onAnimationStart={[Function]}
-        xAxisId={0}
-        yAxisId={0}
-      />
-      <Line
-        activeDot={true}
-        animateNewValues={true}
-        animationBegin={0}
-        animationDuration={1500}
-        animationEasing="ease"
-        connectNulls={true}
-        dataKey="uv"
-        dot={true}
-        fill="#fff"
-        hide={false}
-        isAnimationActive={false}
-        key="uv"
-        legendType="line"
-        onAnimationEnd={[Function]}
-        onAnimationStart={[Function]}
-        points={Array []}
-        stroke="#000000"
-        strokeDasharray=""
-        strokeWidth={1}
-        type="monotone"
-        xAxisId={0}
-        yAxisId={0}
-      />
-      <Line
-        activeDot={true}
-        animateNewValues={true}
-        animationBegin={0}
-        animationDuration={1500}
-        animationEasing="ease"
-        connectNulls={true}
-        dataKey="pv"
-        dot={true}
-        fill="#fff"
-        hide={false}
-        isAnimationActive={false}
-        key="pv"
-        legendType="line"
-        onAnimationEnd={[Function]}
-        onAnimationStart={[Function]}
-        points={Array []}
-        stroke="#000000"
-        strokeDasharray="4 4"
-        strokeWidth={1}
-        type="monotone"
-        xAxisId={0}
-        yAxisId={0}
-      />
-    </ComposedChart>
-  </ResponsiveContainer>
-</WithStyles(ForwardRef(Paper))>
+        >
+          <ChartComponent
+            data={
+              Object {
+                "datasets": Array [
+                  Object {
+                    "backgroundColor": undefined,
+                    "borderColor": undefined,
+                    "borderDash": undefined,
+                    "data": Array [
+                      4000,
+                      3000,
+                      2000,
+                      2780,
+                      1890,
+                      2390,
+                      3490,
+                    ],
+                    "fill": false,
+                    "label": "uv",
+                    "pointBackgroundColor": undefined,
+                    "pointBorderColor": undefined,
+                    "pointHoverBackgroundColor": undefined,
+                    "pointHoverBorderColor": undefined,
+                    "type": "line",
+                  },
+                  Object {
+                    "backgroundColor": undefined,
+                    "borderColor": undefined,
+                    "borderDash": undefined,
+                    "data": Array [
+                      2400,
+                      1398,
+                      9800,
+                      3908,
+                      4800,
+                      3800,
+                      4300,
+                    ],
+                    "fill": false,
+                    "label": "pv",
+                    "pointBackgroundColor": undefined,
+                    "pointBorderColor": undefined,
+                    "pointHoverBackgroundColor": undefined,
+                    "pointHoverBorderColor": undefined,
+                    "type": "line",
+                  },
+                  Object {
+                    "backgroundColor": undefined,
+                    "borderColor": undefined,
+                    "data": Array [
+                      2400,
+                      2210,
+                      2290,
+                      2000,
+                      2181,
+                      2500,
+                      2100,
+                    ],
+                    "fill": false,
+                    "hoverBackgroundColor": undefined,
+                    "hoverBorderColor": undefined,
+                    "label": "amt",
+                    "type": "bar",
+                  },
+                ],
+                "labels": Array [
+                  "Page A",
+                  "Page B",
+                  "Page C",
+                  "Page D",
+                  "Page E",
+                  "Page F",
+                  "Page G",
+                ],
+              }
+            }
+            datasetKeyProvider={[Function]}
+            height={150}
+            legend={
+              Object {
+                "display": true,
+                "position": "bottom",
+              }
+            }
+            options={
+              Object {
+                "elements": Object {
+                  "line": Object {
+                    "fill": false,
+                  },
+                },
+                "legend": Object {
+                  "position": "bottom",
+                },
+                "responsive": true,
+                "scales": Object {
+                  "xAxes": Array [
+                    Object {
+                      "display": true,
+                      "gridLines": Object {
+                        "display": true,
+                      },
+                      "stacked": true,
+                    },
+                  ],
+                  "yAxes": Array [
+                    Object {
+                      "display": true,
+                      "gridLines": Object {
+                        "display": true,
+                      },
+                      "id": "y-axis-1",
+                      "labels": Object {
+                        "show": true,
+                      },
+                      "position": "left",
+                      "stacked": true,
+                      "type": "linear",
+                    },
+                  ],
+                },
+                "tooltips": Object {
+                  "mode": "label",
+                },
+              }
+            }
+            redraw={false}
+            type="bar"
+            width={300}
+          >
+            <canvas
+              height={150}
+              onClick={[Function]}
+              width={300}
+            />
+          </ChartComponent>
+        </Bar>
+      </div>
+    </ForwardRef(Paper)>
+  </WithStyles(ForwardRef(Paper))>
+</Chart>
 `;

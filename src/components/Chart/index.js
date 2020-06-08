@@ -1,6 +1,4 @@
 import React from 'react'
-// import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, Legend } from 'recharts'
-import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -68,16 +66,4 @@ export default function Chart(props) {
         />
     </Paper>
   )
-}
-
-Chart.propTypes = {
-  data: PropTypes.instanceOf(Array).isRequired,
-  xAxis: PropTypes.string.isRequired,
-  lines: PropTypes.instanceOf(Array),
-  bars: PropTypes.instanceOf(Array),
-}
-
-Chart.defaultProps = {
-  lines: [],
-  bars: [],
 }

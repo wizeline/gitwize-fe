@@ -7,6 +7,7 @@ import PullRequestStats from '../pages/PullRequestStats'
 import ContributorStatsPage from '../pages/ContributorStatsPage'
 import Drawer from '@material-ui/core/Drawer'
 import ExpandLess from "@material-ui/icons/ExpandLess";
+import {PageProvider} from '../contexts/PageContext'
 
 jest.mock('@okta/okta-react')
 
@@ -28,7 +29,11 @@ describe('Navbar component', () => {
         authService: {},
       }
     })
-    const component = shallow(<Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>)
+    const component = shallow(
+        <PageProvider>
+        <Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>
+        </PageProvider>
+    )
 
     expect(component.length).toBe(1)
   })
@@ -40,13 +45,21 @@ describe('Navbar component', () => {
         authService: {},
       }
     })
-    const component = shallow(<Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>)
+    const component = shallow(
+      <PageProvider>
+      <Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>
+      </PageProvider>
+  )
 
     expect(component.contains(<Drawer/>)).toBe(false)
   })
 
   it('renders without Expend Button', () => {
-    const component = shallow(<Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>)
+    const component = shallow(
+      <PageProvider>
+      <Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>
+      </PageProvider>
+  )
 
     expect(component.contains(<ExpandLess/>)).toBe(false)
   })
