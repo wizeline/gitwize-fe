@@ -129,7 +129,7 @@ function Navbar (props) {
         setStateDashBoard(true)
       })
     }
-  }, [authState.accessToken, repoId])
+  }, [authState.accessToken, repoId, dateRange])
   let dashBoard
   
   const handleBackToRepo = () => {
