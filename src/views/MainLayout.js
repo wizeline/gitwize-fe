@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Route, Switch, NavLink, Link } from 'react-router-dom'
@@ -25,7 +25,7 @@ import PullRequestStats from '../pages/PullRequestStats'
 import useToggle from '../hooks/useToggle';
 import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
 import ContributorStatsPage from '../pages/ContributorStatsPage'
-import { PageProvider } from '../contexts/PageContext'
+import PageContext from '../contexts/PageContext'
 
 const drawerWidth = (256)
 const apiClient = new ApiClient()
@@ -119,6 +119,7 @@ const useStyles = makeStyles(() => ({
 function MainLayout(props) {
   const {handleLogout, userInfor} = props;
   const classes = useStyles()
+  const [{ dateRange }] = useContext(PageContext)
   const [repositoryId, setRepositoryId] = useState()
   const [repositoryName, setRepositoryName] = useState()
   const [isDisplayDashBoard, setStateDashBoard] = useState(false)
@@ -127,12 +128,12 @@ function MainLayout(props) {
   useEffect(() => {
     if(repositoryId) {
       apiClient.setAccessToken(authState.accessToken)
-      apiClient.stats.getRepoStats(repositoryId).then((data) => {
+      apiClient.stats.getRepoStats(repositoryId, dateRange).then((data) => {
         setRepositoryName(data.name)
         setStateDashBoard(true)
       })
     }
-  }, [authState.accessToken, repositoryId])
+  }, [authState.accessToken, repositoryId, dateRange])
   let dashBoard
 
   const subMenuItem = [
@@ -192,7 +193,6 @@ function MainLayout(props) {
 
   return (
     <div className={classes.root}>
-      <PageProvider>
       <MainLayoutContexProvider value={mainLayOutContextValue}>
         <Router>
           <CssBaseline />
@@ -251,7 +251,6 @@ function MainLayout(props) {
           </Container>
         </Router>
       </MainLayoutContexProvider>
-      </PageProvider>
     </div>
   )
 }

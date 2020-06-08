@@ -6,7 +6,6 @@ import DropdownList from '../DropdownList'
 import { transformPeriodToDateRange } from '../../utils/dataUtils'
 import DatePicker from '../DatePicker'
 import PageContext from '../../contexts/PageContext'
-import { convertDateToSecond } from '../../utils/apiUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,8 +32,8 @@ export default function BranchPicker(props) {
     dispatch({
       type: 'changeDate',
       newDate: { 
-        date_from: convertDateToSecond(date.from),
-        date_to: convertDateToSecond(date.to)
+        date_from: date.from,
+        date_to: date.to
       }
     })
 

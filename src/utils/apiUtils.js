@@ -1,9 +1,16 @@
+export const convertDateToSecond = (date) => {
+  return Math.floor(date.getTime()/1000)
+}
+
+
 export const calculateChangePercent = (additions, deletions, loc) => {
   return loc ? (((additions + deletions) / loc) * 100).toFixed(2) : 0
 }
 
 export const transformMetricsDataApiResponse = (data, dateRange) => {
   let { date_from, date_to } = dateRange
+  date_from = convertDateToSecond(date_from)
+  date_to = convertDateToSecond(date_to)
   const dataByDate = {}
 
   Object.keys(data).forEach((metric) => {
@@ -47,8 +54,4 @@ export const getRepositoryNameFromGitHubUrl = (url) => {
   const repoName = finalPart.replace(".git", "")
   
   return repoName === null ? url : repoName
-}
-
-export const convertDateToSecond = (date) => {
-  return Math.floor(date.getTime()/1000)
 }
