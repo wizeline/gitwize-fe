@@ -1,8 +1,8 @@
 import React from 'react'
 
 const initialValue = {
-  handleChangeRepositoryId: () => {},
-  handleDisplaySubMenu: () => {}
+  repositoryId: '',
+  handleChangeRepositoryId: () => {}
 }
 const MainLayoutContex = React.createContext(initialValue)
 
