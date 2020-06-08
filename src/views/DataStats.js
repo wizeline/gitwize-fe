@@ -42,6 +42,12 @@ function DataStats(props) {
         toggleChartTable();
     }
 
+    const filterTableData =  (tableData, tableColumn) => {
+      return tableData.map((item) => {
+        return Object.assign(...tableColumn.map((object) => ({[object]: item[object]})))
+      })
+    }
+
     const handleChangeHeaderTxt = (headerTxt) => {
       setHeaderTxt(headerTxt)
     }
@@ -56,7 +62,7 @@ function DataStats(props) {
               <Button className={classes.button} variant="outlined" onClick={handleToggleView}>{isDisplayChart ? 'View Table' : 'View Chart'}</Button>
             </Grid>
           </Grid>
-          {!isDisplayChart && <TableData tableData={tableData} tableColumn={tableColumn} isDisplayMaterialTable={isDisplayMaterialTable}/>}
+          {!isDisplayChart && <TableData tableData={filterTableData(tableData, tableColumn)} tableColumn={tableColumn} isDisplayMaterialTable={isDisplayMaterialTable}/>}
           {isDisplayChart && <Chart data={chartData} />}
         </>
       )
