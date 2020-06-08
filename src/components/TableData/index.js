@@ -10,8 +10,6 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import MaterialTable from "material-table";
 
-import { filterObjectByKey } from '../../utils/dataUtils'
-
 const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: '0px 6px 18px rgba(0, 0, 0, 0.1)',
@@ -38,13 +36,11 @@ export default function TableData(props) {
   let tableObject;
   if(!isDisplayMaterialTable) {
 
-    const data = filterObjectByKey(tableData, tableColumn)
-
     const headRow = () => {
-      if (data.length !== 0) {
+      if (tableData.length !== 0) {
         return (
           <TableRow>
-            {Object.keys(data[0]).map((value) => (
+            {Object.keys(tableData[0]).map((value) => (
               <TableCell key={value} className={classes.headTextColor}>
                 {value}
               </TableCell>
@@ -57,7 +53,7 @@ export default function TableData(props) {
     const bodyContent = () => {
       return (
         <>
-          {data.map((row, index) => (
+          {tableData.map((row, index) => (
             <TableRow key={index}>
               {Object.entries(row).map(([key, value]) => (
                 <TableCell component="th" scope="row" className={classes.bodyTextColor}>

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 
 import DropdownList from '../DropdownList'
-import { fetchBranchesFromServer } from '../../services/dataFetchingService'
+import { transformPeriodToDateRange } from '../../utils/dataUtils'
 import DatePicker from '../DatePicker'
+import PageContext from '../../contexts/PageContext'
+import { convertDateToSecond } from '../../utils/apiUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,38 +16,68 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BranchPicker(props) {
   const {showDate, onPeriodChange, customFilters = []} = props
-  const [branches, setBranches] = useState([])
-  const today = new Date()
+  const [openDatePicker , setOpenDatePicker] = useState(false)
+  const [{dateRange}, dispatch] = useContext(PageContext)
+  const [date, setDate] = useState({
+    from: dateRange.date_from,
+    to: dateRange.date_to
+  })
   const styles = useStyles()
   const defaultItemSize = 2;
-  let branchFilterSize =  12 - (customFilters.length*2 + defaultItemSize*3);
+  const datePickerSize = 3;
+  let branchFilterSize =  12 - (customFilters.length*2 + defaultItemSize + datePickerSize);
   branchFilterSize = branchFilterSize < 2 ? 2 : branchFilterSize;
 
+
   useEffect(() => {
-    fetchBranchesFromServer().then((data) => setBranches(data))
-  }, [])
+    dispatch({
+      type: 'changeDate',
+      newDate: { 
+        date_from: convertDateToSecond(date.from),
+        date_to: convertDateToSecond(date.to)
+      }
+    })
+
+  }, [date, dispatch])
 
   const handleChangePeriodValue = (value) => {
-    onPeriodChange(value);
+    if(value === 'Custom') {
+      setOpenDatePicker(true)
+    } else {
+      setOpenDatePicker(false)
+      const periodDateRange = transformPeriodToDateRange(value)
+      setDate({
+        from: periodDateRange.period_date_from,
+        to: periodDateRange.period_date_to
+      })
+      onPeriodChange(value);
+    }
   }
+
   const handleChangeBranchValue = (value) => {
-    //DO NOTHING
-    return;
+    /** 
+     * TODO: Users can view stats of a specific branch
+     *  */ 
+  }
+
+  const handleDatePickerValue = (value) => {
+    if(value.from !== undefined && value.to !== undefined) {
+      setDate(value)
+      value = `${(value.from).toLocaleDateString()} - ${(value.to).toLocaleDateString()}`
+      onPeriodChange(value)
+    }
   }
 
   return (
     <Grid container className={styles.root}>
       <Grid item xs={branchFilterSize}>
-        <DropdownList label="Branch" data={branches} onChange={(value) => handleChangeBranchValue(value)}/>
+        <DropdownList label="Branch" data={['master']} onChange={(value) => handleChangeBranchValue(value)}/>
       </Grid>
       <Grid item xs={defaultItemSize}>
         <DropdownList label="Period" data={showDate} value={''} onChange={(value) => handleChangePeriodValue(value)}/>
       </Grid>
-      <Grid item xs={defaultItemSize}>
-        <DatePicker label="From" />
-      </Grid>
-      <Grid item xs={defaultItemSize}>
-        <DatePicker label="To" maxDate={today} />
+      <Grid item xs={datePickerSize} style={{display: `${openDatePicker ? "block" : "none"}` }}>
+        <DatePicker label="Date Range" onChange={handleDatePickerValue} />
       </Grid>
       {customFilters}
     </Grid>

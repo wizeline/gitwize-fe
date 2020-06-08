@@ -3,9 +3,9 @@ import { useOktaAuth } from '@okta/okta-react'
 
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
-import { createReversedArray } from '../utils/dataUtils'
-import { transformRepositoryStatsApiResponse } from '../utils/apiUtils'
+import { transformMetricsDataApiResponse } from '../utils/apiUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
+import PageContext from '../contexts/PageContext'
 import DataStats from '../views/DataStats'
 
 const apiClient = new ApiClient()
@@ -17,20 +17,21 @@ function RepositoryStats(props) {
   const [repoData, setRepoData] = useState([])
   const { authState } = useOktaAuth()
   const mainLayout = useContext(MainLayoutContex)
+  const [{ dateRange }] = useContext(PageContext)
   const { id } = props.match.params
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
-    apiClient.stats.getRepoStats(id).then((data) => {
+    apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.handleChangeRepositoryId(id)
-      setRepoData(transformRepositoryStatsApiResponse(data.metric))
+      setRepoData(transformMetricsDataApiResponse(data.metric, dateRange))
     })
-  }, [authState.accessToken, id, mainLayout])
+  }, [authState.accessToken, id, mainLayout, dateRange])
 
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>Repository Request Stats</PageTitle>
-      <DataStats tableData={repoData} chartData={createReversedArray(repoData)} xAxis={'Date'} 
+      <DataStats tableData={repoData} chartData={repoData} xAxis={'Date'} 
                       tableColumn={tableColumn} chartLines={chartLines} chartBars={chartBars}/>
     </div>
   )

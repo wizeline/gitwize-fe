@@ -1,30 +1,4 @@
-import { filterObjectByKey, createReversedArray } from './dataUtils'
-import { transformRepositoryStatsApiResponse } from './apiUtils'
-import { data } from './data'
-
-describe('filterObjectByKey', () => {
-  const transformedData = transformRepositoryStatsApiResponse(data)
-
-  test('Create instace of Array', () => {
-    expect(filterObjectByKey(transformedData, ['Commits', 'Merged', 'Rejected'])).toBeInstanceOf(Array)
-  })
-
-  test('Return enough data', () => {
-    expect(filterObjectByKey(transformedData, ['Commits', 'Merged', 'Rejected']).length).toBe(3)
-    expect(filterObjectByKey(transformedData, ['Deletions', 'Additions', 'Total lines of code']).length).toBe(3)
-  })
-
-  test('Value is within the object', () => {
-    const filteredData = filterObjectByKey(transformedData, ['Merged', 'Additions', 'Deletions', 'Rejected'])
-
-    expect(Object.values(filteredData)[0].Merged).toBe(1200)
-    expect(Object.values(filteredData)[0].Additions).toBe(1000)
-    expect(Object.values(filteredData)[0].Deletions).toBe(1000)
-    expect(Object.values(filteredData)[0].Rejected).toBe(1200)
-    expect(Object.values(filteredData)[0].Commits).toBe(undefined)
-    expect(Object.values(filteredData)[0].Created).toBe(undefined)
-  })
-})
+import { createReversedArray, transformPeriodToDateRange } from './dataUtils'
 
 describe('createReversedArray', () => {
   const mockedData = [
@@ -51,5 +25,52 @@ describe('createReversedArray', () => {
     expect(Object.values(reversedArray)[0].Created).toBe(666)
     expect(Object.values(reversedArray)[0].Date).toBe('4/120/2020')
     expect(Object.values(reversedArray)[0].Deletions).toBe(6666)
+  })
+})
+
+describe('transformPeriodToDateRange', () => {
+  const period = {
+    last7days: 'Last 7 Days',
+    last14days: 'Last 14 Days',
+    last21days: 'Last 21 Days',
+    last30days: 'Last 30 Days',
+  }
+
+  test('Create instance of object', () => {
+    expect(transformPeriodToDateRange(period.last7days)).toBeInstanceOf(Object)
+  })
+
+  test('Create valid data', () => {
+    const last7daysDateRange = transformPeriodToDateRange(period.last7days)
+    const key = Object.keys(last7daysDateRange)
+    expect(key[0]).toBe('period_date_from')
+    expect(key[1]).toBe('period_date_to')
+  })
+
+
+  test('Create correct data', () => {
+    const today = new Date()
+    const _7DaysAgo = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000))
+    const _14DaysAgo = new Date(today.getTime() - (14 * 24 * 60 * 60 * 1000))
+    const _21DaysAgo = new Date(today.getTime() - (21 * 24 * 60 * 60 * 1000))
+    const _30DaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000))
+
+
+    const last7DaysRange = transformPeriodToDateRange(period.last7days)
+    expect(last7DaysRange.period_date_from.toDateString()).toStrictEqual(_7DaysAgo.toDateString())
+    expect(last7DaysRange.period_date_to.toDateString()).toStrictEqual(today.toDateString())
+
+    const last14DaysRange = transformPeriodToDateRange(period.last14days)
+    expect(last14DaysRange.period_date_from.toDateString()).toStrictEqual(_14DaysAgo.toDateString())
+    expect(last14DaysRange.period_date_to.toDateString()).toStrictEqual(today.toDateString())
+
+    const last21DaysRange = transformPeriodToDateRange(period.last21days)
+    expect(last21DaysRange.period_date_from.toDateString()).toStrictEqual(_21DaysAgo.toDateString())
+    expect(last21DaysRange.period_date_to.toDateString()).toStrictEqual(today.toDateString())
+
+    const last30DaysRange = transformPeriodToDateRange(period.last30days)
+    expect(last30DaysRange.period_date_from.toDateString()).toStrictEqual(_30DaysAgo.toDateString())
+    expect(last30DaysRange.period_date_to.toDateString()).toStrictEqual(today.toDateString())
+  
   })
 })

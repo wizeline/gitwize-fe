@@ -1,21 +1,30 @@
-import { transformRepositoryStatsApiResponse, getRepositoryNameFromGitHubUrl } from './apiUtils'
+import { transformMetricsDataApiResponse, getRepositoryNameFromGitHubUrl } from './apiUtils'
 import { data } from './data'
+
+// from 6/3/2020 to 6/1/2020
+const toDate = 1591160400
+const fromDate = 1590987600
+
+const dateRange = {
+  date_from: fromDate,
+  date_to: toDate
+}
 
 describe('transformRepositoryStatsApiResponse', () => {
   test('Create instace of Array', () => {
-    expect(transformRepositoryStatsApiResponse(data)).toBeInstanceOf(Array)
+    expect(transformMetricsDataApiResponse(data, dateRange)).toBeInstanceOf(Array)
   })
 
   test('Return enough data', () => {
-    expect(transformRepositoryStatsApiResponse(data).length).toBe(3)
+    expect(transformMetricsDataApiResponse(data, dateRange).length).toBe(3)
   })
 
   test('Return correct data', () => {
-    expect(Object.values(transformRepositoryStatsApiResponse(data))[0].Date).toBe('4/29/2020')
+    expect(Object.values(transformMetricsDataApiResponse(data, dateRange))[0].Date).toBe('6/1/2020')
   })
 
   test('Value is within the object', () => {
-    const transformedData = transformRepositoryStatsApiResponse(data)
+    const transformedData = transformMetricsDataApiResponse(data, dateRange)
 
     expect(Object.values(transformedData)[0].Commits).toBe(1234)
     expect(Object.values(transformedData)[0].Additions).toBe(1000)
@@ -31,7 +40,7 @@ describe('transformRepositoryStatsApiResponse', () => {
     delete data.lines_added[0]
     delete data.commits[1]
     delete data.lines_removed[1]
-    const transformedData = transformRepositoryStatsApiResponse(data)
+    const transformedData = transformMetricsDataApiResponse(data, dateRange)
 
     expect(Object.values(transformedData)[0]['Total lines of code']).toBe(0)
     expect(Object.values(transformedData)[0].Additions).toBe(0)
