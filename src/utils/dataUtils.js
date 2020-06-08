@@ -21,3 +21,43 @@ export const transformPeriodToDateRange = (period) => {
     period_date_to: today
   }
 }
+
+export const tranformToChartData = (lines, bars, rawData, xAxis) => {
+  let dataSets = [];
+  const labels = rawData.flatMap(item => item[xAxis]);
+  lines.forEach(chartItem => {
+    const dataArray = rawData.flatMap(rawDataItem => rawDataItem[chartItem.name]);
+    const dataSetsItem = {
+      label: chartItem.name,
+      type:'line',
+      data: dataArray,
+      fill: false,
+      borderColor: chartItem.color,
+      backgroundColor: chartItem.color,
+      pointBorderColor: chartItem.color,
+      pointBackgroundColor: chartItem.color,
+      pointHoverBackgroundColor: chartItem.color,
+      pointHoverBorderColor: chartItem.color,
+      borderDash: chartItem.dash
+    }
+    dataSets.push(dataSetsItem);
+  })
+  bars.forEach(chartItem => {
+    const dataArray = rawData.flatMap(rawDataItem => rawDataItem[chartItem.name]);
+    const dataSetsItem = {
+      label: chartItem.name,
+      type:'bar',
+      data: dataArray,
+      fill: false,
+      backgroundColor: chartItem.color,
+      borderColor: chartItem.color,
+      hoverBackgroundColor: chartItem.color,
+      hoverBorderColor: chartItem.color,
+    }
+    dataSets.push(dataSetsItem);
+  })
+  return {
+    labels: labels,
+    datasets: dataSets
+  }
+}

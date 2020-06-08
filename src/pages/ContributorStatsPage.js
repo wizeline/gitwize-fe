@@ -7,6 +7,7 @@ import { ApiClient } from '../apis'
 import Grid from '@material-ui/core/Grid'
 import DropdownList from '../components/DropdownList'
 import DataStats from '../views/DataStats';
+import { tranformToChartData } from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 
 const apiClient = new ApiClient()
@@ -41,6 +42,9 @@ const tranformData = (data, isTableData) => {
     return Object.assign(...tempTableObject.map((object) => ({[object.text]: item[object.fieldName]})))
   })
 }
+const chartLines = [{name: 'Commits', color: '#5392FF', dash: [12,3,3]},
+                    {name: 'Files change', color: '#62C8BA'}]
+const chartBars = [{name: 'Additions', color: '#EC5D5C'}, {name: 'Deletions', color: '#DADADA'}]
 
 function ContributorStatsPage(props) {
   
@@ -70,7 +74,8 @@ function ContributorStatsPage(props) {
       setRepoData(tableData);
     })
     apiClient.contributor.getContributorChartDataStats(id).then((data) => {
-      setChartData(tranformData(data.metric));
+      const chartData = tranformToChartData(chartLines, chartBars, tranformData(data.metric), 'Date')
+      setChartData(chartData);
     })
 
   }, [authState.accessToken, id, mainLayout])
@@ -78,9 +83,7 @@ function ContributorStatsPage(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>Contributor Stats</PageTitle>
-      <DataStats tableData={repoData} chartData={chartData} xAxis={'Date'} 
-                      tableColumn={tableColumns} chartLines={['Commits', 'Files change']} chartBars={['Additions', 'Deletions']} 
-                      isDisplayMaterialTable={true} customFilters={[userFilter]}/>
+      <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={userFilter}/>
     </div>
   )
 }
