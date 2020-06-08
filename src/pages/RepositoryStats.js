@@ -17,7 +17,7 @@ function RepositoryStats(props) {
   const [repoData, setRepoData] = useState([])
   const { authState } = useOktaAuth()
   const mainLayout = useContext(MainLayoutContex)
-  const [{ dateRange }, dispatch] = useContext(PageContext)
+  const [{ dateRange }] = useContext(PageContext)
   const { id } = props.match.params
 
   useEffect(() => {

@@ -16,14 +16,14 @@ function PullRequestStats(props) {
   const [repoData, setRepoData] = useState([])
   const { authState } = useOktaAuth()
   const mainLayout = useContext(MainLayoutContex)
-  const [{ dateRange }, dispatch] = useContext(PageContext)
+  const [{ dateRange }] = useContext(PageContext)
   const { id } = props.match.params
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.handleChangeRepositoryId(id)
-      setRepoData(transformMetricsDataApiResponse(data.metric))
+      setRepoData(transformMetricsDataApiResponse(data.metric, dateRange))
     })
   }, [authState.accessToken, id, mainLayout, dateRange])
 

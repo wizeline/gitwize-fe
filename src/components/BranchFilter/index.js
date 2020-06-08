@@ -14,18 +14,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const today = new Date()
-const last7Days = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000))
-
 export default function BranchPicker(props) {
   const {showDate, onPeriodChange, customFilters = []} = props
-  const [branches, setBranches] = useState(['maser'])
   const [openDatePicker , setOpenDatePicker] = useState(false)
+  const [{dateRange}, dispatch] = useContext(PageContext)
   const [date, setDate] = useState({
-    from: last7Days,
-    to: today
+    from: dateRange.date_from,
+    to: dateRange.date_to
   })
-  const [{ dateRange }, dispatch] = useContext(PageContext)
   const styles = useStyles()
   const defaultItemSize = 2;
   const datePickerSize = 3;
@@ -42,7 +38,7 @@ export default function BranchPicker(props) {
       }
     })
 
-  }, [date])
+  }, [date, dispatch])
 
   const handleChangePeriodValue = (value) => {
     if(value === 'Custom') {
@@ -75,7 +71,7 @@ export default function BranchPicker(props) {
   return (
     <Grid container className={styles.root}>
       <Grid item xs={branchFilterSize}>
-        <DropdownList label="Branch" data={branches} onChange={(value) => handleChangeBranchValue(value)}/>
+        <DropdownList label="Branch" data={['master']} onChange={(value) => handleChangeBranchValue(value)}/>
       </Grid>
       <Grid item xs={defaultItemSize}>
         <DropdownList label="Period" data={showDate} value={''} onChange={(value) => handleChangePeriodValue(value)}/>
