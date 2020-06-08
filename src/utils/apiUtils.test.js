@@ -2,8 +2,8 @@ import { transformMetricsDataApiResponse, getRepositoryNameFromGitHubUrl } from 
 import { data } from './data'
 
 // from 6/3/2020 to 6/1/2020
-const toDate = 1591160400
-const fromDate = 1590987600
+const toDate = new Date('6/3/2020')
+const fromDate = new Date('6/1/2020')
 
 const dateRange = {
   date_from: fromDate,

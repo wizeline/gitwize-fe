@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { CssBaseline } from '@material-ui/core'
 import MainLayout from '../views/MainLayout'
 import LandingPage from './LandingPage'
+import { PageProvider } from '../contexts/PageContext'
 
 const Dashboard = () => {
   const { authState, authService } = useOktaAuth()
@@ -31,11 +32,11 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
+    <PageProvider>
       <CssBaseline />
       {authState.isAuthenticated && userInfo && <MainLayout userInfor={userInfo} handleLogout={() => logout()} />}
       {!authState.isAuthenticated && <LandingPage handleLogin={() => login()} />}
-    </div>
+    </PageProvider>
   )
 }
 
