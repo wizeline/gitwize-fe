@@ -4,7 +4,7 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
-import { createReversedArray, tranformToChartData } from '../utils/dataUtils'
+import { createReversedArray, transformToChartData } from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
 import DataStats from '../views/DataStats'
@@ -29,7 +29,7 @@ function RepositoryStats(props) {
       mainLayout.current.handleChangeRepositoryId(id)
       const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange);
       const reversedData = createReversedArray(dataTransformed);
-      const chartData = tranformToChartData(chartLines, chartBars, dataTransformed, 'Date')
+      const chartData = transformToChartData(chartLines, chartBars, dataTransformed, 'Date')
       setRepoData(reversedData);
       setChartData(chartData);
     })

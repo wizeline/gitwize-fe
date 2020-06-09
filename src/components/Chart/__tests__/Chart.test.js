@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import Chart from '../index'
-import {tranformToChartData} from '../../../utils/dataUtils'
+import {transformToChartData} from '../../../utils/dataUtils'
 
 const data = [
   {
@@ -48,21 +48,21 @@ const data = [
   },
 ]
 
-fdescribe('Chart', () => {
+describe('Chart', () => {
   it('render withour crashing', () => {
-    const chartData = tranformToChartData([{name: 'uv'}, {name: 'pv'}], [{name: 'amt'}], data, "name")
+    const chartData = transformToChartData([{name: 'uv'}, {name: 'pv'}], [{name: 'amt'}], data, "name")
     const wrapper = mount(<Chart data={chartData}/>)
     expect(wrapper.find('Bar').length).toBe(1)
   })
 
   it('should match snapshot renders', () => {
-    const chartData = tranformToChartData([{name: 'uv'}, {name: 'pv'}], [{name: 'amt'}], data, "name")
+    const chartData = transformToChartData([{name: 'uv'}, {name: 'pv'}], [{name: 'amt'}], data, "name")
     const component = mount(<Chart data={chartData} />)
     expect(component).toMatchSnapshot()
   })
 
   it('There should be a combination of bar and Line Chart', () => {
-    const chartData = tranformToChartData([{name: 'uv'}], [{name: 'amt'}], data, "name")
+    const chartData = transformToChartData([{name: 'uv'}], [{name: 'amt'}], data, "name")
     const wrapper = mount(<Chart data={chartData} />)
     const bar = (wrapper.find('Bar'))
     const dataSets = bar.props().data.datasets
@@ -71,7 +71,7 @@ fdescribe('Chart', () => {
   })
 
   test('There should be only 2 lines of Line Chart', () => {
-    const chartData = tranformToChartData([{name: 'uv'}, {name: 'pv'}], [], data, "name")
+    const chartData = transformToChartData([{name: 'uv'}, {name: 'pv'}], [], data, "name")
     const wrapper = mount(<Chart data={chartData}/>)
     const bar = (wrapper.find('Bar'))
     const dataSets = bar.props().data.datasets
@@ -80,7 +80,7 @@ fdescribe('Chart', () => {
   })
 
   test('There should be only bars of Bar Chart', () => {
-    const chartData = tranformToChartData([], [{name: 'amt'}], data, "name")
+    const chartData = transformToChartData([], [{name: 'amt'}], data, "name")
     const wrapper = mount(<Chart data={chartData}/>)
     const bar = (wrapper.find('Bar'))
     const dataSets = bar.props().data.datasets

@@ -181,7 +181,7 @@ function Navbar (props) {
         <Divider />
         {dashBoard}
       </List>
-      <Collapse in={isSubMenuOpen && repoId}>
+      <Collapse in={isSubMenuOpen && (repoId !== undefined)}>
         <List>
           {subMenuItem.map((subMenuItem, index) => (
             <ListItem button key={subMenuItem.name}>

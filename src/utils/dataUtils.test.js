@@ -1,4 +1,4 @@
-import { createReversedArray, transformPeriodToDateRange } from './dataUtils'
+import { createReversedArray, transformPeriodToDateRange, transformToChartData } from './dataUtils'
 
 describe('createReversedArray', () => {
   const mockedData = [
@@ -72,5 +72,49 @@ describe('transformPeriodToDateRange', () => {
     expect(last30DaysRange.period_date_from.toDateString()).toStrictEqual(_30DaysAgo.toDateString())
     expect(last30DaysRange.period_date_to.toDateString()).toStrictEqual(today.toDateString())
   
+  })
+})
+
+describe('transformToChartData', () => {
+  const data = [
+    {
+      name: 'Page A',
+      uv: 4000,
+      pv: 2400,
+      amt: 2400,
+    },
+    {
+      name: 'Page B',
+      uv: 3000,
+      pv: 1398,
+      amt: 2210,
+    },
+    {
+      name: 'Page C',
+      uv: 2000,
+      pv: 9800,
+      amt: 2290,
+    },
+    {
+      name: 'Page D',
+      uv: 2780,
+      pv: 3908,
+      amt: 2000,
+    }
+  ]
+
+  const chartLines = [{name: 'uv'}]
+  const chartBars = [{name: 'pv'}]
+
+  test('Create instance of object', () => {
+    expect(transformToChartData(chartLines, chartBars, data, 'name')).toBeInstanceOf(Object)
+  })
+
+  test('Create correct data', () => {
+    const chartData = transformToChartData(chartLines, chartBars, data, 'name')
+    expect(chartData.labels.length).toBe(4)
+    expect(chartData.datasets.length).toBe(2)
+    expect(chartData.datasets[0].type).toBe('line')
+    expect(chartData.datasets[1].type).toBe('bar')
   })
 })

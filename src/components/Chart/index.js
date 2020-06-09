@@ -57,13 +57,17 @@ const options = {
 export default function Chart(props) {
   const {data} = props
   const classes = useStyles()
+  let chart;
+  if(data && data.length !== 0) {
+    chart  = (<Bar
+                data={data}
+                options={options}
+              />)
+  } 
 
   return (
     <Paper className={classes.root}>
-      <Bar
-          data={data}
-          options={options}
-        />
+        {chart}
     </Paper>
   )
 }

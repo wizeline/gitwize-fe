@@ -7,7 +7,7 @@ import { ApiClient } from '../apis'
 import Grid from '@material-ui/core/Grid'
 import DropdownList from '../components/DropdownList'
 import DataStats from '../views/DataStats';
-import { tranformToChartData } from '../utils/dataUtils'
+import { transformToChartData } from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 
 const apiClient = new ApiClient()
@@ -74,7 +74,7 @@ function ContributorStatsPage(props) {
       setRepoData(tableData);
     })
     apiClient.contributor.getContributorChartDataStats(id).then((data) => {
-      const chartData = tranformToChartData(chartLines, chartBars, tranformData(data.metric), 'Date')
+      const chartData = transformToChartData(chartLines, chartBars, tranformData(data.metric), 'Date')
       setChartData(chartData);
     })
 

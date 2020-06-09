@@ -22,7 +22,7 @@ export const transformPeriodToDateRange = (period) => {
   }
 }
 
-export const tranformToChartData = (lines, bars, rawData, xAxis) => {
+export const transformToChartData = (lines, bars, rawData, xAxis) => {
   let dataSets = [];
   const labels = rawData.flatMap(item => item[xAxis]);
   lines.forEach(chartItem => {
