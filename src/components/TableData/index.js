@@ -56,7 +56,7 @@ export default function TableData(props) {
           {tableData.map((row, index) => (
             <TableRow key={index}>
               {Object.entries(row).map(([key, value]) => (
-                <TableCell component="th" scope="row" className={classes.bodyTextColor}>
+                <TableCell key={key} component="th" scope="row" className={classes.bodyTextColor}>
                   {value}
                 </TableCell>
               ))}
