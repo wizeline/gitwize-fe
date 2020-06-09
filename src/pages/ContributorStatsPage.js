@@ -42,7 +42,7 @@ const tranformData = (data, isTableData) => {
     return Object.assign(...tempTableObject.map((object) => ({[object.text]: item[object.fieldName]})))
   })
 }
-const chartLines = [{name: 'Commits', color: '#5392FF', dash: [12,3,3]},
+const chartLines = [{name: 'Commits', color: '#5392FF'},
                     {name: 'Files change', color: '#62C8BA'}]
 const chartBars = [{name: 'Additions', color: '#EC5D5C'}, {name: 'Deletions', color: '#DADADA'}]
 

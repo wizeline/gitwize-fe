@@ -38,7 +38,8 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
       pointBackgroundColor: chartItem.color,
       pointHoverBackgroundColor: chartItem.color,
       pointHoverBorderColor: chartItem.color,
-      borderDash: chartItem.dash
+      borderDash: chartItem.dash,
+      yAxisID: 'y-axis-2'
     }
     dataSets.push(dataSetsItem);
   })
@@ -53,6 +54,8 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
       borderColor: chartItem.color,
       hoverBackgroundColor: chartItem.color,
       hoverBorderColor: chartItem.color,
+      yAxisID: 'y-axis-1',
+      barPercentage: 0.5
     }
     dataSets.push(dataSetsItem);
   })

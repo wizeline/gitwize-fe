@@ -30,7 +30,11 @@ const options = {
         gridLines: {
           display: true
         },
-        stacked: true
+        stacked: true,
+        ticks: {
+          fontColor: "#C4C4C4",
+          fontSize: 10
+        }
       }
     ],
     yAxes: [
@@ -45,7 +49,28 @@ const options = {
         labels: {
           show: true
         },
-        stacked: true
+        stacked: true,
+        ticks: {
+          fontColor: "#C4C4C4",
+          fontSize: 10
+        }
+      },
+      {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        id: 'y-axis-2',
+        gridLines: {
+          display: false
+        },
+        labels: {
+          show: true
+        },
+        stacked: false,
+        ticks: {
+          fontColor: "#62C8BA",
+          fontSize: 10
+        }
       }
     ]
   },
