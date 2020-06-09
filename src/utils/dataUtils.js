@@ -61,3 +61,9 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
     datasets: dataSets
   }
 }
+
+export const filterTableData =  (tableData, tableColumn) => {
+  return tableData.map((item) => {
+    return Object.assign(...tableColumn.map((object) => ({[object]: item[object]})))
+  })
+}

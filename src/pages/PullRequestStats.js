@@ -4,7 +4,7 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
-import { transformToChartData } from '../utils/dataUtils'
+import { transformToChartData, filterTableData} from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import DataStats from '../views/DataStats'
 import PageContext from '../contexts/PageContext'
@@ -25,7 +25,7 @@ function PullRequestStats(props) {
     apiClient.setAccessToken(authState.accessToken)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
-      const tranformedData = transformMetricsDataApiResponse(data.metric, dateRange);
+      const tranformedData = filterTableData(transformMetricsDataApiResponse(data.metric, dateRange), tableColumn);
       const chartData = transformToChartData([], chartBars, tranformedData, 'Date')
       setChartData(chartData);
       setRepoData(tranformedData)

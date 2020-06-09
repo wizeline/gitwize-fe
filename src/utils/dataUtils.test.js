@@ -1,4 +1,4 @@
-import { createReversedArray, transformPeriodToDateRange, transformToChartData } from './dataUtils'
+import { createReversedArray, transformPeriodToDateRange, transformToChartData, filterTableData } from './dataUtils'
 
 describe('createReversedArray', () => {
   const mockedData = [
@@ -116,5 +116,30 @@ describe('transformToChartData', () => {
     expect(chartData.datasets.length).toBe(2)
     expect(chartData.datasets[0].type).toBe('line')
     expect(chartData.datasets[1].type).toBe('bar')
+  })
+})
+
+describe('filterTableData', () => {
+  const tableColumn = ['Header 1', 'Header 2']
+  const tableData = [{
+    'Header 1': 'Value 11',
+    'Header 2': 'Value 12',
+    'Header 3': 'Value 13'
+  },
+  {
+    'Header 1': 'Value 21',
+    'Header 2': 'Value 22',
+    'Header 3': 'Value 23'
+  }]
+
+  test('Create instance of object', () => {
+    expect(filterTableData(tableData, tableColumn)).toBeInstanceOf(Object)
+  })
+
+  test('Create correct data', () => {
+    const newTableData = filterTableData(tableData, tableColumn)
+    expect(newTableData.length).toBe(2)
+    expect(newTableData[0]['Header 3']).toBe(undefined)
+    expect(newTableData[0]['Header 1']).toBe('Value 11')
   })
 })
