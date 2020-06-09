@@ -51,6 +51,7 @@ exports[`Chart should match snapshot renders 1`] = `
         },
         Object {
           "backgroundColor": undefined,
+          "barPercentage": 0.5,
           "borderColor": undefined,
           "data": Array [
             2400,
@@ -172,6 +173,7 @@ exports[`Chart should match snapshot renders 1`] = `
                 },
                 Object {
                   "backgroundColor": undefined,
+                  "barPercentage": 0.5,
                   "borderColor": undefined,
                   "data": Array [
                     2400,
@@ -220,6 +222,10 @@ exports[`Chart should match snapshot renders 1`] = `
                       "display": true,
                     },
                     "stacked": true,
+                    "ticks": Object {
+                      "fontColor": "#C4C4C4",
+                      "fontSize": 10,
+                    },
                   },
                 ],
                 "yAxes": Array [
@@ -234,6 +240,10 @@ exports[`Chart should match snapshot renders 1`] = `
                     },
                     "position": "left",
                     "stacked": true,
+                    "ticks": Object {
+                      "fontColor": "#C4C4C4",
+                      "fontSize": 10,
+                    },
                     "type": "linear",
                   },
                   Object {
@@ -247,6 +257,10 @@ exports[`Chart should match snapshot renders 1`] = `
                     },
                     "position": "right",
                     "stacked": false,
+                    "ticks": Object {
+                      "fontColor": "#62C8BA",
+                      "fontSize": 10,
+                    },
                     "type": "linear",
                   },
                 ],
@@ -307,6 +321,7 @@ exports[`Chart should match snapshot renders 1`] = `
                   },
                   Object {
                     "backgroundColor": undefined,
+                    "barPercentage": 0.5,
                     "borderColor": undefined,
                     "data": Array [
                       2400,
@@ -363,6 +378,10 @@ exports[`Chart should match snapshot renders 1`] = `
                         "display": true,
                       },
                       "stacked": true,
+                      "ticks": Object {
+                        "fontColor": "#C4C4C4",
+                        "fontSize": 10,
+                      },
                     },
                   ],
                   "yAxes": Array [
@@ -377,6 +396,10 @@ exports[`Chart should match snapshot renders 1`] = `
                       },
                       "position": "left",
                       "stacked": true,
+                      "ticks": Object {
+                        "fontColor": "#C4C4C4",
+                        "fontSize": 10,
+                      },
                       "type": "linear",
                     },
                     Object {
@@ -390,6 +413,10 @@ exports[`Chart should match snapshot renders 1`] = `
                       },
                       "position": "right",
                       "stacked": false,
+                      "ticks": Object {
+                        "fontColor": "#62C8BA",
+                        "fontSize": 10,
+                      },
                       "type": "linear",
                     },
                   ],
