@@ -39,13 +39,7 @@ const tranformData = (data, isTableData) => {
     tempTableObject.push({text: 'Date', fieldName: 'date'});
   }
   return data.map((item) => {
-    return Object.assign(...tempTableObject.map((object) => {
-      let value = item[object.fieldName];
-      if(object.text === 'Date') {
-        value = new Date(value).toLocaleDateString();
-      }
-      return ({[object.text]: value})
-    }))
+    return Object.assign(...tempTableObject.map((object) => ({[object.text]: item[object.fieldName]})))
   })
 }
 const chartLines = [{name: 'Commits', color: '#5392FF'},
