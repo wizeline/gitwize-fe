@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react'
 
 const today = new Date()
-const last7Days = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000))
+const last7Days = new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000))
 
 const PageContext = React.createContext()
 
