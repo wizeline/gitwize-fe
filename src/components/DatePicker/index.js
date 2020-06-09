@@ -46,6 +46,8 @@ export default function DatePicker(props) {
     const range = DateUtils.addDayToRange(day, pickedDate)
     setPickedDate(range)
     onChange(range)
+    if(range.from !== undefined && range.to !== undefined)
+      toggleDatePicker()
   }
 
     const { from, to } = pickedDate
