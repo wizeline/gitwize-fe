@@ -43,6 +43,40 @@
             "changePercent": 20,
             "activeDays": 10,
             "filesChange": 20
+        },
+        {
+            "date": "2018-10-23T08:00:00.000Z",
+            "commits": 300,
+            "additions": 200,
+            "deletions": 20,
+            "netChanges": 11,
+            "newCodePercents": 30,
+            "changePercent": 34,
+            "activeDays": 33,
+            "filesChange": 22
+        },
+        {
+            "date": "2018-10-24T08:00:00.000Z",
+            "commits": 10,
+            "additions": 222,
+            "deletions": 33,
+            "netChanges": 33,
+            "newCodePercents": 50,
+            "changePercent": 20,
+            "activeDays": 10,
+            "filesChange": 20
+        },
+        {
+            "date": "2018-10-25T08:00:00.000Z",
+            "commits": 123,
+            "additions": 32,
+            "deletions": 123,
+            "netChanges": 11,
+            "newCodePercents": 23,
+            "changePercent": 33,
+            "activeDays": 44,
+            "filesChange": 55
         }
+        
     ]
 }

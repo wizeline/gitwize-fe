@@ -11,7 +11,7 @@ import DataStats from '../views/DataStats'
 
 const apiClient = new ApiClient()
 const tableColumn = ['Date', 'Commits', 'Additions', 'Deletions', 'Total lines of code', 'Change percent %']
-const chartLines = [{name: 'Commits', color: '#5392FF', dash: [12,3,3]},
+const chartLines = [{name: 'Commits', color: '#5392FF'},
                     {name: 'Additions', color: '#62C8BA'}]
 const chartBars = [{name: 'Total lines of code', color: '#EC5D5C'}, {name: 'Deletions', color: '#DADADA'}]
 

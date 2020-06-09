@@ -46,6 +46,19 @@ const options = {
           show: true
         },
         stacked: true
+      },
+      {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        id: 'y-axis-2',
+        gridLines: {
+          display: false
+        },
+        labels: {
+          show: true
+        },
+        stacked: false
       }
     ]
   },

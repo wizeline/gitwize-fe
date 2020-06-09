@@ -25,6 +25,7 @@ exports[`Chart should match snapshot renders 1`] = `
           "pointHoverBackgroundColor": undefined,
           "pointHoverBorderColor": undefined,
           "type": "line",
+          "yAxisID": "y-axis-2",
         },
         Object {
           "backgroundColor": undefined,
@@ -46,6 +47,7 @@ exports[`Chart should match snapshot renders 1`] = `
           "pointHoverBackgroundColor": undefined,
           "pointHoverBorderColor": undefined,
           "type": "line",
+          "yAxisID": "y-axis-2",
         },
         Object {
           "backgroundColor": undefined,
@@ -64,6 +66,7 @@ exports[`Chart should match snapshot renders 1`] = `
           "hoverBorderColor": undefined,
           "label": "amt",
           "type": "bar",
+          "yAxisID": "y-axis-1",
         },
       ],
       "labels": Array [
@@ -143,6 +146,7 @@ exports[`Chart should match snapshot renders 1`] = `
                   "pointHoverBackgroundColor": undefined,
                   "pointHoverBorderColor": undefined,
                   "type": "line",
+                  "yAxisID": "y-axis-2",
                 },
                 Object {
                   "backgroundColor": undefined,
@@ -164,6 +168,7 @@ exports[`Chart should match snapshot renders 1`] = `
                   "pointHoverBackgroundColor": undefined,
                   "pointHoverBorderColor": undefined,
                   "type": "line",
+                  "yAxisID": "y-axis-2",
                 },
                 Object {
                   "backgroundColor": undefined,
@@ -182,6 +187,7 @@ exports[`Chart should match snapshot renders 1`] = `
                   "hoverBorderColor": undefined,
                   "label": "amt",
                   "type": "bar",
+                  "yAxisID": "y-axis-1",
                 },
               ],
               "labels": Array [
@@ -230,6 +236,19 @@ exports[`Chart should match snapshot renders 1`] = `
                     "stacked": true,
                     "type": "linear",
                   },
+                  Object {
+                    "display": true,
+                    "gridLines": Object {
+                      "display": false,
+                    },
+                    "id": "y-axis-2",
+                    "labels": Object {
+                      "show": true,
+                    },
+                    "position": "right",
+                    "stacked": false,
+                    "type": "linear",
+                  },
                 ],
               },
               "tooltips": Object {
@@ -262,6 +281,7 @@ exports[`Chart should match snapshot renders 1`] = `
                     "pointHoverBackgroundColor": undefined,
                     "pointHoverBorderColor": undefined,
                     "type": "line",
+                    "yAxisID": "y-axis-2",
                   },
                   Object {
                     "backgroundColor": undefined,
@@ -283,6 +303,7 @@ exports[`Chart should match snapshot renders 1`] = `
                     "pointHoverBackgroundColor": undefined,
                     "pointHoverBorderColor": undefined,
                     "type": "line",
+                    "yAxisID": "y-axis-2",
                   },
                   Object {
                     "backgroundColor": undefined,
@@ -301,6 +322,7 @@ exports[`Chart should match snapshot renders 1`] = `
                     "hoverBorderColor": undefined,
                     "label": "amt",
                     "type": "bar",
+                    "yAxisID": "y-axis-1",
                   },
                 ],
                 "labels": Array [
@@ -355,6 +377,19 @@ exports[`Chart should match snapshot renders 1`] = `
                       },
                       "position": "left",
                       "stacked": true,
+                      "type": "linear",
+                    },
+                    Object {
+                      "display": true,
+                      "gridLines": Object {
+                        "display": false,
+                      },
+                      "id": "y-axis-2",
+                      "labels": Object {
+                        "show": true,
+                      },
+                      "position": "right",
+                      "stacked": false,
                       "type": "linear",
                     },
                   ],
