@@ -68,6 +68,7 @@ const useStyles = makeStyles(() => ({
   },
   clickable: {
     cursor: 'pointer',
+    width: '100%'
   },
 }))
 
@@ -103,8 +104,8 @@ function RepositoryCard(props) {
 
   return (
     <Card className={styles.root}>
-      <CardContent className={styles.clickable}>
-        <Link key ={repo.id} to={`/repository/${repo.id}/${statsPage}/`} style={{ width: '100%' }}>
+      <CardContent>
+        <Link key ={repo.id} to={`/repository/${repo.id}/${statsPage}/`} className={styles.clickable}>
           <p className={styles.repoName}>{repo.name}</p>
         </Link>
         <div className={styles.detail}>

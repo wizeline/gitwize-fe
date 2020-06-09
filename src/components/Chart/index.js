@@ -1,10 +1,8 @@
 import React from 'react'
-import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, Legend } from 'recharts'
-import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { getChartColor } from '../../utils/chartUtils'
+import {Bar} from 'react-chartjs-2';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,48 +13,61 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const options = {
+  responsive: true,
+  tooltips: {
+    mode: 'label'
+  },
+  elements: {
+    line: {
+      fill: false
+    }
+  },
+  scales: {
+    xAxes: [
+      {
+        display: true,
+        gridLines: {
+          display: true
+        },
+        stacked: true
+      }
+    ],
+    yAxes: [
+      {
+        type: 'linear',
+        display: true,
+        position: 'left',
+        id: 'y-axis-1',
+        gridLines: {
+          display: true
+        },
+        labels: {
+          show: true
+        },
+        stacked: true
+      }
+    ]
+  },
+  legend: {
+    position: 'bottom'
+  }
+};
+
 export default function Chart(props) {
-  const { xAxis, data, lines, bars } = props
+  const {data} = props
   const classes = useStyles()
+  let chart;
+  if(data && data.length !== 0) {
+    chart  = (<Bar
+                data={data}
+                options={options}
+              />)
+  } 
 
   return (
     <Paper className={classes.root}>
-      <ResponsiveContainer width="100%" height={300}>
-        <ComposedChart cx="50%" cy="50%" outerRadius="80%" data={data}>
-          <XAxis dataKey={xAxis} />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <Legend />
-          <Tooltip />
-          {bars.map((bar) => (
-            <Bar dataKey={bar} fill={getChartColor(bar)} barSize={10} isAnimationActive={false} key={bar} />
-          ))}
-
-          {lines.map((line, index) => (
-            <Line
-              connectNulls
-              type="monotone"
-              dataKey={line}
-              isAnimationActive={false}
-              stroke={getChartColor(line)}
-              strokeDasharray={lines.length > 1 && index + 1 === lines.length ? '4 4' : ''}
-              key={line}
-            />
-          ))}
-        </ComposedChart>
-      </ResponsiveContainer>
+        {chart}
     </Paper>
   )
-}
-
-Chart.propTypes = {
-  data: PropTypes.instanceOf(Array).isRequired,
-  xAxis: PropTypes.string.isRequired,
-  lines: PropTypes.instanceOf(Array),
-  bars: PropTypes.instanceOf(Array),
-}
-
-Chart.defaultProps = {
-  lines: [],
-  bars: [],
 }
