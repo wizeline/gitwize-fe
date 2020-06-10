@@ -30,12 +30,13 @@ const useStyles = makeStyles(() => ({
     marginBottom: '50px',
   },
   button: {
-    backgroundColor: '#000000 !important',
+    backgroundColor: '#EC5D5C !important',
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.24)',
-    borderRadius: '4px',
+    borderRadius: '8px',
     fontStyle: 'normal',
+    fontFamily: 'Poppins',
     fontWeight: 600,
-    fontSize: '11px',
+    fontSize: '13px',
     lineHeight: '19px',
     /* identical to box height */
 
@@ -46,6 +47,7 @@ const useStyles = makeStyles(() => ({
 
     color: '#ffffff !important',
     width: '200px',
+    textTransform: 'none'
   },
   logoText: {
     fontFamily: 'Open Sans',

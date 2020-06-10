@@ -68,7 +68,6 @@ const useStyles = makeStyles(() => ({
   },
   clickable: {
     cursor: 'pointer',
-    width: '100%'
   },
 }))
 
@@ -120,7 +119,7 @@ function RepositoryCard(props) {
             <p className={styles.typeText}>GitHub</p>
           </div>
           <div className={styles.deleteBtn} onClick={() => showDeletionConfirmationDialog()}>
-              <DeleteOutlineIcon />
+              <DeleteOutlineIcon className={styles.clickable}/>
           </div>
         </div>
       </CardContent>

@@ -42,6 +42,7 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
       pointHoverBorderColor: chartItem.color,
       borderDash: chartItem.dash,
       yAxisID: yAxisID,
+      lineTension: 0,
     }
     dataSets.push(dataSetsItem);
   })
