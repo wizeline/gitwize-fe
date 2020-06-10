@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: '13px',
     lineHeight: '19px',
-    textAlign: 'center',
     color: '#c4c4c4',
   },
   button: {
