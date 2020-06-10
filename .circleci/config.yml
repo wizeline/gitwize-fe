@@ -26,28 +26,41 @@ jobs:
             echo "${CIRCLE_BUILD_NUM}" >> $BUILD_INFO  
             echo "${CIRCLE_SHA1}"      >> $BUILD_INFO 
             echo "$(date -u)"          >> $BUILD_INFO
-            sed "\
-            s|^REACT_APP_BASE_URL=.*$|REACT_APP_BASE_URL=${REACT_APP_BASE_URL}|g;
-            s|^REACT_APP_API_URL=.*$|REACT_APP_API_URL=${REACT_APP_API_URL}|g;
-            s|^REACT_APP_OKTA_CLIENT_ID=.*$|REACT_APP_OKTA_CLIENT_ID=${REACT_APP_OKTA_CLIENT_ID}|g;
-            s|^REACT_APP_OKTA_ISSUER=.*$|REACT_APP_OKTA_ISSUER =${REACT_APP_OKTA_ISSUER}|g;
-            s|^REACT_APP_OKTA_DISABLE_HTTPS_CHECK=.*$|REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${REACT_APP_OKTA_DISABLE_HTTPS_CHECK}|g;
+            if [ "${CIRCLE_BRANCH}" == "deploy-qa" ]; then
+              sed "\
+              s|^REACT_APP_BASE_URL=.*$|REACT_APP_BASE_URL=${QA_REACT_APP_BASE_URL}|g;
+              s|^REACT_APP_API_URL=.*$|REACT_APP_API_URL=${QA_REACT_APP_API_URL}|g;
+              s|^REACT_APP_OKTA_CLIENT_ID=.*$|REACT_APP_OKTA_CLIENT_ID=${QA_REACT_APP_OKTA_CLIENT_ID}|g;
+              s|^REACT_APP_OKTA_ISSUER=.*$|REACT_APP_OKTA_ISSUER =${QA_REACT_APP_OKTA_ISSUER}|g;
+              s|^REACT_APP_OKTA_DISABLE_HTTPS_CHECK=.*$|REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${QA_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}|g;
+            else
+              sed "\
+              s|^REACT_APP_BASE_URL=.*$|REACT_APP_BASE_URL=${REACT_APP_BASE_URL}|g;
+              s|^REACT_APP_API_URL=.*$|REACT_APP_API_URL=${REACT_APP_API_URL}|g;
+              s|^REACT_APP_OKTA_CLIENT_ID=.*$|REACT_APP_OKTA_CLIENT_ID=${REACT_APP_OKTA_CLIENT_ID}|g;
+              s|^REACT_APP_OKTA_ISSUER=.*$|REACT_APP_OKTA_ISSUER =${REACT_APP_OKTA_ISSUER}|g;
+              s|^REACT_APP_OKTA_DISABLE_HTTPS_CHECK=.*$|REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${REACT_APP_OKTA_DISABLE_HTTPS_CHECK}|g;
+            fi
             " .env.example > .env
             cat .env
             yarn install
             yarn build
             cp -f .env build/.env
             cp -f $BUILD_INFO build/$BUILD_INFO
-            
       - run:
           name: Deploy to CloudFront
           command: |
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-            aws s3 sync --acl bucket-owner-full-control build ${DEV_S3}  --delete --region ${DEV_AWS_REGION} 
-            aws cloudfront create-invalidation --distribution-id ${DEV_CLOUDFRONT_ID} --paths "/*"
-
+            export S3=${DEV_S3}
+            export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
+            if [ "${CIRCLE_BRANCH}" == "deploy-qa" ]; then
+              export S3=${QA_S3}
+              export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
+            fi 
+            aws s3 sync --acl bucket-owner-full-control build ${S3}  --delete --region ${DEV_AWS_REGION} 
+            aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
