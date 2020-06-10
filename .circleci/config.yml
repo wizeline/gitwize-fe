@@ -58,7 +58,9 @@ jobs:
             export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
             export AWS_REGION=${DEV_AWS_REGION}
             if [ "${CIRCLE_BRANCH}" == "deploy-qa" ]; then
+              echo
               echo "deploy QA build"
+              echo
               export S3=${QA_S3}
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
