@@ -56,12 +56,14 @@ jobs:
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
             export S3=${DEV_S3}
             export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
+            export AWS_REGION=${DEV_AWS_REGION}
             if [ "${CIRCLE_BRANCH}" == "deploy-qa" ]; then
               export S3=${QA_S3}
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
+              export AWS_REGION=${QA_AWS_REGION}
             fi 
-            aws s3 sync --acl bucket-owner-full-control build ${S3}  --delete --region ${DEV_AWS_REGION} 
-            aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
+            echo aws s3 sync --acl bucket-owner-full-control build ${S3}  --delete --region ${QA_AWS_REGION} 
+            echo aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
