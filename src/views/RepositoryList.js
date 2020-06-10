@@ -8,6 +8,7 @@ import { ApiClient } from '../apis'
 import GetStartedImg from '../assets/images/getstarted.png'
 import RepositoryCard from '../components/RepositoryCard'
 import AddRepositoryDialog from './AddRepositoryDialog'
+import MessageNotification from '../components/MesageNotification'
 
 const apiClient = new ApiClient()
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: '13px',
     lineHeight: '19px',
-    textAlign: 'center',
     color: '#c4c4c4',
   },
   button: {
@@ -81,6 +81,8 @@ export default function RepositoryList() {
   const { authState } = useOktaAuth()
   const [repoList, setRepoList] = useState([])
   const [isOpen, setOpen] = useState(false)
+  const [repoName , setRepoName] = useState('')
+  const [removeExistingRepo, setRemovexistingRepo] = useState(true)
   const styles = useStyles()
 
   useEffect(() => {
@@ -100,6 +102,8 @@ export default function RepositoryList() {
     const removed = repoList.filter(x => x.id !== item.id)
 
     setRepoList(removed)
+    setRepoName(item.name)
+    setRemovexistingRepo(true)
   }
 
   const handleDeletionCancel = () => {}
@@ -108,6 +112,8 @@ export default function RepositoryList() {
     apiClient.setAccessToken(authState.accessToken)
 
     const response = await apiClient.repos.createRepo(repoDetail)
+    setRepoName(response.name)
+    setRemovexistingRepo(false)
     const newRepo = {
       ...repoDetail,
       id: response.id,
@@ -143,6 +149,7 @@ export default function RepositoryList() {
             </Button>
           </div>
           <p className={styles.textSmallDisabled}>Most recent</p>
+          <MessageNotification repoName={repoName} removeRepo={removeExistingRepo}/>
           {repoList
             .slice(0)
             .reverse()
