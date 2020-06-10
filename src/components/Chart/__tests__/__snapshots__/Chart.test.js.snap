@@ -203,73 +203,6 @@ exports[`Chart should match snapshot renders 1`] = `
               ],
             }
           }
-          options={
-            Object {
-              "elements": Object {
-                "line": Object {
-                  "fill": false,
-                },
-              },
-              "legend": Object {
-                "position": "bottom",
-              },
-              "responsive": true,
-              "scales": Object {
-                "xAxes": Array [
-                  Object {
-                    "display": true,
-                    "gridLines": Object {
-                      "display": true,
-                    },
-                    "stacked": true,
-                    "ticks": Object {
-                      "fontColor": "#C4C4C4",
-                      "fontSize": 10,
-                    },
-                  },
-                ],
-                "yAxes": Array [
-                  Object {
-                    "display": true,
-                    "gridLines": Object {
-                      "display": true,
-                    },
-                    "id": "y-axis-1",
-                    "labels": Object {
-                      "show": true,
-                    },
-                    "position": "left",
-                    "stacked": true,
-                    "ticks": Object {
-                      "fontColor": "#C4C4C4",
-                      "fontSize": 10,
-                    },
-                    "type": "linear",
-                  },
-                  Object {
-                    "display": true,
-                    "gridLines": Object {
-                      "display": false,
-                    },
-                    "id": "y-axis-2",
-                    "labels": Object {
-                      "show": true,
-                    },
-                    "position": "right",
-                    "stacked": false,
-                    "ticks": Object {
-                      "fontColor": "#62C8BA",
-                      "fontSize": 10,
-                    },
-                    "type": "linear",
-                  },
-                ],
-              },
-              "tooltips": Object {
-                "mode": "label",
-              },
-            }
-          }
         >
           <ChartComponent
             data={
@@ -359,73 +292,7 @@ exports[`Chart should match snapshot renders 1`] = `
                 "position": "bottom",
               }
             }
-            options={
-              Object {
-                "elements": Object {
-                  "line": Object {
-                    "fill": false,
-                  },
-                },
-                "legend": Object {
-                  "position": "bottom",
-                },
-                "responsive": true,
-                "scales": Object {
-                  "xAxes": Array [
-                    Object {
-                      "display": true,
-                      "gridLines": Object {
-                        "display": true,
-                      },
-                      "stacked": true,
-                      "ticks": Object {
-                        "fontColor": "#C4C4C4",
-                        "fontSize": 10,
-                      },
-                    },
-                  ],
-                  "yAxes": Array [
-                    Object {
-                      "display": true,
-                      "gridLines": Object {
-                        "display": true,
-                      },
-                      "id": "y-axis-1",
-                      "labels": Object {
-                        "show": true,
-                      },
-                      "position": "left",
-                      "stacked": true,
-                      "ticks": Object {
-                        "fontColor": "#C4C4C4",
-                        "fontSize": 10,
-                      },
-                      "type": "linear",
-                    },
-                    Object {
-                      "display": true,
-                      "gridLines": Object {
-                        "display": false,
-                      },
-                      "id": "y-axis-2",
-                      "labels": Object {
-                        "show": true,
-                      },
-                      "position": "right",
-                      "stacked": false,
-                      "ticks": Object {
-                        "fontColor": "#62C8BA",
-                        "fontSize": 10,
-                      },
-                      "type": "linear",
-                    },
-                  ],
-                },
-                "tooltips": Object {
-                  "mode": "label",
-                },
-              }
-            }
+            options={Object {}}
             redraw={false}
             type="bar"
             width={300}

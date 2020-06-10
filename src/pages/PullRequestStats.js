@@ -12,6 +12,54 @@ import PageContext from '../contexts/PageContext'
 const apiClient = new ApiClient()
 const tableColumn = ['Date', 'Merged', 'Rejected', 'Created']
 const chartBars = [{name: 'Created', color: '#EC5D5C'}, {name: 'Rejected', color: '#DADADA'}, {name: 'Merged', color: '#5392FF'}]
+const chartOptions = {
+  responsive: true,
+  tooltips: {
+    mode: 'label'
+  },
+  elements: {
+    line: {
+      fill: false
+    }
+  },
+  scales: {
+    xAxes: [
+      {
+        display: true,
+        gridLines: {
+          display: false
+        },
+        stacked: true,
+        ticks: {
+          fontColor: "#C4C4C4",
+          fontSize: 10
+        }
+      }
+    ],
+    yAxes: [
+      {
+        type: 'linear',
+        display: true,
+        position: 'left',
+        id: 'y-axis-1',
+        gridLines: {
+          display: true
+        },
+        labels: {
+          show: true
+        },
+        stacked: true,
+        ticks: {
+          fontColor: "#C4C4C4",
+          fontSize: 10
+        }
+      }
+    ]
+  },
+  legend: {
+    position: 'bottom'
+  }
+};
 
 function PullRequestStats(props) {
   const [repoData, setRepoData] = useState([])
@@ -36,7 +84,7 @@ function PullRequestStats(props) {
     <div style={{ width: '100%' }}>
       <PageTitle>Pull Request Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData}
-                    tableColumn={tableColumn}/>
+                    tableColumn={tableColumn} chartOptions={chartOptions}/>
     </div>
   )
 }

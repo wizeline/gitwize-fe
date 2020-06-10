@@ -11,9 +11,75 @@ import DataStats from '../views/DataStats'
 
 const apiClient = new ApiClient()
 const tableColumn = ['Date', 'Commits', 'Additions', 'Deletions', 'Total lines of code', 'Change percent %']
-const chartLines = [{name: 'Commits', color: '#5392FF'},
+const chartLines = [{name: 'Commits', color: '#5392FF'}]
+const chartBars = [{name: 'Deletions', color: '#DADADA'},
                     {name: 'Additions', color: '#62C8BA'}]
-const chartBars = [{name: 'Deletions', color: '#DADADA'}]
+
+const chartOptions = {
+  responsive: true,
+  tooltips: {
+    mode: 'label'
+  },
+  elements: {
+    line: {
+      fill: false
+    }
+  },
+  scales: {
+    xAxes: [
+      {
+        display: true,
+        gridLines: {
+          display: false
+        },
+        stacked: true,
+        ticks: {
+          fontColor: "#C4C4C4",
+          fontSize: 10
+        }
+      }
+    ],
+    yAxes: [
+      {
+        type: 'linear',
+        display: true,
+        position: 'left',
+        id: 'y-axis-1',
+        gridLines: {
+          display: true
+        },
+        labels: {
+          show: true
+        },
+        stacked: true,
+        ticks: {
+          fontColor: "#C4C4C4",
+          fontSize: 10
+        }
+      },
+      {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        id: 'y-axis-2',
+        gridLines: {
+          display: false
+        },
+        labels: {
+          show: true
+        },
+        stacked: false,
+        ticks: {
+          fontColor: "#5392FF",
+          fontSize: 10
+        }
+      }
+    ]
+  },
+  legend: {
+    position: 'bottom'
+  }
+};
 
 function RepositoryStats(props) {
   const [repoData, setRepoData] = useState([])
@@ -38,7 +104,7 @@ function RepositoryStats(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>Repository Request Stats</PageTitle>
-      <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumn}/>
+      <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={chartOptions}/>
     </div>
   )
 }

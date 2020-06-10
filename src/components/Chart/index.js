@@ -13,80 +13,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const options = {
-  responsive: true,
-  tooltips: {
-    mode: 'label'
-  },
-  elements: {
-    line: {
-      fill: false
-    }
-  },
-  scales: {
-    xAxes: [
-      {
-        display: true,
-        gridLines: {
-          display: true
-        },
-        stacked: true,
-        ticks: {
-          fontColor: "#C4C4C4",
-          fontSize: 10
-        }
-      }
-    ],
-    yAxes: [
-      {
-        type: 'linear',
-        display: true,
-        position: 'left',
-        id: 'y-axis-1',
-        gridLines: {
-          display: true
-        },
-        labels: {
-          show: true
-        },
-        stacked: true,
-        ticks: {
-          fontColor: "#C4C4C4",
-          fontSize: 10
-        }
-      },
-      {
-        type: 'linear',
-        display: true,
-        position: 'right',
-        id: 'y-axis-2',
-        gridLines: {
-          display: false
-        },
-        labels: {
-          show: true
-        },
-        stacked: false,
-        ticks: {
-          fontColor: "#62C8BA",
-          fontSize: 10
-        }
-      }
-    ]
-  },
-  legend: {
-    position: 'bottom'
-  }
-};
-
 export default function Chart(props) {
-  const {data} = props
+  const {data, chartOptions} = props
   const classes = useStyles()
   let chart;
   if(data && data.length !== 0) {
     chart  = (<Bar
                 data={data}
-                options={options}
+                options={chartOptions}
               />)
   } 
 
