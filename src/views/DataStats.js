@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 function DataStats(props) {
-    const {tableData, chartData, tableColumn, isDisplayMaterialTable, customFilters} = props
+    const {tableData, chartData, tableColumn, isDisplayMaterialTable, customFilters, chartOptions} = props
     const [isDisplayChart, toggleChartTable] = useToggle(true);
     const classes = useStyles();
     const [headerTxt, setHeaderTxt] = useState(showDate[0])
@@ -57,7 +57,7 @@ function DataStats(props) {
             </Grid>
           </Grid>
           {!isDisplayChart && <TableData tableData={tableData} tableColumn={tableColumn} isDisplayMaterialTable={isDisplayMaterialTable}/>}
-          {isDisplayChart && <Chart data={chartData} />}
+          {isDisplayChart && <Chart data={chartData} chartOptions={chartOptions}/>}
         </>
       )
 }

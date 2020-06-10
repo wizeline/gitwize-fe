@@ -23,10 +23,12 @@ export const transformPeriodToDateRange = (period) => {
 }
 
 export const transformToChartData = (lines, bars, rawData, xAxis) => {
+  let i = 2;
   let dataSets = [];
   const labels = rawData.flatMap(item => item[xAxis]);
   lines.forEach(chartItem => {
     const dataArray = rawData.flatMap(rawDataItem => rawDataItem[chartItem.name]);
+    let yAxisID = 'y-axis-' + i;
     const dataSetsItem = {
       label: chartItem.name,
       type:'line',
@@ -39,7 +41,7 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
       pointHoverBackgroundColor: chartItem.color,
       pointHoverBorderColor: chartItem.color,
       borderDash: chartItem.dash,
-      yAxisID: 'y-axis-2'
+      yAxisID: yAxisID,
     }
     dataSets.push(dataSetsItem);
   })
