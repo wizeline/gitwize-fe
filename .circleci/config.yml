@@ -27,6 +27,11 @@ jobs:
             echo "${CIRCLE_SHA1}"      >> $BUILD_INFO 
             echo "$(date -u)"          >> $BUILD_INFO
             if [ "${CIRCLE_BRANCH}" == "deploy-qa" ]; then
+              export REACT_APP_BASE_URL=${QA_REACT_APP_BASE_URL}
+              export REACT_APP_API_URL=${QA_REACT_APP_API_URL}
+              export REACT_APP_OKTA_CLIENT_ID=${QA_REACT_APP_OKTA_CLIENT_ID}    
+              export REACT_APP_OKTA_ISSUER=${QA_REACT_APP_OKTA_ISSUER}
+              export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${QA_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
               sed "\
               s|^REACT_APP_BASE_URL=.*$|REACT_APP_BASE_URL=${QA_REACT_APP_BASE_URL}|g;
               s|^REACT_APP_API_URL=.*$|REACT_APP_API_URL=${QA_REACT_APP_API_URL}|g;
