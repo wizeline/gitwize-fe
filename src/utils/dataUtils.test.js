@@ -50,10 +50,10 @@ describe('transformPeriodToDateRange', () => {
 
   test('Create correct data', () => {
     const today = new Date()
-    const _7DaysAgo = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000))
-    const _14DaysAgo = new Date(today.getTime() - (14 * 24 * 60 * 60 * 1000))
-    const _21DaysAgo = new Date(today.getTime() - (21 * 24 * 60 * 60 * 1000))
-    const _30DaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000))
+    const _7DaysAgo = new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000))
+    const _14DaysAgo = new Date(today.getTime() - (13 * 24 * 60 * 60 * 1000))
+    const _21DaysAgo = new Date(today.getTime() - (20 * 24 * 60 * 60 * 1000))
+    const _30DaysAgo = new Date(today.getTime() - (29 * 24 * 60 * 60 * 1000))
 
 
     const last7DaysRange = transformPeriodToDateRange(period.last7days)

@@ -57,6 +57,7 @@ const useStyles = makeStyles(() => ({
   type: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center'
   },
   typeText: {
     fontWeight: 'normal',
@@ -69,6 +70,9 @@ const useStyles = makeStyles(() => ({
   clickable: {
     cursor: 'pointer',
   },
+  icon: {
+    fontSize: '30px'
+  }
 }))
 
 const apiClient = new ApiClient()
@@ -109,13 +113,15 @@ function RepositoryCard(props) {
         </Link>
         <div className={styles.detail}>
           <p className={clsx(styles.header, styles.value)}>
-            Last Updated:
+            Last Updated: &nbsp;
+          </p>
+          <p style={{color: 'black'}}>
             {DateTime.fromISO(repo.last_updated).toLocaleString()}
           </p>
         </div>
         <div className={styles.footer}>
           <div className={styles.type}>
-            <GitHubIcon />
+            <GitHubIcon className={styles.icon}/>
             <p className={styles.typeText}>GitHub</p>
           </div>
           <div className={styles.deleteBtn} onClick={() => showDeletionConfirmationDialog()}>

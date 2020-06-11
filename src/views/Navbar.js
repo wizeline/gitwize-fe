@@ -111,9 +111,12 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
+const today = new Date()
+const last7Days = new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000))
+
 function Navbar (props) {
   const mainLayout = useContext(MainLayoutContex)
-  const [{ dateRange }] = useContext(PageContext)
+  const [{ dateRange }, dispatch] = useContext(PageContext)
   const repoId = mainLayout.repositoryId
   const {handleLogout, userInfor, subMenuItem} = props;
   const classes = useStyles()
@@ -138,6 +141,20 @@ function Navbar (props) {
     if(!isSubMenuOpen) {
       toggleSubMenu()
     }
+  }
+
+  const resetDateRange = () => {
+    dispatch({
+      type: 'changeDate',
+      newDate: { 
+        date_from: last7Days,
+        date_to: today
+      }
+    })
+  }
+
+  const handleLink = () => {
+    resetDateRange()
   }
 
   if(isDisplayDashBoard) {
@@ -185,9 +202,8 @@ function Navbar (props) {
         <List>
           {subMenuItem.map((subMenuItem, index) => (
             <ListItem button key={subMenuItem.name}>
-            <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={index} to={`/repository/${repoId}${subMenuItem.uri}`} style={{ width: '100%' }}>
+            <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={index} to={`/repository/${repoId}${subMenuItem.uri}`} style={{ width: '100%' }} onClick={handleLink}>
             {subMenuItem.name}
-              {/* <ListItemText classes={{primary: classes.buttonSubMenutext}}  primary={subMenuItem.name}/> */}
             </NavLink>
           </ListItem>
           ))}
