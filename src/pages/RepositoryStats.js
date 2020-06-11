@@ -4,13 +4,23 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
-import { createReversedArray, transformToChartData, filterTableData} from '../utils/dataUtils'
+import { createReversedArray, transformToChartData, filterTableData, convertTableObjectToTableColumn} from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
 import DataStats from '../views/DataStats'
 
 const apiClient = new ApiClient()
-const tableColumn = ['Date', 'Commits', 'Additions', 'Deletions', 'Total lines of code', 'Change percent %']
+
+const tableObject = [
+  {text: 'Date', fieldName: 'Date'},
+  {text: 'Commits', fieldName: 'Commits', type: 'numeric'}, 
+  {text: 'Additions', fieldName: 'Additions', type: 'numeric'}, 
+  {text: 'Deletions', fieldName: 'Deletions', type: 'numeric'}, 
+  {text: 'Total lines of code', fieldName: 'Total lines of code', type: 'numeric'},
+  {text: 'Change percent %', fieldName: 'Change percent %', type: 'numeric'}
+]
+
+const tableColumn = convertTableObjectToTableColumn(tableObject)
 const chartLines = [{name: 'Commits', color: '#5492FF'}]
 const chartBars = [{name: 'Deletions', color: '#EC5D5C'},
                     {name: 'Additions', color: '#DADADA'}]
@@ -94,7 +104,7 @@ function RepositoryStats(props) {
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange);
-      const tableData = filterTableData(createReversedArray(dataTransformed), tableColumn);
+      const tableData = filterTableData(createReversedArray(dataTransformed), tableObject);
       const chartData = transformToChartData(chartLines, chartBars, dataTransformed, 'Date')
       setRepoData(tableData);
       setChartData(chartData);

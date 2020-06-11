@@ -76,6 +76,14 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
 
 export const filterTableData =  (tableData, tableColumn) => {
   return tableData.map((item) => {
-    return Object.assign(...tableColumn.map((object) => ({[object]: item[object]})))
+    return Object.assign(...tableColumn.map((object) => ({[object.text]: item[object.fieldName]})))
   })
+}
+
+export const convertTableObjectToTableColumn =  (tableObject) => {
+  return tableObject.flatMap(item => ({
+    title: item.text,
+    field: item.text,
+    type: (item.type) ? item.type : 'string'
+  }))
 }

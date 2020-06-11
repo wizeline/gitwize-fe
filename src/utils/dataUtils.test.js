@@ -1,4 +1,4 @@
-import { createReversedArray, transformPeriodToDateRange, transformToChartData, filterTableData } from './dataUtils'
+import { createReversedArray, transformPeriodToDateRange, transformToChartData, filterTableData, convertTableObjectToTableColumn } from './dataUtils'
 
 describe('createReversedArray', () => {
   const mockedData = [
@@ -120,7 +120,7 @@ describe('transformToChartData', () => {
 })
 
 describe('filterTableData', () => {
-  const tableColumn = ['Header 1', 'Header 2']
+  const tableColumn = [{text: 'Header 1', fieldName: 'Header 1'}, {text: 'Header 2', fieldName: 'Header 2'}]
   const tableData = [{
     'Header 1': 'Value 11',
     'Header 2': 'Value 12',
@@ -141,5 +141,71 @@ describe('filterTableData', () => {
     expect(newTableData.length).toBe(2)
     expect(newTableData[0]['Header 3']).toBe(undefined)
     expect(newTableData[0]['Header 1']).toBe('Value 11')
+  })
+})
+
+describe('transformToChartData', () => {
+  const data = [
+    {
+      name: 'Page A',
+      uv: 4000,
+      pv: 2400,
+      amt: 2400,
+    },
+    {
+      name: 'Page B',
+      uv: 3000,
+      pv: 1398,
+      amt: 2210,
+    },
+    {
+      name: 'Page C',
+      uv: 2000,
+      pv: 9800,
+      amt: 2290,
+    },
+    {
+      name: 'Page D',
+      uv: 2780,
+      pv: 3908,
+      amt: 2000,
+    }
+  ]
+
+  const chartLines = [{name: 'uv'}]
+  const chartBars = [{name: 'pv'}]
+
+  test('Create instance of object', () => {
+    expect(transformToChartData(chartLines, chartBars, data, 'name')).toBeInstanceOf(Object)
+  })
+
+  test('Create correct data', () => {
+    const chartData = transformToChartData(chartLines, chartBars, data, 'name')
+    expect(chartData.labels.length).toBe(4)
+    expect(chartData.datasets.length).toBe(2)
+    expect(chartData.datasets[0].type).toBe('line')
+    expect(chartData.datasets[1].type).toBe('bar')
+  })
+})
+
+describe('convertTableObjectToTableColumn', () => {
+  const tableObject = [
+    {text: 'Date', fieldName: 'Date'},
+    {text: 'Merged', fieldName: 'Commits', type: 'numeric'}, 
+    {text: 'Rejected', fieldName: 'Additions', type: 'numeric'}, 
+    {text: 'Created', fieldName: 'Deletions', type: 'numeric'},
+  ]
+
+  test('Create instance of object', () => {
+    expect(convertTableObjectToTableColumn(tableObject)).toBeInstanceOf(Object)
+  })
+
+  test('Create correct data', () => {
+    const tableColumns = convertTableObjectToTableColumn(tableObject)
+    expect(tableColumns.length).toBe(4)
+    expect(tableColumns[0]['title']).toBe('Date')
+    expect(tableColumns[1]['title']).toBe('Merged')
+    expect(tableColumns[2]['title']).toBe('Rejected')
+    expect(tableColumns[3]['title']).toBe('Created')
   })
 })
