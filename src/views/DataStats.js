@@ -22,7 +22,6 @@ const useStyles = makeStyles(() => ({
       flexGrow: 0.3,
       fontWeight: 'bold',
       borderRadius: '8px',
-      fontFamily: 'Poppins',
       fontSize: '13px'
     },
     textStyle: {
