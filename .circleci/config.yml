@@ -49,6 +49,7 @@ commands:
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
             fi 
+            sudo apt-get update && sudo apt-get install -yy less
             aws s3 sync --acl bucket-owner-full-control build ${S3} --delete --region ${AWS_REGION} 
             aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
 
