@@ -4,6 +4,7 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
+import { getChartOptions } from '../utils/chartUtils'
 import { transformToChartData, filterTableData, convertTableObjectToTableColumn} from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import DataStats from '../views/DataStats'
@@ -19,15 +20,6 @@ const tableObject = [
 const tableColumn = convertTableObjectToTableColumn(tableObject)
 const chartBars = [{name: 'Created', color: '#EC5D5C'}, {name: 'Merged', color: '#5492FF'}, {name: 'Rejected', color: '#62C8BA'}, ]
 const chartOptions = {
-  responsive: true,
-  tooltips: {
-    mode: 'label'
-  },
-  elements: {
-    line: {
-      fill: false
-    }
-  },
   scales: {
     xAxes: [
       {
@@ -61,9 +53,6 @@ const chartOptions = {
         }
       }
     ]
-  },
-  legend: {
-    position: 'bottom'
   }
 };
 
@@ -90,7 +79,7 @@ function PullRequestStats(props) {
     <div style={{ width: '100%' }}>
       <PageTitle>Pull Request Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData}
-                    tableColumn={tableColumn} chartOptions={chartOptions}/>
+                    tableColumn={tableColumn} chartOptions={getChartOptions(chartOptions)}/>
     </div>
   )
 }

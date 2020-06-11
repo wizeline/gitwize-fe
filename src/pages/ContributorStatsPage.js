@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import DropdownList from '../components/DropdownList'
 import DataStats from '../views/DataStats';
 import { transformToChartData, filterTableData, convertTableObjectToTableColumn } from '../utils/dataUtils'
+import {getChartOptions} from '../utils/chartUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 
 const apiClient = new ApiClient()
@@ -41,15 +42,6 @@ const chartLines = [{name: 'Commits', color: '#5392FF'},
 const chartBars = [{name: 'Additions', color: '#EC5D5C'}, {name: 'Deletions', color: '#DADADA'}]
 
 const chartOptions = {
-  responsive: true,
-  tooltips: {
-    mode: 'label'
-  },
-  elements: {
-    line: {
-      fill: false
-    }
-  },
   scales: {
     xAxes: [
       {
@@ -100,9 +92,6 @@ const chartOptions = {
         }
       }
     ]
-  },
-  legend: {
-    position: 'bottom'
   }
 };
 
@@ -144,7 +133,7 @@ function ContributorStatsPage(props) {
     <div style={{ width: '100%' }}>
       <PageTitle>Contributor Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
-      isDisplaySearch={true} chartOptions={chartOptions}/>
+      isDisplaySearch={true} chartOptions={getChartOptions(chartOptions)}/>
     </div>
   )
 }
