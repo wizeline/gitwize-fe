@@ -26,7 +26,8 @@ jobs:
             echo "${CIRCLE_BUILD_NUM}" >> $BUILD_INFO  
             echo "${CIRCLE_SHA1}"      >> $BUILD_INFO 
             echo "$(date -u)"          >> $BUILD_INFO
-            if [ "${CIRCLE_BRANCH}" == "deploy-qa" ]; then
+            export PATTERN="v[0-9]+(\.[0-9]+).*"
+            if [[ ${CIRCLE_TAG} =~  ${PATTERN} ]]; then
               export REACT_APP_BASE_URL=${QA_REACT_APP_BASE_URL}
               export REACT_APP_API_URL=${QA_REACT_APP_API_URL}
               export REACT_APP_OKTA_CLIENT_ID=${QA_REACT_APP_OKTA_CLIENT_ID}    
@@ -62,7 +63,7 @@ jobs:
             export S3=${DEV_S3}
             export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
             export AWS_REGION=${DEV_AWS_REGION}
-            if [ "${CIRCLE_BRANCH}" == "deploy-qa" ]; then
+            if [[ ${CIRCLE_TAG} =~  ${PATTERN} ]]; then
               echo
               echo "deploy QA build"
               echo
@@ -70,8 +71,8 @@ jobs:
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
             fi 
-            aws s3 sync --acl bucket-owner-full-control build ${S3} --delete --region ${AWS_REGION} 
-            aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
+            #aws s3 sync --acl bucket-owner-full-control build ${S3} --delete --region ${AWS_REGION} 
+            #aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
@@ -85,7 +86,8 @@ workflows:
           requires:
             - build
           filters:
+            tags:
+              only:/v[0-9]+(\.[0-9]+).*/
             branches:
               only: 
                 - master
-                - /deploy-.*/
