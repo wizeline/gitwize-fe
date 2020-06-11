@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
   },
   textMedium: {
     margin: 0,
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: '28px',
@@ -58,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
   },
   textSmallDisabled: {
     width: '258px',
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: '13px',
@@ -69,7 +67,6 @@ const useStyles = makeStyles((theme) => ({
   button: {
     backgroundColor: '#FAFAFA !important',
     borderRadius: '8px',
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '15px',

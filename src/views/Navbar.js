@@ -80,7 +80,6 @@ const useStyles = makeStyles(() => ({
   },
   buttonText: {
     marginLeft: '1vh',
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: '13px',
@@ -89,7 +88,6 @@ const useStyles = makeStyles(() => ({
   },
   buttonSubMenutext: {
     marginLeft: '2.5vh',
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontSize: '15px',
     lineHeight: '21px',

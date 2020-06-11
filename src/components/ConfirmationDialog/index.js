@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
   },
   header: {
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: '28px',
@@ -28,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.24)',
     borderRadius: '4px',
 
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '13px',

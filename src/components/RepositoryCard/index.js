@@ -17,7 +17,6 @@ const useStyles = makeStyles(() => ({
     borderRadius: '4px',
     width: '100%',
     margin: '5px 0 5px 0',
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
   },
   repoName: {
