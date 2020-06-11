@@ -7,26 +7,22 @@ import { ApiClient } from '../apis'
 import Grid from '@material-ui/core/Grid'
 import DropdownList from '../components/DropdownList'
 import DataStats from '../views/DataStats';
-import { transformToChartData } from '../utils/dataUtils'
+import { transformToChartData, filterTableData, convertTableObjectToTableColumn } from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 
 const apiClient = new ApiClient()
 const tableObject = [
-  {text: 'Contributor name', fieldName: 'name'},
+  {text: 'Contributor name', fieldName: 'name', searchable: true},
   {text: 'Commits', fieldName: 'commits', type: 'numeric'}, 
   {text: 'Additions', fieldName: 'additions', type: 'numeric'}, 
   {text: 'Deletions', fieldName: 'deletions', type: 'numeric'}, 
   {text: 'Net change', fieldName: 'netChanges', type: 'numeric'}, 
-  {text: 'New code percent %', fieldName: 'newCodePercents', type: 'numeric'}, 
+  {text: 'Code percent %', fieldName: 'newCodePercents', type: 'numeric'}, 
   {text: 'Change percent %', fieldName: 'changePercent', type: 'numeric'}, 
   {text: 'Active days', fieldName: 'activeDays', type: 'numeric'}, 
   {text: 'Files change', fieldName: 'filesChange', type: 'numeric'}]
 
-const tableColumns = tableObject.flatMap(item => ({
-  title: item.text,
-  field: item.text,
-  type: (item.type) ? item.type : 'string'
-}))
+const tableColumns = convertTableObjectToTableColumn(tableObject)
 
 const tranformData = (data, isTableData) => {
   let tempTableObject = [];
@@ -38,9 +34,7 @@ const tranformData = (data, isTableData) => {
     tempTableObject = cloneDeep(chartObject);
     tempTableObject.push({text: 'Date', fieldName: 'date'});
   }
-  return data.map((item) => {
-    return Object.assign(...tempTableObject.map((object) => ({[object.text]: item[object.fieldName]})))
-  })
+  return filterTableData(data, tempTableObject);
 }
 const chartLines = [{name: 'Commits', color: '#5392FF'},
                     {name: 'Files change', color: '#62C8BA'}]
@@ -150,7 +144,7 @@ function ContributorStatsPage(props) {
     <div style={{ width: '100%' }}>
       <PageTitle>Contributor Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
-      isDisplayMaterialTable={true} chartOptions={chartOptions}/>
+      isDisplaySearch={true} chartOptions={chartOptions}/>
     </div>
   )
 }

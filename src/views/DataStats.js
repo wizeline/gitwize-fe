@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 function DataStats(props) {
-    const {tableData, chartData, tableColumn, isDisplayMaterialTable, customFilters, chartOptions} = props
+    const {tableData, chartData, tableColumn, isDisplaySearch, customFilters, chartOptions} = props
     const [isDisplayChart, toggleChartTable] = useToggle(true);
     const classes = useStyles();
     const [headerTxt, setHeaderTxt] = useState(showDate[0])
@@ -56,7 +56,7 @@ function DataStats(props) {
               <Button className={classes.button} variant="outlined" onClick={handleToggleView}>{isDisplayChart ? 'View Table' : 'View Chart'}</Button>
             </Grid>
           </Grid>
-          {!isDisplayChart && <TableData tableData={tableData} tableColumn={tableColumn} isDisplayMaterialTable={isDisplayMaterialTable}/>}
+          {!isDisplayChart && <TableData tableData={tableData} tableColumn={tableColumn} isDisplaySearch={isDisplaySearch}/>}
           {isDisplayChart && <Chart data={chartData} chartOptions={chartOptions}/>}
         </>
       )
