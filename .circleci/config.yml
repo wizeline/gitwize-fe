@@ -91,3 +91,4 @@ workflows:
             branches:
               only: 
                 - master
+                - /deploy-.*/
