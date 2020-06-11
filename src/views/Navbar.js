@@ -9,12 +9,12 @@ import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider';
-import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
+import PermIdentityIcon from '@material-ui/icons/PermIdentityTwoTone'
 import CallToActionIcon from '@material-ui/icons/CallToActionOutlined'
 import Collapse from '@material-ui/core/Collapse';
 import ListItem from '@material-ui/core/ListItem'
 import { ListItemText, Button } from '@material-ui/core'
-import DashboardIcon from '@material-ui/icons/DashboardOutlined'
+import DashboardIcon from '@material-ui/icons/DashboardRounded'
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import {NavLink, Link} from 'react-router-dom'

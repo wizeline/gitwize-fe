@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import { useOktaAuth } from '@okta/okta-react'
 import { Button } from '@material-ui/core'
+import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
+import AppsRoundedIcon from '@material-ui/icons/AppsRounded';
 import { makeStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
 
 import { ApiClient } from '../apis'
 import GetStartedImg from '../assets/images/getstarted.png'
@@ -60,26 +63,42 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: '13px',
     lineHeight: '19px',
+    textAlign: 'left',
     color: '#c4c4c4',
   },
   button: {
-    backgroundColor: '#000000 !important',
-    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.24)',
-    borderRadius: '4px',
+    backgroundColor: '#FAFAFA !important',
+    borderRadius: '8px',
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 600,
-    fontSize: '13px',
+    fontSize: '15px',
     lineHeight: '19px',
     textAlign: 'center',
     letterSpacing: '0.01em',
-    color: '#ffffff !important',
+    color: '#3E3E3E!important',
+    textTransform: 'none',
+    border: '1px solid #3E3E3E',
+    padding: '0 !important',
+    width: '12vw'
   },
+  gridRoot: {
+    width: '100%'
+  },
+  gridButtonLayout: {
+    display: 'inherit',
+    justifyContent: 'flex-end',
+    marginTop: '1vh',
+  },
+  buttonLayoutChosen: {
+    color: '#DADADA'
+  }
 }))
 
 export default function RepositoryList() {
   const { authState } = useOktaAuth()
   const [repoList, setRepoList] = useState([])
+  const [isDisplayColumnGrid, setColumnLayout] = useState(false);
   const [isOpen, setOpen] = useState(false)
   const [repoName , setRepoName] = useState('')
   const [removeExistingRepo, setRemovexistingRepo] = useState(true)
@@ -126,6 +145,10 @@ export default function RepositoryList() {
     setOpen(false)
   }
 
+  const handleChangeLayout = (isDisplayColumnGrid) => {
+    setColumnLayout(isDisplayColumnGrid)
+  }
+
   return (
     <div className={clsx(styles.root, repoList.length === 0 ? styles.empty : styles.notEmpty)}>
       {repoList.length === 0 ? (
@@ -148,16 +171,35 @@ export default function RepositoryList() {
               Add a repository
             </Button>
           </div>
-          <p className={styles.textSmallDisabled}>Most recent</p>
-          <MessageNotification repoName={repoName} removeRepo={removeExistingRepo}/>
-          {repoList
-            .slice(0)
-            .reverse()
-            .map((item, index) => (
-              <div key={item.id} style={{width: '100%'}}>
-                <RepositoryCard key={item.id} repo={item} handleDeletionOK={(item) => removeRepo(item)} handleDeletionCancel={() => handleDeletionCancel()}/>
-              </div>
-            ))}
+          <Grid container className={styles.gridRoot}>
+            <Grid item xs={12} className={styles.gridButtonLayout}>
+              <Button className={clsx(isDisplayColumnGrid && styles.buttonLayoutChosen)} onClick={() => handleChangeLayout(false)}>
+                <MenuRoundedIcon />
+              </Button>
+              <Button className={clsx(!isDisplayColumnGrid && styles.buttonLayoutChosen)} onClick={() => handleChangeLayout(true)}>
+                <AppsRoundedIcon />
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid container className={styles.gridRoot}>
+            <Grid item xs={12}>
+              <p className={styles.textSmallDisabled}>Most recent</p>
+            </Grid>
+          </Grid>
+          <Grid container className={styles.gridRoot} spacing={isDisplayColumnGrid ? 4 : 0}>
+              <MessageNotification repoName={repoName} removeRepo={removeExistingRepo}/>
+              {repoList
+              .slice(0)
+              .reverse()
+              .map((item, index) => (
+                <Grid item xs={isDisplayColumnGrid ? 4 : 12}>
+                  <div key={item.id} style={{width: '100%'}}>
+                    <RepositoryCard key={item.id} repo={item} handleDeletionOK={(item) => removeRepo(item)} handleDeletionCancel={() => handleDeletionCancel()}/>
+                  </div>
+                </Grid>
+              ))}
+          </Grid>
+          
         </>
       )}
       <AddRepositoryDialog
