@@ -49,7 +49,9 @@ commands:
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
             fi 
-            sudo apt-get update && sudo apt-get install -yy less
+            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            unzip awscli-bundle.zip
+            sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
             aws s3 sync --acl bucket-owner-full-control build ${S3} --delete --region ${AWS_REGION} 
             aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
 
@@ -85,7 +87,6 @@ jobs:
 
 orbs:
   slack: circleci/slack@3.4.2
-  aws-cli: circleci/aws-cli@1.0.0
 workflows:
   ci-workflow:
     jobs:
