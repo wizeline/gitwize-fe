@@ -11,7 +11,7 @@ import PageContext from '../contexts/PageContext'
 
 const apiClient = new ApiClient()
 const tableColumn = ['Date', 'Merged', 'Rejected', 'Created']
-const chartBars = [{name: 'Created', color: '#EC5D5C'}, {name: 'Rejected', color: '#DADADA'}, {name: 'Merged', color: '#5392FF'}]
+const chartBars = [{name: 'Created', color: '#EC5D5C'}, {name: 'Merged', color: '#5492FF'}, {name: 'Rejected', color: '#62C8BA'}, ]
 const chartOptions = {
   responsive: true,
   tooltips: {

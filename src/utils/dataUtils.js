@@ -54,11 +54,17 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
       data: dataArray,
       fill: false,
       backgroundColor: chartItem.color,
-      borderColor: chartItem.color,
+      borderColor: 'white',
       hoverBackgroundColor: chartItem.color,
       hoverBorderColor: chartItem.color,
       yAxisID: 'y-axis-1',
-      barPercentage: 0.5
+      barPercentage: 0.5,
+      borderWidth: {
+        top: 2,
+        right: 0,
+        bottom: 0,
+        left: 0
+      }
     }
     dataSets.push(dataSetsItem);
   })
