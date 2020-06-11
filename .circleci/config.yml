@@ -32,7 +32,6 @@ commands:
             yarn install
             yarn build
             cp -f $BUILD_INFO build/$BUILD_INFO
-      - aws-cli/setup
       - run:
           name: Deploy to CloudFront
           command: |
