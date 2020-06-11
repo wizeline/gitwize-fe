@@ -55,12 +55,6 @@ describe('Chart', () => {
     expect(wrapper.find('Bar').length).toBe(1)
   })
 
-  it('should match snapshot renders', () => {
-    const chartData = transformToChartData([{name: 'uv'}, {name: 'pv'}], [{name: 'amt'}], data, "name")
-    const component = mount(<Chart data={chartData} />)
-    expect(component).toMatchSnapshot()
-  })
-
   it('There should be a combination of bar and Line Chart', () => {
     const chartData = transformToChartData([{name: 'uv'}], [{name: 'amt'}], data, "name")
     const wrapper = mount(<Chart data={chartData} />)
