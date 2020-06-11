@@ -111,8 +111,8 @@ const useStyles = makeStyles(() => ({
   },
   avatar: {
     marginRight: 10,
-    width: '7vh',
-    height: '7vh'
+    width: '30px',
+    height: '30px'
   }
 }))
 
