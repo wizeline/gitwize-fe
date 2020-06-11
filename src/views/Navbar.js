@@ -9,7 +9,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider';
-import PermIdentityIcon from '@material-ui/icons/PermIdentityTwoTone'
 import CallToActionIcon from '@material-ui/icons/CallToActionOutlined'
 import Collapse from '@material-ui/core/Collapse';
 import ListItem from '@material-ui/core/ListItem'
@@ -18,6 +17,7 @@ import DashboardIcon from '@material-ui/icons/DashboardRounded'
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import {NavLink, Link} from 'react-router-dom'
+import Avatar from '@material-ui/core/Avatar';
 
 import clsx from 'clsx'
 
@@ -108,6 +108,11 @@ const useStyles = makeStyles(() => ({
   },
   textRoot: {
     flex: 'none'
+  },
+  avatar: {
+    marginRight: 10,
+    width: '30px',
+    height: '30px'
   }
 }))
 
@@ -191,7 +196,7 @@ function Navbar (props) {
         </Link>
         <ListItem>
           <Button className={classes.button}>
-            <PermIdentityIcon className={classes.icon} />
+            <Avatar alt="Logo" className={classes.avatar} src='/images/wizeline_logo.png' />
             <ListItemText classes={{primary: classes.buttonText}} primary={userInfor.name}/>
           </Button>
         </ListItem>
