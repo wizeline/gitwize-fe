@@ -4,6 +4,13 @@ import { CssBaseline } from '@material-ui/core'
 import MainLayout from '../views/MainLayout'
 import LandingPage from './LandingPage'
 import { PageProvider } from '../contexts/PageContext'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+
+const theme = createMuiTheme({  
+  typography: {
+    fontFamily: 'Poppins'
+  },
+});
 
 const Dashboard = () => {
   const { authState, authService } = useOktaAuth()
@@ -33,9 +40,11 @@ const Dashboard = () => {
 
   return (
     <PageProvider>
+      <MuiThemeProvider theme={theme}>
       <CssBaseline />
       {authState.isAuthenticated && userInfo && <MainLayout userInfor={userInfo} handleLogout={() => logout()} />}
       {!authState.isAuthenticated && <LandingPage handleLogin={() => login()} />}
+      </MuiThemeProvider>
     </PageProvider>
   )
 }
