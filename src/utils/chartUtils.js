@@ -36,29 +36,5 @@ export const getChartColor = (data) => {
 export const getChartOptions = (chartOptions) => {
   return {
     ...chartOptions,
-    responsive: true,
-    tooltips: {
-      mode: 'label',
-      bodySpacing: 10,
-      titleMarginBottom: 10,
-      titleFontSize: 14,
-      titleFontStyle: 'bold',
-      footerAlign: 'right',
-      callbacks: {
-        label: (tooltipItem, data) => {
-          const label = data.datasets[tooltipItem.datasetIndex].label || ''
-          const value = tooltipItem.value
-          return `   ${label}: ${value}`
-        }
-      }
-    },
-    elements: {
-      line: {
-        fill: false
-      }
-    },
-    legend: {
-      position: 'bottom'
-    }
   }
 }
