@@ -4,6 +4,7 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
+import { getChartOptions } from '../utils/chartUtils'
 import { createReversedArray, transformToChartData, filterTableData, convertTableObjectToTableColumn} from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
@@ -26,15 +27,6 @@ const chartBars = [{name: 'Deletions', color: '#EC5D5C'},
                     {name: 'Additions', color: '#DADADA'}]
 
 const chartOptions = {
-  responsive: true,
-  tooltips: {
-    mode: 'label'
-  },
-  elements: {
-    line: {
-      fill: false
-    }
-  },
   scales: {
     xAxes: [
       {
@@ -85,9 +77,6 @@ const chartOptions = {
         }
       }
     ]
-  },
-  legend: {
-    position: 'bottom'
   }
 };
 
@@ -114,7 +103,7 @@ function RepositoryStats(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>Repository Request Stats</PageTitle>
-      <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={chartOptions}/>
+      <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={getChartOptions(chartOptions)}/>
     </div>
   )
 }
