@@ -33,7 +33,8 @@ const ChartLegend = styled.div`
         cursor: pointer;
         text-align: left;
         margin: 0px 25px;
-        height: 20px
+        height: 20px;
+        font-weight: bold;
       }`;
 
 export default function Chart(props) {
@@ -66,8 +67,10 @@ export default function Chart(props) {
     meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
     if(item.style.color !== 'grey') {
       item.style.color = 'grey'
+      item.style.fontWeight = 'normal'
     } else {
       item.style.color = 'black'
+      item.style.fontWeight = 'bold'
     }
 
     ci.update();
