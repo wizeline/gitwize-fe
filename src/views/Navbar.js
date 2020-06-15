@@ -18,6 +18,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import {NavLink, Link} from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import clsx from 'clsx'
 
@@ -111,6 +112,11 @@ const useStyles = makeStyles(() => ({
     marginRight: 10,
     width: '30px',
     height: '30px'
+  },
+  textTruncated: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   }
 }))
 
@@ -163,11 +169,13 @@ function Navbar (props) {
   if(isDisplayDashBoard) {
     dashBoard = (
       <ListItem className={classes.button}>
-        <Button className={clsx(classes.buttonText, classes.wrapperButton)} onClick={() => toggleSubMenu()}>
-          <DashboardIcon className={classes.icon} />
-          <ListItemText classes={{primary: classes.buttonText}} primary={repositoryName}/>
-          {isSubMenuOpen ? <ExpandLess /> : <ExpandMore />}
-        </Button>
+        <Tooltip title={repositoryName} placement='right-end' arrow enterDelay={3000} enterNextDelay={3000}>
+          <Button className={clsx(classes.buttonText, classes.wrapperButton)} onClick={() => toggleSubMenu()}>
+              <DashboardIcon className={classes.icon} />
+              <ListItemText classes={{primary: classes.textTruncated}} primary={repositoryName}/>
+              {isSubMenuOpen ? <ExpandLess /> : <ExpandMore />}
+          </Button>
+        </Tooltip>
       </ListItem>
     )
   } else {
@@ -175,7 +183,7 @@ function Navbar (props) {
       <ListItem className={classes.button}>
         <Button className={clsx(classes.buttonText, classes.wrapperButton)}>
           <DashboardIcon className={classes.icon} />
-          <ListItemText classes={{primary: classes.buttonText}} primary={'Active Repositories'}/>
+          <ListItemText primary={'Active Repositories'}/>
         </Button>
       </ListItem>
     )
