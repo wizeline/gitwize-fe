@@ -71,7 +71,8 @@ const chartOptions = {
         stacked: true,
         ticks: {
           fontColor: "#C4C4C4",
-          fontSize: 10
+          fontSize: 10,
+          beginAtZero: true
         }
       },
       {
@@ -88,7 +89,8 @@ const chartOptions = {
         stacked: false,
         ticks: {
           fontColor: "#5392FF",
-          fontSize: 10
+          fontSize: 10,
+          beginAtZero: true
         }
       }
     ]

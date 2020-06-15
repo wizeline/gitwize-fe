@@ -48,7 +48,8 @@ export default function Chart(props) {
       ).innerHTML = chartRef.current.chartInstance.generateLegend();
 
       document.querySelectorAll("#chart-legend li").forEach((item, index) => {
-        item.addEventListener("click", e => handleClick(e, item, index));
+        const originalColor = item.childNodes[0].style.backgroundColor
+        item.addEventListener("click", e => handleClick(e, item, index, originalColor));
       });
     }
   }, [isDisplayLegend]);
@@ -61,15 +62,17 @@ export default function Chart(props) {
 
   const {data, chartOptions} = props
   const classes = useStyles()
-  const handleClick = (e, item, index) => {
+  const handleClick = (e, item, index, originalColor) => {
     let ci = chartRef.current.chartInstance;
     var meta = ci.getDatasetMeta(index);
     meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
     if(item.style.color !== 'grey') {
       item.style.color = 'grey'
+      item.childNodes[0].style.backgroundColor = 'grey'
       item.style.fontWeight = 'normal'
     } else {
       item.style.color = 'black'
+      item.childNodes[0].style.backgroundColor = originalColor
       item.style.fontWeight = 'bold'
     }
 
