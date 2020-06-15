@@ -37,7 +37,9 @@ const chartOptions = {
         stacked: true,
         ticks: {
           fontColor: "#C4C4C4",
-          fontSize: 10
+          fontSize: 10,
+          autoSkip: true,
+          autoSkipPadding: 30
         }
       }
     ],

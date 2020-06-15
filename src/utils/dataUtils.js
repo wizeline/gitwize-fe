@@ -1,3 +1,5 @@
+import * as moment from 'moment'
+
 export const createReversedArray = (array) => {
   const reversedArray = array.reduce((acc, b) => [b, ...acc], [])
 
@@ -23,9 +25,15 @@ export const transformPeriodToDateRange = (period) => {
 }
 
 export const transformToChartData = (lines, bars, rawData, xAxis) => {
+  const dateFormat = 'Do MMM'
   let i = 2;
   let dataSets = [];
-  const labels = rawData.flatMap(item => item[xAxis]);
+  let labels;
+  if(xAxis === 'Date') {
+    labels = rawData.flatMap(item => moment(item[xAxis]).format(dateFormat));
+  } else {
+    labels = rawData.flatMap(item => item[xAxis]);
+  }
   lines.forEach(chartItem => {
     const dataArray = rawData.flatMap(rawDataItem => rawDataItem[chartItem.name]);
     let yAxisID = 'y-axis-' + i;
