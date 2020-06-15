@@ -9,16 +9,18 @@ import { transformToChartData, filterTableData, convertTableObjectToTableColumn}
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import DataStats from '../views/DataStats'
 import PageContext from '../contexts/PageContext'
+import * as _ from 'lodash'
 
 const apiClient = new ApiClient()
+const information = 'This section will display the number of open/merged/rejected PRs for the selected branch and date range'
 const tableObject = [
   {text: 'Date', fieldName: 'Date'},
-  {text: 'Merged', fieldName: 'Commits', type: 'numeric'}, 
-  {text: 'Rejected', fieldName: 'Additions', type: 'numeric'}, 
-  {text: 'Created', fieldName: 'Deletions', type: 'numeric'},
+  {text: 'Merged', fieldName: 'Merged', type: 'numeric'}, 
+  {text: 'Rejected', fieldName: 'Rejected', type: 'numeric'}, 
+  {text: 'Open', fieldName: 'Open', type: 'numeric'},
 ]
 const tableColumn = convertTableObjectToTableColumn(tableObject)
-const chartBars = [{name: 'Created', color: '#EC5D5C'}, {name: 'Merged', color: '#5492FF'}, {name: 'Rejected', color: '#62C8BA'}, ]
+const chartBars = [{name: 'Open', color: '#EC5D5C'}, {name: 'Merged', color: '#5492FF'}, {name: 'Rejected', color: '#62C8BA'}, ]
 const chartOptions = {
   scales: {
     xAxes: [
@@ -71,16 +73,17 @@ function PullRequestStats(props) {
     apiClient.setAccessToken(authState.accessToken)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
-      const tranformedData = filterTableData(transformMetricsDataApiResponse(data.metric, dateRange), tableObject);
-      const chartData = transformToChartData([], chartBars, tranformedData, 'Date')
+      const transformedData = transformMetricsDataApiResponse(data.metric, dateRange);
+      const repoData = filterTableData(_.cloneDeep(transformedData), tableObject);
+      const chartData = transformToChartData([], chartBars, transformedData, 'Date')
       setChartData(chartData);
-      setRepoData(tranformedData)
+      setRepoData(repoData)
     })
   }, [authState.accessToken, id, mainLayout, dateRange])
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle>Pull Request Stats</PageTitle>
+      <PageTitle information={information}>Pull Request Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData}
                     tableColumn={tableColumn} chartOptions={getChartOptions(chartOptions)}/>
     </div>

@@ -1,5 +1,7 @@
 import * as moment from 'moment'
 
+const dateFormat = 'Do MMM'
+
 export const createReversedArray = (array) => {
   const reversedArray = array.reduce((acc, b) => [b, ...acc], [])
 
@@ -25,7 +27,6 @@ export const transformPeriodToDateRange = (period) => {
 }
 
 export const transformToChartData = (lines, bars, rawData, xAxis) => {
-  const dateFormat = 'Do MMM'
   let i = 2;
   let dataSets = [];
   let labels;
@@ -84,6 +85,9 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
 
 export const filterTableData =  (tableData, tableColumn) => {
   return tableData.map((item) => {
+    if(item['Date']) {
+      item['Date'] = moment(item['Date']).format(dateFormat)
+    }
     return Object.assign(...tableColumn.map((object) => ({[object.text]: item[object.fieldName]})))
   })
 }

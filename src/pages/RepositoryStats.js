@@ -9,16 +9,16 @@ import { createReversedArray, transformToChartData, filterTableData, convertTabl
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
 import DataStats from '../views/DataStats'
+import * as _ from 'lodash'
 
 const apiClient = new ApiClient()
+const information = "This section will display the number of commits, and additions/deletions in lines of code for the selected branch and date range";
 
 const tableObject = [
   {text: 'Date', fieldName: 'Date'},
   {text: 'Commits', fieldName: 'Commits', type: 'numeric'}, 
   {text: 'Additions', fieldName: 'Additions', type: 'numeric'}, 
-  {text: 'Deletions', fieldName: 'Deletions', type: 'numeric'}, 
-  {text: 'Total lines of code', fieldName: 'Total lines of code', type: 'numeric'},
-  {text: 'Change percent %', fieldName: 'Change percent %', type: 'numeric'}
+  {text: 'Deletions', fieldName: 'Deletions', type: 'numeric'}
 ]
 
 const tableColumn = convertTableObjectToTableColumn(tableObject)
@@ -97,7 +97,7 @@ function RepositoryStats(props) {
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange);
-      const tableData = filterTableData(createReversedArray(dataTransformed), tableObject);
+      const tableData = filterTableData(_.cloneDeep(createReversedArray(dataTransformed)), tableObject);
       const chartData = transformToChartData(chartLines, chartBars, dataTransformed, 'Date')
       setRepoData(tableData);
       setChartData(chartData);
@@ -106,7 +106,7 @@ function RepositoryStats(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle>Repository Request Stats</PageTitle>
+      <PageTitle information={information}>Repository Request Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={getChartOptions(chartOptions)}/>
     </div>
   )
