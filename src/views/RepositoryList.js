@@ -12,6 +12,7 @@ import GetStartedImg from '../assets/images/getstarted.png'
 import RepositoryCard from '../components/RepositoryCard'
 import AddRepositoryDialog from './AddRepositoryDialog'
 import MessageNotification from '../components/MesageNotification'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const apiClient = new ApiClient()
 const useStyles = makeStyles((theme) => ({
@@ -89,12 +90,16 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonLayoutChosen: {
     color: '#DADADA'
+  },
+  loadingImage: {
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }))
 
 export default function RepositoryList() {
   const { authState } = useOktaAuth()
-  const [repoList, setRepoList] = useState([])
+  const [repoList, setRepoList] = useState(undefined)
   const [isDisplayColumnGrid, setColumnLayout] = useState(false);
   const [isOpen, setOpen] = useState(false)
   const [repoName , setRepoName] = useState('')
@@ -145,60 +150,67 @@ export default function RepositoryList() {
   const handleChangeLayout = (isDisplayColumnGrid) => {
     setColumnLayout(isDisplayColumnGrid)
   }
+  
+  let repoListComponent;
+  
+  if(repoList !== undefined) {
+    repoListComponent = repoList.length === 0 ? (
+      <>
+        <img alt="GetStarted" src={GetStartedImg} />
+        <p className={styles.textMedium}>Get Started</p>
+        <p className={styles.textSmallDisabled}>
+          Welcome to Gitwize. To get you started, first add a new repository.
+        </p>
+        <div style={{ height: '100px' }} />
+        <Button onClick={handleAddDialog} className={styles.button}>
+          Add repository
+        </Button>
+      </>
+    ) : (
+      <>
+        <div className={styles.rowAlign}>
+          <p className={styles.textMedium}>Active Repositories</p>
+          <Button onClick={handleAddDialog} className={styles.button}>
+            Add repository
+          </Button>
+        </div>
+        <Grid container className={styles.gridRoot}>
+          <Grid item xs={12} className={styles.gridButtonLayout}>
+            <Button className={clsx(isDisplayColumnGrid && styles.buttonLayoutChosen)} onClick={() => handleChangeLayout(false)}>
+              <MenuRoundedIcon />
+            </Button>
+            <Button className={clsx(!isDisplayColumnGrid && styles.buttonLayoutChosen)} onClick={() => handleChangeLayout(true)}>
+              <AppsRoundedIcon />
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container className={styles.gridRoot}>
+          <Grid item xs={12}>
+            <p className={styles.textSmallDisabled} style={{marginBottom: 55}}>Most recent</p>
+          </Grid>
+        </Grid>
+        <Grid container className={styles.gridRoot} spacing={isDisplayColumnGrid ? 4 : 0}>
+            <MessageNotification repoName={repoName} removeRepo={removeExistingRepo}/>
+            {repoList
+            .slice(0)
+            .reverse()
+            .map((item, index) => (
+              <Grid item xs={isDisplayColumnGrid ? 4 : 12}>
+                <div key={item.id} style={{width: '100%'}}>
+                  <RepositoryCard key={item.id} repo={item} handleDeletionOK={(item) => removeRepo(item)} handleDeletionCancel={() => handleDeletionCancel()}/>
+                </div>
+              </Grid>
+            ))}
+        </Grid>
+      </>
+    )
+  } else {
+    repoListComponent = <CircularProgress/>
+  }
 
   return (
-    <div className={clsx(styles.root, repoList.length === 0 ? styles.empty : styles.notEmpty)}>
-      {repoList.length === 0 ? (
-        <>
-          <img alt="GetStarted" src={GetStartedImg} />
-          <p className={styles.textMedium}>Get Started</p>
-          <p className={styles.textSmallDisabled}>
-            Welcome to Gitwize. To get you started, first add a new repository.
-          </p>
-          <div style={{ height: '100px' }} />
-          <Button onClick={handleAddDialog} className={styles.button}>
-            Add Repository
-          </Button>
-        </>
-      ) : (
-        <>
-          <div className={styles.rowAlign}>
-            <p className={styles.textMedium}>Active Repositories</p>
-            <Button onClick={handleAddDialog} className={styles.button}>
-              Add a repository
-            </Button>
-          </div>
-          <Grid container className={styles.gridRoot}>
-            <Grid item xs={12} className={styles.gridButtonLayout}>
-              <Button className={clsx(isDisplayColumnGrid && styles.buttonLayoutChosen)} onClick={() => handleChangeLayout(false)}>
-                <MenuRoundedIcon />
-              </Button>
-              <Button className={clsx(!isDisplayColumnGrid && styles.buttonLayoutChosen)} onClick={() => handleChangeLayout(true)}>
-                <AppsRoundedIcon />
-              </Button>
-            </Grid>
-          </Grid>
-          <Grid container className={styles.gridRoot}>
-            <Grid item xs={12}>
-              <p className={styles.textSmallDisabled}>Most recent</p>
-            </Grid>
-          </Grid>
-          <Grid container className={styles.gridRoot} spacing={isDisplayColumnGrid ? 4 : 0}>
-              <MessageNotification repoName={repoName} removeRepo={removeExistingRepo}/>
-              {repoList
-              .slice(0)
-              .reverse()
-              .map((item, index) => (
-                <Grid item xs={isDisplayColumnGrid ? 4 : 12}>
-                  <div key={item.id} style={{width: '100%'}}>
-                    <RepositoryCard key={item.id} repo={item} handleDeletionOK={(item) => removeRepo(item)} handleDeletionCancel={() => handleDeletionCancel()}/>
-                  </div>
-                </Grid>
-              ))}
-          </Grid>
-          
-        </>
-      )}
+    <div className={clsx(styles.root, (repoList && repoList.length) === 0 ? styles.empty : styles.notEmpty, (!repoList) && styles.loadingImage)}>
+      {repoListComponent}
       <AddRepositoryDialog
         isOpen={isOpen}
         handleClose={() => handleCloseAddDialog()}

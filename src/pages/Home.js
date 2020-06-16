@@ -8,7 +8,10 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 const theme = createMuiTheme({  
   typography: {
-    fontFamily: 'Poppins'
+    fontFamily: 'Poppins',
+    button: {
+      textTransform: 'none'
+    }
   },
 });
 

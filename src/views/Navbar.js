@@ -48,7 +48,6 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'flex-start',
   },
   logoText: {
-    fontFamily: 'Open Sans',
     fontStyle: 'normal',
     fontSize: '11px',
     lineHeight: '15px',
@@ -83,9 +82,17 @@ const useStyles = makeStyles(() => ({
     marginLeft: '1vh',
     fontStyle: 'normal',
     fontWeight: 500,
-    fontSize: '13px',
+    fontSize: '14px',
     lineHeight: '21px',
-    color: '#EC5D5C'
+    color: '#EC5D5C',
+  },
+  userText: {
+    marginLeft: '1vh',
+    fontStyle: 'normal',
+    fontWeight: 500,
+    fontSize: '18px',
+    lineHeight: '21px',
+    color: 'rgba(0, 0, 0, 0.87)',
   },
   buttonSubMenutext: {
     marginLeft: '2.5vh',
@@ -200,10 +207,10 @@ function Navbar (props) {
             </ListItem>
           </Button>
         </Link>
-        <ListItem>
+        <ListItem style={{marginBottom: 20}}>
           <Button className={classes.button}>
             <Avatar alt="Logo" className={classes.avatar} src='/images/wizeline_logo.png' />
-            <ListItemText classes={{primary: classes.buttonText}} primary={userInfor.name}/>
+            <ListItemText classes={{primary: classes.userText}} primary={userInfor.name}/>
           </Button>
         </ListItem>
         <Divider />
