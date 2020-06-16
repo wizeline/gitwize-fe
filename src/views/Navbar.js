@@ -47,7 +47,6 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'flex-start',
   },
   logoText: {
-    fontFamily: 'Open Sans',
     fontStyle: 'normal',
     fontSize: '11px',
     lineHeight: '15px',

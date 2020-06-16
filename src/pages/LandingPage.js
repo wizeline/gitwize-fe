@@ -50,7 +50,6 @@ const useStyles = makeStyles(() => ({
     textTransform: 'none'
   },
   logoText: {
-    fontFamily: 'Open Sans',
     fontStyle: 'normal',
     /* identical to box height */
     textAlign: 'center',
@@ -58,7 +57,6 @@ const useStyles = makeStyles(() => ({
     fontSize: '28px',
   },
   logoTextBold: {
-    fontFamily: 'Open Sans',
     fontWeight: 'bold',
     fontSize: '28px',
   },
