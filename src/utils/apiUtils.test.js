@@ -29,9 +29,8 @@ describe('transformRepositoryStatsApiResponse', () => {
     expect(Object.values(transformedData)[0].Commits).toBe(1234)
     expect(Object.values(transformedData)[0].Additions).toBe(1000)
     expect(Object.values(transformedData)[0].Deletions).toBe(1000)
-    expect(Object.values(transformedData)[0]['Total lines of code']).toBe(2000)
     expect(Object.values(transformedData)[0].Merged).toBe(1200)
-    expect(Object.values(transformedData)[0].Created).toBe(1304)
+    expect(Object.values(transformedData)[0].Open).toBe(1304)
     expect(Object.values(transformedData)[0].Rejected).toBe(1200)
   })
 
@@ -42,7 +41,6 @@ describe('transformRepositoryStatsApiResponse', () => {
     delete data.lines_removed[1]
     const transformedData = transformMetricsDataApiResponse(data, dateRange)
 
-    expect(Object.values(transformedData)[0]['Total lines of code']).toBe(0)
     expect(Object.values(transformedData)[0].Additions).toBe(0)
     expect(Object.values(transformedData)[1].Commits).toBe(0)
     expect(Object.values(transformedData)[1].Deletions).toBe(0)
