@@ -163,7 +163,7 @@ export default function RepositoryList() {
         </p>
         <div style={{ height: '100px' }} />
         <Button onClick={handleAddDialog} className={styles.button}>
-          Add Repository
+          Add repository
         </Button>
       </>
     ) : (
@@ -171,7 +171,7 @@ export default function RepositoryList() {
         <div className={styles.rowAlign}>
           <p className={styles.textMedium}>Active Repositories</p>
           <Button onClick={handleAddDialog} className={styles.button}>
-            Add a repository
+            Add repository
           </Button>
         </div>
         <Grid container className={styles.gridRoot}>
