@@ -186,7 +186,7 @@ export default function RepositoryList() {
         </Grid>
         <Grid container className={styles.gridRoot}>
           <Grid item xs={12}>
-            <p className={styles.textSmallDisabled}>Most recent</p>
+            <p className={styles.textSmallDisabled} style={{marginBottom: 55}}>Most recent</p>
           </Grid>
         </Grid>
         <Grid container className={styles.gridRoot} spacing={isDisplayColumnGrid ? 4 : 0}>
