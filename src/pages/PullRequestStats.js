@@ -9,7 +9,7 @@ import { transformToChartData, filterTableData, convertTableObjectToTableColumn}
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import DataStats from '../views/DataStats'
 import PageContext from '../contexts/PageContext'
-import * as _ from 'lodash'
+import {cloneDeep} from 'lodash'
 
 const apiClient = new ApiClient()
 const information = 'This section will display the number of open/merged/rejected PRs for the selected branch and date range'
@@ -74,7 +74,7 @@ function PullRequestStats(props) {
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const transformedData = transformMetricsDataApiResponse(data.metric, dateRange);
-      const repoData = filterTableData(_.cloneDeep(transformedData), tableObject);
+      const repoData = filterTableData(cloneDeep(transformedData), tableObject);
       const chartData = transformToChartData([], chartBars, transformedData, 'Date')
       setChartData(chartData);
       setRepoData(repoData)

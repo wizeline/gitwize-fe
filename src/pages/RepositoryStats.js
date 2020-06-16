@@ -9,7 +9,7 @@ import { createReversedArray, transformToChartData, filterTableData, convertTabl
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
 import DataStats from '../views/DataStats'
-import * as _ from 'lodash'
+import {cloneDeep} from 'lodash'
 
 const apiClient = new ApiClient()
 const information = "This section will display the number of commits, and additions/deletions in lines of code for the selected branch and date range";
@@ -97,7 +97,7 @@ function RepositoryStats(props) {
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange);
-      const tableData = filterTableData(_.cloneDeep(createReversedArray(dataTransformed)), tableObject);
+      const tableData = filterTableData(cloneDeep(createReversedArray(dataTransformed)), tableObject);
       const chartData = transformToChartData(chartLines, chartBars, dataTransformed, 'Date')
       setRepoData(tableData);
       setChartData(chartData);
