@@ -7,7 +7,6 @@ import {Bar} from 'react-chartjs-2';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: '0px 6px 18px rgba(0, 0, 0, 0.1)',
     borderRadius: 4,
     marginBottom: theme.spacing(6),
     padding: '30px 40px 30px 10px',

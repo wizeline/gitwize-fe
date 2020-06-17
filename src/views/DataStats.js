@@ -26,8 +26,9 @@ const useStyles = makeStyles(() => ({
     },
     textStyle: {
       float: 'left',
-      fontSize: '20px',
-      fontWeight: 'bold'
+      fontSize: '18px',
+      fontWeight: '700',
+      backgroundColor: 'transparent'
     }
 }))
 

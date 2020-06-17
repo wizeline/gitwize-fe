@@ -11,12 +11,12 @@ const useStyles = makeStyles(() => ({
   root: {},
   header: {
     borderBottom: '1px solid #E5E5E5',
-    height: '108px',
+    height: '105px',
   },
   headerContent: {
     height: '100%',
     alignItems: 'center',
-    padding: '0 10%',
+    padding: '0 63px',
   },
   content: {
     backgroundColor: '#F8F8F8',
@@ -25,6 +25,7 @@ const useStyles = makeStyles(() => ({
   },
   textField: {
     paddingRight: '65px',
+    marginLeft: 160
   },
   text: {
     marginBottom: '50px',
@@ -54,11 +55,13 @@ const useStyles = makeStyles(() => ({
     /* identical to box height */
     textAlign: 'center',
     color: '#000000',
-    fontSize: '28px',
+    fontSize: '25px',
+    fontFamily: 'Open Sans !important'
   },
   logoTextBold: {
     fontWeight: 'bold',
-    fontSize: '28px',
+    fontSize: '25px',
+    fontFamily: 'Open Sans !important'
   },
 }))
 
@@ -76,7 +79,7 @@ export default function LandingPage({ handleLogin }) {
   const styles = useStyles()
 
   return (
-    <Grid container spacing={2} className={styles.root}>
+    <Grid container className={styles.root}>
       <Grid item xs={12} className={styles.header}>
         <Grid container className={styles.headerContent}>
           <Grid item className={styles.logoTextBold}>
@@ -88,9 +91,8 @@ export default function LandingPage({ handleLogin }) {
         </Grid>
       </Grid>
       <Grid item xs={12} className={styles.content}>
-        <Container spacing={2}>
           <Grid container>
-            <Grid item xs={5} className={styles.textField}>
+            <Grid item xs={4} className={styles.textField}>
               <Title className={styles.text}>Actionable metrics for engineering leaders.</Title>
               <Text className={styles.text}>
                 Gitwize turns data from commits, pull requests and code into insights you can use to drive engineering
@@ -100,11 +102,10 @@ export default function LandingPage({ handleLogin }) {
                 Get Started
               </Button>
             </Grid>
-            <Grid item xs={7}>
+            <Grid item xs={6}>
               <Iframe />
             </Grid>
           </Grid>
-        </Container>
       </Grid>
     </Grid>
   )

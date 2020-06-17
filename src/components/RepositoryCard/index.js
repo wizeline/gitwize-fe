@@ -108,7 +108,7 @@ function RepositoryCard(props) {
     <Card className={styles.root}>
       <CardContent>
         <Link key ={repo.id} to={`/repository/${repo.id}/${statsPage}/`} className={styles.clickable}>
-          <p className={styles.repoName}>{repo.name}</p>
+          <p style={{marginBottom: 19}} className={styles.repoName}>{repo.name}</p>
         </Link>
         <div className={styles.detail}>
           <p className={clsx(styles.header, styles.value)}>
