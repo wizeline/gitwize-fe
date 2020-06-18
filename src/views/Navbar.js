@@ -123,7 +123,8 @@ const useStyles = makeStyles(() => ({
   textTruncated: {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    fontWeight: 600
   }
 }))
 
@@ -190,7 +191,7 @@ function Navbar (props) {
       <ListItem className={classes.button}>
         <Button className={clsx(classes.buttonText, classes.wrapperButton)}>
           <DashboardIcon className={classes.icon} />
-          <ListItemText primary={'Active Repositories'}/>
+          <ListItemText classes={{primary: classes.textTruncated}} primary={'Active Repositories'}/>
         </Button>
       </ListItem>
     )
