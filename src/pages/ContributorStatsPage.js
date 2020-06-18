@@ -113,7 +113,7 @@ function ContributorStatsPage(props) {
   }
   
   const userFilter = (<Grid item xs={2} key={'user-filter'}>
-                          <DropdownList label="User" data={userFilterList} value={userFilterList[0] ? userFilterList[0] : ''} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
+                          <DropdownList label="User" data={userFilterList} value={userFilterList[0] ? userFilterList[0] : 'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
                       </Grid>);
 
   useEffect(() => {

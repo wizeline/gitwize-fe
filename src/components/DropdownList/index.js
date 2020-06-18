@@ -2,7 +2,8 @@ import React, { useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
-import NativeSelect from '@material-ui/core/NativeSelect'
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select'
 import PropTypes from 'prop-types'
 
 const useFilterBarStyles = makeStyles((theme) => ({
@@ -14,6 +15,20 @@ const useFilterBarStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  select: {
+    "&": {
+      opacity: 0.8,
+      marginTop: '50px',
+      top: '67px !important'
+    },
+    "& ul": {
+        backgroundColor: "#000000",
+    },
+    "& li": {
+        fontSize: 12,
+        color: '#FFFFFF'
+    },
+  }
 }))
 
 export default function DropdownList(props) {
@@ -32,20 +47,21 @@ export default function DropdownList(props) {
         <InputLabel shrink htmlFor="age-native-label-placeholder">
           {label}
         </InputLabel>
-        <NativeSelect
+        <Select
           value={selectedValue}
           onChange={handleChange}
           inputProps={{
             name: 'name',
             id: 'uncontrolled-native',
           }}
+          MenuProps={{ classes: { paper: classes.select } }}
         >
           {data.map((item) => (
-            <option value={item} key={item}>
+            <MenuItem value={item} key={item}>
               {item}
-            </option>
+            </MenuItem>
           ))}
-        </NativeSelect>
+        </Select>
       </FormControl>
     </div>
   )
