@@ -27,7 +27,9 @@ export default function TableData(props) {
                     search: isDisplaySearch,
                     draggable: false,
                     sorting: false,
-                    pageSize: defaultPageSize
+                    pageSize: defaultPageSize,
+                    paginationType: 'stepped',
+                    toolbar: isDisplaySearch
                   }}
                 />)
   
