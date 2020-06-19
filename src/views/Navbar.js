@@ -135,6 +135,7 @@ function Navbar (props) {
   const mainLayout = useContext(MainLayoutContex)
   const [{ dateRange }, dispatch] = useContext(PageContext)
   const repoId = mainLayout.repositoryId
+  const showNavbar = mainLayout.showNavbar
   const {handleLogout, userInfor, subMenuItem} = props;
   const classes = useStyles()
   const [repositoryName, setRepositoryName] = useState()
@@ -198,7 +199,7 @@ function Navbar (props) {
   }
 
   return (
-    <Drawer variant="permanent" className={classes.drawer} PaperProps={{ className: classes.paper }}>
+    <Drawer variant="permanent" className={classes.drawer} PaperProps={{ className: classes.paper }} style={{display: `${showNavbar === true ? "block" : "none"}` }}>
       <List>
         <Link to="/" style={{ width: '100%' }}>
           <Button onClick={handleBackToRepo}>

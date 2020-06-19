@@ -2,7 +2,9 @@ import React from 'react'
 
 const initialValue = {
   repositoryId: '',
-  handleChangeRepositoryId: () => {}
+  showNavbar: true,
+  handleChangeRepositoryId: () => {},
+  handleShowNavbar: () => {}
 }
 const MainLayoutContex = React.createContext(initialValue)
 
