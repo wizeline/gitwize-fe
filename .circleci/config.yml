@@ -10,6 +10,22 @@ commands:
             yarn install
             yarn build
             yarn test
+      - run:
+          name: "Run  Coverage Reports"
+          command: |
+            npm test -- --coverage --watchAll=false --collectCoverageFrom=src/**/*js
+      - run:
+          name: "RunSonarqube scanner"
+          command: |
+            export SCAN_VERSION=4.3.0.2102-linux
+            wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SCAN_VERSION}.zip 
+            unzip sonar-scanner-cli-${SCAN_VERSION}.zip 
+            ./sonar-scanner-${SCAN_VERSION}/bin/sonar-scanner \
+             -Dsonar.projectKey=gitwize-fe \
+             -Dsonar.sources=. \
+             -Dsonar.host.url=https://sunfyre.wizeline.com \
+             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+             -Dsonar.login=${SONARQUBE_TOKEN}
 
   deploy_build:
     steps:
