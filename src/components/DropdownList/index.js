@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState, useRef, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -18,8 +18,6 @@ const useFilterBarStyles = makeStyles((theme) => ({
   select: {
     "&": {
       opacity: 0.8,
-      marginTop: '50px',
-      top: '67px !important'
     },
     "& ul": {
         backgroundColor: "#000000",
@@ -31,14 +29,31 @@ const useFilterBarStyles = makeStyles((theme) => ({
   }
 }))
 
+const marginTopBetweenSelectAndDropdown = 5
+
 export default function DropdownList(props) {
   const {data, label, onChange, value} = props
-  const [selectedValue, setSelectedValue] = useState(value)
+  const [selectedValue, setSelectedValue] = useState(value ? value : data[0])
+  const [topPosition, setTopPosition] = useState('0px');
   const classes = useFilterBarStyles()
+  const selectRef = useRef();
 
   const handleChange = (e) => {
     setSelectedValue(e.target.value)
     onChange(e.target.value)
+  }
+
+  useEffect(() => {
+    if(selectRef.current) {
+      const top = (selectRef.current.offsetTop + selectRef.current.offsetHeight + marginTopBetweenSelectAndDropdown) + 'px';
+      setTopPosition(top);
+    }
+  }, [])
+  let newDefaultValue
+  if(value) {
+    newDefaultValue = ( <MenuItem value={value} key={value}>
+                            {value}
+                        </MenuItem>)
   }
 
   return (
@@ -47,15 +62,16 @@ export default function DropdownList(props) {
         <InputLabel shrink htmlFor="age-native-label-placeholder">
           {label}
         </InputLabel>
-        <Select
+        <Select ref={selectRef}
           value={selectedValue}
           onChange={handleChange}
           inputProps={{
             name: 'name',
             id: 'uncontrolled-native',
           }}
-          MenuProps={{ classes: { paper: classes.select } }}
+          MenuProps={{ classes: { paper: classes.select }, style: {top: topPosition} }}
         >
+          {newDefaultValue}
           {data.map((item) => (
             <MenuItem value={item} key={item}>
               {item}

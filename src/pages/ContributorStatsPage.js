@@ -104,7 +104,7 @@ function ContributorStatsPage(props) {
   const {id} = props.match.params;
   const [repoData, setRepoData] = useState([]);
   const [chartData, setChartData] = useState([]);
-  const [userFilterList, setUserFilterList] = useState([]);
+  const [userFilterList, setUserFilterList] = useState(["Average"]);
   const { authState } = useOktaAuth();
   const mainLayout = useRef(useContext(MainLayoutContex))
 
@@ -113,7 +113,7 @@ function ContributorStatsPage(props) {
   }
   
   const userFilter = (<Grid item xs={2} key={'user-filter'}>
-                          <DropdownList label="User" data={userFilterList} value={userFilterList[0] ? userFilterList[0] : 'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
+                          <DropdownList label="User" data={userFilterList} value={'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
                       </Grid>);
 
   useEffect(() => {
@@ -121,8 +121,7 @@ function ContributorStatsPage(props) {
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.contributor.getContributorStats(id).then((data) => {
       const tableData = tranformData(data.metric, true);
-      let userList = ['Average'];
-      userList = userList.concat(data.metric.flatMap(item => item.name))
+      const userList = data.metric.flatMap(item => item.name)
       setUserFilterList(userList);
       setRepoData(tableData);
     })
