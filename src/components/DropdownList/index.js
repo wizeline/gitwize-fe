@@ -18,6 +18,7 @@ const useFilterBarStyles = makeStyles((theme) => ({
   select: {
     "&": {
       opacity: 0.8,
+      top: '0px !important'
     },
     "& ul": {
         backgroundColor: "#000000",
@@ -45,7 +46,7 @@ export default function DropdownList(props) {
 
   useEffect(() => {
     if(selectRef.current) {
-      const top = (selectRef.current.offsetTop + selectRef.current.offsetHeight + marginTopBetweenSelectAndDropdown) + 'px';
+      const top = (selectRef.current.offsetParent.offsetTop + selectRef.current.offsetParent.offsetHeight + marginTopBetweenSelectAndDropdown) + 'px';
       setTopPosition(top);
     }
   }, [])

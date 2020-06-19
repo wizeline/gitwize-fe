@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid'
 
 
 const Title = styled.h1`
-  margin-top: 5px !important;
+  margin-top: 20px !important;
   font-size: 30px;
 `
 

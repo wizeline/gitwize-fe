@@ -8,7 +8,6 @@ import {Bar} from 'react-chartjs-2';
 const useStyles = makeStyles((theme) => ({
   root: {
     borderRadius: 4,
-    marginBottom: theme.spacing(6),
     padding: '30px 40px 30px 10px',
   },
 }))
