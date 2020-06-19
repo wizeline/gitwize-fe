@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext, useRef, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components'
 
+import MainLayoutContex from '../contexts/MainLayoutContext'
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: '40px 0', 
@@ -48,6 +49,12 @@ const ErrorMessage = styled.h3`
 
 export default function NotFoundError404() {
   const styles = useStyles()
+  const mainLayout = useRef(useContext(MainLayoutContex))
+
+  useEffect(() => {
+    mainLayout.current.handleShowNavbar(false)
+    document.body.style.backgroundColor = "#fff"
+  })
 
   return (
     <Grid container className={styles.root} align="center">
