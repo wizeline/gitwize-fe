@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import clsx from 'clsx'
 import { useOktaAuth } from '@okta/okta-react'
 import { Button } from '@material-ui/core'
@@ -13,6 +13,7 @@ import RepositoryCard from '../components/RepositoryCard'
 import AddRepositoryDialog from './AddRepositoryDialog'
 import MessageNotification from '../components/MesageNotification'
 import CircularProgress from '@material-ui/core/CircularProgress';
+import MainLayoutContex from '../contexts/MainLayoutContext';
 
 const apiClient = new ApiClient()
 const useStyles = makeStyles((theme) => ({
@@ -99,8 +100,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RepositoryList() {
   const { authState } = useOktaAuth()
-  const [repoList, setRepoList] = useState(undefined)
+  const mainLayoutContext = useRef(useContext(MainLayoutContex))
   const [isDisplayColumnGrid, setColumnLayout] = useState(false);
+  const [repoList, setRepoList] = useState()
   const [isOpen, setOpen] = useState(false)
   const [repoName , setRepoName] = useState('')
   const [removeExistingRepo, setRemovexistingRepo] = useState(true)
@@ -108,7 +110,10 @@ export default function RepositoryList() {
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
-    apiClient.repos.listRepo().then((repo) => setRepoList(repo))
+      apiClient.repos.listRepo().then((repo) => {
+        setRepoList(repo)
+        mainLayoutContext.current.handleChangeRepoList(repo)
+      })
   }, [authState.accessToken])
 
   const handleAddDialog = () => {
@@ -121,8 +126,8 @@ export default function RepositoryList() {
 
   const removeRepo = (item) => {
     const removed = repoList.filter(x => x.id !== item.id)
-
-    setRepoList(removed)
+    
+    mainLayoutContext.current.handleChangeRepoList(removed)
     setRepoName(item.name)
     setRemovexistingRepo(true)
   }
@@ -143,7 +148,7 @@ export default function RepositoryList() {
       type: 'GitHub',
     }
 
-    setRepoList([...repoList, newRepo])
+    mainLayoutContext.current.handleChangeRepoList([...repoList, newRepo])
     setOpen(false)
   }
 

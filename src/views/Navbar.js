@@ -1,6 +1,5 @@
 import { useOktaAuth } from '@okta/okta-react'
 import React, {useState, useContext, useEffect} from 'react'
-import { ApiClient } from '../apis'
 import useToggle from '../hooks/useToggle';
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
@@ -24,7 +23,6 @@ import clsx from 'clsx'
 
 
 const drawerWidth = (256)
-const apiClient = new ApiClient()
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -133,8 +131,9 @@ const last7Days = new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000))
 
 function Navbar (props) {
   const mainLayout = useContext(MainLayoutContex)
-  const [{ dateRange }, dispatch] = useContext(PageContext)
+  let [{dateRange}, dispatch] = useContext(PageContext)
   const repoId = mainLayout.repositoryId
+  const repoList = mainLayout.repoList;
   const showNavbar = mainLayout.showNavbar
   const {handleLogout, userInfor, subMenuItem} = props;
   const classes = useStyles()
@@ -143,14 +142,14 @@ function Navbar (props) {
   const [isSubMenuOpen, toggleSubMenu] = useToggle(true)
   const { authState } = useOktaAuth()
   useEffect(() => {
-    if(repoId) {
-      apiClient.setAccessToken(authState.accessToken)
-      apiClient.stats.getRepoStats(repoId, dateRange).then((data) => {
-        setRepositoryName(data.name)
+    if(repoId && repoList) {
+      const currentRepo = repoList.find(item => String(item.id) === repoId)
+      if(currentRepo) {
+        setRepositoryName(currentRepo.name)
         setStateDashBoard(true)
-      })
+      }
     }
-  }, [authState.accessToken, repoId, dateRange])
+  }, [authState.accessToken, repoId, repoList])
   let dashBoard
   
   const handleBackToRepo = () => {
@@ -162,12 +161,13 @@ function Navbar (props) {
   }
 
   const resetDateRange = () => {
-    dispatch({
-      type: 'changeDate',
-      newDate: { 
+    dateRange = {
         date_from: last7Days,
         date_to: today
-      }
+    }
+    dispatch({
+      type: 'changeDate',
+      newDate: dateRange
     })
   }
 

@@ -102,7 +102,7 @@ function RepositoryStats(props) {
       setRepoData(tableData);
       setChartData(chartData);
     })
-  }, [authState.accessToken, id, mainLayout, dateRange])
+  }, [authState.accessToken, id, dateRange])
 
   return (
     <div style={{ width: '100%' }}>
