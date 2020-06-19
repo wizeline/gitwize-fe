@@ -2,12 +2,12 @@ import React from 'react'
 import { Security } from '@okta/okta-react'
 
 import config from './config'
-import AppRouteAuthen from './views/AppRouteAuthen'
+import AppWithRouterAccess from './views/AppWithRouterAccess'
 
 function App() {
   return (
       <Security {...config.oidc}>
-        <AppRouteAuthen />
+        <AppWithRouterAccess />
       </Security>
   )
 }
