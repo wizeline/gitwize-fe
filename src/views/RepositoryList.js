@@ -130,6 +130,7 @@ export default function RepositoryList() {
     mainLayoutContext.current.handleChangeRepoList(removed)
     setRepoName(item.name)
     setRemovexistingRepo(true)
+    setRepoList(removed)
   }
 
   const closeMessageNotification = () => {
@@ -153,6 +154,7 @@ export default function RepositoryList() {
     }
 
     mainLayoutContext.current.handleChangeRepoList([...repoList, newRepo])
+    setRepoList([...repoList, newRepo])
     setOpen(false)
   }
 
