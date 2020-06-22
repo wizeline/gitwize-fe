@@ -4,7 +4,7 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
-import { getChartOptions } from '../utils/chartUtils'
+import {getChartOptions} from '../utils/chartUtils'
 import { transformToChartData, filterTableData, convertTableObjectToTableColumn} from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import DataStats from '../views/DataStats'
@@ -84,7 +84,7 @@ function PullRequestStats(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Pull Request Stats</PageTitle>
-      <DataStats tableData={repoData} chartData={chartData}
+      <DataStats tableData={repoData} chartData={chartData} chartBars={chartBars}
                     tableColumn={tableColumn} chartOptions={getChartOptions(chartOptions)}/>
     </div>
   )

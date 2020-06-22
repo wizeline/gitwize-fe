@@ -4,7 +4,7 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
-import { getChartOptions } from '../utils/chartUtils'
+import {getChartOptions} from '../utils/chartUtils'
 import { createReversedArray, transformToChartData, filterTableData, convertTableObjectToTableColumn} from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
@@ -22,9 +22,10 @@ const tableObject = [
 ]
 
 const tableColumn = convertTableObjectToTableColumn(tableObject)
-const chartLines = [{name: 'Commits', color: '#5492FF'}]
+const chartLines = [{name: 'Commits', color: '#5492FF', yAxisId: 'line-1'}]
 const chartBars = [{name: 'Deletions', color: '#EC5D5C'},
-                    {name: 'Additions', color: '#DADADA'}]
+                    {name: 'Additions', color: '#62C8BA'}]
+
 
 const chartOptions = {
   scales: {
@@ -59,25 +60,9 @@ const chartOptions = {
         ticks: {
           fontColor: "#C4C4C4",
           fontSize: 10,
-          beginAtZero: true
-        }
-      },
-      {
-        type: 'linear',
-        display: true,
-        position: 'right',
-        id: 'y-axis-2',
-        gridLines: {
-          display: false
-        },
-        labels: {
-          show: true
-        },
-        stacked: false,
-        ticks: {
-          fontColor: "#5392FF",
-          fontSize: 10,
-          beginAtZero: true
+          beginAtZero: true,
+          precision: 0,
+          suggestedMax: 10
         }
       }
     ]
@@ -106,8 +91,8 @@ function RepositoryStats(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Repository Request Stats</PageTitle>
-      <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={getChartOptions(chartOptions)}/>
+      <PageTitle information={information}>Repository Stats</PageTitle>
+      <DataStats chartBars={chartBars} chartLines={chartLines} tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={getChartOptions(chartOptions, chartLines)}/>
     </div>
   )
 }
