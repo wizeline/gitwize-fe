@@ -25,6 +25,22 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: '0.01em',
     color: '#192a3e',
   },
+  content: {
+    '& .MuiFormLabel-asterisk': {
+      color: 'red'
+    }
+  },
+  message: {
+    paddingLeft: '24px',
+    paddingBottom: '35px',
+    color: '#6A707E' ,
+    fontSize: '12px',
+    lineHeight: '18px'
+  },
+  errorMessage: {
+    paddingLeft: '24px',
+    color: 'red'
+  },
   button: {
     backgroundColor: '#000000 !important',
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.24)',
@@ -42,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function AddRepositoryDialog(props) {
-  const { isOpen, handleClose, handleAdd } = props
+  const { isOpen, handleClose, handleAdd, addRepoErrorMessage } = props
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [url, setUrl] = useState('')
@@ -68,9 +84,13 @@ function AddRepositoryDialog(props) {
         <DialogTitle id="form-dialog-title" className={styles.header}>
           Add Repository
         </DialogTitle>
-        <DialogContent>
+        <div className={styles.message}>
+          Please enter your GitHub credentials
+        </div>
+        <DialogContent className={styles.content}>
           <TextField
             autoFocus
+            required
             margin="dense"
             id="userName"
             label="User Name"
@@ -83,7 +103,7 @@ function AddRepositoryDialog(props) {
             autoFocus
             margin="dense"
             id="password"
-            label="Password"
+            label="Access Token"
             type="password"
             fullWidth
             value={password}
@@ -91,6 +111,7 @@ function AddRepositoryDialog(props) {
           />
           <TextField
             autoFocus
+            required
             margin="dense"
             id="projectUrl"
             label="Project repo URL"
@@ -100,6 +121,9 @@ function AddRepositoryDialog(props) {
             onChange={(e) => setUrl(e.target.value)}
           />
         </DialogContent>
+        <div className={styles.errorMessage}>
+          {addRepoErrorMessage}
+        </div>
         <DialogActions>
           <Button className={styles.button} onClick={handleClose} color="primary">
             Cancel
