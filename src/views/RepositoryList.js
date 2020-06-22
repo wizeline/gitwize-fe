@@ -146,11 +146,12 @@ export default function RepositoryList() {
     setRepoName(response.name)
     setRemovexistingRepo(false)
     const newRepo = {
-      ...repoDetail,
       id: response.id,
       name: response.name,
       last_updated: response.last_updated,
       type: 'GitHub',
+      branches: response.branches,
+      url: repoDetail.url
     }
 
     mainLayoutContext.current.handleChangeRepoList([...repoList, newRepo])
