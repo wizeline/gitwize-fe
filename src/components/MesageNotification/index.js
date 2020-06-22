@@ -1,10 +1,10 @@
 import React from 'react'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { makeStyles } from '@material-ui/core/styles'
+import CloseIcon from '@material-ui/icons/Close'; 
 
 const useStyles  = makeStyles((theme) => ({
-  addRepo: {
+  root: {
     color: '#919892;',
     width: '100%',
     backgroundColor: '#edfcef',
@@ -13,49 +13,44 @@ const useStyles  = makeStyles((theme) => ({
     borderRadius: '4px',
     display: 'flex',
     alignItems: 'center',
-    fontSize: '13px'
+    fontSize: '13px',
+    height: '50px'
   },
-  removeRepo: {
-    color: '#919892;',
-    width: '100%',
-    backgroundColor: '#f7eded',
-    border: '1px solid #ecc4c4',
-    padding: '8px',
-    borderRadius: '4px',
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '13px'
+  closeIcon: {
+    marginLeft: 'auto',
+    cursor: 'pointer'
   },
   addIcon: {
     color: '#4ad962',
     fontSize: '33px'
-  },
-  removeIcon: {
-    color: '#db2828',
-    fontSize: '33px'
-  },
-  repoName: {
-    fontWeight: 600
   }
 }))
 
 export default function MessageNotification(props) {
-  const {repoName, removeRepo} = props
+  const {repoName, isRemovingMessage, handleMessage} = props
   const styles = useStyles()
 
-  if(!removeRepo) {
-    return (
-      <div className={styles.addRepo} style={{display: `${repoName === '' ? "none" : "flex"}` }}>
-        <CheckCircleIcon className={styles.addIcon}/>
-        &nbsp;You've successfully added repo&nbsp;<p className={styles.repoName}>{repoName}</p>
-      </div>
-    )
+  let messageContent;
+  if(!isRemovingMessage) {
+    messageContent = (
+      <>
+        &nbsp;You've successfully added repo&nbsp;<strong >{repoName}</strong>
+      </>
+      )
   } else {
-    return (
-      <div className={styles.removeRepo} style={{display: `${repoName === '' ? "none" : "flex"}` }}>
-        <DeleteForeverIcon className={styles.removeIcon}/>
-        &nbsp;You've successfully removed repo&nbsp;<p className={styles.repoName}>{repoName}</p>
-      </div>
+    messageContent = (
+      <>
+        &nbsp;You've successfully removed repo&nbsp;<strong>{repoName}</strong>
+      </>
     )
   }
+
+  return (
+    <div className={styles.root} style={{display: `${repoName === '' ? "none" : "flex"}` }}>
+      <CheckCircleIcon className={styles.addIcon}/>
+      {messageContent}
+      <CloseIcon className={styles.closeIcon} onClick={handleMessage} />
+    </div>
+  )
+
 }

@@ -132,6 +132,10 @@ export default function RepositoryList() {
     setRemovexistingRepo(true)
   }
 
+  const closeMessageNotification = () => {
+    setRepoName('')
+  }
+
   const handleDeletionCancel = () => {}
 
   const handleAddRepo = async (repoDetail = {}) => {
@@ -195,7 +199,7 @@ export default function RepositoryList() {
           </Grid>
         </Grid>
         <Grid container className={styles.gridRoot} spacing={isDisplayColumnGrid ? 4 : 0}>
-            <MessageNotification repoName={repoName} removeRepo={removeExistingRepo}/>
+            <MessageNotification repoName={repoName} isRemovingMessage={removeExistingRepo} handleMessage={closeMessageNotification}/>
             {repoList
             .slice(0)
             .reverse()
