@@ -18,7 +18,8 @@ const useFilterBarStyles = makeStyles((theme) => ({
   select: {
     "&": {
       opacity: 0.8,
-      top: '0px !important'
+      top: '0px !important',
+      maxHeight: '70vh'
     },
     "& ul": {
         backgroundColor: "#000000",

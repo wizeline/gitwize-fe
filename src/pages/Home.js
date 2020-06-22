@@ -15,6 +15,7 @@ import ContributorStatsPage from '../pages/ContributorStatsPage'
 import NotFoundError404 from '../pages/NotFoundError404'
 import Navbar from '../views/Navbar'
 import Loading from '../components/Loading'
+import { ApiClient } from '../apis'
 
 const theme = createMuiTheme({  
   typography: {
@@ -24,6 +25,8 @@ const theme = createMuiTheme({
     }
   },
 });
+
+const apiClient = new ApiClient()
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,6 +48,7 @@ const Dashboard = () => {
   const { authState, authService } = useOktaAuth()
   const [userInfo, setUserInfo] = useState(null)
   const [repositoryId, setRepositoryId] = useState()
+  const [repositoryList, setRepositoryList] = useState()
   const [showNavbar, setShowNavbar] = useState(true)
   const classes = useStyles()
 
@@ -58,6 +62,17 @@ const Dashboard = () => {
     }
   }, [authState, authService])
 
+  useEffect(() => {
+    if(repositoryId) {
+      apiClient.setAccessToken(authState.accessToken)
+      if(repositoryList === undefined) {
+        apiClient.repos.getRepoDetail(repositoryId).then((data) => {
+          setRepositoryList([data])
+        })
+      }
+    }
+  }, [authState.accessToken, repositoryId, repositoryList])
+
   const logout = async () => {
     authService.logout('/')
   }
@@ -70,15 +85,23 @@ const Dashboard = () => {
     setShowNavbar(showNavbar)
   }
 
+  const handleChangeRepoList = (repoList) => {
+    setRepositoryList(repoList)
+  }
+
   const mainLayOutContextValue = {
     repositoryId: repositoryId,
     handleChangeRepositoryId: (repositoryId) => {
       handleChangeRepoId(repositoryId)
     },
+
     showNavbar: showNavbar,
     handleShowNavbar: (showNavbar) => {
       handleShowNavbar(showNavbar)
-    }
+    },
+
+    repoList: repositoryList,
+    handleChangeRepoList: handleChangeRepoList
   }
 
   if (authState.isPending || userInfo === null) {

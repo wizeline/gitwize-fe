@@ -6,14 +6,13 @@ import DropdownList from '../DropdownList'
 import { transformPeriodToDateRange } from '../../utils/dataUtils'
 import DatePicker from '../DatePicker'
 import PageContext from '../../contexts/PageContext'
+import MainLayoutContex from '../../contexts/MainLayoutContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(5),
   },
 }))
-
-const listBranch = ['master']
 
 export default function BranchPicker(props) {
   const {showDate, onPeriodChange, customFilters = []} = props
@@ -23,12 +22,25 @@ export default function BranchPicker(props) {
     from: dateRange.date_from,
     to: dateRange.date_to
   })
+
+  const mainLayoutContext = useContext(MainLayoutContex)
   const styles = useStyles()
   const defaultItemSize = 2;
   const datePickerSize = 3;
   let branchFilterSize =  12 - (customFilters.length*2 + defaultItemSize + datePickerSize);
   branchFilterSize = branchFilterSize < 2 ? 2 : branchFilterSize;
-
+  let listBranch = ['master']
+  if(mainLayoutContext.repoList) {
+    const currentRepo = mainLayoutContext.repoList.find(item =>  {
+      if(String(item.id) === mainLayoutContext.repositoryId) {
+        return item;
+      } 
+      return null
+    })
+    if(currentRepo) {
+      listBranch = listBranch.concat(currentRepo.branches)
+    }
+  }
 
   useEffect(() => {
     dispatch({
@@ -38,7 +50,6 @@ export default function BranchPicker(props) {
         date_to: date.to
       }
     })
-
   }, [date, dispatch])
 
   const handleChangePeriodValue = (value) => {
