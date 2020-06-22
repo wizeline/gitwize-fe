@@ -72,10 +72,10 @@ export default function BranchPicker(props) {
   return (
     <Grid container className={styles.root}>
       <Grid item xs={branchFilterSize}>
-        <DropdownList label="Branch" data={listBranch} value={listBranch[0]} onChange={(value) => handleChangeBranchValue(value)}/>
+        <DropdownList label="Branch" data={listBranch} onChange={(value) => handleChangeBranchValue(value)}/>
       </Grid>
       <Grid item xs={defaultItemSize}>
-        <DropdownList label="Period" data={showDate} value={showDate[0]} onChange={(value) => handleChangePeriodValue(value)}/>
+        <DropdownList label="Period" data={showDate} onChange={(value) => handleChangePeriodValue(value)}/>
       </Grid>
       <Grid item xs={datePickerSize} style={{display: `${openDatePicker ? "block" : "none"}` }}>
         <DatePicker label="Date Range" onChange={handleDatePickerValue} />
