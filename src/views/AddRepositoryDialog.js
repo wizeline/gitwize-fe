@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#192a3e',
   },
   content: {
-    '& .MuiFormLabel-asterisk': {
+    '& [class*="MuiFormLabel-asterisk"]': {
       color: 'red'
     }
   },
@@ -90,7 +90,6 @@ function AddRepositoryDialog(props) {
         <DialogContent className={styles.content}>
           <TextField
             autoFocus
-            required
             margin="dense"
             id="userName"
             label="User Name"
@@ -101,6 +100,7 @@ function AddRepositoryDialog(props) {
           />
           <TextField
             autoFocus
+            required
             margin="dense"
             id="password"
             label="Access Token"
