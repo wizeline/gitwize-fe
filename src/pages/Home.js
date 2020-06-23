@@ -11,7 +11,7 @@ import RepositoryList from '../views/RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
 import PullRequestStats from '../pages/PullRequestStats'
 import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
-import ContributorStatsPage from '../pages/ContributorStatsPage'
+// import ContributorStatsPage from '../pages/ContributorStatsPage'
 import NotFoundError404 from '../pages/NotFoundError404'
 import Navbar from '../views/Navbar'
 import Loading from '../components/Loading'
@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
 const subMenuItem = [
   {name: 'Repository stats', uri: '/repository-stats', component: RepositoryStats},
   {name: 'Pull request stats', uri: '/pull-request-stats', component: PullRequestStats}, 
-  {name: 'Contributor stats', uri: '/contributor-stats', component: ContributorStatsPage},
+  // {name: 'Contributor stats', uri: '/contributor-stats', component: ContributorStatsPage},
   // {name: 'Inactivity', uri: '/inactivity'},
   // {name: 'Code churn/frequency', uri: '/code-churn-frequency'},
   // {name: 'Commit activity trend', uri: '/commit-activity-trend'},

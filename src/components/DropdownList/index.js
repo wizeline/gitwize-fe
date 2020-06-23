@@ -17,7 +17,6 @@ const useFilterBarStyles = makeStyles((theme) => ({
   },
   select: {
     "&": {
-      opacity: 0.8,
       top: '0px !important',
       maxHeight: '70vh'
     },
@@ -71,7 +70,7 @@ export default function DropdownList(props) {
             name: 'name',
             id: 'uncontrolled-native',
           }}
-          MenuProps={{ classes: { paper: classes.select }, style: {top: topPosition} }}
+          MenuProps={{ classes: { paper: classes.select }, style: {position:'absolute', top: topPosition} }}
         >
           {newDefaultValue}
           {data.map((item) => (
