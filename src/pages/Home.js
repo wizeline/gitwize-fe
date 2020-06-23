@@ -1,6 +1,5 @@
 import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
-import { CssBaseline } from '@material-ui/core'
 import { PageProvider } from '../contexts/PageContext'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container';
@@ -112,7 +111,6 @@ const Dashboard = () => {
     <div className={classes.root}>
     <PageProvider>
       <MuiThemeProvider theme={theme}>
-      <CssBaseline />
       <MainLayoutContexProvider value={mainLayOutContextValue}>
       <Router>
         <Navbar subMenuItem={subMenuItem} userInfor={userInfo} handleLogout={logout} />
