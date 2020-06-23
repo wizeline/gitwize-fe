@@ -34,7 +34,7 @@ export default function MessageNotification(props) {
   if(!isRemovingMessage) {
     messageContent = (
       <>
-        &nbsp;You've successfully added repo&nbsp;<strong >{repoName}</strong>
+        &nbsp;Repository &nbsp;<strong>{repoName}</strong>&nbsp;added, but it may take from few minutes to few hours for the data to reflect
       </>
       )
   } else {

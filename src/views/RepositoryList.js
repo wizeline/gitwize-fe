@@ -106,6 +106,7 @@ export default function RepositoryList() {
   const [isOpen, setOpen] = useState(false)
   const [repoName , setRepoName] = useState('')
   const [removeExistingRepo, setRemovexistingRepo] = useState(true)
+  const [addRepoErrorMessage, setAddRepoErrorMessage] = useState('')
   const styles = useStyles()
 
   useEffect(() => {
@@ -142,21 +143,37 @@ export default function RepositoryList() {
   const handleAddRepo = async (repoDetail = {}) => {
     apiClient.setAccessToken(authState.accessToken)
 
-    const response = await apiClient.repos.createRepo(repoDetail)
-    setRepoName(response.name)
-    setRemovexistingRepo(false)
-    const newRepo = {
-      id: response.id,
-      name: response.name,
-      last_updated: response.last_updated,
-      type: 'GitHub',
-      branches: response.branches,
-      url: repoDetail.url
-    }
+    try {
+      const response = await apiClient.repos.createRepo(repoDetail)
 
-    mainLayoutContext.current.handleChangeRepoList([...repoList, newRepo])
-    setRepoList([...repoList, newRepo])
-    setOpen(false)
+      setRepoName(response.name)
+      setRemovexistingRepo(false)
+      const newRepo = {
+        id: response.id,
+        name: response.name,
+        last_updated: response.last_updated,
+        type: 'GitHub',
+        branches: response.branches,
+        url: repoDetail.url
+      }
+
+      mainLayoutContext.current.handleChangeRepoList([...repoList, newRepo])
+      setRepoList([...repoList, newRepo])
+      setOpen(false)
+    } catch (e) {
+      const errorMessage = e.response.data.error
+      if(errorMessage === "Not be able to parse repository url")
+        setAddRepoErrorMessage("Invalid Repo URL")
+
+      if(errorMessage.includes("Bad credentials"))
+        setAddRepoErrorMessage("Incorrect Credentials Entered")
+      
+      if(errorMessage.includes("Not Found"))
+        setAddRepoErrorMessage("Repository Not Found")
+      
+      if(errorMessage.includes("'Url' failed on the 'required' tag"))
+        setAddRepoErrorMessage("Empty Repo URL Not Allowed")
+    }
   }
 
   const handleChangeLayout = (isDisplayColumnGrid) => {
@@ -202,7 +219,7 @@ export default function RepositoryList() {
           </Grid>
         </Grid>
         <Grid container className={styles.gridRoot} spacing={isDisplayColumnGrid ? 4 : 0}>
-            <MessageNotification repoName={repoName} isRemovingMessage={removeExistingRepo} handleMessage={closeMessageNotification}/>
+            <MessageNotification repoName={repoName} isRemovingMessage={removeExistingRepo} handleMessage={closeMessageNotification} />
             {repoList
             .slice(0)
             .reverse()
@@ -227,6 +244,7 @@ export default function RepositoryList() {
         isOpen={isOpen}
         handleClose={() => handleCloseAddDialog()}
         handleAdd={(item) => handleAddRepo(item)}
+        addRepoErrorMessage={addRepoErrorMessage}
       />
     </div>
   )
