@@ -37,8 +37,8 @@ const tranformData = (data, isTableData) => {
   }
   return filterTableData(data, tempTableObject);
 }
-const chartLines = [{name: 'Commits', color: '#5392FF'},
-                    {name: 'Files change', color: '#62C8BA'}]
+const chartLines = [{name: 'Commits', color: '#5392FF', yAxisId: 'line-1'},
+                    {name: 'Files change', color: '#62C8BA', yAxisId: 'line-2'}]
 const chartBars = [{name: 'Additions', color: '#EC5D5C'}, {name: 'Deletions', color: '#DADADA'}]
 
 const chartOptions = {
@@ -73,24 +73,6 @@ const chartOptions = {
         stacked: true,
         ticks: {
           fontColor: "#C4C4C4",
-          fontSize: 10,
-          beginAtZero: true
-        }
-      },
-      {
-        type: 'linear',
-        display: true,
-        position: 'right',
-        id: 'y-axis-2',
-        gridLines: {
-          display: false
-        },
-        labels: {
-          show: true
-        },
-        stacked: false,
-        ticks: {
-          fontColor: "#5392FF",
           fontSize: 10,
           beginAtZero: true
         }
@@ -136,7 +118,7 @@ function ContributorStatsPage(props) {
     <div style={{ width: '100%' }}>
       <PageTitle>Contributor Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
-      isDisplaySearch={true} chartOptions={getChartOptions(chartOptions)}/>
+      isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={getChartOptions(chartOptions, chartLines)}/>
     </div>
   )
 }

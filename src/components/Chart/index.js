@@ -35,6 +35,58 @@ const ChartLegend = styled.div`
         font-weight: bold;
       }`;
 
+const initValue = (chartInstance, chartLines) => {
+  chartInstance.options.scales.yAxes[0].display = true;
+  chartInstance.options.scales.yAxes[0].gridLines.display = true;
+  if(chartLines && chartLines.length > 0) {
+    for(let i = 1; i <= chartLines.length; i++) {
+      chartInstance.options.scales.yAxes[i].display = true
+    }
+    chartInstance.options.scales.yAxes[1].gridLines.display = false
+  }
+}
+const drawNewOptions = (chartInstance, datasets, chartBars, chartLines = []) => {
+  
+  initValue(chartInstance, chartLines)
+  
+  let numberOfLineDisabled = 0;
+  let numberOfBarDisabled = 0;
+  let i = 0;
+
+  datasets.forEach(item => {
+    const meta = chartInstance.getDatasetMeta(i);
+    if(item.type === 'line') {
+      const yAxisID = item.yAxisID
+      if(meta.hidden) {
+        numberOfLineDisabled++
+        const index = chartInstance.options.scales.yAxes.findIndex(yAxesItem => yAxesItem.id === yAxisID)
+        if(index !== -1) {
+          chartInstance.options.scales.yAxes[index].display = false
+        }
+      }
+    }
+
+    if(item.type === 'bar') {
+      if(meta.hidden) {
+        numberOfBarDisabled++
+      }
+    }
+    i++
+  })
+
+  if(chartBars.length === numberOfBarDisabled  && chartLines.length !== numberOfLineDisabled) {
+    chartInstance.options.scales.yAxes[0].display = false;
+    chartInstance.options.scales.yAxes[0].gridLines.display = false;
+    chartInstance.options.scales.yAxes[1].gridLines.display = true
+  }
+
+  if(chartBars.length === numberOfBarDisabled  && chartLines.length === numberOfLineDisabled) {
+    chartInstance.options.scales.yAxes[0].display = true;
+    chartInstance.options.scales.yAxes[0].gridLines.display = true;
+    chartInstance.options.scales.yAxes[1].gridLines.display = false
+  }
+}
+
 export default function Chart(props) {
 
   const chartRef = useRef(null)
@@ -50,6 +102,7 @@ export default function Chart(props) {
         item.addEventListener("click", e => handleClick(e, item, index, originalColor));
       });
     }
+  // eslint-disable-next-line
   }, [isDisplayLegend]);
 
   const plugins = [{
@@ -58,7 +111,7 @@ export default function Chart(props) {
       }
   }]
 
-  const {data, chartOptions} = props
+  const {data, chartOptions, chartBars, chartLines} = props
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
     let ci = chartRef.current.chartInstance;
@@ -74,6 +127,7 @@ export default function Chart(props) {
       item.style.fontWeight = 'bold'
     }
 
+    drawNewOptions(ci, ci.data.datasets, chartBars, chartLines)
     ci.update();
   }
 
