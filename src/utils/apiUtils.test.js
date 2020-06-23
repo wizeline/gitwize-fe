@@ -30,7 +30,7 @@ describe('transformRepositoryStatsApiResponse', () => {
     expect(Object.values(transformedData)[0].Additions).toBe(1000)
     expect(Object.values(transformedData)[0].Deletions).toBe(1000)
     expect(Object.values(transformedData)[0].Merged).toBe(1200)
-    expect(Object.values(transformedData)[0].Open).toBe(1304)
+    expect(Object.values(transformedData)[0].Created).toBe(1304)
     expect(Object.values(transformedData)[0].Rejected).toBe(1200)
   })
 

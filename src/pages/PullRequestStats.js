@@ -17,10 +17,10 @@ const tableObject = [
   {text: 'Date', fieldName: 'Date'},
   {text: 'Merged', fieldName: 'Merged', type: 'numeric'}, 
   {text: 'Rejected', fieldName: 'Rejected', type: 'numeric'}, 
-  {text: 'Open', fieldName: 'Open', type: 'numeric'},
+  {text: 'Created', fieldName: 'Created', type: 'numeric'},
 ]
 const tableColumn = convertTableObjectToTableColumn(tableObject)
-const chartBars = [{name: 'Open', color: '#EC5D5C'}, {name: 'Merged', color: '#5492FF'}, {name: 'Rejected', color: '#62C8BA'}, ]
+const chartBars = [{name: 'Created', color: '#EC5D5C'}, {name: 'Merged', color: '#5492FF'}, {name: 'Rejected', color: '#62C8BA'}, ]
 const chartOptions = {
   scales: {
     xAxes: [
