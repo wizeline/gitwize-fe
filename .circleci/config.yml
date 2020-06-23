@@ -15,7 +15,7 @@ commands:
           command: |
             npm test -- --coverage --watchAll=false --collectCoverageFrom=src/**/*js
       - run:
-          name: "RunSonarqube scanner"
+          name: "Run Sonarqube scanner"
           command: |
             export SCAN_VERSION=4.3.0.2102-linux
             wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SCAN_VERSION}.zip 
