@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -58,9 +58,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function AddRepositoryDialog(props) {
-  const { isOpen, handleClose, handleAdd, addRepoErrorMessage } = props
+  const { isOpen, handleClose, handleAdd, addingRepoError } = props
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('') 
   const [url, setUrl] = useState('')
   const styles = useStyles()
 
@@ -68,19 +69,39 @@ function AddRepositoryDialog(props) {
     setUserName('')
     setPassword('')
     setUrl('')
+    setErrorMessage('') 
   }
+
+  useEffect(() => {
+    if(addingRepoError === "Not be able to parse repository url")
+      setErrorMessage("Invalid Repo URL")
+
+    if(addingRepoError.includes("Bad credentials"))
+      setErrorMessage("Incorrect Credentials Entered")
+      
+    if(addingRepoError.includes("Not Found"))
+      setErrorMessage("Repository Not Found")
+      
+    if(addingRepoError.includes("'Url' failed on the 'required' tag"))
+      setErrorMessage("Empty Repo URL Not Allowed")
+  
+  })
 
   const handleSubmit = () => {
     // get data
     const data = { userName, password, url }
     const name = getRepositoryNameFromGitHubUrl(url)
-    reset()
     handleAdd({ ...data, name})
+  }
+
+  const handleCancel = () => {
+    handleClose()
+    reset()
   }
 
   return (
     <div className={styles.root}>
-      <Dialog open={isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={isOpen} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title" className={styles.header}>
           Add Repository
         </DialogTitle>
@@ -122,10 +143,10 @@ function AddRepositoryDialog(props) {
           />
         </DialogContent>
         <div className={styles.errorMessage}>
-          {addRepoErrorMessage}
+          {errorMessage}
         </div>
         <DialogActions>
-          <Button className={styles.button} onClick={handleClose} color="primary">
+          <Button className={styles.button} onClick={handleCancel} color="primary">
             Cancel
           </Button>
           <Button className={styles.button} onClick={handleSubmit} color="primary">
