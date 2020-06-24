@@ -106,7 +106,7 @@ export default function RepositoryList() {
   const [isOpen, setOpen] = useState(false)
   const [repoName , setRepoName] = useState('')
   const [removeExistingRepo, setRemovexistingRepo] = useState(true)
-  const [addRepoErrorMessage, setAddRepoErrorMessage] = useState('')
+  const [addingRepoError, setAddingRepoError] = useState('')
   const styles = useStyles()
 
   useEffect(() => {
@@ -123,6 +123,7 @@ export default function RepositoryList() {
 
   const handleCloseAddDialog = () => {
     setOpen(false)
+    setAddingRepoError('')
   }
 
   const removeRepo = (item) => {
@@ -161,18 +162,8 @@ export default function RepositoryList() {
       setRepoList([...repoList, newRepo])
       setOpen(false)
     } catch (e) {
-      const errorMessage = e.response.data.error
-      if(errorMessage === "Not be able to parse repository url")
-        setAddRepoErrorMessage("Invalid Repo URL")
-
-      if(errorMessage.includes("Bad credentials"))
-        setAddRepoErrorMessage("Incorrect Credentials Entered")
-      
-      if(errorMessage.includes("Not Found"))
-        setAddRepoErrorMessage("Repository Not Found")
-      
-      if(errorMessage.includes("'Url' failed on the 'required' tag"))
-        setAddRepoErrorMessage("Empty Repo URL Not Allowed")
+      const error = e.response.data.error
+      setAddingRepoError(error)
     }
   }
 
@@ -244,7 +235,7 @@ export default function RepositoryList() {
         isOpen={isOpen}
         handleClose={() => handleCloseAddDialog()}
         handleAdd={(item) => handleAddRepo(item)}
-        addRepoErrorMessage={addRepoErrorMessage}
+        addingRepoError={addingRepoError}
       />
     </div>
   )
