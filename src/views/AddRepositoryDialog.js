@@ -61,7 +61,6 @@ function AddRepositoryDialog(props) {
   const { isOpen, handleClose, handleAdd, addingRepoError } = props
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState('') 
   const [url, setUrl] = useState('')
   const styles = useStyles()
 
@@ -69,23 +68,7 @@ function AddRepositoryDialog(props) {
     setUserName('')
     setPassword('')
     setUrl('')
-    setErrorMessage('') 
   }
-
-  useEffect(() => {
-    if(addingRepoError === "Not be able to parse repository url")
-      setErrorMessage("Invalid Repo URL")
-
-    if(addingRepoError.includes("Bad credentials"))
-      setErrorMessage("Incorrect Credentials Entered")
-      
-    if(addingRepoError.includes("Not Found"))
-      setErrorMessage("Repository Not Found")
-      
-    if(addingRepoError.includes("'Url' failed on the 'required' tag"))
-      setErrorMessage("Empty Repo URL Not Allowed")
-  
-  })
 
   const handleSubmit = () => {
     // get data
@@ -96,8 +79,26 @@ function AddRepositoryDialog(props) {
 
   const handleCancel = () => {
     handleClose()
-    reset()
   }
+
+  useEffect(() => {
+    reset()
+  }, [isOpen])
+
+  let errorMessage = '';
+
+  const handleErrorMessage = () => {
+    if(addingRepoError === "Not be able to parse repository url") {
+      errorMessage = "Invalid Repo URL"
+    } else if(addingRepoError.includes("Bad credentials")) {
+      errorMessage = "Incorrect Credentials Entered"
+    } else if(addingRepoError.includes("Not Found")) {
+      errorMessage = "Repository Not Found"
+    } else if(addingRepoError.includes("'Url' failed on the 'required' tag")) {
+      errorMessage = "Empty Repo URL Not Allowed"
+    }
+  }
+  handleErrorMessage()
 
   return (
     <div className={styles.root}>
