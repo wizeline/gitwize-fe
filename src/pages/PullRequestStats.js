@@ -54,7 +54,9 @@ const chartOptions = {
         ticks: {
           fontColor: "#C4C4C4",
           fontSize: 10,
-          beginAtZero: true
+          beginAtZero: true,
+          precision: 0,
+          suggestedMax: 5
         }
       }
     ]
