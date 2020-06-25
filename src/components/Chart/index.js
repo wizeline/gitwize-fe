@@ -127,7 +127,9 @@ export default function Chart(props) {
       item.style.fontWeight = 'bold'
     }
 
-    drawNewOptions(ci, ci.data.datasets, chartBars, chartLines)
+    if(chartLines && chartLines.length !== 0) {
+      drawNewOptions(ci, ci.data.datasets, chartBars, chartLines)
+    }
     ci.update();
   }
 
