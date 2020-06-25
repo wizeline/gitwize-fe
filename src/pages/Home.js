@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import RepositoryList from '../views/RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
 import PullRequestStats from '../pages/PullRequestStats'
+import QuartelyTrends from '../pages/QuartelyTrends'
 import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
 // import ContributorStatsPage from '../pages/ContributorStatsPage'
 import NotFoundError404 from '../pages/NotFoundError404'
@@ -33,15 +34,53 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const subMenuItem = [
-  {name: 'Repository stats', uri: '/repository-stats', component: RepositoryStats},
-  {name: 'Pull request stats', uri: '/pull-request-stats', component: PullRequestStats}, 
-  // {name: 'Contributor stats', uri: '/contributor-stats', component: ContributorStatsPage},
-  // {name: 'Inactivity', uri: '/inactivity'},
-  // {name: 'Code churn/frequency', uri: '/code-churn-frequency'},
-  // {name: 'Commit activity trend', uri: '/commit-activity-trend'},
-  // {name: 'Velocity', uri: '/velocity'}
+const subMenuItems = [
+  {
+    name: 'Repository stats', 
+    uri: '/repository-stats', 
+    component: RepositoryStats
+  },
+  {
+    name: 'Pull request',
+    uri: '/pull-request',
+    children: [
+      {
+        name: 'Pull request stats', 
+        uri: '/pull-request-stats',
+        component: PullRequestStats
+      },
+      {
+        name: 'Quartely Trends', 
+        uri: '/quartely-trends', 
+        component: QuartelyTrends
+      }
+      // ,
+      // {
+      //   name: 'test 1', 
+      //   uri: '/test-trends',
+      //   children: [
+      //     {
+      //       name: 'test Trends child', 
+      //       uri: '/test-trends',
+      //     }
+      //   ]
+      // }
+    ]
+  }
 ];
+
+const buildRoutPath = (menuItems, baseURI='') => {
+  return menuItems.flatMap(item => {
+    if(item.children) {
+      return buildRoutPath(item.children, item.uri)
+    } else {
+      return {
+        uri: baseURI+item.uri,
+        component: item.component
+      }
+    }
+  })
+}
 
 const Dashboard = () => {
   const { authState, authService } = useOktaAuth()
@@ -113,16 +152,16 @@ const Dashboard = () => {
       <MuiThemeProvider theme={theme}>
       <MainLayoutContexProvider value={mainLayOutContextValue}>
       <Router>
-        <Navbar subMenuItem={subMenuItem} userInfor={userInfo} handleLogout={logout} />
+        <Navbar subMenuItems={subMenuItems} userInfor={userInfo} handleLogout={logout} />
         <Container>
           <Switch>
             <Route path="/" exact component={RepositoryList} />
-              {subMenuItem.map((subMenuItem, index) => (
+              {buildRoutPath(subMenuItems).map((item, index) => (
             <Route
               exact
-              key={subMenuItem.uri}
-              path={`/repository/:id${subMenuItem.uri}`}
-              component={subMenuItem.component}
+              key={item.uri}
+              path={`/repository/:id${item.uri}`}
+              component={item.component}
             />
             ))}
             <Route component={NotFoundError404} />

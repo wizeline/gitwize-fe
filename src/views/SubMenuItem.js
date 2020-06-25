@@ -54,12 +54,12 @@ const useStyles = makeStyles(() => ({
 		textAlign: 'start'
 	},
 	chosenParent: {
-		color: 'red',
+		color: '#EC5D5C',
 	}
 }))
 
 export function SubMenuItemNode (props) {
-	const {renderNav, children, name} = props
+	const {renderNav, children, name, baseURI} = props
 	const [isDisplay, toggleDisplay] = useToggle(true)
 	const [isParentChosen, setParentChosen] = useState(false)
 	const classes = useStyles()
@@ -67,12 +67,20 @@ export function SubMenuItemNode (props) {
 		toggleDisplay()
 	}
 
-	const uri = children[0].uri
 	const currentURI = window.location.href
 
 	useEffect(()=> {
-		setParentChosen(uri && currentURI.includes(uri))
-	}, [uri, currentURI])
+		const parentURI = []
+		let parentChosenValue = false
+		children.forEach(item => parentURI.push(baseURI+item.uri))
+		
+		parentURI.forEach(item => {
+			if(currentURI.includes(item)) {
+				parentChosenValue = true
+			}
+		})
+		setParentChosen(parentChosenValue)
+	}, [children, baseURI, currentURI])
 
 	return (<List>
 						<ListItem className={clsx(classes.root, classes.notPaddingTopBottom, classes.notPaddingLeftRight)}>
@@ -81,7 +89,7 @@ export function SubMenuItemNode (props) {
 								{isDisplay ? <ExpandLess /> : <ExpandMore />}
 							</Button>
 							<Collapse style={{width: '100%'}} in={isDisplay}>
-								{renderNav(children)}
+								{renderNav(children, baseURI)}
 							</Collapse>
 						</ListItem>
 					</List>)
@@ -89,11 +97,16 @@ export function SubMenuItemNode (props) {
 
 export function SubMenuItemLeaf(props) {
 	const classes = useStyles()
-	const {repoId, uri, name, handleLink} = props
+	const {repoId, uri, name, handleLink, baseURI} = props
+	let parentURI = ''
+
+	if(baseURI) {
+		parentURI = baseURI
+	}
 
 	return (<List>
 						<ListItem className={clsx(classes.notPaddingTopBottom, classes.notPaddingLeftRight,)} button key={name}>
-							<NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
+							<NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
 								{name}
 							</NavLink>
 						</ListItem>

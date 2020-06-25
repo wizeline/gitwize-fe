@@ -127,22 +127,6 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const testsubMenuItem = [
-  {
-    name: 'Repository stats', 
-    uri: '/repository-stats', 
-  },
-  {
-    name: 'Pull request', 
-    children: [
-      {
-        name: 'Pull request stats', 
-        uri: '/pull-request-stats', 
-      }
-    ]
-  }
-];
-
 
 const today = new Date()
 const last7Days = new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000))
@@ -153,7 +137,7 @@ function Navbar (props) {
   const repoId = mainLayout.repositoryId
   const repoList = mainLayout.repoList;
   const showNavbar = mainLayout.showNavbar
-  const {handleLogout, userInfor} = props;
+  const {handleLogout, userInfor, subMenuItems} = props;
   const classes = useStyles()
   const [repositoryName, setRepositoryName] = useState()
   const [isDisplayDashBoard, setStateDashBoard] = useState(false)
@@ -193,11 +177,11 @@ function Navbar (props) {
     resetDateRange()
   }
 
-  const renderNav = (nodes) => {
+  const renderNav = (nodes, baseURI) => {
     return nodes.map(node => {
       return node.children 
-      ? (<SubMenuItemNode key={node.name} name={node.name} children={node.children} renderNav={renderNav}/>)
-      : (<SubMenuItemLeaf key={node.name} name={node.name} handleLink={handleLink} repoId={repoId} uri={node.uri}/>)
+      ? (<SubMenuItemNode key={node.name} name={node.name} baseURI={node.uri} children={node.children} renderNav={renderNav}/>)
+      : (<SubMenuItemLeaf baseURI={baseURI} key={node.name} name={node.name} handleLink={handleLink} repoId={repoId} uri={node.uri}/>)
     })
   }
 
@@ -245,16 +229,7 @@ function Navbar (props) {
         {dashBoard}
       </List>
       <Collapse in={isSubMenuOpen && (repoId !== undefined)}>
-        {/* <List>
-          {subMenuItem.map((subMenuItem, index) => (
-            <ListItem button key={subMenuItem.name}>
-            <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={index} to={`/repository/${repoId}${subMenuItem.uri}`} style={{ width: '100%' }} onClick={handleLink}>
-            {subMenuItem.name}
-            </NavLink>
-          </ListItem>
-          ))}
-        </List> */}
-        {renderNav(testsubMenuItem)}
+        {renderNav(subMenuItems)}
       </Collapse>
       <List  style={{marginTop: 'auto'}}>
         <ListItem>
