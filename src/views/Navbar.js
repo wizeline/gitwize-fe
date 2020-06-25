@@ -15,11 +15,12 @@ import { ListItemText, Button } from '@material-ui/core'
 import DashboardIcon from '@material-ui/icons/DashboardRounded'
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import {NavLink, Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import clsx from 'clsx'
+import {SubMenuItemLeaf, SubMenuItemNode} from './SubMenuItem';
 
 
 const drawerWidth = (256)
@@ -126,6 +127,23 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
+const testsubMenuItem = [
+  {
+    name: 'Repository stats', 
+    uri: '/repository-stats', 
+  },
+  {
+    name: 'Pull request', 
+    children: [
+      {
+        name: 'Pull request stats', 
+        uri: '/pull-request-stats', 
+      }
+    ]
+  }
+];
+
+
 const today = new Date()
 const last7Days = new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000))
 
@@ -135,7 +153,7 @@ function Navbar (props) {
   const repoId = mainLayout.repositoryId
   const repoList = mainLayout.repoList;
   const showNavbar = mainLayout.showNavbar
-  const {handleLogout, userInfor, subMenuItem} = props;
+  const {handleLogout, userInfor} = props;
   const classes = useStyles()
   const [repositoryName, setRepositoryName] = useState()
   const [isDisplayDashBoard, setStateDashBoard] = useState(false)
@@ -173,6 +191,14 @@ function Navbar (props) {
 
   const handleLink = () => {
     resetDateRange()
+  }
+
+  const renderNav = (nodes) => {
+    return nodes.map(node => {
+      return node.children 
+      ? (<SubMenuItemNode key={node.name} name={node.name} children={node.children} renderNav={renderNav}/>)
+      : (<SubMenuItemLeaf key={node.name} name={node.name} handleLink={handleLink} repoId={repoId} uri={node.uri}/>)
+    })
   }
 
   if(isDisplayDashBoard) {
@@ -219,7 +245,7 @@ function Navbar (props) {
         {dashBoard}
       </List>
       <Collapse in={isSubMenuOpen && (repoId !== undefined)}>
-        <List>
+        {/* <List>
           {subMenuItem.map((subMenuItem, index) => (
             <ListItem button key={subMenuItem.name}>
             <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={index} to={`/repository/${repoId}${subMenuItem.uri}`} style={{ width: '100%' }} onClick={handleLink}>
@@ -227,7 +253,8 @@ function Navbar (props) {
             </NavLink>
           </ListItem>
           ))}
-        </List>
+        </List> */}
+        {renderNav(testsubMenuItem)}
       </Collapse>
       <List  style={{marginTop: 'auto'}}>
         <ListItem>
