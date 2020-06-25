@@ -33,9 +33,6 @@ class TestAcceptance():
   def teardown_method(self, method):
     self.driver.quit()
   
-
- 
-
   def test_acceptance(self):
     
     self.driver.get("https://qa.gitwize.net/")
@@ -54,6 +51,7 @@ class TestAcceptance():
     try:
       element = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='knewz-support']")))
     except TimeoutException:
+      print ("test repo not found, need to create.")
       wait.until(EC.element_to_be_clickable((By.XPATH,"//button[./span[text()='Add repository']]"))).click()
       wait.until(EC.element_to_be_clickable((By.ID, "projectUrl"))).send_keys(repo_url)
       wait.until(EC.element_to_be_clickable((By.ID, "password"))).click()
@@ -62,8 +60,8 @@ class TestAcceptance():
       wait.until(EC.element_to_be_clickable((By.XPATH,"//strong[text()='knewz-support']")))
       element = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='knewz-support']")))
     divs = element.find_elements_by_xpath( "//div[contains(@class, 'MuiCardContent-root-')]")
-    for item in divs:
     
+    for item in divs:
       repos  = item.find_elements_by_xpath("//a/p[text()='knewz-support']")
       if (len(repos) > 0):
         svgs = item.find_elements_by_xpath(".//*[contains(@class, 'MuiSvgIcon-root')]")
@@ -71,11 +69,7 @@ class TestAcceptance():
           svgs[1].click()
           wait.until(EC.element_to_be_clickable((By.XPATH,"//button[./span[text()='OK']]"))).click()
           time.sleep(5) 
+          print ("test is successful.")
           break
-
-        
-      
-    #wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiGrid-root-245:nth-child(2) .jss355 > .MuiSvgIcon-root-169"))).click()
-    #wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".jss366:nth-child(2) > .MuiButton-label-77"))).click()
   
     
