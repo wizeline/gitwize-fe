@@ -55,6 +55,10 @@ const useStyles = makeStyles(() => ({
 	},
 	chosenParent: {
 		color: '#EC5D5C',
+		fontWeight: 'bold',
+		borderLeft: '10px solid',
+		borderRadius: 0,
+		paddingLeft: 10
 	}
 }))
 
@@ -84,7 +88,7 @@ export function SubMenuItemNode (props) {
 
 	return (<List>
 						<ListItem className={clsx(classes.root, classes.notPaddingTopBottom, classes.notPaddingLeftRight)}>
-							<Button className={clsx(classes.buttonText, (isParentChosen) && classes.chosenParent)} style={{paddingLeft: 0}} onClick={() => handleToggleDisplay()}>
+							<Button className={clsx(classes.buttonText, (isParentChosen) && classes.chosenParent)} onClick={() => handleToggleDisplay()}>
 								<ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
 								{isDisplay ? <ExpandLess /> : <ExpandMore />}
 							</Button>
@@ -98,17 +102,26 @@ export function SubMenuItemNode (props) {
 export function SubMenuItemLeaf(props) {
 	const classes = useStyles()
 	const {repoId, uri, name, handleLink, baseURI} = props
+	const [isChangeClass, setChangeClass] = useState(false)
 	let parentURI = ''
 
 	if(baseURI) {
 		parentURI = baseURI
 	}
+	
+	const currentURI = window.location.href
+
+	useEffect(()=> {
+		setChangeClass(!baseURI && currentURI.includes(uri))
+	}, [baseURI, currentURI, uri])
 
 	return (<List>
-						<ListItem className={clsx(classes.notPaddingTopBottom, classes.notPaddingLeftRight,)} button key={name}>
-							<NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
-								{name}
-							</NavLink>
+						<ListItem className={clsx(classes.notPaddingTopBottom, classes.notPaddingLeftRight)} key={name}>
+							<Button className={clsx(classes.buttonText, (isChangeClass) && classes.chosenParent)}>
+								<NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
+									<ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
+								</NavLink>
+							</Button>
 						</ListItem>
 					</List>)
 }
