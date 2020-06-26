@@ -18,6 +18,7 @@ const tableObject = [
   {text: 'Merged', fieldName: 'Merged', type: 'numeric'}, 
   {text: 'Rejected', fieldName: 'Rejected', type: 'numeric'}, 
   {text: 'Created', fieldName: 'Created', type: 'numeric'},
+  {text: 'Open', fieldName: 'Open', type: 'numeric'},
 ]
 const tableColumn = convertTableObjectToTableColumn(tableObject)
 const chartBars = [
