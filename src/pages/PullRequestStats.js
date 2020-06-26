@@ -20,7 +20,12 @@ const tableObject = [
   {text: 'Created', fieldName: 'Created', type: 'numeric'},
 ]
 const tableColumn = convertTableObjectToTableColumn(tableObject)
-const chartBars = [{name: 'Created', color: '#EC5D5C'}, {name: 'Merged', color: '#5492FF'}, {name: 'Rejected', color: '#62C8BA'}, ]
+const chartBars = [
+  {name: 'Created', color: '#62C8BA', stackId: 'stack-0', categoryPercentage: 0.5, barPercentage: 0.7}, 
+  {name: 'Merged', color: '#5492FF', stackId: 'stack-0', categoryPercentage: 0.5, barPercentage: 0.7}, 
+  {name: 'Rejected', color: '#EC5D5C', stackId: 'stack-0', categoryPercentage: 0.5, barPercentage: 0.7}, 
+  {name: 'Open', color: '#D3A2FF', stackId: 'stack-1', categoryPercentage: 0.5, barPercentage: 0.7}, 
+]
 const chartOptions = {
   scales: {
     xAxes: [
