@@ -4,7 +4,7 @@ import * as oktaLib from '@okta/okta-react'
 import Navbar from './Navbar'
 import RepositoryStats from '../pages/RepositoryStats'
 import PullRequestStats from '../pages/PullRequestStats'
-import ContributorStatsPage from '../pages/ContributorStatsPage'
+import QuartelyTrends from '../pages/QuartelyTrends'
 import Drawer from '@material-ui/core/Drawer'
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import {PageProvider} from '../contexts/PageContext'
@@ -12,13 +12,27 @@ import {PageProvider} from '../contexts/PageContext'
 jest.mock('@okta/okta-react')
 
 const subMenuItem = [
-  {name: 'Repository stats', uri: '/repository-stats', component: RepositoryStats},
-  {name: 'Pull request stats', uri: '/pull-request-stats', component: PullRequestStats}, 
-  {name: 'Contributor stats', uri: '/contributor-stats', component: ContributorStatsPage},
-  {name: 'Inactivity', uri: '/inactivity'},
-  {name: 'Code churn/frequency', uri: '/code-churn-frequency'},
-  {name: 'Commit activity trend', uri: '/commit-activity-trend'},
-  {name: 'Velocity', uri: '/velocity'}
+  {
+    name: 'Repository stats', 
+    uri: '/repository-stats', 
+    component: RepositoryStats
+  },
+  {
+    name: 'Pull request',
+    uri: '/pull-request',
+    children: [
+      {
+        name: 'Pull request stats', 
+        uri: '/pull-request-stats',
+        component: PullRequestStats
+      },
+      {
+        name: 'Quartely Trends', 
+        uri: '/quartely-trends', 
+        component: QuartelyTrends
+      }
+    ]
+  }
 ];
 
 describe('Navbar component', () => {
