@@ -54,17 +54,6 @@ const subMenuItems = [
         uri: '/quartely-trends', 
         component: QuartelyTrends
       }
-      // ,
-      // {
-      //   name: 'test 1', 
-      //   uri: '/test-trends',
-      //   children: [
-      //     {
-      //       name: 'test Trends child', 
-      //       uri: '/test-trends',
-      //     }
-      //   ]
-      // }
     ]
   }
 ];

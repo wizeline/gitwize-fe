@@ -17,11 +17,9 @@ const useStyles = makeStyles(() => ({
 		alignItems: 'flex-start',
 		width: '100%'
 	},
-	notPaddingTopBottom: {
+	notPaddingTopBottomRight: {
 		paddingTop: 0,
-		paddingBottom: 0
-	},
-	notPaddingLeftRight: {
+		paddingBottom: 0,
 		paddingRight: 0
 	},
 	button: {
@@ -87,16 +85,16 @@ export function SubMenuItemNode (props) {
 	}, [children, baseURI, currentURI])
 
 	return (<List>
-						<ListItem className={clsx(classes.root, classes.notPaddingTopBottom, classes.notPaddingLeftRight)}>
-							<Button className={clsx(classes.buttonText, (isParentChosen) && classes.chosenParent)} onClick={() => handleToggleDisplay()}>
-								<ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
-								{isDisplay ? <ExpandLess /> : <ExpandMore />}
-							</Button>
-							<Collapse style={{width: '100%'}} in={isDisplay}>
-								{renderNav(children, baseURI)}
-							</Collapse>
-						</ListItem>
-					</List>)
+            <ListItem className={clsx(classes.root, classes.notPaddingTopBottomRight)}>
+              <Button className={clsx(classes.buttonText, (isParentChosen) && classes.chosenParent)} onClick={() => handleToggleDisplay()}>
+                <ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
+                {isDisplay ? <ExpandLess /> : <ExpandMore />}
+              </Button>
+              <Collapse style={{width: '100%'}} in={isDisplay}>
+                {renderNav(children, baseURI)}
+              </Collapse>
+            </ListItem>
+          </List>)
 }
 
 export function SubMenuItemLeaf(props) {
@@ -116,12 +114,12 @@ export function SubMenuItemLeaf(props) {
 	}, [baseURI, currentURI, uri])
 
 	return (<List>
-						<ListItem className={clsx(classes.notPaddingTopBottom, classes.notPaddingLeftRight)} key={name}>
-							<Button className={clsx(classes.buttonText, (isChangeClass) && classes.chosenParent)}>
-								<NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
-									<ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
-								</NavLink>
-							</Button>
-						</ListItem>
-					</List>)
+            <ListItem className={clsx(classes.notPaddingTopBottomRight)} key={name}>
+              <Button className={clsx(classes.buttonText, (isChangeClass) && classes.chosenParent)}>
+                <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
+                  <ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
+                </NavLink>
+              </Button>
+            </ListItem>
+          </List>)
 }
