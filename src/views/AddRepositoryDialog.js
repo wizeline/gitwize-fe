@@ -85,20 +85,14 @@ function AddRepositoryDialog(props) {
     reset()
   }, [isOpen])
 
-  let errorMessage = '';
-
-  const handleErrorMessage = () => {
-    if(addingRepoError === "Not be able to parse repository url") {
-      errorMessage = "Invalid Repo URL"
-    } else if(addingRepoError.includes("Bad credentials")) {
-      errorMessage = "Incorrect Credentials Entered"
-    } else if(addingRepoError.includes("Not Found")) {
-      errorMessage = "Repository Not Found"
-    } else if(addingRepoError.includes("'Url' failed on the 'required' tag")) {
-      errorMessage = "Empty Repo URL Not Allowed"
-    }
+  // https://wizeline.atlassian.net/wiki/spaces/GWZ/pages/1368326818/Error+Handling
+  const REPOSITORY_ERROR_MAP = {
+    "common.unauthorized": "Unauthorized",
+    "repository.existed": "The repository already exists in the list",
+    "repository.notFound": "Repository with that URL is not found",
+    "repository.invalidCredentials": "The repository cannot be accessed with provided credentials",
+    "repository.invalidURL": "Please enter correct repo URL"
   }
-  handleErrorMessage()
 
   return (
     <div className={styles.root}>
@@ -144,7 +138,7 @@ function AddRepositoryDialog(props) {
           />
         </DialogContent>
         <div className={styles.errorMessage}>
-          {errorMessage}
+          {REPOSITORY_ERROR_MAP[addingRepoError.errorKey]}
         </div>
         <DialogActions>
           <Button className={styles.button} onClick={handleCancel} color="primary">
