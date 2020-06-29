@@ -36,7 +36,8 @@ export const transformMetricsDataApiResponse = (data, dateRange) => {
       Deletions: metricByDate.lines_removed !== undefined ? metricByDate.lines_removed : 0,
       Created: metricByDate.prs_created !== undefined ? metricByDate.prs_created : 0,
       Merged: metricByDate.prs_merged !== undefined ? metricByDate.prs_merged : 0,
-      Rejected:metricByDate.prs_rejected !== undefined ? metricByDate.prs_rejected : 0
+      Rejected:metricByDate.prs_rejected !== undefined ? metricByDate.prs_rejected : 0,
+      Open:metricByDate.prs_opened !== undefined ? metricByDate.prs_opened : 0
     })
 
     date_from = date_from + (24*3600)
