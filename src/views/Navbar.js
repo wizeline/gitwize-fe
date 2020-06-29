@@ -127,7 +127,6 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-
 const today = new Date()
 const last7Days = new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000))
 
