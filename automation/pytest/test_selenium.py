@@ -4,6 +4,7 @@ import time
 import json
 import re
 import os
+from sys import platform
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -22,8 +23,9 @@ class TestAcceptance():
     o =  webdriver.ChromeOptions()
     o.add_argument('--disable-application-cache')
     o.add_argument("--incognito") 
-    o.add_argument('--headless')
-    o.add_argument('--no-sandbox')
+    if platform != "darwin":
+      o.add_argument('--headless')
+      o.add_argument('--no-sandbox')
     o.add_argument('--single-process')
     o.add_argument('--disable-dev-shm-usage')
     #driver = webdriver.Chrome(options=chrome_options)
