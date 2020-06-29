@@ -114,7 +114,7 @@ export function SubMenuItemLeaf(props) {
 	}, [baseURI, currentURI, uri])
 
 	return (<List>
-            <ListItem className={clsx(classes.notPaddingTopBottomRight)} key={name}>
+            <ListItem className={classes.notPaddingTopBottomRight} key={name}>
               <Button className={clsx(classes.buttonText, (isChangeClass) && classes.chosenParent)}>
                 <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
                   <ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
