@@ -72,7 +72,7 @@ commands:
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
             fi 
-            export PROD_PATTERN="v[0-9]+(\.[0-9]+).*"
+            export PROD_PATTERN="prod[0-9]+(\.[0-9]+).*"
             if [[ ${CIRCLE_TAG} =~  ${PROD_PATTERN} ]]; then
               echo
               echo "deploy PROD build"
