@@ -2,7 +2,7 @@ import { BaseApiClient } from './base'
 import contributorsStatsRespond from '../mockData/contributorData.json'
 // import { convertDateToSecond } from '../utils/apiUtils'
 
-// const GET_CONTRIBUTOR_STATS_PATH = (repoId) => `/repositories/${repoId}/stats`
+// const GET_CONTRIBUTOR_STATS_PATH = (repoId) => `/repositories/${repoId}/contributor`
 
 export default class ContributorStatsApiClient extends BaseApiClient {
   getContributorStats(repoId, dateRange) {
