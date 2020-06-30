@@ -126,7 +126,7 @@ jobs:
           webhook: '${SLACK_WEBHOOK}' 
   deploy-prod:
     docker:
-      - image: circleci/python:3.7.7
+      - image: circleci/node:lts 
     steps:
       - checkout 
       - deploy_build
