@@ -5,7 +5,7 @@ import MaterialTable from "material-table";
 const defaultPageSize = 7
 
 export default function TableData(props) {
-  const { tableData, tableColumn, isDisplaySearch = false } = props
+  const { tableData, tableColumn, isDisplaySearch = false, customComponent } = props
   let tableObject;
   const [selectedRow, setSelectedRow] = useState(null);
   tableObject = (<MaterialTable
@@ -31,6 +31,7 @@ export default function TableData(props) {
                     paginationType: 'stepped',
                     toolbar: isDisplaySearch
                   }}
+                  components={customComponent}
                 />)
   
 

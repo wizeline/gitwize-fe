@@ -103,9 +103,11 @@ export default function Chart(props) {
         const originalColor = item.childNodes[0].style.backgroundColor
         item.addEventListener("click", e => handleClick(e, item, index, originalColor));
       });
+      chartRef.current.chartInstance.options = newChartOptions
+      chartRef.current.chartInstance.update();
     }
   // eslint-disable-next-line
-  }, [isDisplayLegend]);
+  }, [isDisplayLegend, chartLines, chartOptions]);
 
   const plugins = [{
       afterDraw: (chartInstance) => {
