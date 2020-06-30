@@ -45,6 +45,14 @@ commands:
               export REACT_APP_OKTA_ISSUER=${QA_REACT_APP_OKTA_ISSUER}
               export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${QA_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
             fi
+            export PROD_PATTERN="prod[0-9]+(\.[0-9]+).*"
+            if [[ ${CIRCLE_TAG} =~  ${PROD_PATTERN} ]]; then
+              export REACT_APP_BASE_URL=${PROD_REACT_APP_BASE_URL}
+              export REACT_APP_API_URL=${PROD_REACT_APP_API_URL}
+              export REACT_APP_OKTA_CLIENT_ID=${PROD_REACT_APP_OKTA_CLIENT_ID}
+              export REACT_APP_OKTA_ISSUER=${PROD_REACT_APP_OKTA_ISSUER}
+              export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${PROD_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
+            fi
             yarn install
             yarn build
             cp -f $BUILD_INFO build/$BUILD_INFO
@@ -64,6 +72,16 @@ commands:
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
             fi 
+            export PROD_PATTERN="v[0-9]+(\.[0-9]+).*"
+            if [[ ${CIRCLE_TAG} =~  ${PROD_PATTERN} ]]; then
+              echo
+              echo "deploy PROD build"
+              echo
+              export S3=${PROD_S3}
+              export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
+              export AWS_REGION=${PROD_AWS_REGION}
+            fi
+
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
@@ -105,9 +123,15 @@ jobs:
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
+  deploy-prod:
+      - slack/status:
+          fail_only: false
+          webhook: '${SLACK_WEBHOOK}'
+
 orbs:
   slack: circleci/slack@3.4.2
   browser-tools: circleci/browser-tools@1.0.1
+
 workflows:
   ci-workflow:
     jobs:
@@ -128,3 +152,11 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v[0-9]+(\.[0-9]+).*/
+      - deploy-prod:
+          requires:
+            - deploy
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^prod[0-9]+(\.[0-9]+).*/
