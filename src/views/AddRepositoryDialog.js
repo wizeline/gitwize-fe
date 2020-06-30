@@ -61,9 +61,9 @@ const useStyles = makeStyles((theme) => ({
 const REPOSITORY_ERROR_MAP = {
   "common.unauthorized": "Unauthorized",
   "repository.existed": "The repository already exists in the list",
-  "repository.notFound": "Repository with that URL is not found",
-  "repository.invalidCredentials": "The repository cannot be accessed with provided credentials",
-  "repository.invalidURL": "Please enter correct repo URL"
+  "repository.notFound": "Repository not found",
+  "repository.invalidCredentials": "Incorrect credentials entered",
+  "repository.invalidURL": "Invalid Repo URL"
 }
 
 function AddRepositoryDialog(props) {
