@@ -10,6 +10,7 @@ import DataStats from '../views/DataStats';
 import { transformToChartData, filterTableData, convertTableObjectToTableColumn } from '../utils/dataUtils'
 import {getChartOptions} from '../utils/chartUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
+import PageContext from '../contexts/PageContext';
 
 const apiClient = new ApiClient()
 const tableObject = [
@@ -17,9 +18,16 @@ const tableObject = [
   {text: 'Commits', fieldName: 'commits', type: 'numeric'}, 
   {text: 'Additions', fieldName: 'additions', type: 'numeric'}, 
   {text: 'Deletions', fieldName: 'deletions', type: 'numeric'}, 
-  {text: 'Net change', fieldName: 'netChanges', type: 'numeric'}, 
-  {text: 'Code percent %', fieldName: 'newCodePercents', type: 'numeric'}, 
-  {text: 'Change percent %', fieldName: 'changePercent', type: 'numeric'}, 
+  {text: 'Net change', fieldName: 'netChanges', type: 'numeric', 
+    cellStyle: rowData => {
+      if(rowData < 0) {
+        return {
+          color: 'white',
+          backgroundColor: '#F17F7D'
+        }
+      }
+    }
+  }, 
   {text: 'Active days', fieldName: 'activeDays', type: 'numeric'}, 
   {text: 'Files change', fieldName: 'filesChange', type: 'numeric'}]
 
@@ -34,14 +42,16 @@ const tranformData = (data, isTableData) => {
     chartObject.shift();
     tempTableObject = cloneDeep(chartObject);
     tempTableObject.push({text: 'Date', fieldName: 'date'});
+    tempTableObject.push({text: 'Change percentage', fieldName: 'changePercent'});
   }
   return filterTableData(data, tempTableObject);
 }
-const chartLines = [{name: 'Commits', color: '#5392FF', yAxisId: 'line-1'},
-                    {name: 'Files change', color: '#62C8BA', yAxisId: 'line-2'}]
-const chartBars = [{name: 'Additions', color: '#EC5D5C'}, {name: 'Deletions', color: '#DADADA'}]
+const chartLinesConfig = [{name: 'Commits', color: '#5392FF', yAxisId: 'line-1'},
+                    {name: 'Files change', color: '#F5A961', yAxisId: 'line-2'},
+                    {name: 'Change percentage', color: '#D3A2FF', yAxisId: 'line-3'}]
+const chartBars = [{name: 'Additions', color: '#62C8BA'}, {name: 'Deletions', color: '#EC5D5C'}]
 
-const chartOptions = {
+const chartOptionsInit = {
   scales: {
     xAxes: [
       {
@@ -74,7 +84,9 @@ const chartOptions = {
         ticks: {
           fontColor: "#C4C4C4",
           fontSize: 10,
-          beginAtZero: true
+          beginAtZero: true,
+          precision: 0,
+          suggestedMax: 10
         }
       }
     ]
@@ -86,39 +98,52 @@ function ContributorStatsPage(props) {
   const {id} = props.match.params;
   const [repoData, setRepoData] = useState([]);
   const [chartData, setChartData] = useState([]);
-  const [userFilterList, setUserFilterList] = useState(["Average"]);
+  const [chartLines, setChartLines] = useState(chartLinesConfig)
+  const [chartOptions, setChartOptions] = useState()
+  const [data, setData] = useState([]);
+  const [userFilterList, setUserFilterList] = useState([]);
   const { authState } = useOktaAuth();
   const mainLayout = useRef(useContext(MainLayoutContex))
+  const [{ dateRange }] = useContext(PageContext)
 
   const handleChangeUser = (userName) =>  {
-    console.log(userName);
+    const chosenUser = userFilterList.find(item => item.author_name === userName)
+    let chartData;
+    let newChartLines = cloneDeep(chartLinesConfig);
+    if(chosenUser && chosenUser.author_email !== 'Average') {
+      chartData = data.chart[chosenUser.author_email]
+      newChartLines.splice(newChartLines.length -1, 1)
+    } else {
+      chartData = data.chart['average'];
+    }
+    setChartOptions(getChartOptions(chartOptionsInit, newChartLines))
+    setChartLines(newChartLines)
+    setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartData, false), 'Date'));
   }
   
   const userFilter = (<Grid item xs={2} key={'user-filter'}>
-                          <DropdownList label="User" data={userFilterList} value={'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
+                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} value={'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
                       </Grid>);
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     mainLayout.current.handleChangeRepositoryId(id)
-    apiClient.contributor.getContributorStats(id).then((data) => {
-      const tableData = tranformData(data.metric, true);
-      const userList = data.metric.flatMap(item => item.name)
-      setUserFilterList(userList);
-      setRepoData(tableData);
+    setChartOptions(getChartOptions(chartOptionsInit, chartLinesConfig))
+    apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
+      const tableData = respone.table;
+      const chartData = respone.chart['average']
+      setUserFilterList(respone.Contributors);
+      setRepoData(tranformData(tableData, true));
+      setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartData, false), 'Date'));
+      setData(respone)
     })
-    apiClient.contributor.getContributorChartDataStats(id).then((data) => {
-      const chartData = transformToChartData(chartLines, chartBars, tranformData(data.metric), 'Date')
-      setChartData(chartData);
-    })
-
-  }, [authState.accessToken, id, mainLayout])
+  }, [authState.accessToken, id, mainLayout, dateRange])
 
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>Contributor Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
-      isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={getChartOptions(chartOptions, chartLines)}/>
+      isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={chartOptions}/>
     </div>
   )
 }

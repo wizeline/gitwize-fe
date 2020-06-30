@@ -91,6 +91,7 @@ export default function Chart(props) {
 
   const chartRef = useRef(null)
   const [isDisplayLegend, setDisplayLegend] = useState(false)
+  const {data, chartOptions, chartBars, chartLines} = props
   useEffect(() => {
     if(isDisplayLegend) {
       document.getElementById(
@@ -101,9 +102,11 @@ export default function Chart(props) {
         const originalColor = item.childNodes[0].style.backgroundColor
         item.addEventListener("click", e => handleClick(e, item, index, originalColor));
       });
+      chartRef.current.chartInstance.options = newChartOptions
+      chartRef.current.chartInstance.update();
     }
   // eslint-disable-next-line
-  }, [isDisplayLegend]);
+  }, [isDisplayLegend, chartLines, chartOptions]);
 
   const plugins = [{
       afterDraw: (chartInstance) => {
@@ -111,7 +114,6 @@ export default function Chart(props) {
       }
   }]
 
-  const {data, chartOptions, chartBars, chartLines} = props
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
     let ci = chartRef.current.chartInstance;

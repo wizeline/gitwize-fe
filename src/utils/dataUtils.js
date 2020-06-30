@@ -84,7 +84,7 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
   }
 }
 
-export const filterTableData =  (tableData, tableColumn) => {
+export const filterTableData =  (tableData = [], tableColumn) => {
   return tableData.map((item) => {
     if(item['Date']) {
       item['Date'] = moment(item['Date']).format(dateFormat)
@@ -97,6 +97,8 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
   return tableObject.flatMap(item => ({
     title: item.text,
     field: item.text,
-    type: (item.type) ? item.type : 'string'
+    type: (item.type) ? item.type : 'string',
+    searchable: item.searchable ? true : false,
+    cellStyle: item.cellStyle
   }))
 }
