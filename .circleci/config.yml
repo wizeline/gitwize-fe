@@ -124,6 +124,10 @@ jobs:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
   deploy-prod:
+    docker:
+      - image: circleci/python:3.7.7
+    steps:
+      - checkout 
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}'
