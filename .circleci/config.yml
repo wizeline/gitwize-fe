@@ -109,7 +109,7 @@ jobs:
           webhook: '${SLACK_WEBHOOK}' 
   deploy-qa:
     docker:
-      - image: circleci/python:3.7.7
+      - image: circleci/node:lts
     steps:
       - checkout
       - deploy_build
@@ -137,6 +137,7 @@ jobs:
 orbs:
   slack: circleci/slack@3.4.2
   browser-tools: circleci/browser-tools@1.0.1
+  python: circleci/python@0.3.0
 
 workflows:
   ci-workflow:
