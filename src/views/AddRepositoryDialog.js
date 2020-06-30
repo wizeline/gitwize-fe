@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   message: {
     paddingLeft: '24px',
     paddingBottom: '35px',
-    color: '#6A707E' ,
+    color: '#6A707E',
     fontSize: '12px',
     lineHeight: '18px'
   },
@@ -57,6 +57,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+// https://wizeline.atlassian.net/wiki/spaces/GWZ/pages/1368326818/Error+Handling
+const REPOSITORY_ERROR_MAP = {
+  "common.unauthorized": "Unauthorized",
+  "repository.existed": "The repository already exists in the list",
+  "repository.notFound": "Repository with that URL is not found",
+  "repository.invalidCredentials": "The repository cannot be accessed with provided credentials",
+  "repository.invalidURL": "Please enter correct repo URL"
+}
+
 function AddRepositoryDialog(props) {
   const { isOpen, handleClose, handleAdd, addingRepoError } = props
   const [userName, setUserName] = useState('')
@@ -74,7 +83,7 @@ function AddRepositoryDialog(props) {
     // get data
     const data = { userName, password, url }
     const name = getRepositoryNameFromGitHubUrl(url)
-    handleAdd({ ...data, name})
+    handleAdd({ ...data, name })
   }
 
   const handleCancel = () => {
@@ -84,15 +93,6 @@ function AddRepositoryDialog(props) {
   useEffect(() => {
     reset()
   }, [isOpen])
-
-  // https://wizeline.atlassian.net/wiki/spaces/GWZ/pages/1368326818/Error+Handling
-  const REPOSITORY_ERROR_MAP = {
-    "common.unauthorized": "Unauthorized",
-    "repository.existed": "The repository already exists in the list",
-    "repository.notFound": "Repository with that URL is not found",
-    "repository.invalidCredentials": "The repository cannot be accessed with provided credentials",
-    "repository.invalidURL": "Please enter correct repo URL"
-  }
 
   return (
     <div className={styles.root}>
