@@ -109,7 +109,7 @@ jobs:
           name: "Run automation test"
           command: |
             sudo apt update
-            sudo apt install python3
+            sudo apt install python3 python3-pip
             python3 --version
             cd ./automation/pytest
             pip3 install -r requirement.txt
@@ -153,6 +153,11 @@ workflows:
               only: /^v[0-9]+(\.[0-9]+).*/
       - approval-deploy-prod: 
           type: approval 
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+(\.[0-9]+).*/
       - deploy-prod:
           requires:
             - approval-deploy-prod
