@@ -55,7 +55,7 @@ commands:
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
             fi
-            if [[ "${ENVIRONMENT} == "PROD" ]]; then
+            if [[ "${ENVIRONMENT}" == "PROD" ]]; then
               export REACT_APP_BASE_URL=${PROD_REACT_APP_BASE_URL}
               export REACT_APP_API_URL=${PROD_REACT_APP_API_URL}
               export REACT_APP_OKTA_CLIENT_ID=${PROD_REACT_APP_OKTA_CLIENT_ID}    
