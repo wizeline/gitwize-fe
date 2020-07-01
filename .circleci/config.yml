@@ -135,7 +135,7 @@ jobs:
 orbs:
   slack: circleci/slack@3.4.2
   browser-tools: circleci/browser-tools@1.0.1
-  python: medasync/python@2.0.0
+  python: circleci/python@0.3.0
 
 workflows:
   ci-workflow:
