@@ -13,6 +13,12 @@ import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext';
 
 const apiClient = new ApiClient()
+const information = `This section will display the following data for the selected team member from the dropdown, for each day of the selected date range. 
+\n\n - Number of commits 
+\n\n - Number of additions in lines of code 
+\n\n - Number of deletions in lines of code \n\n\n - Number of files changed or worked upon 
+\n\n - Change percentage in lines of code with respect to other team members: 
+This will indicate the amount of changes made by the user compared to other team members`
 const tableObject = [
   {text: 'Contributor name', fieldName: 'name', searchable: true},
   {text: 'Commits', fieldName: 'commits', type: 'numeric'}, 
@@ -156,7 +162,7 @@ function ContributorStatsPage(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle>Contributor Stats</PageTitle>
+      <PageTitle information={information}>Contributor Stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
       isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={chartOptions}/>
     </div>
