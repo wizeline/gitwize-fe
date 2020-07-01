@@ -65,7 +65,7 @@ commands:
               export S3=${QA_S3}
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
-            if
+            fi
             if [[ "${ENVIRONMENT}" == "PROD" ]]; then
               export S3=${PROD_S3}
               export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
@@ -76,9 +76,6 @@ commands:
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-            if [[ ${REACT_APP_OKTA_CLIENT_ID} == '0oaelas08JLcedPXB4x6' ]]; then
-               echo "deploy to QA!!!!!!"
-            fi
             #aws s3 sync --acl bucket-owner-full-control build ${S3} --delete --region ${AWS_REGION} 
             #aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
 
@@ -114,6 +111,8 @@ jobs:
       - run:
           name: "Run automation test"
           command: |
+            sudo apt update
+            sudo apt install python3
             python --version
             cd ./automation/pytest
             pip install -r requirement.txt
