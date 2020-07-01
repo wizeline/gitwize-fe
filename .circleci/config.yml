@@ -46,7 +46,8 @@ commands:
       - run:
           name: Deploy to CloudFront
           command: |
-            echo " << parameters.environment >> test " > out.txt
+            export ENVIRONMENT=<< parameters.environment >>
+            echo " ${ENVIRONMENT} test " > out.txt
             cat out.txt
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
@@ -108,9 +109,9 @@ jobs:
           name: "Run automation test"
           command: |
             sudo apt update
-            sudo apt install software-properties-common
-            sudo add-apt-repository ppa:deadsnakes/ppa
-            sudo apt install python3.8
+            sudo apt install --yes software-properties-common
+            sudo add-apt-repository --yes ppa:deadsnakes/ppa
+            sudo apt install --yes python3.8
             cd ./automation/pytest
             pip install -r requirement.txt
             pytest -s test_selenium.py
