@@ -39,17 +39,16 @@ commands:
             echo ${CIRCLE_TAG}
             yarn install
             yarn build
-            cat build/static/js/main.6222030c.chunk.js
             cp -f $BUILD_INFO build/$BUILD_INFO
       - run:
           name: Deploy to CloudFront
           command: |
-            echo ${S3} > out.txt
+            echo " ${S3} test " > out.txt
             cat out.txt
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-            if [[ ${S3} == 's3://web-qa-ap-southeast-1-gitwize' ]]; then
+            if [[ ${REACT_APP_OKTA_CLIENT_ID} == '0oaelas08JLcedPXB4x6' ]]; then
                echo "deploy to QA!!!!!!"
             fi
             #aws s3 sync --acl bucket-owner-full-control build ${S3} --delete --region ${AWS_REGION} 
@@ -98,14 +97,17 @@ jobs:
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
       - deploy_build
-      - python/install-deps
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
           name: "Run automation test"
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
+            sudo add-apt-repository --yes ppa:deadsnakes/ppa
+            sudo apt-get update
+            sudo apt-get install python3.7
+            wget https://bootstrap.pypa.io/get-pip.py
+            sudo python3.7 get-pip.py
+            sudo python3.7 -m pip install
             cd ./automation/pytest
             pip install -r requirement.txt
             pytest -s test_selenium.py
