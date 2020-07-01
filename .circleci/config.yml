@@ -100,8 +100,7 @@ jobs:
     docker:
       - image: circleci/node:lts
     steps:
-      - checkout
-      
+      - checkout  
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
@@ -122,6 +121,32 @@ jobs:
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
+  deploy-qa:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - deploy_build:
+          environment: QA
+      - slack/status:
+          fail_only: false
+          webhook: '${SLACK_WEBHOOK}' 
+  automation-qa:
+    docker:
+      - image: circleci/python:3.7.7
+    steps:
+      - checkout
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          name: "Run automation test"
+          command: |
+            cd ./automation/pytest
+            pip install -r requirement.txt
+            pytest -s test_selenium.py
+      - slack/status:
+          fail_only: false
+          webhook: '${SLACK_WEBHOOK}' 
   deploy-prod:
     docker:
       - image: circleci/node:lts 
@@ -136,8 +161,6 @@ jobs:
 orbs:
   slack: circleci/slack@3.4.2
   browser-tools: circleci/browser-tools@1.0.1
-  python: circleci/python@0.3.0
-
 workflows:
   ci-workflow:
     jobs:
@@ -150,7 +173,9 @@ workflows:
               only: 
                 - master
                 - /deploy-.*/
-      - deploy-qa:
+      - automation-qa:
+          requires:
+            - deploy-qa
           filters:
             branches:
               ignore: /.*/
