@@ -95,6 +95,9 @@ jobs:
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
       - deploy_build
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
