@@ -39,8 +39,7 @@ commands:
             echo ${CIRCLE_TAG}
             yarn install
             yarn build
-            echo ${REACT_APP_BASE_URL} > out.txt
-            cat out.txt
+            cat build/static/js/main.6222030c.chunk.js
             cp -f $BUILD_INFO build/$BUILD_INFO
       - run:
           name: Deploy to CloudFront
