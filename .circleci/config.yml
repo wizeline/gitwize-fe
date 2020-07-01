@@ -39,10 +39,7 @@ commands:
             echo "${CIRCLE_BUILD_NUM}" >> $BUILD_INFO  
             echo "${CIRCLE_SHA1}"      >> $BUILD_INFO 
             echo "$(date -u)"          >> $BUILD_INFO
-            export ENVIRONMENT=<< parameters.environment >>
-            export S3=${DEV_S3}
-            export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
-            export AWS_REGION=${DEV_AWS_REGION}
+
             echo ${CIRCLE_TAG}
 
             if [[ "${ENVIRONMENT}" == "QA" ]]; then
@@ -51,26 +48,29 @@ commands:
               export REACT_APP_OKTA_CLIENT_ID=${QA_REACT_APP_OKTA_CLIENT_ID}    
               export REACT_APP_OKTA_ISSUER=${QA_REACT_APP_OKTA_ISSUER}
               export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${QA_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
-              export S3=${QA_S3}
-              export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
-              export AWS_REGION=${QA_AWS_REGION}
+
             fi
-            if [[ "${ENVIRONMENT}" == "PROD" ]]; then
-              export REACT_APP_BASE_URL=${PROD_REACT_APP_BASE_URL}
-              export REACT_APP_API_URL=${PROD_REACT_APP_API_URL}
-              export REACT_APP_OKTA_CLIENT_ID=${PROD_REACT_APP_OKTA_CLIENT_ID}    
-              export REACT_APP_OKTA_ISSUER=${PROD_REACT_APP_OKTA_ISSUER}
-              export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${PROD_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
-              export S3=${PROD_S3}
-              export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
-              export AWS_REGION=${PROD_AWS_REGION}
-            fi
+            
             yarn install
             yarn build
             cp -f $BUILD_INFO build/$BUILD_INFO
       - run:
           name: Deploy to CloudFront
           command: |
+            export ENVIRONMENT=<< parameters.environment >>
+            export S3=${DEV_S3}
+            export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
+            export AWS_REGION=${DEV_AWS_REGION}
+            if [[ "${ENVIRONMENT}" == "QA" ]]; then
+              export S3=${QA_S3}
+              export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
+              export AWS_REGION=${QA_AWS_REGION}
+            if
+            if [[ "${ENVIRONMENT}" == "PROD" ]]; then
+              export S3=${PROD_S3}
+              export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
+              export AWS_REGION=${PROD_AWS_REGION}
+            fi
             echo " ${S3} test " > out.txt
             cat out.txt
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
@@ -114,11 +114,7 @@ jobs:
       - run:
           name: "Run automation test"
           command: |
-            sudo apt update
-            sudo apt install --yes software-properties-common
-            sudo add-apt-repository --yes ppa:deadsnakes/ppa
-            sudo apt update
-            sudo apt install --yes python3.8
+            python --version
             cd ./automation/pytest
             pip install -r requirement.txt
             pytest -s test_selenium.py
@@ -139,7 +135,7 @@ jobs:
 orbs:
   slack: circleci/slack@3.4.2
   browser-tools: circleci/browser-tools@1.0.1
-  python: circleci/python@0.3.0
+  python: medasync/python@2.0.0
 
 workflows:
   ci-workflow:
