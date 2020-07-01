@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   message: {
     paddingLeft: '24px',
     paddingBottom: '35px',
-    color: '#6A707E' ,
+    color: '#6A707E',
     fontSize: '12px',
     lineHeight: '18px'
   },
@@ -57,6 +57,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+// https://wizeline.atlassian.net/wiki/spaces/GWZ/pages/1368326818/Error+Handling
+const REPOSITORY_ERROR_MAP = {
+  "common.unauthorized": "Unauthorized",
+  "repository.existed": "The repository already exists in the list",
+  "repository.notFound": "Repository not found",
+  "repository.invalidCredentials": "Incorrect credentials entered",
+  "repository.invalidURL": "Invalid Repo URL"
+}
+
 function AddRepositoryDialog(props) {
   const { isOpen, handleClose, handleAdd, addingRepoError } = props
   const [userName, setUserName] = useState('')
@@ -74,7 +83,7 @@ function AddRepositoryDialog(props) {
     // get data
     const data = { userName, password, url }
     const name = getRepositoryNameFromGitHubUrl(url)
-    handleAdd({ ...data, name})
+    handleAdd({ ...data, name })
   }
 
   const handleCancel = () => {
@@ -84,21 +93,6 @@ function AddRepositoryDialog(props) {
   useEffect(() => {
     reset()
   }, [isOpen])
-
-  let errorMessage = '';
-
-  const handleErrorMessage = () => {
-    if(addingRepoError === "Not be able to parse repository url") {
-      errorMessage = "Invalid Repo URL"
-    } else if(addingRepoError.includes("Bad credentials")) {
-      errorMessage = "Incorrect Credentials Entered"
-    } else if(addingRepoError.includes("Not Found")) {
-      errorMessage = "Repository Not Found"
-    } else if(addingRepoError.includes("'Url' failed on the 'required' tag")) {
-      errorMessage = "Empty Repo URL Not Allowed"
-    }
-  }
-  handleErrorMessage()
 
   return (
     <div className={styles.root}>
@@ -144,7 +138,7 @@ function AddRepositoryDialog(props) {
           />
         </DialogContent>
         <div className={styles.errorMessage}>
-          {errorMessage}
+          {REPOSITORY_ERROR_MAP[addingRepoError.errorKey]}
         </div>
         <DialogActions>
           <Button className={styles.button} onClick={handleCancel} color="primary">

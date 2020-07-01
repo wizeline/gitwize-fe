@@ -162,7 +162,7 @@ export default function RepositoryList() {
       setRepoList([...repoList, newRepo])
       setOpen(false)
     } catch (e) {
-      const error = e.response.data.error
+      const error = e.response.data
       setAddingRepoError(error)
     }
   }
