@@ -149,6 +149,7 @@ const chartBars = [
                     {name:'Net Changes', color: '#9F55E2',fieldName: 'netChanges', chartId: 'chartLegendId-3'}, 
                   ]
 const chartLines = []
+const information = "This section will show the trends related to code changes over the last 3 months"
 
 const calculatedateRange = () => {
   const currentDate = getCurrentDate()
@@ -162,7 +163,6 @@ const calculatedateRange = () => {
 }
 
 function CodeChangeVelocity(props) {
-  const {information} = props;
   const [responseData, setResponseData] = useState({})
   const { authState } = useOktaAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
