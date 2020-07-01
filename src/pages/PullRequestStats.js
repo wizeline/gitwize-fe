@@ -12,7 +12,7 @@ import PageContext from '../contexts/PageContext'
 import {cloneDeep} from 'lodash'
 
 const apiClient = new ApiClient()
-const information = 'This section will display the following data for each day in the selected date range \n\n\n - Number of Open PRs at the end of the day, based on the status of \n\n\n - PRs Number of Created/merged/rejected PRs at the end of the day, based on the PR activity'
+const information = 'This section will display the following data for each day in the selected date range \n\n\n - Number of Open PRs at the end of the day, based on the status of PRs \n\n\n - Number of Created/merged/rejected PRs at the end of the day, based on the PR activity'
 const tableObject = [
   {text: 'Date', fieldName: 'Date'},
   {text: 'Merged', fieldName: 'Merged', type: 'numeric'}, 
