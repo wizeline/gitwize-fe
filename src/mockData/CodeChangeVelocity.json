@@ -1,17 +1,17 @@
 {
     "commits": {
-      "May": 50,
-      "June": 10,
-      "July": 20
+      "May": 121,
+      "June": 221,
+      "July": 32
     },
     "newCodeChanges": {
-      "May": 50,
-      "June": 10,
-      "July": 20
+      "May": 111,
+      "June": 22,
+      "July": 33
     },
     "netChanges": {
-      "May": 50,
-      "June": 10,
-      "July": 20
+      "May": 12,
+      "June": 23,
+      "July": 35
     }
 }
