@@ -48,7 +48,6 @@ commands:
               export REACT_APP_OKTA_CLIENT_ID=${QA_REACT_APP_OKTA_CLIENT_ID}    
               export REACT_APP_OKTA_ISSUER=${QA_REACT_APP_OKTA_ISSUER}
               export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${QA_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
-
             fi
             
             yarn install
@@ -71,8 +70,6 @@ commands:
               export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
               export AWS_REGION=${PROD_AWS_REGION}
             fi
-            echo " ${S3} test " > out.txt
-            cat out.txt
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
@@ -113,9 +110,9 @@ jobs:
           command: |
             sudo apt update
             sudo apt install python3
-            python --version
+            python3 --version
             cd ./automation/pytest
-            pip install -r requirement.txt
+            pip3 install -r requirement.txt
             pytest -s test_selenium.py
       - slack/status:
           fail_only: false
