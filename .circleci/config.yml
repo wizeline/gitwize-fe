@@ -101,19 +101,21 @@ jobs:
       - image: circleci/node:lts
     steps:
       - checkout
-      - deploy_build:
-          environment: QA
+      
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
           name: "Run automation test"
           command: |
             sudo apt update
-            sudo apt install python3 python3-pip
+            sudo apt install python3.7
+            sudo apt-get install python3-pip 
             python3 --version
             cd ./automation/pytest
             pip3 install -r requirement.txt
             pytest -s test_selenium.py
+      - deploy_build:
+          environment: QA
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
