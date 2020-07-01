@@ -50,7 +50,14 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
       pointHoverBorderColor: chartItem.color,
       borderDash: chartItem.dash,
       yAxisID: yAxisId,
-      lineTension: 0.001
+      lineTension: 0.001,
+      datalabels: {
+        display: chartItem.dataLabelsDisplay ? true : false,
+        color: chartItem.color,
+        font: {
+          weight: 'bold'
+        }
+      }
     }
     dataSets.push(dataSetsItem);
   })
@@ -74,6 +81,13 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
         right: 0,
         bottom: 0,
         left: 0
+      },
+      datalabels: {
+        display: chartItem.dataLabelsDisplay ? true : false,
+        color: chartItem.color,
+        font: {
+          weight: 'bold'
+        }
       }
     }
     dataSets.push(dataSetsItem);

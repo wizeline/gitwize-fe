@@ -78,7 +78,22 @@ const chartOptions = {
         }
       }
     ]
-  }
+  },
+  tooltips: {
+    mode: 'label',
+    bodySpacing: 10,
+    titleMarginBottom: 10,
+    titleFontSize: 14,
+    titleFontStyle: 'bold',
+    footerAlign: 'right',
+    callbacks: {
+      label: (tooltipItem, data) => {
+        const label = data.datasets[tooltipItem.datasetIndex].label || ''
+        const value = tooltipItem.value
+        return `   ${label}: ${value}`
+      }
+    }
+  },
 };
 
 function ContributorStatsPage(props) {

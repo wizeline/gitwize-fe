@@ -54,7 +54,7 @@ const useStyles = makeStyles(() => ({
 	chosenParent: {
 		color: '#EC5D5C',
 		fontWeight: 'bold',
-		borderLeft: '10px solid',
+		borderLeft: '6px solid',
 		borderRadius: 0,
 		paddingLeft: 10
 	}
