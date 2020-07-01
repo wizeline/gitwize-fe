@@ -140,7 +140,12 @@ workflows:
   ci-workflow:
     jobs:
       - build
-      - deploy-qa
+      - deploy-qa:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+(\.[0-9]+).*/
       - deploy:
           requires:
             - build
