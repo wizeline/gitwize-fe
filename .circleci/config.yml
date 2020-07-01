@@ -39,15 +39,39 @@ commands:
             echo "${CIRCLE_BUILD_NUM}" >> $BUILD_INFO  
             echo "${CIRCLE_SHA1}"      >> $BUILD_INFO 
             echo "$(date -u)"          >> $BUILD_INFO
+            export ENVIRONMENT=<< parameters.environment >>
+            export S3=${DEV_S3}
+            export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
+            export AWS_REGION=${DEV_AWS_REGION}
             echo ${CIRCLE_TAG}
+
+            if [[ "${ENVIRONMENT}" == "QA" ]]; then
+              export REACT_APP_BASE_URL=${QA_REACT_APP_BASE_URL}
+              export REACT_APP_API_URL=${QA_REACT_APP_API_URL}
+              export REACT_APP_OKTA_CLIENT_ID=${QA_REACT_APP_OKTA_CLIENT_ID}    
+              export REACT_APP_OKTA_ISSUER=${QA_REACT_APP_OKTA_ISSUER}
+              export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${QA_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
+              export S3=${QA_S3}
+              export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
+              export AWS_REGION=${QA_AWS_REGION}
+            fi
+              if [[ "${ENVIRONMENT}"" == "PROD" ]]; then
+              export REACT_APP_BASE_URL=${PROD_REACT_APP_BASE_URL}
+              export REACT_APP_API_URL=${PROD_REACT_APP_API_URL}
+              export REACT_APP_OKTA_CLIENT_ID=${PROD_REACT_APP_OKTA_CLIENT_ID}    
+              export REACT_APP_OKTA_ISSUER=${PROD_REACT_APP_OKTA_ISSUER}
+              export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${PROD_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
+              export S3=${PROD_S3}
+              export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
+              export AWS_REGION=${PROD_AWS_REGION}
+            fi
             yarn install
             yarn build
             cp -f $BUILD_INFO build/$BUILD_INFO
       - run:
           name: Deploy to CloudFront
           command: |
-            export ENVIRONMENT=<< parameters.environment >>
-            echo " ${ENVIRONMENT} test " > out.txt
+            echo " ${S3} test " > out.txt
             cat out.txt
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
@@ -75,13 +99,6 @@ jobs:
       - checkout # check out the code in the project directory
       - deploy_build:
           environment: DEV
-      - run:
-          name: Deploy to DEV
-          command: |
-            export S3=${DEV_S3}
-            export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
-            export AWS_REGION=${DEV_AWS_REGION}
-
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
@@ -90,17 +107,6 @@ jobs:
       - image: circleci/node:lts
     steps:
       - checkout
-      - run:
-          name: Deploy to QA
-          command: |
-              export REACT_APP_BASE_URL=${QA_REACT_APP_BASE_URL}
-              export REACT_APP_API_URL=${QA_REACT_APP_API_URL}
-              export REACT_APP_OKTA_CLIENT_ID=${QA_REACT_APP_OKTA_CLIENT_ID}    
-              export REACT_APP_OKTA_ISSUER=${QA_REACT_APP_OKTA_ISSUER}
-              export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${QA_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
-              export S3=${QA_S3}
-              export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
-              export AWS_REGION=${QA_AWS_REGION}
       - deploy_build:
           environment: QA
       - browser-tools/install-chrome
@@ -111,6 +117,7 @@ jobs:
             sudo apt update
             sudo apt install --yes software-properties-common
             sudo add-apt-repository --yes ppa:deadsnakes/ppa
+            sudo apt update
             sudo apt install --yes python3.8
             cd ./automation/pytest
             pip install -r requirement.txt
@@ -123,17 +130,6 @@ jobs:
       - image: circleci/node:lts 
     steps:
       - checkout 
-      - run:
-          name: Deploy to PROD
-          command: |
-              export REACT_APP_BASE_URL=${PROD_REACT_APP_BASE_URL}
-              export REACT_APP_API_URL=${PROD_REACT_APP_API_URL}
-              export REACT_APP_OKTA_CLIENT_ID=${PROD_REACT_APP_OKTA_CLIENT_ID}    
-              export REACT_APP_OKTA_ISSUER=${PROD_REACT_APP_OKTA_ISSUER}
-              export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${PROD_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
-              export S3=${PROD_S3}
-              export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
-              export AWS_REGION=${PROD_AWS_REGION}
       - deploy_build:
           environment: PROD
       - slack/status:
