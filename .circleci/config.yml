@@ -28,6 +28,9 @@ commands:
              -Dsonar.login=${SONARQUBE_TOKEN}
 
   deploy_build:
+    parameters:
+      environment:
+        type: string
     steps:
       - run:
           name: Build Package 
@@ -43,7 +46,7 @@ commands:
       - run:
           name: Deploy to CloudFront
           command: |
-            echo " ${S3} test " > out.txt
+            echo " ${<< parameters.environment >>}  test " > out.txt
             cat out.txt
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
@@ -69,7 +72,8 @@ jobs:
       - image: circleci/node:lts # the primary container, where your job's commands are run
     steps:
       - checkout # check out the code in the project directory
-      - deploy_build
+      - deploy_build:
+          environment: DEV
       - run:
           name: Deploy to DEV
           command: |
@@ -83,6 +87,7 @@ jobs:
   deploy-qa:
     docker:
       - image: circleci/node:lts
+      - image: circleci/python:3.7.2
     steps:
       - checkout
       - run:
@@ -96,18 +101,13 @@ jobs:
               export S3=${QA_S3}
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
-      - deploy_build
+      - deploy_build:
+          environment: QA
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
           name: "Run automation test"
           command: |
-            sudo add-apt-repository --yes ppa:deadsnakes/ppa
-            sudo apt-get update
-            sudo apt-get install python3.7
-            wget https://bootstrap.pypa.io/get-pip.py
-            sudo python3.7 get-pip.py
-            sudo python3.7 -m pip install
             cd ./automation/pytest
             pip install -r requirement.txt
             pytest -s test_selenium.py
@@ -130,7 +130,8 @@ jobs:
               export S3=${PROD_S3}
               export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
               export AWS_REGION=${PROD_AWS_REGION}
-      - deploy_build
+      - deploy_build:
+          environment: PROD
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}'
