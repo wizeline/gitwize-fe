@@ -108,6 +108,8 @@ jobs:
           name: "Run automation test"
           command: |
             sudo apt update
+            sudo apt install software-properties-common
+            sudo add-apt-repository  -yes ppa:deadsnakes/ppa
             sudo apt install python3.7
             sudo apt-get install python3-pip 
             python3 --version
