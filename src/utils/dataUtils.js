@@ -113,7 +113,8 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
     field: item.text,
     type: (item.type) ? item.type : 'string',
     searchable: item.searchable ? true : false,
-    cellStyle: item.cellStyle
+    cellStyle: item.cellStyle,
+    render: item.render
   }))
 }
 
