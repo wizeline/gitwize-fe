@@ -28,6 +28,9 @@ commands:
              -Dsonar.login=${SONARQUBE_TOKEN}
 
   deploy_build:
+    parameters:
+      environment:
+        type: string
     steps:
       - run:
           name: Build Package 
@@ -36,34 +39,45 @@ commands:
             echo "${CIRCLE_BUILD_NUM}" >> $BUILD_INFO  
             echo "${CIRCLE_SHA1}"      >> $BUILD_INFO 
             echo "$(date -u)"          >> $BUILD_INFO
+            export ENVIRONMENT=<< parameters.environment >>
             echo ${CIRCLE_TAG}
-            export PATTERN="v[0-9]+(\.[0-9]+).*"
-            if [[ ${CIRCLE_TAG} =~  ${PATTERN} ]]; then
+
+            if [[ "${ENVIRONMENT}" == "QA" ]]; then
               export REACT_APP_BASE_URL=${QA_REACT_APP_BASE_URL}
               export REACT_APP_API_URL=${QA_REACT_APP_API_URL}
               export REACT_APP_OKTA_CLIENT_ID=${QA_REACT_APP_OKTA_CLIENT_ID}    
               export REACT_APP_OKTA_ISSUER=${QA_REACT_APP_OKTA_ISSUER}
               export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${QA_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
             fi
+            if [[ "${ENVIRONMENT}" == "PROD" ]]; then
+              export REACT_APP_BASE_URL=${PROD_REACT_APP_BASE_URL}
+              export REACT_APP_API_URL=${PROD_REACT_APP_API_URL}
+              export REACT_APP_OKTA_CLIENT_ID=${PROD_REACT_APP_OKTA_CLIENT_ID}    
+              export REACT_APP_OKTA_ISSUER=${PROD_REACT_APP_OKTA_ISSUER}
+              export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${PROD_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
+            fi
+            
             yarn install
             yarn build
             cp -f $BUILD_INFO build/$BUILD_INFO
       - run:
           name: Deploy to CloudFront
           command: |
+            export ENVIRONMENT=<< parameters.environment >>
             export S3=${DEV_S3}
             export CLOUDFRONT_ID=${DEV_CLOUDFRONT_ID}
             export AWS_REGION=${DEV_AWS_REGION}
-            export PATTERN="v[0-9]+(\.[0-9]+).*"
-            echo "${CIRCLE_TAG} ${PATTERN} $REACT_APP_BASE_URL"
-            if [[ ${CIRCLE_TAG} =~  ${PATTERN} ]]; then
-              echo
-              echo "deploy QA build"
-              echo
+
+            if [[ "${ENVIRONMENT}" == "QA" ]]; then
               export S3=${QA_S3}
               export CLOUDFRONT_ID=${QA_CLOUDFRONT_ID}
               export AWS_REGION=${QA_AWS_REGION}
-            fi 
+            fi
+            if [[ "${ENVIRONMENT}" == "PROD" ]]; then
+              export S3=${PROD_S3}
+              export CLOUDFRONT_ID=${PROD_CLOUDFRONT_ID}
+              export AWS_REGION=${PROD_AWS_REGION}
+            fi
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
@@ -85,27 +99,61 @@ jobs:
       - image: circleci/node:lts # the primary container, where your job's commands are run
     steps:
       - checkout # check out the code in the project directory
-      - deploy_build
+      - deploy_build:
+          environment: DEV
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
-
   deploy-qa:
     docker:
-      - image: circleci/node:lts # the primary container, where your job's commands are run
+      - image: circleci/node:lts
     steps:
-      - checkout # check out the code in the project directory
-      - deploy_build
+      - checkout
+      - deploy_build:
+          environment: QA
       - slack/status:
           fail_only: false
           webhook: '${SLACK_WEBHOOK}' 
+  automation-qa:
+    docker:
+      - image: circleci/python:3.7.7
+    steps:
+      - checkout
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          name: "Run automation test"
+          command: |
+            cd ./automation/pytest
+            pip install -r requirement.txt
+            pytest -s test_selenium.py
+      - slack/status:
+          fail_only: false
+          webhook: '${SLACK_WEBHOOK}' 
+  deploy-prod:
+    docker:
+      - image: circleci/node:lts 
+    steps:
+      - checkout 
+      - deploy_build:
+          environment: PROD
+      - slack/status:
+          fail_only: false
+          webhook: '${SLACK_WEBHOOK}'
 
 orbs:
   slack: circleci/slack@3.4.2
+  browser-tools: circleci/browser-tools@1.0.1
 workflows:
   ci-workflow:
     jobs:
       - build
+      - deploy-qa:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+(\.[0-9]+).*/
       - deploy:
           requires:
             - build
@@ -114,7 +162,26 @@ workflows:
               only: 
                 - master
                 - /deploy-.*/
-      - deploy-qa:
+      - automation-qa:
+          requires:
+            - deploy-qa
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+(\.[0-9]+).*/
+      - approval-deploy-prod: 
+          type: approval 
+          requires:
+            - automation-qa
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+(\.[0-9]+).*/
+      - deploy-prod:
+          requires:
+            - approval-deploy-prod
           filters:
             branches:
               ignore: /.*/
