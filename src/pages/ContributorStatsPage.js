@@ -150,6 +150,7 @@ function ContributorStatsPage(props) {
       setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartData, false, tableObject), 'Date'));
       setData(respone)
     })
+    // eslint-disable-next-line
   }, [authState.accessToken, id, mainLayout, dateRange])
 
   return (
