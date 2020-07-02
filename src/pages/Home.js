@@ -24,6 +24,13 @@ const theme = createMuiTheme({
       textTransform: 'none'
     }
   },
+  overrides: {
+    MuiTypography: {
+      body1: {
+        fontSize: 'unset',
+      },
+    }
+  }
 });
 
 const apiClient = new ApiClient()

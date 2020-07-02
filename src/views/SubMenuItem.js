@@ -38,11 +38,13 @@ const useStyles = makeStyles(() => ({
 		lineHeight: '21px',
 		color: '#C5C5C5',
 	},
-	buttonSubMenutext: {
+	navText: {
 		fontStyle: 'normal',
-		fontSize: '15px',
 		lineHeight: '21px',
 		color: '#C5C5C5'
+	},
+	buttonSubMenutext: {
+		fontSize: '12px',
 	},
 	textTruncated: {
 		whiteSpace: 'nowrap',
@@ -54,9 +56,13 @@ const useStyles = makeStyles(() => ({
 	chosenParent: {
 		color: '#EC5D5C',
 		fontWeight: 'bold',
-		borderLeft: '10px solid',
+		borderLeft: '6px solid',
 		borderRadius: 0,
 		paddingLeft: 10
+	},
+	chosenWithoutParent: {
+		fontWeight: 'bold',
+		color: '#EC5D5C !important',
 	}
 }))
 
@@ -115,8 +121,8 @@ export function SubMenuItemLeaf(props) {
 
 	return (<List>
             <ListItem className={classes.notPaddingTopBottomRight} key={name}>
-              <Button className={clsx(classes.buttonText, (isChangeClass) && classes.chosenParent)}>
-                <NavLink className={classes.buttonSubMenutext} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
+              <Button className={clsx(!baseURI && classes.buttonText, baseURI && classes.buttonSubMenutext, (isChangeClass) && classes.chosenParent)}>
+                <NavLink className={clsx(classes.navText, (isChangeClass) && classes.chosenWithoutParent)} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
                   <ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
                 </NavLink>
               </Button>
