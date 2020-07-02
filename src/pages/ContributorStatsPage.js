@@ -16,30 +16,12 @@ const apiClient = new ApiClient()
 const information = `This section will display the following data for the selected team member from the dropdown, for each day of the selected date range. 
 \n\n - Number of commits 
 \n\n - Number of additions in lines of code 
-\n\n - Number of deletions in lines of code \n\n\n - Number of files changed or worked upon 
+\n\n - Number of deletions in lines of code 
+\n\n - Number of files changed or worked upon 
 \n\n - Change percentage in lines of code with respect to other team members: 
 This will indicate the amount of changes made by the user compared to other team members`
-const tableObject = [
-  {text: 'Contributor name', fieldName: 'name', searchable: true},
-  {text: 'Commits', fieldName: 'commits', type: 'numeric'}, 
-  {text: 'Additions', fieldName: 'additions', type: 'numeric'}, 
-  {text: 'Deletions', fieldName: 'deletions', type: 'numeric'}, 
-  {text: 'Net change', fieldName: 'netChanges', type: 'numeric', 
-    cellStyle: rowData => {
-      if(rowData < 0) {
-        return {
-          color: 'white',
-          backgroundColor: '#F17F7D'
-        }
-      }
-    }
-  }, 
-  {text: 'Active days', fieldName: 'activeDays', type: 'numeric'}, 
-  {text: 'Files change', fieldName: 'filesChange', type: 'numeric'}]
 
-const tableColumns = convertTableObjectToTableColumn(tableObject)
-
-const tranformData = (data, isTableData) => {
+const tranformData = (data, isTableData, tableObject) => {
   let tempTableObject = [];
   if(isTableData) {
     tempTableObject = cloneDeep(tableObject);
@@ -104,6 +86,7 @@ function ContributorStatsPage(props) {
   const {id} = props.match.params;
   const [repoData, setRepoData] = useState([]);
   const [chartData, setChartData] = useState([]);
+  const [maxNetChange, setMaxNetChange] = useState([]);
   const [chartLines, setChartLines] = useState(chartLinesConfig)
   const [chartOptions, setChartOptions] = useState()
   const [data, setData] = useState([]);
@@ -111,6 +94,28 @@ function ContributorStatsPage(props) {
   const { authState } = useOktaAuth();
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
+
+  const tableObject = [
+    {text: 'Contributor name', fieldName: 'name', searchable: true},
+    {text: 'Commits', fieldName: 'commits', type: 'numeric'}, 
+    {text: 'Additions', fieldName: 'additions', type: 'numeric'}, 
+    {text: 'Deletions', fieldName: 'deletions', type: 'numeric'}, 
+    {text: 'Net change', fieldName: 'netChanges', type: 'numeric',
+      render: rowData => {
+        const value = rowData['Net change']
+        if(value < 0) {
+          return (<div style={{background: '#DC6660', borderRadius: '4px', padding: '0 50%', color: 'white'}}>{rowData['Net change']}</div>)
+        } else if(value === maxNetChange) {
+          return (<div style={{background: '#7DC5BA', borderRadius: '4px', padding: '0 50%', color: 'white'}}>{rowData['Net change']}</div>)
+        } else {
+          return (<div>{rowData['Net change']}</div>)
+        }
+      }
+    }, 
+    {text: 'Active days', fieldName: 'activeDays', type: 'numeric'}, 
+    {text: 'Files change', fieldName: 'filesChange', type: 'numeric'}
+  ]
+  const tableColumns = convertTableObjectToTableColumn(tableObject)
 
   const handleChangeUser = (userName) =>  {
     const chosenUser = userFilterList.find(item => item.author_name === userName)
@@ -124,7 +129,7 @@ function ContributorStatsPage(props) {
     }
     setChartOptions(getChartOptions(chartOptionsInit, newChartLines))
     setChartLines(newChartLines)
-    setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartData, false), 'Date'));
+    setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartData, false, tableObject), 'Date'));
   }
   
   const userFilter = (<Grid item xs={2} key={'user-filter'}>
@@ -138,9 +143,11 @@ function ContributorStatsPage(props) {
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
       const tableData = respone.table;
       const chartData = respone.chart['average']
+      const maxNetChangeValue = tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b))
+      setMaxNetChange(maxNetChangeValue)
       setUserFilterList(respone.Contributors);
-      setRepoData(tranformData(tableData, true));
-      setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartData, false), 'Date'));
+      setRepoData(tranformData(tableData, true, tableObject));
+      setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartData, false, tableObject), 'Date'));
       setData(respone)
     })
   }, [authState.accessToken, id, mainLayout, dateRange])

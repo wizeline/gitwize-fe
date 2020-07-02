@@ -18,6 +18,16 @@
             "activeDays": 10,
             "filesChange": 15
         }
+        ,
+        {
+            "name": "Mr. C",
+            "commits": 123,
+            "additions": 212,
+            "deletions": 100,
+            "netChanges": 40,
+            "activeDays": 10,
+            "filesChange": 15
+        }
     ],
     "chart": {
         "average":[{
@@ -157,6 +167,10 @@
       {
         "author_email": "MrB@emai.com",
         "author_name": "Mr.B"
+      },
+      {
+        "author_email": "MrC@emai.com",
+        "author_name": "Mr.C"
       }
     ]
 }
