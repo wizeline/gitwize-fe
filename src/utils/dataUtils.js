@@ -115,7 +115,7 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
   }))
 }
 
-export const transformChartDataWithValueAbove = (data, chartBar) => {
+export const transformChartDataWithValueAbove = (data, chartBar, customFormatter) => {
   if(data) {
     const labels = Object.keys(data);
     const chartData = []
@@ -137,7 +137,7 @@ export const transformChartDataWithValueAbove = (data, chartBar) => {
           font: {
             weight: 'bold'
           },
-          formatter: function (value, context) {
+          formatter: customFormatter ? customFormatter : (value, context) => {
             const {dataIndex, dataset} = context
             if(dataIndex === 0) {
               return ''

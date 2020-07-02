@@ -56,6 +56,15 @@ const calculatedateRange = () => {
   }
 }
 
+const customFormatter = (value, context) => {
+  const {dataIndex, dataset} = context
+  if(dataIndex === 0) {
+    return ''
+  } else {
+    return (value - dataset.data[dataIndex - 1]) + '%'
+  }
+}
+
 function QuartelyTrends(props) {
   const [responseData, setResponseData] = useState({})
   const { authState } = useOktaAuth()
@@ -79,8 +88,11 @@ function QuartelyTrends(props) {
         <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={12}>
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
+                const data = chartItem.fieldName === 'percentageRejectedPR' 
+                ? transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, customFormatter) 
+                : transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem)
                 return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
-                          <Chart data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem)} chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
+                          <Chart data={data} chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
                         </Grid>)
               })}
             </Grid>
