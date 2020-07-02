@@ -17,9 +17,6 @@ const useStyles = makeStyles(() => ({
 		alignItems: 'flex-start',
 		width: '100%'
 	},
-	body1: {
-		fontsize: 'unset'
-	},
 	notPaddingTopBottomRight: {
 		paddingTop: 0,
 		paddingBottom: 0,
