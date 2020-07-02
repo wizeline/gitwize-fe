@@ -114,3 +114,44 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
     type: (item.type) ? item.type : 'string'
   }))
 }
+
+export const transformChartDataWithValueAbove = (data, chartBar) => {
+  if(data) {
+    const labels = Object.keys(data);
+    const chartData = []
+    labels.forEach(item => {
+      chartData.push(data[item])
+    })
+    const dataSets = [
+      {
+        label: chartBar.name,
+        backgroundColor: chartBar.color,
+        borderColor: chartBar.color,
+        hoverBackgroundColor: chartBar.color,
+        borderWidth: 1,
+        data: chartData,
+        barPercentage: 0.7,
+        categoryPercentage:  0.5,
+        datalabels: {
+          color: chartBar.color,
+          font: {
+            weight: 'bold'
+          },
+          formatter: function (value, context) {
+            const {dataIndex, dataset} = context
+            if(dataIndex === 0) {
+              return ''
+            } else {
+              value = Math.round(((value - dataset.data[dataIndex - 1]) / dataset.data[dataIndex - 1]) * 100)
+              return value + '%'
+            }
+          }
+        }
+      },
+    ]
+    return {
+      labels: labels,
+      datasets: dataSets
+    }
+  }
+}

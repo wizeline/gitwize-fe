@@ -1,0 +1,17 @@
+{
+    "averagePRTime": {
+      "May": 121,
+      "June": 221,
+      "July": 32
+    },
+    "percentageRejectedPR": {
+      "May": 111,
+      "June": 22,
+      "July": 33
+    },
+    "averagePRSize": {
+      "May": 12,
+      "June": 23,
+      "July": 35
+    }
+}

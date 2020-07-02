@@ -63,3 +63,70 @@ export const getChartOptions = (chartOptions, chartLines = []) => {
   }
   return newChartOptions
 }
+
+export const buildChartOptionsBasedOnMaxValue = (chartData) => {
+  const moreValueToAddYAxis = 10
+  if(chartData) {
+    const chartValue = Object.values(chartData)
+    const maxValue = chartValue.reduce((a, b) => {
+      return Math.max(a, b);
+    })
+    return  {
+      scales: {
+        xAxes: [
+          {
+            display: true,
+            gridLines: {
+              display: false
+            },
+            stacked: false,
+            ticks: {
+              fontColor: "#C4C4C4",
+              fontSize: 10,
+              autoSkip: true,
+              autoSkipPadding: 30
+            }
+          }
+        ],
+        yAxes: [
+          {
+            type: 'linear',
+            display: false,
+            position: 'left',
+            id: 'y-axis-1',
+            gridLines: {
+              display: false
+            },
+            labels: {
+              show: false
+            },
+            stacked: false,
+            ticks: {
+              fontColor: "#C4C4C4",
+              fontSize: 10,
+              beginAtZero: true,
+              min: 0,
+              max: (maxValue + moreValueToAddYAxis),
+              precision: 0,
+              suggestedMax: 5
+            }
+          }
+        ]
+      },
+      tooltips: {
+        enabled: false
+      },
+      plugins: {
+        datalabels: {
+            anchor: 'end',
+            align: 'right',
+            offset: 20,
+            font: {
+              size: 14
+            }
+        }
+      },
+      maintainAspectRatio: false,
+    }
+  }
+}
