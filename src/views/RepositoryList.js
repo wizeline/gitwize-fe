@@ -167,8 +167,8 @@ export default function RepositoryList() {
     }
   }
 
-  const handleChangeLayout = (isDisplayColumnGrid) => {
-    setColumnLayout(isDisplayColumnGrid)
+  const handleChangeLayout = (displayColumnGrid) => {
+    setColumnLayout(displayColumnGrid)
   }
   
   let repoListComponent;
@@ -214,10 +214,10 @@ export default function RepositoryList() {
             {repoList
             .slice(0)
             .reverse()
-            .map((item, index) => (
+            .map((repoItem, index) => (
               <Grid item xs={isDisplayColumnGrid ? 4 : 12}>
-                <div key={item.id} style={{width: '100%'}}>
-                  <RepositoryCard key={item.id} repo={item} handleDeletionOK={(item) => removeRepo(item)} handleDeletionCancel={() => handleDeletionCancel()}/>
+                <div key={repoItem.id} style={{width: '100%'}}>
+                  <RepositoryCard key={repoItem.id} repo={repoItem} handleDeletionOK={(item) => removeRepo(item)} handleDeletionCancel={() => handleDeletionCancel()}/>
                 </div>
               </Grid>
             ))}

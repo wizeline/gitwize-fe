@@ -4,7 +4,7 @@ import { CssBaseline } from '@material-ui/core'
 import {  createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 
 import config from './config'
-import AppWithRouterAccess from './views/AppWithRouterAccess'
+import AppRouteAuthen from './views/AppRouteAuthen'
 
 const theme = createMuiTheme({  
   overrides: {
@@ -28,7 +28,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Security {...config.oidc}>
-        <AppWithRouterAccess />
+        <AppRouteAuthen />
       </Security>
     </ThemeProvider>
   )

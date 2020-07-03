@@ -96,10 +96,10 @@ function PullRequestStats(props) {
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const transformedData = transformMetricsDataApiResponse(data.metric, dateRange);
-      const repoData = filterTableData(cloneDeep(transformedData), tableObject);
-      const chartData = transformToChartData([], chartBars, transformedData, 'Date')
-      setChartData(chartData);
-      setRepoData(repoData)
+      const repoRawData = filterTableData(cloneDeep(transformedData), tableObject);
+      const chartRawData = transformToChartData([], chartBars, transformedData, 'Date')
+      setChartData(chartRawData);
+      setRepoData(repoRawData)
     })
   }, [authState.accessToken, id, mainLayout, dateRange])
 
