@@ -62,7 +62,7 @@ const REPOSITORY_ERROR_MAP = {
   "common.unauthorized": "Unauthorized",
   "repository.existed": "The repository already exists in the list",
   "repository.notFound": "Repository not found",
-  "repository.invalidCredentials": "Incorrect credentials entered",
+  "repository.badCredentials": "Incorrect credentials entered",
   "repository.invalidURL": "Invalid Repo URL"
 }
 
