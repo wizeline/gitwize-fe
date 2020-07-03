@@ -22,18 +22,6 @@ const useStyles = makeStyles(() => ({
   gridItem: {
     display: 'flex',
     alignItems: 'center'
-  },
-  button: {
-    flexGrow: 0.3,
-    fontWeight: 'bold',
-    borderRadius: '8px',
-    fontSize: '13px'
-  },
-  textStyle: {
-    float: 'left',
-    fontSize: '18px',
-    fontWeight: '700',
-    backgroundColor: 'transparent'
   }
 }))
 
@@ -45,14 +33,14 @@ const chartBars = [
 const chartLines = []
 const information = "This section will show the trends related to code changes over the last 3 months"
 
-const calculatedateRange = () => {
+const calculateDateRange = () => {
   const currentDate = getCurrentDate()
   const twoMonthsBackward = getNumberOfMonthBackward(currentDate, 2)
-  const endOfMothCurrentDate = getEndOfMonth(currentDate)
+  const endOfCurrentMonth = getEndOfMonth(currentDate)
   const startOfMonthFrom = getStartOfMonth(twoMonthsBackward)
   return {
     date_from: new Date(startOfMonthFrom.unix()*1000),
-    date_to: new Date(endOfMothCurrentDate.unix()*1000)
+    date_to: new Date(endOfCurrentMonth.unix()*1000)
   }
 }
 
@@ -75,7 +63,7 @@ function QuartelyTrends(props) {
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     mainLayout.current.handleChangeRepositoryId(id)
-    const dateRange  = calculatedateRange()
+    const dateRange  = calculateDateRange()
     apiClient.quarterlyTrends.getQuarterlyTrendsStats(id, dateRange).then((data) => {
       setResponseData(data)
     })
