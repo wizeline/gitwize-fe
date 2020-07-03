@@ -77,7 +77,9 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
           {
             display: true,
             gridLines: {
-              display: false
+              display: true,
+              drawTicks: false,
+              drawOnChartArea: false,
             },
             stacked: false,
             ticks: {
