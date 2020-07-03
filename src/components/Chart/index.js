@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import styled from "styled-components";
 import Grid from '@material-ui/core/Grid'
@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     borderRadius: 4,
     padding: '30px 40px 30px 10px',
+    height: '70vh'
   },
 }))
 
@@ -91,13 +92,14 @@ export default function Chart(props) {
 
   const chartRef = useRef(null)
   const [isDisplayLegend, setDisplayLegend] = useState(false)
+  const {data, chartOptions, chartBars, chartLines, chartLegendId = 'chart-legend'} = props
   useEffect(() => {
     if(isDisplayLegend) {
       document.getElementById(
-        "chart-legend"
+        chartLegendId
       ).innerHTML = chartRef.current.chartInstance.generateLegend();
 
-      document.querySelectorAll("#chart-legend li").forEach((item, index) => {
+      document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
         const originalColor = item.childNodes[0].style.backgroundColor
         item.addEventListener("click", e => handleClick(e, item, index, originalColor));
       });
@@ -111,7 +113,6 @@ export default function Chart(props) {
       }
   }]
 
-  const {data, chartOptions, chartBars, chartLines} = props
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
     let ci = chartRef.current.chartInstance;
@@ -136,21 +137,6 @@ export default function Chart(props) {
   const newChartOptions = {
     ...chartOptions,
     responsive: true,
-    tooltips: {
-      mode: 'label',
-      bodySpacing: 10,
-      titleMarginBottom: 10,
-      titleFontSize: 14,
-      titleFontStyle: 'bold',
-      footerAlign: 'right',
-      callbacks: {
-        label: (tooltipItem, data) => {
-          const label = data.datasets[tooltipItem.datasetIndex].label || ''
-          const value = tooltipItem.value
-          return `   ${label}: ${value}`
-        }
-      }
-    },
     elements: {
       line: {
         fill: false
@@ -186,9 +172,7 @@ export default function Chart(props) {
     <Grid container className={classes.root} >
       <Grid item xs={12}>
         {chart}
-      </Grid>
-      <Grid item xs={12}>
-        <ChartLegend id='chart-legend'/>
+        <ChartLegend id={chartLegendId}/>
       </Grid>
     </Grid>
   )

@@ -50,7 +50,14 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
       pointHoverBorderColor: chartItem.color,
       borderDash: chartItem.dash,
       yAxisID: yAxisId,
-      lineTension: 0.001
+      lineTension: 0.001,
+      datalabels: {
+        display: chartItem.dataLabelsDisplay ? true : false,
+        color: chartItem.color,
+        font: {
+          weight: 'bold'
+        }
+      }
     }
     dataSets.push(dataSetsItem);
   })
@@ -74,6 +81,13 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
         right: 0,
         bottom: 0,
         left: 0
+      },
+      datalabels: {
+        display: chartItem.dataLabelsDisplay ? true : false,
+        color: chartItem.color,
+        font: {
+          weight: 'bold'
+        }
       }
     }
     dataSets.push(dataSetsItem);
@@ -99,4 +113,45 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
     field: item.text,
     type: (item.type) ? item.type : 'string'
   }))
+}
+
+export const transformChartDataWithValueAbove = (data, chartBar, customFormatter) => {
+  if(data) {
+    const labels = Object.keys(data);
+    const chartData = []
+    labels.forEach(item => {
+      chartData.push(data[item])
+    })
+    const dataSets = [
+      {
+        label: chartBar.name,
+        backgroundColor: chartBar.color,
+        borderColor: chartBar.color,
+        hoverBackgroundColor: chartBar.color,
+        borderWidth: 1,
+        data: chartData,
+        barPercentage: 0.7,
+        categoryPercentage:  0.5,
+        datalabels: {
+          color: chartBar.color,
+          font: {
+            weight: 'bold'
+          },
+          formatter: customFormatter ? customFormatter : (value, context) => {
+            const {dataIndex, dataset} = context
+            if(dataIndex === 0) {
+              return ''
+            } else {
+              value = Math.round(((value - dataset.data[dataIndex - 1]) / dataset.data[dataIndex - 1]) * 100)
+              return value + '%'
+            }
+          }
+        }
+      },
+    ]
+    return {
+      labels: labels,
+      datasets: dataSets
+    }
+  }
 }

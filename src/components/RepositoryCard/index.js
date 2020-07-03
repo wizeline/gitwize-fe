@@ -77,7 +77,7 @@ const useStyles = makeStyles(() => ({
 const apiClient = new ApiClient()
 
 function RepositoryCard(props) {
-  const statsPage = "repository-stats"
+  const statsPage = "code-change-velocity"
   const { repo, handleDeletionOK, handleDeletionCancel } = props
   const styles = useStyles()
   const { authState } = useOktaAuth()

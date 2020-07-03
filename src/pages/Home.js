@@ -16,6 +16,7 @@ import NotFoundError404 from '../pages/NotFoundError404'
 import Navbar from '../views/Navbar'
 import Loading from '../components/Loading'
 import { ApiClient } from '../apis'
+import CodeChangeVelocity from './CodeChangeVelocity';
 
 const theme = createMuiTheme({  
   typography: {
@@ -42,6 +43,11 @@ const useStyles = makeStyles(() => ({
 }))
 
 const subMenuItems = [
+  {
+    name: 'Code change velocity', 
+    uri: '/code-change-velocity', 
+    component: CodeChangeVelocity
+  },
   {
     name: 'Repository stats', 
     uri: '/repository-stats', 

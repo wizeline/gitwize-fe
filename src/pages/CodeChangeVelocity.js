@@ -26,9 +26,9 @@ const useStyles = makeStyles(() => ({
 }))
 
 const chartBars = [
-                    {name:'Average PR size', color: '#62C8BA', fieldName: 'averagePRSize', chartId: 'chartLegendId-1'},
-                    {name:'Average PR review time', color: '#EC5D5C', fieldName: 'averagePRTime', chartId: 'chartLegendId-2'},
-                    {name:'Rejected PRs', color: '#9F55E2',fieldName: 'percentageRejectedPR', chartId: 'chartLegendId-3'}, 
+                    {name:'Number Of commit', color: '#62C8BA', fieldName: 'commits', chartId: 'chartLegendId-1'},
+                    {name:'New Code Percentage', color: '#EC5D5C', fieldName: 'newCodeChanges', chartId: 'chartLegendId-2'},
+                    {name:'Net Changes', color: '#9F55E2',fieldName: 'netChanges', chartId: 'chartLegendId-3'}, 
                   ]
 const chartLines = []
 const information = "This section will show the trends related to code changes over the last 3 months"
@@ -44,16 +44,7 @@ const calculateDateRange = () => {
   }
 }
 
-const customFormatter = (value, context) => {
-  const {dataIndex, dataset} = context
-  if(dataIndex === 0) {
-    return ''
-  } else {
-    return (value - dataset.data[dataIndex - 1]) + '%'
-  }
-}
-
-function QuartelyTrends(props) {
+function CodeChangeVelocity(props) {
   const [responseData, setResponseData] = useState({})
   const { authState } = useOktaAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
@@ -64,23 +55,20 @@ function QuartelyTrends(props) {
     apiClient.setAccessToken(authState.accessToken)
     mainLayout.current.handleChangeRepositoryId(id)
     const dateRange  = calculateDateRange()
-    apiClient.quarterlyTrends.getQuarterlyTrendsStats(id, dateRange).then((data) => {
+    apiClient.codeChangeVelocity.getCodeChangeVelocityStats(id, dateRange).then((data) => {
       setResponseData(data)
     })
   }, [id, authState.accessToken])
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Quartely Trends</PageTitle>
+      <PageTitle information={information}>Code Change Velocity</PageTitle>
       <Grid container className={classes.root}>
         <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={12}>
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
-                const data = chartItem.fieldName === 'percentageRejectedPR' 
-                ? transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, customFormatter) 
-                : transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem)
                 return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
-                          <Chart data={data} chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
+                          <Chart data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem)} chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
                         </Grid>)
               })}
             </Grid>
@@ -90,4 +78,4 @@ function QuartelyTrends(props) {
   )
 }
 
-export default QuartelyTrends
+export default CodeChangeVelocity
