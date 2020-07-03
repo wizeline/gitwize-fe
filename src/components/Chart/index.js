@@ -93,19 +93,6 @@ export default function Chart(props) {
   const chartRef = useRef(null)
   const [isDisplayLegend, setDisplayLegend] = useState(false)
   const {data, chartOptions, chartBars, chartLines, chartLegendId = 'chart-legend'} = props
-  useEffect(() => {
-    if(isDisplayLegend) {
-      document.getElementById(
-        chartLegendId
-      ).innerHTML = chartRef.current.chartInstance.generateLegend();
-
-      document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
-        const originalColor = item.childNodes[0].style.backgroundColor
-        item.addEventListener("click", e => handleClick(e, item, index, originalColor));
-      });
-    }
-  // eslint-disable-next-line
-  }, [isDisplayLegend]);
 
   const plugins = [{
       afterDraw: (chartInstance) => {
@@ -159,6 +146,23 @@ export default function Chart(props) {
       return text.join("");
     }
   }
+  
+  useEffect(() => {
+    if(isDisplayLegend) {
+      document.getElementById(
+        chartLegendId
+      ).innerHTML = chartRef.current.chartInstance.generateLegend();
+
+      document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
+        const originalColor = item.childNodes[0].style.backgroundColor
+        item.addEventListener("click", e => handleClick(e, item, index, originalColor));
+      });
+      chartRef.current.chartInstance.options = newChartOptions
+      chartRef.current.chartInstance.update();
+    }
+  // eslint-disable-next-line
+  }, [isDisplayLegend, chartLines, chartOptions]);
+
   let chart;
   if(data && data.length !== 0) {
     chart  = (<Bar ref={chartRef}

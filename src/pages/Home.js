@@ -11,7 +11,7 @@ import RepositoryStats from '../pages/RepositoryStats'
 import PullRequestStats from '../pages/PullRequestStats'
 import QuartelyTrends from '../pages/QuartelyTrends'
 import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
-// import ContributorStatsPage from '../pages/ContributorStatsPage'
+import ContributorStatsPage from '../pages/ContributorStatsPage'
 import NotFoundError404 from '../pages/NotFoundError404'
 import Navbar from '../views/Navbar'
 import Loading from '../components/Loading'
@@ -68,7 +68,12 @@ const subMenuItems = [
         component: QuartelyTrends
       }
     ]
-  }
+  },
+  {
+    name: 'Contributor', 
+    uri: '/contributor-stats', 
+    component: ContributorStatsPage
+  },
 ];
 
 const buildRoutPath = (menuItems, baseURI='') => {
