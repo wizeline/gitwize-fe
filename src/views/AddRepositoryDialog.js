@@ -7,44 +7,47 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import Tooltip from '@material-ui/core/Tooltip'
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
+import clsx from 'clsx'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 import { getRepositoryNameFromGitHubUrl } from '../utils/apiUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    padding: '50px'
   },
   header: {
     fontStyle: 'normal',
     fontWeight: 500,
-    fontSize: '28px',
-    lineHeight: '42px',
+    lineHeight: '37px',
     letterSpacing: '0.01em',
     color: '#192a3e',
+    paddingTop: '60px',
+    '& [class*="MuiTypography"]': {
+      fontSize: '25px'
+    }
   },
   content: {
+    paddingBottom: '60px',
     '& [class*="MuiFormLabel-asterisk"]': {
       color: 'red'
     }
   },
   message: {
+    paddingBottom: '10px',
     paddingLeft: '24px',
-    paddingBottom: '35px',
+    paddingTop: '5px',
     color: '#6A707E',
     fontSize: '12px',
-    lineHeight: '18px'
-  },
-  errorMessage: {
-    paddingLeft: '24px',
-    color: 'red'
+    lineHeight: '18px',
+    fontWeight: 'normal'
   },
   button: {
-    backgroundColor: '#000000 !important',
-    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.24)',
-    borderRadius: '4px',
+    borderRadius: '8px',
 
     fontStyle: 'normal',
     fontWeight: 600,
@@ -52,9 +55,29 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '19px',
     textAlign: 'center',
     letterSpacing: '0.01em',
-    color: '#ffffff !important',
-    margin: '30px !important',
+    width: '100%',
+    marginBottom:'26px',
+    padding: '7px 0'
   },
+  add: {
+    background: '#EC5D5C',
+    color: '#FFFFFF'
+  },
+  cancel: {
+    color: '#121212',
+    border: '1px solid #C4C4C4'
+  },
+  dialogAction: {
+    padding: '0 24px'
+  },
+  tooltip: {
+    fontSize: 9,
+    padding: '35px 40px 40px 26px',
+    marginRight: '10vw',
+    borderRadius: 8,
+    minHeight: 100,
+    whiteSpace: 'pre-line'
+  }
 }))
 
 // https://wizeline.atlassian.net/wiki/spaces/GWZ/pages/1368326818/Error+Handling
@@ -66,6 +89,7 @@ const REPOSITORY_ERROR_MAP = {
   "repository.invalidURL": "Invalid Repo URL"
 }
 
+const toolTipMessage = 'To get the access token, please follow the guidelines on this page https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line'
 function AddRepositoryDialog(props) {
   const { isOpen, handleClose, handleAdd, addingRepoError } = props
   const [userName, setUserName] = useState('')
@@ -94,26 +118,32 @@ function AddRepositoryDialog(props) {
     reset()
   }, [isOpen])
 
+
+  let message
+  if(addingRepoError) {
+    message = <div className={styles.message} style={{ color: 'red' }}>
+      {REPOSITORY_ERROR_MAP[addingRepoError.errorKey]}
+    </div>
+  } else {
+    message = <div className={styles.message}>
+      Please enter your GitHub credentials
+    </div>
+  }
+
+  const toolTip = (
+    <Tooltip title={toolTipMessage} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: styles.tooltip}}>
+      <InfoOutlinedIcon/>        
+    </Tooltip>
+  )
+
   return (
-    <div className={styles.root}>
-      <Dialog open={isOpen} aria-labelledby="form-dialog-title">
+      <Dialog open={isOpen} aria-labelledby="form-dialog-title" className={styles.root}>
+        <Container>
         <DialogTitle id="form-dialog-title" className={styles.header}>
           Add Repository
         </DialogTitle>
-        <div className={styles.message}>
-          Please enter your GitHub credentials
-        </div>
+        {message}
         <DialogContent className={styles.content}>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="userName"
-            label="User Name"
-            type="text"
-            fullWidth
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
           <TextField
             autoFocus
             required
@@ -124,6 +154,13 @@ function AddRepositoryDialog(props) {
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end" style={{ color: 'grey' }}>
+                  {toolTip}
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             autoFocus
@@ -137,19 +174,21 @@ function AddRepositoryDialog(props) {
             onChange={(e) => setUrl(e.target.value)}
           />
         </DialogContent>
-        <div className={styles.errorMessage}>
-          {REPOSITORY_ERROR_MAP[addingRepoError.errorKey]}
-        </div>
-        <DialogActions>
-          <Button className={styles.button} onClick={handleCancel} color="primary">
-            Cancel
-          </Button>
-          <Button className={styles.button} onClick={handleSubmit} color="primary">
-            Add
-          </Button>
+        <DialogActions className={styles.dialogAction}>
+          <Grid item xs={6}>
+            <Button className={clsx(styles.button, styles.cancel)} onClick={handleCancel} >
+              Cancel
+            </Button> 
+          </Grid>
+
+          <Grid item xs={6}>
+            <Button className={clsx(styles.button, styles.add)} onClick={handleSubmit} >
+              Add to list
+            </Button> 
+          </Grid>
         </DialogActions>
+        </Container>
       </Dialog>
-    </div>
   )
 }
 
