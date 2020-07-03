@@ -98,13 +98,16 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
   }
 }
 
-export const filterTableData =  (tableData = [], tableColumn) => {
-  return tableData.map((item) => {
-    if(item['Date']) {
-      item['Date'] = moment(item['Date']).format(dateFormat)
-    }
-    return Object.assign(...tableColumn.map((object) => ({[object.text]: item[object.fieldName]})))
-  })
+export const filterTableData =  (tableData, tableColumn) => {
+  if(tableData) {
+    return tableData.map((item) => {
+      if(item['Date']) {
+        item['Date'] = moment(item['Date']).format(dateFormat)
+      }
+      return Object.assign(...tableColumn.map((object) => ({[object.text]: item[object.fieldName]})))
+    })
+  }
+  return [];
 }
 
 export const convertTableObjectToTableColumn =  (tableObject) => {

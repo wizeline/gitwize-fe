@@ -132,13 +132,13 @@ export default function Chart(props) {
     legend: {
       display: false
     },
-    legendCallback: (chart) => {
+    legendCallback: (chartInstance) => {
       let text = [];
       text.push('<ul>');
-      for (let i = 0; i < chart.data.datasets.length; i++) {
-        text.push('<li><span style="background-color:' + chart.data.datasets[i].backgroundColor + '"></span>');
-        if (chart.data.datasets[i].label) {
-          text.push(chart.data.datasets[i].label);
+      for (let i = 0; i < chartInstance.data.datasets.length; i++) {
+        text.push('<li><span style="background-color:' + chartInstance.data.datasets[i].backgroundColor + '"></span>');
+        if (chartInstance.data.datasets[i].label) {
+          text.push(chartInstance.data.datasets[i].label);
         }
         text.push('</li>');
       }

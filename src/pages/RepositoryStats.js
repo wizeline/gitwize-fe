@@ -98,9 +98,9 @@ function RepositoryStats(props) {
       mainLayout.current.handleChangeRepositoryId(id)
       const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange);
       const tableData = filterTableData(cloneDeep(createReversedArray(dataTransformed)), tableObject);
-      const chartData = transformToChartData(chartLines, chartBars, dataTransformed, 'Date')
+      const chartRawData = transformToChartData(chartLines, chartBars, dataTransformed, 'Date')
       setRepoData(tableData);
-      setChartData(chartData);
+      setChartData(chartRawData);
     })
   }, [authState.accessToken, id, dateRange])
 

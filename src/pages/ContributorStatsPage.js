@@ -21,12 +21,12 @@ const information = `This section will display the following data for the select
 \n\n - Change percentage in lines of code with respect to other team members: 
 This will indicate the amount of changes made by the user compared to other team members`
 
-const tranformData = (data, isTableData, tableObject) => {
+const tranformData = (data, isTableData, tableObjectInstance) => {
   let tempTableObject = [];
   if(isTableData) {
-    tempTableObject = cloneDeep(tableObject);
+    tempTableObject = cloneDeep(tableObjectInstance);
   } else {
-    const chartObject = cloneDeep(tableObject);
+    const chartObject = cloneDeep(tableObjectInstance);
     chartObject.shift();
     tempTableObject = cloneDeep(chartObject);
     tempTableObject.push({text: 'Date', fieldName: 'date'});
@@ -141,17 +141,17 @@ function ContributorStatsPage(props) {
 
   const handleChangeUser = (userName) =>  {
     const chosenUser = userFilterList.find(item => item.author_name === userName)
-    let chartData;
+    let chartRawData;
     let newChartLines = cloneDeep(chartLinesConfig);
     if(chosenUser && chosenUser.author_email !== 'Average') {
-      chartData = data.chart[chosenUser.author_email]
+      chartRawData = data.chart[chosenUser.author_email]
       newChartLines.splice(newChartLines.length -1, 1)
     } else {
-      chartData = data.chart['average'];
+      chartRawData = data.chart['average'];
     }
     setChartOptions(getChartOptions(chartOptionsInit, newChartLines))
     setChartLines(newChartLines)
-    setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartData, false, tableObject), 'Date'));
+    setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartRawData, false, tableObject), 'Date'));
   }
   
   const userFilter = (<Grid item xs={2} key={'user-filter'}>
@@ -164,12 +164,12 @@ function ContributorStatsPage(props) {
     setChartOptions(getChartOptions(chartOptionsInit, chartLinesConfig))
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
       const tableData = respone.table;
-      const chartData = respone.chart['average']
+      const chartRawData = respone.chart['average']
       const maxNetChangeValue = tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b))
       setMaxNetChange(maxNetChangeValue)
       setUserFilterList(respone.Contributors);
       setRepoData(tranformData(tableData, true, tableObject));
-      setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartData, false, tableObject), 'Date'));
+      setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartRawData, false, tableObject), 'Date'));
       setData(respone)
     })
   }, [authState.accessToken, id, mainLayout, dateRange])
