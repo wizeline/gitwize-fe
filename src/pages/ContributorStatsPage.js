@@ -39,6 +39,16 @@ const chartLinesConfig = [{name: 'Commits', color: '#5392FF', yAxisId: 'line-1'}
                     {name: 'Change percentage', color: '#D3A2FF', yAxisId: 'line-3'}]
 const chartBars = [{name: 'Additions', color: '#62C8BA'}, {name: 'Deletions', color: '#EC5D5C'}]
 
+const tableObject = [
+  {text: 'Contributor name', fieldName: 'name', searchable: true},
+  {text: 'Commits', fieldName: 'commits', type: 'numeric'}, 
+  {text: 'Additions', fieldName: 'additions', type: 'numeric'}, 
+  {text: 'Deletions', fieldName: 'deletions', type: 'numeric'}, 
+  {text: 'Net change', fieldName: 'netChanges', type: 'numeric'}, 
+  {text: 'Active days', fieldName: 'activeDays', type: 'numeric'}, 
+  {text: 'Files change', fieldName: 'filesChange', type: 'numeric'}
+]
+
 const chartOptionsInit = {
   scales: {
     xAxes: [
@@ -95,27 +105,24 @@ function ContributorStatsPage(props) {
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
 
-  const tableObject = [
-    {text: 'Contributor name', fieldName: 'name', searchable: true},
-    {text: 'Commits', fieldName: 'commits', type: 'numeric'}, 
-    {text: 'Additions', fieldName: 'additions', type: 'numeric'}, 
-    {text: 'Deletions', fieldName: 'deletions', type: 'numeric'}, 
-    {text: 'Net change', fieldName: 'netChanges', type: 'numeric',
-      render: rowData => {
-        const value = rowData['Net change']
-        if(value < 0) {
-          return (<div style={{background: '#DC6660', borderRadius: '4px', padding: '0 50%', color: 'white'}}>{rowData['Net change']}</div>)
-        } else if(value === maxNetChange) {
-          return (<div style={{background: '#7DC5BA', borderRadius: '4px', padding: '0 50%', color: 'white'}}>{rowData['Net change']}</div>)
-        } else {
-          return (<div>{rowData['Net change']}</div>)
-        }
+  const cloneTable = cloneDeep(tableObject)
+  const customRenderNetChange = (rowData) => {
+      const value = rowData['Net change']
+      if(value < 0) {
+        return (<div style={{background: '#DC6660', borderRadius: '4px', padding: '0 50%', color: 'white'}}>{rowData['Net change']}</div>)
+      } else if(value === maxNetChange) {
+        return (<div style={{background: '#7DC5BA', borderRadius: '4px', padding: '0 50%', color: 'white'}}>{rowData['Net change']}</div>)
+      } else {
+        return (<div>{rowData['Net change']}</div>)
       }
-    }, 
-    {text: 'Active days', fieldName: 'activeDays', type: 'numeric'}, 
-    {text: 'Files change', fieldName: 'filesChange', type: 'numeric'}
-  ]
-  const tableColumns = convertTableObjectToTableColumn(tableObject)
+  }
+  cloneTable.forEach(item => {
+    if(item.fieldName === 'netChanges') {
+      item.render = customRenderNetChange
+    }
+  })
+
+  const tableColumns = convertTableObjectToTableColumn(cloneTable)
 
   const handleChangeUser = (userName) =>  {
     const chosenUser = userFilterList.find(item => item.author_name === userName)
@@ -150,7 +157,6 @@ function ContributorStatsPage(props) {
       setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartData, false, tableObject), 'Date'));
       setData(respone)
     })
-    // eslint-disable-next-line
   }, [authState.accessToken, id, mainLayout, dateRange])
 
   return (
