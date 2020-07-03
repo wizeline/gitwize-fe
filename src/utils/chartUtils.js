@@ -131,4 +131,5 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
       maintainAspectRatio: false,
     }
   }
+  return null
 }
