@@ -122,9 +122,9 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
         datalabels: {
             anchor: 'end',
             align: 'right',
-            offset: 20,
+            offset: 11,
             font: {
-              size: 14
+              size: 13
             }
         }
       },
