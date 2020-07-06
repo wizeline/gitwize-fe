@@ -133,7 +133,7 @@ export const transformChartDataWithValueAbove = (data, chartBar, customFormatter
         hoverBackgroundColor: chartBar.color,
         borderWidth: 1,
         data: chartData,
-        barPercentage: 0.7,
+        barPercentage: 0.5,
         categoryPercentage:  0.5,
         datalabels: {
           color: chartBar.color,

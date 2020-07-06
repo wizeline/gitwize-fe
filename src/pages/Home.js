@@ -54,23 +54,23 @@ const subMenuItems = [
     component: RepositoryStats
   },
   {
-    name: 'Pull request',
+    name: 'Pull requests',
     uri: '/pull-request',
     children: [
       {
-        name: 'Pull request stats', 
+        name: 'Pull requests stats', 
         uri: '/pull-request-stats',
         component: PullRequestStats
       },
       {
-        name: 'Quartely Trends', 
+        name: 'Quartely trends', 
         uri: '/quartely-trends', 
         component: QuartelyTrends
       }
     ]
   },
   {
-    name: 'Contributor', 
+    name: 'Contributors', 
     uri: '/contributor-stats', 
     component: ContributorStatsPage
   },
