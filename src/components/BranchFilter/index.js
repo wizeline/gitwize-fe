@@ -38,7 +38,11 @@ export default function BranchPicker(props) {
       return null
     })
     if(currentRepo) {
-      listBranch = listBranch.concat(currentRepo.branches)
+      currentRepo.branches.forEach(item => {
+        if(listBranch.indexOf(item) === -1) {
+          listBranch.push(item)
+        }
+      })
     }
   }
 
