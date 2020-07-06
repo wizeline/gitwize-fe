@@ -13,8 +13,7 @@ export default function TableData(props) {
                   options={{
                     showTitle: false,
                     headerStyle: {
-                      color: '#334D6E',
-                      opacity: 0.5,
+                      color: '#000000',
                       fontWeight: 500,
                     },
                     search: isDisplaySearch,
@@ -22,7 +21,10 @@ export default function TableData(props) {
                     sorting: false,
                     pageSize: defaultPageSize,
                     paginationType: 'stepped',
-                    toolbar: isDisplaySearch
+                    toolbar: isDisplaySearch,
+                    rowStyle: {
+                      color: '#707683',
+                    }
                   }}
                   components={customComponent}
                 />)

@@ -16,9 +16,9 @@ const information = "This section will display the number of commits, and additi
 
 const tableObject = [
   {text: 'Date', fieldName: 'Date'},
-  {text: 'Commits', fieldName: 'Commits', type: 'numeric'}, 
-  {text: 'Additions', fieldName: 'Additions', type: 'numeric'}, 
-  {text: 'Deletions', fieldName: 'Deletions', type: 'numeric'}
+  {text: 'Commits', fieldName: 'Commits'}, 
+  {text: 'Additions', fieldName: 'Additions'}, 
+  {text: 'Deletions', fieldName: 'Deletions'}
 ]
 
 const tableColumn = convertTableObjectToTableColumn(tableObject)
