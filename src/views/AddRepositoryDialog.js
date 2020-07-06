@@ -82,11 +82,12 @@ const useStyles = makeStyles((theme) => ({
 
 // https://wizeline.atlassian.net/wiki/spaces/GWZ/pages/1368326818/Error+Handling
 const REPOSITORY_ERROR_MAP = {
+  "common.badJsonFormat": "Repo URL not found",
   "common.unauthorized": "Unauthorized",
   "repository.existed": "The repository already exists in the list",
   "repository.notFound": "Repository not found",
   "repository.badCredentials": "Incorrect credentials entered",
-  "repository.invalidURL": "Invalid Repo URL"
+  "repository.invalidURL": "Invalid repo URL"
 }
 
 const toolTipMessage = 'To get the access token, please follow the guidelines on this page https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line'
