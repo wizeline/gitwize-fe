@@ -26,7 +26,7 @@ commands:
              -Dsonar.host.url=https://sunfyre.wizeline.com \
              -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
              -Dsonar.login=${SONARQUBE_TOKEN} \
-             -Dsonar.exclusions=node_modules/**,**/*test*/**
+             -Dsonar.exclusions=node_modules/**,**/*.test.js
 
   deploy_build:
     parameters:
