@@ -58,7 +58,7 @@ class TestAcceptance():
       wait.until(EC.element_to_be_clickable((By.ID, "projectUrl"))).send_keys(repo_url)
       wait.until(EC.element_to_be_clickable((By.ID, "password"))).click()
       wait.until(EC.element_to_be_clickable((By.ID, "password"))).send_keys(repo_token)
-      wait.until(EC.element_to_be_clickable((By.XPATH,"//button[./span[text()='Add']]"))).click()
+      wait.until(EC.element_to_be_clickable((By.XPATH,"//button[./span[text()='Add to list']]"))).click()
       wait.until(EC.element_to_be_clickable((By.XPATH,"//strong[text()='knewz-support']")))
       element = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='knewz-support']")))
     divs = element.find_elements_by_xpath( "//div[contains(@class, 'MuiCardContent-root-')]")
