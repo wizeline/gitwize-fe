@@ -112,7 +112,7 @@ export default function Chart(props) {
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
     let ci = chartRef.current.chartInstance;
-    var meta = ci.getDatasetMeta(index);
+    let meta = ci.getDatasetMeta(index);
     meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
     if(item.style.color !== 'grey') {
       item.style.color = 'grey'
@@ -167,7 +167,7 @@ export default function Chart(props) {
         item.addEventListener("click", e => handleClick(e, item, index, originalColor));
         //keep color as grey if already disabled
         let ci = chartRef.current.chartInstance;
-        var meta = ci.getDatasetMeta(index);
+        const meta = ci.getDatasetMeta(index);
         if(meta.hidden) {
           item.style.color = 'grey'
           item.childNodes[0].style.backgroundColor = 'grey'
