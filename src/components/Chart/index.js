@@ -165,6 +165,14 @@ export default function Chart(props) {
       document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
         const originalColor = item.childNodes[0].style.backgroundColor
         item.addEventListener("click", e => handleClick(e, item, index, originalColor));
+        //keep color as grey if already disabled
+        let ci = chartRef.current.chartInstance;
+        var meta = ci.getDatasetMeta(index);
+        if(meta.hidden) {
+          item.style.color = 'grey'
+          item.childNodes[0].style.backgroundColor = 'grey'
+          item.style.fontWeight = 'normal'
+        }
       });
       chartRef.current.chartInstance.options = newChartOptions
       chartRef.current.chartInstance.update();
