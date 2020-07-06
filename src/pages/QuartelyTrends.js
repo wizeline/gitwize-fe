@@ -71,7 +71,7 @@ function QuartelyTrends(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Quartely Trends</PageTitle>
+      <PageTitle information={information}>Quarterly Trends</PageTitle>
       <Grid container className={classes.root}>
         <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={12}>
             <Grid container className={classes.root}>

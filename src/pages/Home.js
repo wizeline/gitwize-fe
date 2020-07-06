@@ -63,7 +63,7 @@ const subMenuItems = [
         component: PullRequestStats
       },
       {
-        name: 'Quartely trends', 
+        name: 'Quarterly trends', 
         uri: '/quartely-trends', 
         component: QuartelyTrends
       }
