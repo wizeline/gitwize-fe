@@ -11,6 +11,8 @@ import { transformToChartData, filterTableData, convertTableObjectToTableColumn 
 import {getChartOptions} from '../utils/chartUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext';
+import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
 
 const apiClient = new ApiClient()
 const information = `This section will display the following data for the selected team member from the dropdown, for each day of the selected date range. 
@@ -20,6 +22,22 @@ const information = `This section will display the following data for the select
 \n\n - Number of files changed or worked upon 
 \n\n - Change percentage in lines of code with respect to other team members: 
 This will indicate the amount of changes made by the user compared to other team members`
+
+const useStyles = makeStyles(() => ({
+  negativeTxt: {
+    background: '#DC6660', 
+  },
+  maxValueTxt:{
+    background: '#7DC5BA', 
+  },
+  tableCell: {
+    borderRadius: '4px', 
+    color: 'white', 
+    height: 25, 
+    width: '50%',
+    lineHeight: '25px'
+  }
+}))
 
 const tranformData = (data, isTableData, tableObject) => {
   let tempTableObject = [];
@@ -41,12 +59,12 @@ const chartBars = [{name: 'Additions', color: '#62C8BA'}, {name: 'Deletions', co
 
 const tableObject = [
   {text: 'Contributor name', fieldName: 'name', searchable: true},
-  {text: 'Commits', fieldName: 'commits', type: 'numeric'}, 
-  {text: 'Additions', fieldName: 'additions', type: 'numeric'}, 
-  {text: 'Deletions', fieldName: 'deletions', type: 'numeric'}, 
-  {text: 'Net change', fieldName: 'netChanges', type: 'numeric'}, 
-  {text: 'Active days', fieldName: 'activeDays', type: 'numeric'}, 
-  {text: 'Files change', fieldName: 'filesChange', type: 'numeric'}
+  {text: 'Commits', fieldName: 'commits'}, 
+  {text: 'Additions', fieldName: 'additions'}, 
+  {text: 'Deletions', fieldName: 'deletions'}, 
+  {text: 'Net change', fieldName: 'netChanges'},
+  {text: 'Files change', fieldName: 'filesChange'},
+  {text: 'Active days', fieldName: 'activeDays'}
 ]
 
 const chartOptionsInit = {
@@ -119,14 +137,15 @@ function ContributorStatsPage(props) {
   const { authState } = useOktaAuth();
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
+  const classes = useStyles();
 
   const cloneTable = cloneDeep(tableObject)
   const customRenderNetChange = (rowData) => {
       const value = rowData['Net change']
       if(value < 0) {
-        return (<div style={{background: '#DC6660', borderRadius: '4px', padding: '0 50%', color: 'white'}}>{rowData['Net change']}</div>)
+        return (<div className={clsx(classes.tableCell, classes.negativeTxt)}>{rowData['Net change']}</div>)
       } else if(value === maxNetChange) {
-        return (<div style={{background: '#7DC5BA', borderRadius: '4px', padding: '0 50%', color: 'white'}}>{rowData['Net change']}</div>)
+        return (<div className={clsx(classes.tableCell, classes.maxValueTxt)}>{rowData['Net change']}</div>)
       } else {
         return (<div>{rowData['Net change']}</div>)
       }
