@@ -35,7 +35,8 @@ const useStyles = makeStyles(() => ({
     color: 'white', 
     height: 25, 
     width: '50%',
-    lineHeight: '25px'
+    lineHeight: '25px',
+    textAlign: 'center'
   }
 }))
 

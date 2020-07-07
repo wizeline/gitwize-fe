@@ -42,8 +42,8 @@ const initValue = (chartInstance, chartLines) => {
   if(chartLines && chartLines.length > 0) {
     for(let i = 1; i <= chartLines.length; i++) {
       chartInstance.options.scales.yAxes[i].display = true
+      chartInstance.options.scales.yAxes[i].gridLines.display = false
     }
-    chartInstance.options.scales.yAxes[1].gridLines.display = false
   }
 }
 const drawNewOptions = (chartInstance, datasets, chartBars, chartLines = []) => {
@@ -75,10 +75,19 @@ const drawNewOptions = (chartInstance, datasets, chartBars, chartLines = []) => 
     i++
   })
 
+  //find minimum yAxis index with display === true, mark gridLineDisplay for it
+  let yAxisIndexMin = Number.MAX_SAFE_INTEGER;
+  for(let i = 1; i < chartInstance.options.scales.yAxes.length; i++) {
+    const yAxesValue = chartInstance.options.scales.yAxes[i]
+    if(yAxesValue.display && i<yAxisIndexMin) {
+      yAxisIndexMin = i
+    }
+  }
+
   if(chartBars.length === numberOfBarDisabled  && chartLines.length !== numberOfLineDisabled) {
     chartInstance.options.scales.yAxes[0].display = false;
     chartInstance.options.scales.yAxes[0].gridLines.display = false;
-    chartInstance.options.scales.yAxes[1].gridLines.display = true
+    chartInstance.options.scales.yAxes[yAxisIndexMin].gridLines.display = true
   }
 
   if(chartBars.length === numberOfBarDisabled  && chartLines.length === numberOfLineDisabled) {
@@ -103,7 +112,7 @@ export default function Chart(props) {
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
     let ci = chartRef.current.chartInstance;
-    var meta = ci.getDatasetMeta(index);
+    let meta = ci.getDatasetMeta(index);
     meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
     if(item.style.color !== 'grey') {
       item.style.color = 'grey'
@@ -156,6 +165,14 @@ export default function Chart(props) {
       document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
         const originalColor = item.childNodes[0].style.backgroundColor
         item.addEventListener("click", e => handleClick(e, item, index, originalColor));
+        //keep color as grey if already disabled
+        let ci = chartRef.current.chartInstance;
+        const meta = ci.getDatasetMeta(index);
+        if(meta.hidden) {
+          item.style.color = 'grey'
+          item.childNodes[0].style.backgroundColor = 'grey'
+          item.style.fontWeight = 'normal'
+        }
       });
       chartRef.current.chartInstance.options = newChartOptions
       chartRef.current.chartInstance.update();

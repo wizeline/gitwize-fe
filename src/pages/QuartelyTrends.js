@@ -39,8 +39,8 @@ const calculateDateRange = () => {
   const endOfCurrentMonth = getEndOfMonth(currentDate)
   const startOfMonthFrom = getStartOfMonth(twoMonthsBackward)
   return {
-    date_from: new Date(startOfMonthFrom.unix()*1000),
-    date_to: new Date(endOfCurrentMonth.unix()*1000)
+    date_from: startOfMonthFrom.unix(),
+    date_to: endOfCurrentMonth.unix()
   }
 }
 
@@ -71,7 +71,7 @@ function QuartelyTrends(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Quartely Trends</PageTitle>
+      <PageTitle information={information}>Quarterly Trends</PageTitle>
       <Grid container className={classes.root}>
         <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={12}>
             <Grid container className={classes.root}>

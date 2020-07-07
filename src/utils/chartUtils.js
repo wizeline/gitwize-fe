@@ -65,7 +65,6 @@ export const getChartOptions = (chartOptions, chartLines = []) => {
 }
 
 export const buildChartOptionsBasedOnMaxValue = (chartData) => {
-  const moreValueToAddYAxis = 10
   if(chartData) {
     const chartValue = Object.values(chartData)
     const maxValue = chartValue.reduce((a, b) => {
@@ -108,7 +107,7 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
               fontSize: 10,
               beginAtZero: true,
               min: 0,
-              max: (maxValue + moreValueToAddYAxis),
+              max: (maxValue + (maxValue/2)),
               precision: 0,
               suggestedMax: 5
             }
