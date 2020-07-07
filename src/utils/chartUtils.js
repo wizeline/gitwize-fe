@@ -68,7 +68,7 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
   if(chartData) {
     const chartValue = Object.values(chartData)
     let maxValue = 0
-    if(chartValue && chartValue.length != 0) {
+    if(chartValue && chartValue.length !== 0) {
       maxValue = chartValue.reduce((a, b) => {
         return Math.max(a, b);
       })
