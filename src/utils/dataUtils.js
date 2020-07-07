@@ -120,10 +120,18 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
 
 export const transformChartDataWithValueAbove = (data, chartBar, customFormatter) => {
   if(data) {
-    const labels = Object.keys(data);
+    const objectKeys = Object.keys(data);
+    const labels = []
+    const monthArrays = [];
+    objectKeys.forEach(key => {
+      monthArrays.push(moment().month(key).format("M"))
+    })
+    monthArrays.sort();
     const chartData = []
-    labels.forEach(item => {
-      chartData.push(data[item])
+    monthArrays.forEach(month => {
+      const monthName = moment(month, 'M').format('MMMM');
+      chartData.push(data[monthName])
+      labels.push(monthName)
     })
     const dataSets = [
       {

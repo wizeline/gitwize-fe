@@ -187,7 +187,7 @@ function ContributorStatsPage(props) {
       const chartData = respone.chart['average']
       const maxNetChangeValue = tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b))
       setMaxNetChange(maxNetChangeValue)
-      setUserFilterList(respone.Contributors);
+      setUserFilterList(respone.contributors);
       setRepoData(tranformData(tableData, true, tableObject));
       setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartData, false, tableObject), 'Date'));
       setData(respone)
