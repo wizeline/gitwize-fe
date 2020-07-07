@@ -54,8 +54,8 @@ const tranformData = (data, isTableData, tableObject) => {
   return filterTableData(data, tempTableObject);
 }
 const chartLinesConfig = [{name: 'Commits', color: '#5392FF', yAxisId: 'line-1'},
-                    {name: 'Files change', color: '#F5A961', yAxisId: 'line-2'},
-                    {name: 'Change percentage', color: '#D3A2FF', yAxisId: 'line-3'}]
+                    {name: 'Files change', color: '#F5A961', yAxisId: 'line-2'}]
+const chartLinesAverage = {name: 'Change percentage', color: '#D3A2FF', yAxisId: 'line-3'}
 const chartBars = [{name: 'Additions', color: '#62C8BA'}, {name: 'Deletions', color: '#EC5D5C'}]
 
 const tableObject = [
@@ -165,7 +165,7 @@ function ContributorStatsPage(props) {
     let newChartLines = cloneDeep(chartLinesConfig);
     if(chosenUser && chosenUser.author_email !== 'Average') {
       chartData = data.chart[chosenUser.author_email]
-      newChartLines.splice(newChartLines.length -1, 1)
+      newChartLines.push(chartLinesAverage)
     } else {
       chartData = data.chart['average'];
     }
