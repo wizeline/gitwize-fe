@@ -39,8 +39,8 @@ const calculateDateRange = () => {
   const endOfCurrentMonth = getEndOfMonth(currentDate)
   const startOfMonthFrom = getStartOfMonth(twoMonthsBackward)
   return {
-    date_from: new Date(startOfMonthFrom.unix()*1000),
-    date_to: new Date(endOfCurrentMonth.unix()*1000)
+    date_from: startOfMonthFrom.unix(),
+    date_to: endOfCurrentMonth.unix()
   }
 }
 
