@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Chart from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward, getMonthFromDate} from '../utils/dateUtils'
+import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward, getMonth} from '../utils/dateUtils'
 import {buildChartOptionsBasedOnMaxValue} from '../utils/chartUtils'
 import {transformChartDataWithValueAbove} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels';
@@ -70,6 +70,9 @@ function QuartelyTrends(props) {
     })
   }, [id, authState.accessToken])
 
+  const monthFrom = getMonth(dateRange.date_from * 1000)
+  const monthTo = getMonth(dateRange.date_to * 1000)
+
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Quarterly Trends</PageTitle>
@@ -78,10 +81,10 @@ function QuartelyTrends(props) {
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
                 const data = chartItem.fieldName === 'percentageRejectedPR' 
-                ? transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, getMonthFromDate(dateRange.date_from * 1000), 
-                  getMonthFromDate(dateRange.date_to * 1000), customFormatter) 
-                : transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, getMonthFromDate(dateRange.date_from * 1000)
-                  , getMonthFromDate(dateRange.date_to * 1000))
+                ? transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, monthFrom, 
+                  monthTo, customFormatter) 
+                : transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, monthFrom, 
+                  monthTo)
                 return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
                           <Chart data={data} chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
                         </Grid>)
