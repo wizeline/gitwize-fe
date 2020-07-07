@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Grid from '@material-ui/core/Grid'
 
 import {Bar} from 'react-chartjs-2';
+import { getChartOptions } from '../../utils/chartUtils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -131,7 +132,7 @@ export default function Chart(props) {
   }
 
   const newChartOptions = {
-    ...chartOptions,
+    ...getChartOptions(chartOptions, chartLines),
     responsive: true,
     elements: {
       line: {
@@ -155,7 +156,7 @@ export default function Chart(props) {
       return text.join("");
     }
   }
-  
+
   useEffect(() => {
     if(isDisplayLegend) {
       document.getElementById(
@@ -174,6 +175,32 @@ export default function Chart(props) {
           item.style.fontWeight = 'normal'
         }
       });
+
+      const newChartOptions = {
+        ...getChartOptions(chartOptions, chartLines),
+        responsive: true,
+        elements: {
+          line: {
+            fill: false
+          }
+        },
+        legend: {
+          display: false
+        },
+        legendCallback: (chart) => {
+          let text = [];
+          text.push('<ul>');
+          for (let i = 0; i < chart.data.datasets.length; i++) {
+            text.push('<li><span style="background-color:' + chart.data.datasets[i].backgroundColor + '"></span>');
+            if (chart.data.datasets[i].label) {
+              text.push(chart.data.datasets[i].label);
+            }
+            text.push('</li>');
+          }
+          text.push('</ul>');
+          return text.join("");
+        }
+      }
       chartRef.current.chartInstance.options = newChartOptions
       chartRef.current.chartInstance.update();
     }
