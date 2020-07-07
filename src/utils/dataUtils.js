@@ -118,7 +118,7 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
   }))
 }
 
-export const transformChartDataWithValueAbove = (data, chartBar, customFormatter) => {
+export const transformChartDataWithValueAbove = (data, chartBar, monthFrom, monthTo, customFormatter) => {
   if(data) {
     const objectKeys = Object.keys(data);
     const labels = []
@@ -128,11 +128,17 @@ export const transformChartDataWithValueAbove = (data, chartBar, customFormatter
     })
     monthArrays.sort();
     const chartData = []
-    monthArrays.forEach(month => {
+    // create dump data if not in response
+    for(let month = monthFrom; month <= monthTo; month++) {
+      const index = monthArrays.findIndex(item => Number(item) === month)
       const monthName = moment(month, 'M').format('MMMM');
-      chartData.push(data[monthName])
+      if(index === -1) {
+        chartData.push(0)
+      } else {
+        chartData.push(data[monthName])
+      }
       labels.push(monthName)
-    })
+    }
     const dataSets = [
       {
         label: chartBar.name,
@@ -150,7 +156,7 @@ export const transformChartDataWithValueAbove = (data, chartBar, customFormatter
           },
           formatter: customFormatter ? customFormatter : (value, context) => {
             const {dataIndex, dataset} = context
-            if(dataIndex === 0) {
+            if(dataIndex === 0 || dataset.data[dataIndex - 1] === 0) {
               return ''
             } else {
               value = Math.round(((value - dataset.data[dataIndex - 1]) / dataset.data[dataIndex - 1]) * 100)

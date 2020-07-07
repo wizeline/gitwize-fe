@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Chart from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward} from '../utils/dateUtils'
+import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward, getMonthFromDate} from '../utils/dateUtils'
 import {buildChartOptionsBasedOnMaxValue} from '../utils/chartUtils'
 import {transformChartDataWithValueAbove} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels';
@@ -53,6 +53,8 @@ const customFormatter = (value, context) => {
   }
 }
 
+const dateRange  = calculateDateRange()
+
 function QuartelyTrends(props) {
   const [responseData, setResponseData] = useState({})
   const { authState } = useOktaAuth()
@@ -63,7 +65,6 @@ function QuartelyTrends(props) {
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     mainLayout.current.handleChangeRepositoryId(id)
-    const dateRange  = calculateDateRange()
     apiClient.quarterlyTrends.getQuarterlyTrendsStats(id, dateRange).then((data) => {
       setResponseData(data)
     })
@@ -77,8 +78,10 @@ function QuartelyTrends(props) {
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
                 const data = chartItem.fieldName === 'percentageRejectedPR' 
-                ? transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, customFormatter) 
-                : transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem)
+                ? transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, getMonthFromDate(dateRange.date_from * 1000), 
+                  getMonthFromDate(dateRange.date_to * 1000), customFormatter) 
+                : transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, getMonthFromDate(dateRange.date_from * 1000)
+                  , getMonthFromDate(dateRange.date_to * 1000))
                 return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
                           <Chart data={data} chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
                         </Grid>)
