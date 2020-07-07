@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Chart from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward} from '../utils/dateUtils'
+import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward, getMonth} from '../utils/dateUtils'
 import {buildChartOptionsBasedOnMaxValue} from '../utils/chartUtils'
 import {transformChartDataWithValueAbove} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels';
@@ -44,6 +44,8 @@ const calculateDateRange = () => {
   }
 }
 
+const dateRange  = calculateDateRange()
+
 function CodeChangeVelocity(props) {
   const [responseData, setResponseData] = useState({})
   const { authState } = useOktaAuth()
@@ -54,12 +56,13 @@ function CodeChangeVelocity(props) {
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     mainLayout.current.handleChangeRepositoryId(id)
-    const dateRange  = calculateDateRange()
     apiClient.codeChangeVelocity.getCodeChangeVelocityStats(id, dateRange).then((data) => {
       setResponseData(data)
     })
   }, [id, authState.accessToken])
 
+  const monthFrom = getMonth(dateRange.date_from * 1000)
+  const monthTo = getMonth(dateRange.date_to * 1000)
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Code Change Velocity</PageTitle>
@@ -68,7 +71,8 @@ function CodeChangeVelocity(props) {
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
                 return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
-                          <Chart data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem)} chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
+                          <Chart data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, monthFrom , monthTo)} 
+                          chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
                         </Grid>)
               })}
             </Grid>

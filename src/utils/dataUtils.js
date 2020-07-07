@@ -1,4 +1,4 @@
-import * as moment from 'moment'
+import moment from 'moment'
 
 const dateFormat = 'Do MMM'
 
@@ -118,13 +118,27 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
   }))
 }
 
-export const transformChartDataWithValueAbove = (data, chartBar, customFormatter) => {
+export const transformChartDataWithValueAbove = (data, chartBar, monthFrom, monthTo, customFormatter) => {
   if(data) {
-    const labels = Object.keys(data);
-    const chartData = []
-    labels.forEach(item => {
-      chartData.push(data[item])
+    const objectKeys = Object.keys(data);
+    const labels = []
+    const monthArrays = [];
+    objectKeys.forEach(key => {
+      monthArrays.push(moment().month(key).format("M"))
     })
+    monthArrays.sort();
+    const chartData = []
+    // create dump data if not in response
+    for(let month = monthFrom; month <= monthTo; month++) {
+      const index = monthArrays.findIndex(item => Number(item) === month)
+      const monthName = moment(month, 'M').format('MMMM');
+      if(index === -1) {
+        chartData.push(0)
+      } else {
+        chartData.push(data[monthName])
+      }
+      labels.push(monthName)
+    }
     const dataSets = [
       {
         label: chartBar.name,
@@ -142,7 +156,7 @@ export const transformChartDataWithValueAbove = (data, chartBar, customFormatter
           },
           formatter: customFormatter ? customFormatter : (value, context) => {
             const {dataIndex, dataset} = context
-            if(dataIndex === 0) {
+            if(dataIndex === 0 || dataset.data[dataIndex - 1] === 0) {
               return ''
             } else {
               value = Math.round(((value - dataset.data[dataIndex - 1]) / dataset.data[dataIndex - 1]) * 100)
@@ -156,5 +170,43 @@ export const transformChartDataWithValueAbove = (data, chartBar, customFormatter
       labels: labels,
       datasets: dataSets
     }
+  }
+}
+
+export const createDumpDataIfMissing = (data, dateRange) => {
+  if(data) {
+    let { date_from, date_to } = dateRange
+    date_from = moment(date_from*1000).unix()
+    date_to = moment(date_to*1000).unix()
+    const result = []
+    while(date_from <= date_to) {
+      const date = moment(date_from)
+      const index = data.findIndex(item => moment(item.date).isSame(date, 'day'))
+      if(index !== -1) {
+        result.push({
+          date: data[index].date,
+          additions: data[index] ? data[index].additions : 0,
+          changePercent: data[index] ? data[index].changePercent : 0,
+          commits: data[index] ? data[index].commits : 0,
+          deletions: data[index] ? data[index].deletions : 0,
+          filesChange: data[index] ? data[index].filesChange : 0,
+          email: data[index] ? data[index].email : '',
+        })
+      } else {
+        result.push({
+          date: date,
+          additions: 0,
+          changePercent: 0,
+          commits: 0,
+          deletions: 0,
+          filesChange: 0,
+          email: '',
+        })
+      }
+  
+      date_from = date_from + (24*3600000)
+    }
+  
+    return result
   }
 }

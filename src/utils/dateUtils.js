@@ -1,4 +1,4 @@
-import * as moment from 'moment'
+import moment from 'moment'
 
 export const getCurrentDate = () => {
     return moment();
@@ -14,4 +14,8 @@ export const getEndOfMonth = (date) => {
 
 export const getNumberOfMonthBackward = (date, number) => {
     return moment(date).subtract(number, 'month')
+}
+
+export const getMonth = (date) => {
+    return moment(date).month() + 1
 }

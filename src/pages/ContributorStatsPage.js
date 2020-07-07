@@ -7,7 +7,7 @@ import { ApiClient } from '../apis'
 import Grid from '@material-ui/core/Grid'
 import DropdownList from '../components/DropdownList'
 import DataStats from '../views/DataStats';
-import { transformToChartData, filterTableData, convertTableObjectToTableColumn } from '../utils/dataUtils'
+import { transformToChartData, filterTableData, convertTableObjectToTableColumn, createDumpDataIfMissing } from '../utils/dataUtils'
 import {getChartOptions} from '../utils/chartUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext';
@@ -54,8 +54,8 @@ const tranformData = (data, isTableData, tableObject) => {
   return filterTableData(data, tempTableObject);
 }
 const chartLinesConfig = [{name: 'Commits', color: '#5392FF', yAxisId: 'line-1'},
-                    {name: 'Files change', color: '#F5A961', yAxisId: 'line-2'},
-                    {name: 'Change percentage', color: '#D3A2FF', yAxisId: 'line-3'}]
+                    {name: 'Files change', color: '#F5A961', yAxisId: 'line-2'}]
+const chartLinesAverage = {name: 'Change percentage', color: '#D3A2FF', yAxisId: 'line-3'}
 const chartBars = [{name: 'Additions', color: '#62C8BA'}, {name: 'Deletions', color: '#EC5D5C'}]
 
 const tableObject = [
@@ -139,6 +139,7 @@ function ContributorStatsPage(props) {
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
   const classes = useStyles();
+  const [chosenUser, setChosenUser] = useState('Average')
 
   const cloneTable = cloneDeep(tableObject)
   const customRenderNetChange = (rowData) => {
@@ -165,13 +166,15 @@ function ContributorStatsPage(props) {
     let newChartLines = cloneDeep(chartLinesConfig);
     if(chosenUser && chosenUser.author_email !== 'Average') {
       chartData = data.chart[chosenUser.author_email]
-      newChartLines.splice(newChartLines.length -1, 1)
+      newChartLines.push(chartLinesAverage)
     } else {
       chartData = data.chart['average'];
     }
-    setChartOptions(getChartOptions(chartOptionsInit, newChartLines))
+    const chartDisplayData = createDumpDataIfMissing(chartData, dateRange)
+    setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartDisplayData, false, tableObject), 'Date'));
     setChartLines(newChartLines)
-    setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartData, false, tableObject), 'Date'));
+    setChartOptions(getChartOptions(chartOptionsInit, newChartLines))
+    setChosenUser(userName)
   }
   
   const userFilter = (<Grid item xs={2} key={'user-filter'}>
@@ -184,15 +187,27 @@ function ContributorStatsPage(props) {
     setChartOptions(getChartOptions(chartOptionsInit, chartLinesConfig))
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
       const tableData = respone.table;
-      const chartData = respone.chart['average']
       const maxNetChangeValue = tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b))
+
+      const user = respone.contributors.find(item => item.author_name === chosenUser)
+      let chartData;
+      let newChartLines = cloneDeep(chartLinesConfig);
+      if(user && user.author_email !== 'Average') {
+        chartData = respone.chart[user.author_email]
+        newChartLines.push(chartLinesAverage)
+      } else {
+        chartData = respone.chart['average'];
+      }
+
       setMaxNetChange(maxNetChangeValue)
-      setUserFilterList(respone.Contributors);
+      setUserFilterList(respone.contributors);
       setRepoData(tranformData(tableData, true, tableObject));
-      setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartData, false, tableObject), 'Date'));
+      const chartDisplayData = createDumpDataIfMissing(chartData, dateRange)
+      setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartDisplayData, false, tableObject), 'Date'));
       setData(respone)
+      setChartOptions(getChartOptions(chartOptionsInit, newChartLines))
     })
-  }, [authState.accessToken, id, mainLayout, dateRange])
+  }, [authState.accessToken, id, mainLayout, dateRange, chosenUser])
 
   return (
     <div style={{ width: '100%' }}>
