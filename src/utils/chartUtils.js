@@ -36,7 +36,7 @@ export const getChartColor = (data) => {
 
 export const getChartOptions = (chartOptions, chartLines = []) => {
   let newChartOptions = cloneDeep(chartOptions)
-  if(chartLines.length > 0) {
+  if(chartLines.length > 0 && newChartOptions) {
     chartLines.forEach(item => {
       const yAxisItem = {
         type: 'linear',
@@ -67,9 +67,12 @@ export const getChartOptions = (chartOptions, chartLines = []) => {
 export const buildChartOptionsBasedOnMaxValue = (chartData) => {
   if(chartData) {
     const chartValue = Object.values(chartData)
-    const maxValue = chartValue.reduce((a, b) => {
-      return Math.max(a, b);
-    })
+    let maxValue = 0
+    if(chartValue && chartValue.length != 0) {
+      maxValue = chartValue.reduce((a, b) => {
+        return Math.max(a, b);
+      })
+    }
     return  {
       scales: {
         xAxes: [
