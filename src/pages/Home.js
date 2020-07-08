@@ -95,7 +95,7 @@ const buildRoutPath = (menuItems, baseURI='') => {
   })
 }
 
-const Dashboard = () => {
+const Home = () => {
   const { authState, authService } = useOktaAuth()
   const [userInfo, setUserInfo] = useState(null)
   const [repositoryId, setRepositoryId] = useState()
@@ -128,12 +128,12 @@ const Dashboard = () => {
     authService.logout('/')
   }
 
-  const handleChangeRepoId = (repositoryId) => {
-    setRepositoryId(repositoryId)
+  const handleChangeRepoId = (repoId) => {
+    setRepositoryId(repoId)
   }
 
-  const handleShowNavbar = (showNavbar) => {
-    setShowNavbar(showNavbar)
+  const handleShowNavbar = (showNav) => {
+    setShowNavbar(showNav)
   }
 
   const handleChangeRepoList = (repoList) => {
@@ -142,13 +142,13 @@ const Dashboard = () => {
 
   const mainLayOutContextValue = {
     repositoryId: repositoryId,
-    handleChangeRepositoryId: (repositoryId) => {
-      handleChangeRepoId(repositoryId)
+    handleChangeRepositoryId: (repoId) => {
+      handleChangeRepoId(repoId)
     },
 
     showNavbar: showNavbar,
-    handleShowNavbar: (showNavbar) => {
-      handleShowNavbar(showNavbar)
+    handleShowNavbar: (showNav) => {
+      handleShowNavbar(showNav)
     },
 
     repoList: repositoryList,
@@ -188,4 +188,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Home

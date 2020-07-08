@@ -39,12 +39,12 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const tranformData = (data, isTableData, tableObject) => {
+const tranformData = (data, isTableData, tableObjectInstance) => {
   let tempTableObject = [];
   if(isTableData) {
-    tempTableObject = cloneDeep(tableObject);
+    tempTableObject = cloneDeep(tableObjectInstance);
   } else {
-    const chartObject = cloneDeep(tableObject);
+    const chartObject = cloneDeep(tableObjectInstance);
     chartObject.shift();
     tempTableObject = cloneDeep(chartObject);
     tempTableObject.push({text: 'Date', fieldName: 'date'});
@@ -161,15 +161,15 @@ function ContributorStatsPage(props) {
 
   const handleChangeUser = (userName) =>  {
     const chosenUser = userFilterList.find(item => item.author_name === userName)
-    let chartData;
+    let chartRawData;
     let newChartLines = cloneDeep(chartLinesConfig);
     if(chosenUser && chosenUser.author_email !== 'Average') {
-      chartData = data.chart[chosenUser.author_email]
+      chartRawData = data.chart[chosenUser.author_email]
       newChartLines.push(chartLinesAverage)
     } else {
-      chartData = data.chart['average'];
+      chartRawData = data.chart['average'];
     }
-    const chartDisplayData = createDumpDataIfMissing(chartData, dateRange)
+    const chartDisplayData = createDumpDataIfMissing(chartRawData, dateRange)
     setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartDisplayData, false, tableObject), 'Date'));
     setChartLines(newChartLines)
     setChartOptions(chartOptionsInit)
