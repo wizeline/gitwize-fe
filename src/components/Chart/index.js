@@ -102,7 +102,7 @@ export default function Chart(props) {
 
   const chartRef = useRef(null)
   const [isDisplayLegend, setDisplayLegend] = useState(false)
-  const {data, chartOptions, chartBars, chartLines, chartLegendId = 'chart-legend'} = props
+  const {data, chartOptions, chartBars, chartLines, isLegendClickable=true, chartLegendId = 'chart-legend'} = props
 
   const plugins = [{
       afterDraw: (chartInstance) => {
@@ -163,7 +163,9 @@ export default function Chart(props) {
 
       document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
         const originalColor = item.childNodes[0].style.backgroundColor
-        item.addEventListener("click", e => handleClick(e, item, index, originalColor));
+        if(isLegendClickable) {
+          item.addEventListener("click", e => handleClick(e, item, index, originalColor));
+        }
         //keep color as grey if already disabled
         let ci = chartRef.current.chartInstance;
         const meta = ci.getDatasetMeta(index);
