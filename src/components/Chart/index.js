@@ -217,8 +217,8 @@ export default function Chart(props) {
   } 
 
   return (
-    <Grid container className={classes.root} >
-      <Grid item xs={12}>
+    <Grid container >
+      <Grid className={classes.root} item xs={12}>
         {chart}
         <ChartLegend id={chartLegendId}/>
       </Grid>
