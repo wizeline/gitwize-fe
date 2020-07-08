@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 
 const chartBars = [
                     {name:'Number Of commit', color: '#62C8BA', fieldName: 'commits', chartId: 'chartLegendId-1'},
-                    {name:'New Code Percentage', color: '#EC5D5C', fieldName: 'newCodeChanges', chartId: 'chartLegendId-2'},
+                    // {name:'New Code Percentage', color: '#EC5D5C', fieldName: 'newCodeChanges', chartId: 'chartLegendId-2'},
                     {name:'Net Changes', color: '#9F55E2',fieldName: 'netChanges', chartId: 'chartLegendId-3'}, 
                   ]
 const chartLines = []
