@@ -141,7 +141,7 @@ function AddRepositoryDialog(props) {
              interactive
              title={
                 <>
-                  To get the access token, please follow the guidelines on <a href="https://www.w3schools.com" target="_blank" rel="noopener noreferrer">this page</a>
+                  To get the access token, please follow the guidelines on <a href="https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token" target="_blank" rel="noopener noreferrer">this page</a>
                 </>
               }
     >
