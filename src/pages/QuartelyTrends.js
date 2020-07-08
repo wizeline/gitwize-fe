@@ -86,7 +86,9 @@ function QuartelyTrends(props) {
                 : transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, monthFrom, 
                   monthTo)
                 return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
-                          <Chart data={data} chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
+                          <Chart isLegendClickable = {false} data={data} 
+                            chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} 
+                            chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
                         </Grid>)
               })}
             </Grid>
