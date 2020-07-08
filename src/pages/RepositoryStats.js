@@ -4,7 +4,6 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
-import {getChartOptions} from '../utils/chartUtils'
 import { createReversedArray, transformToChartData, filterTableData, convertTableObjectToTableColumn} from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
@@ -107,7 +106,7 @@ function RepositoryStats(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Repository Stats</PageTitle>
-      <DataStats chartBars={chartBars} chartLines={chartLines} tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={getChartOptions(chartOptions, chartLines)}/>
+      <DataStats chartBars={chartBars} chartLines={chartLines} tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={chartOptions}/>
     </div>
   )
 }
