@@ -75,11 +75,10 @@ const useStyles = makeStyles((theme) => ({
     padding: '0 24px'
   },
   tooltip: {
-    fontSize: 9,
-    padding: '35px 40px 40px 26px',
+    fontSize: 10,
+    padding: '20px',
     marginRight: '10vw',
     borderRadius: 8,
-    minHeight: 100,
     whiteSpace: 'pre-line'
   }
 }))
@@ -93,8 +92,6 @@ const REPOSITORY_ERROR_MAP = {
   "repository.badCredentials": "Incorrect credentials entered",
   "repository.invalidURL": "Invalid repo URL"
 }
-
-const toolTipMessage = 'To get the access token, please follow the guidelines on this page https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line'
 function AddRepositoryDialog(props) {
   const { isOpen, handleClose, handleAdd, addingRepoError } = props
   const [userName, setUserName] = useState('')
@@ -136,7 +133,18 @@ function AddRepositoryDialog(props) {
   }
 
   const toolTip = (
-    <Tooltip title={toolTipMessage} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: styles.tooltip}}>
+    <Tooltip 
+             placement='bottom-start' 
+             enterDelay={500} 
+             enterNextDelay={500} 
+             classes={{tooltip: styles.tooltip}}
+             interactive
+             title={
+                <>
+                  To get the access token, please follow the guidelines on <a href="https://www.w3schools.com" target="_blank" rel="noopener noreferrer">this page</a>
+                </>
+              }
+    >
       <InfoOutlinedIcon/>        
     </Tooltip>
   )
