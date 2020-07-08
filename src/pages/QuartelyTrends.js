@@ -46,7 +46,7 @@ const calculateDateRange = () => {
 
 const customFormatter = (value, context) => {
   const {dataIndex, dataset} = context
-  if(dataIndex === 0) {
+  if(dataIndex === 0 || value === 0 ) {
     return ''
   } else {
     return (value - dataset.data[dataIndex - 1]) + '%'

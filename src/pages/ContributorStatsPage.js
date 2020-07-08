@@ -165,14 +165,15 @@ function ContributorStatsPage(props) {
     let newChartLines = cloneDeep(chartLinesConfig);
     if(chosenUser && chosenUser.author_email !== 'Average') {
       chartRawData = data.chart[chosenUser.author_email]
-      newChartLines.splice(newChartLines.length -1, 1)
+      newChartLines.push(chartLinesAverage)
     } else {
       chartRawData = data.chart['average'];
     }
-    const chartDisplayData = createDumpDataIfMissing(chartData, dateRange)
+    const chartDisplayData = createDumpDataIfMissing(chartRawData, dateRange)
     setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartDisplayData, false, tableObject), 'Date'));
     setChartLines(newChartLines)
-    setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartRawData, false, tableObject), 'Date'));
+    setChartOptions(chartOptionsInit)
+    setChosenUser(userName)
   }
   
   const userFilter = (<Grid item xs={2} key={'user-filter'}>
@@ -185,7 +186,6 @@ function ContributorStatsPage(props) {
     setChartOptions(chartOptionsInit)
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
       const tableData = respone.table;
-      const chartRawData = respone.chart['average']
       const maxNetChangeValue = tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b))
 
       const user = respone.contributors.find(item => item.author_name === chosenUser)
@@ -201,7 +201,8 @@ function ContributorStatsPage(props) {
       setMaxNetChange(maxNetChangeValue)
       setUserFilterList(respone.contributors);
       setRepoData(tranformData(tableData, true, tableObject));
-      setChartData(transformToChartData(chartLinesConfig, chartBars, tranformData(chartRawData, false, tableObject), 'Date'));
+      const chartDisplayData = createDumpDataIfMissing(chartData, dateRange)
+      setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartDisplayData, false, tableObject), 'Date'));
       setData(respone)
       setChartOptions(chartOptionsInit)
     })
