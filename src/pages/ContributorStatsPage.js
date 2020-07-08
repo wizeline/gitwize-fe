@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid'
 import DropdownList from '../components/DropdownList'
 import DataStats from '../views/DataStats';
 import { transformToChartData, filterTableData, convertTableObjectToTableColumn, createDumpDataIfMissing } from '../utils/dataUtils'
-import {getChartOptions} from '../utils/chartUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext';
 import { makeStyles } from '@material-ui/core/styles'
@@ -173,7 +172,7 @@ function ContributorStatsPage(props) {
     const chartDisplayData = createDumpDataIfMissing(chartData, dateRange)
     setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartDisplayData, false, tableObject), 'Date'));
     setChartLines(newChartLines)
-    setChartOptions(getChartOptions(chartOptionsInit, newChartLines))
+    setChartOptions(chartOptionsInit)
     setChosenUser(userName)
   }
   
@@ -184,7 +183,7 @@ function ContributorStatsPage(props) {
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     mainLayout.current.handleChangeRepositoryId(id)
-    setChartOptions(getChartOptions(chartOptionsInit, chartLinesConfig))
+    setChartOptions(chartOptionsInit)
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
       const tableData = respone.table;
       const maxNetChangeValue = tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b))
@@ -205,7 +204,7 @@ function ContributorStatsPage(props) {
       const chartDisplayData = createDumpDataIfMissing(chartData, dateRange)
       setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartDisplayData, false, tableObject), 'Date'));
       setData(respone)
-      setChartOptions(getChartOptions(chartOptionsInit, newChartLines))
+      setChartOptions(chartOptionsInit)
     })
   }, [authState.accessToken, id, mainLayout, dateRange, chosenUser])
 
