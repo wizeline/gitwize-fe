@@ -123,8 +123,8 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
       plugins: {
         datalabels: {
             anchor: 'end',
-            align: 'right',
-            offset: 11,
+            align: 'top',
+            offset: -3,
             font: {
               size: 13
             }
