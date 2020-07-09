@@ -12,8 +12,8 @@ export const getEndOfMonth = (date) => {
     return moment(date).endOf('month')
 }
 
-export const getNumberOfMonthBackward = (date, monthBackward) => {
-    return moment(date).subtract(monthBackward, 'month')
+export const getNumberOfMonthBackward = (date, monthsBackward) => {
+    return moment(date).subtract(monthsBackward, 'month')
 }
 
 export const getNumberOfMonthForward = (date, monthsForward) => {
