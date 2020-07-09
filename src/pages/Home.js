@@ -58,7 +58,7 @@ const subMenuItems = [
     uri: '/pull-request',
     children: [
       {
-        name: 'Pull requests stats', 
+        name: 'Pull request stats', 
         uri: '/pull-request-stats',
         component: PullRequestStats
       },
