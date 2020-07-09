@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Chart from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward, getMonth} from '../utils/dateUtils'
+import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward} from '../utils/dateUtils'
 import {buildChartOptionsBasedOnMaxValue} from '../utils/chartUtils'
 import {transformChartDataWithValueAbove} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels';
@@ -61,8 +61,8 @@ function CodeChangeVelocity(props) {
     })
   }, [id, authState.accessToken])
 
-  const monthFrom = getMonth(dateRange.date_from * 1000)
-  const monthTo = getMonth(dateRange.date_to * 1000)
+  const dateFrom = dateRange.date_from
+  const dateTo = dateRange.date_to
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Code Change Velocity</PageTitle>
@@ -71,7 +71,7 @@ function CodeChangeVelocity(props) {
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
                 return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
-                          <Chart isLegendClickable = {false} data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, monthFrom , monthTo)} 
+                          <Chart isLegendClickable = {false} data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, dateFrom , dateTo)} 
                             chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} 
                             chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
                         </Grid>)
