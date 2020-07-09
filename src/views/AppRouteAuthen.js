@@ -18,9 +18,9 @@ export default function AppRouteAuthen() {
   return (
     <Router>
       <Switch>
+        <Route path="/implicit/callback" component={ImplicitCallback} />
         {!authState.isAuthenticated && <Route exact path="/" component={LandingPage} />}
         {authState.isAuthenticated && <Route path="/" component={Home} />}
-        <Route path="/implicit/callback" component={ImplicitCallback} />
         <Route component={NotFoundError404} />
       </Switch>
     </Router>
