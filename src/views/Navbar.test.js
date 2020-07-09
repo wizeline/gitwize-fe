@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import * as oktaLib from '@okta/okta-react'
 import Navbar from './Navbar'
 import RepositoryStats from '../pages/RepositoryStats'
@@ -8,6 +8,8 @@ import QuartelyTrends from '../pages/QuartelyTrends'
 import Drawer from '@material-ui/core/Drawer'
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import {PageProvider} from '../contexts/PageContext'
+import { BrowserRouter } from 'react-router-dom'
+import { MainLayoutContexProvider } from '../contexts/MainLayoutContext'
 
 jest.mock('@okta/okta-react')
 
@@ -36,16 +38,18 @@ const subMenuItem = [
 ];
 
 describe('Navbar component', () => {
-  it('renders without crashing', () => {
+  beforeEach(() => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},
         authService: {},
       }
     })
+  });
+  it('renders without crashing', () => {
     const component = shallow(
         <PageProvider>
-        <Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>
+        <Navbar subMenuItems={subMenuItem} userInfor={{name: 'Test'}}/>
         </PageProvider>
     )
 
@@ -53,15 +57,9 @@ describe('Navbar component', () => {
   })
 
   it('renders with drawer', () => {
-    oktaLib.useOktaAuth.mockImplementation(() => {
-      return {
-        authState: {},
-        authService: {},
-      }
-    })
     const component = shallow(
       <PageProvider>
-      <Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>
+      <Navbar subMenuItems={subMenuItem} userInfor={{name: 'Test'}}/>
       </PageProvider>
   )
 
@@ -71,10 +69,24 @@ describe('Navbar component', () => {
   it('renders without Expend Button', () => {
     const component = shallow(
       <PageProvider>
-      <Navbar subMenuItem={subMenuItem} userInfor={{name: 'Test'}}/>
+      <Navbar subMenuItems={subMenuItem} userInfor={{name: 'Test'}}/>
       </PageProvider>
   )
 
     expect(component.contains(<ExpandLess/>)).toBe(false)
+  })
+
+  it('renders correct Component', () => {
+    const component = mount(
+      <BrowserRouter>
+        <PageProvider>
+            <Navbar subMenuItems={subMenuItem} userInfor={{name: 'Test'}}/>
+        </PageProvider>
+      </BrowserRouter>
+    )
+
+    expect(component.contains('Repository stats')).toBe(true)
+    expect(component.contains('Pull request')).toBe(true)
+    expect(component.contains('Quartely Trends')).toBe(true)
   })
 })
