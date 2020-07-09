@@ -140,7 +140,7 @@ export const transformChartDataWithValueAbove = (data, chartBar, dateFrom, dateT
       if(index === -1) {
         chartData.push(0)
       } else {
-        chartData.push(data[monthName])
+        chartData.push(Number(data[monthName]))
       }
       labels.push(monthName)
       dateFrom = getNumberOfMonthForward(dateFrom * 1000, 1).unix()

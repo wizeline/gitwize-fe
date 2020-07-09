@@ -69,9 +69,9 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
     const chartValue = Object.values(chartData)
     let maxValue = 0
     if(chartValue && chartValue.length !== 0) {
-      maxValue = chartValue.reduce((a, b) => {
-        return Math.max(a, b);
-      })
+      maxValue = Number(chartValue.reduce((a, b) => {
+        return Math.max(Number(a), Number(b));
+      }))
     }
     return  {
       scales: {
@@ -110,7 +110,7 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
               fontSize: 10,
               beginAtZero: true,
               min: 0,
-              max: (maxValue + (maxValue/2)),
+              max: maxValue < 0 ? 0: (maxValue + (maxValue/2)),
               precision: 0,
               suggestedMax: 5
             }
