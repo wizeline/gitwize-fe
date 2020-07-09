@@ -1,4 +1,5 @@
 import moment from 'moment'
+import {getMonth, getNumberOfMonthForward} from '../utils/dateUtils'
 
 const dateFormat = 'Do MMM'
 
@@ -121,7 +122,7 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
   }))
 }
 
-export const transformChartDataWithValueAbove = (data, chartBar, monthFrom, monthTo, customFormatter) => {
+export const transformChartDataWithValueAbove = (data, chartBar, dateFrom, dateTo, customFormatter) => {
   if(data) {
     const objectKeys = Object.keys(data);
     const labels = []
@@ -129,10 +130,11 @@ export const transformChartDataWithValueAbove = (data, chartBar, monthFrom, mont
     objectKeys.forEach(key => {
       monthArrays.push(moment().month(key).format("M"))
     })
-    monthArrays.sort();
+
     const chartData = []
     // create dump data if not in response
-    for(let month = monthFrom; month <= monthTo; month++) {
+    while(dateFrom <= dateTo) {
+      const month = getMonth(dateFrom * 1000)
       const index = monthArrays.findIndex(item => Number(item) === month)
       const monthName = moment(month, 'M').format('MMMM');
       if(index === -1) {
@@ -141,6 +143,7 @@ export const transformChartDataWithValueAbove = (data, chartBar, monthFrom, mont
         chartData.push(data[monthName])
       }
       labels.push(monthName)
+      dateFrom = getNumberOfMonthForward(dateFrom * 1000, 1).unix()
     }
     const dataSets = [
       {
