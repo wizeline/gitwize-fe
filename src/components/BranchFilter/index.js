@@ -31,19 +31,19 @@ export default function BranchPicker(props) {
   branchFilterSize = branchFilterSize < 2 ? 2 : branchFilterSize;
   let listBranch = ['master']
   if(mainLayoutContext.repoList) {
-    const currentRepo = mainLayoutContext.repoList.find(item =>  {
-      if(String(item.id) === mainLayoutContext.repositoryId) {
-        return item;
-      } 
-      return null
-    })
-    if(currentRepo) {
-      currentRepo.branches.forEach(item => {
-        if(listBranch.indexOf(item) === -1) {
-          listBranch.push(item)
-        }
-      })
-    }
+    // const currentRepo = mainLayoutContext.repoList.find(item =>  {
+    //   if(String(item.id) === mainLayoutContext.repositoryId) {
+    //     return item;
+    //   } 
+    //   return null
+    // })
+    // if(currentRepo) {
+    //   currentRepo.branches.forEach(item => {
+    //     if(listBranch.indexOf(item) === -1) {
+    //       listBranch.push(item)
+    //     }
+    //   })
+    // }
   }
 
   useEffect(() => {
