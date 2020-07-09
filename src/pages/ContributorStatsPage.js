@@ -186,7 +186,7 @@ function ContributorStatsPage(props) {
     setChartOptions(chartOptionsInit)
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
       const tableData = respone.table;
-      const maxNetChangeValue = tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b))
+      const maxNetChangeValue = (tableData && tableData.length > 0) ? tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b)) : 0
 
       const user = respone.contributors.find(item => item.author_name === chosenUser)
       let chartData;
