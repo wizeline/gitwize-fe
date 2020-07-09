@@ -105,7 +105,7 @@ function PullRequestStats(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Pull Request Stats</PageTitle>
+      <PageTitle information={information}>Pull request stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData} chartBars={chartBars}
                     tableColumn={tableColumn} chartOptions={chartOptions}/>
     </div>

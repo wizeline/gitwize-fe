@@ -74,7 +74,7 @@ const subMenuItems = [
     uri: '/contributor-stats',
     children: [
       {
-        name: 'Contributors stats', 
+        name: 'Contributor stats', 
         uri: '/Contributors-stats',
         component: ContributorStatsPage
       }

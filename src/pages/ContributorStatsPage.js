@@ -210,7 +210,7 @@ function ContributorStatsPage(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Contributor Stats</PageTitle>
+      <PageTitle information={information}>Contributor stats</PageTitle>
       <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
       isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={chartOptions}/>
     </div>

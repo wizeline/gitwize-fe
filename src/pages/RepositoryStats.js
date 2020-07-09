@@ -105,7 +105,7 @@ function RepositoryStats(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Repository Stats</PageTitle>
+      <PageTitle information={information}>Repository stats</PageTitle>
       <DataStats chartBars={chartBars} chartLines={chartLines} tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={chartOptions}/>
     </div>
   )
