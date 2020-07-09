@@ -44,26 +44,26 @@ const useStyles = makeStyles(() => ({
 
 const subMenuItems = [
   {
-    name: 'Code change velocity', 
+    name: 'Code Change Velocity', 
     uri: '/code-change-velocity', 
     component: CodeChangeVelocity
   },
   {
-    name: 'Repository stats', 
+    name: 'Repository Stats', 
     uri: '/repository-stats', 
     component: RepositoryStats
   },
   {
-    name: 'Pull requests',
+    name: 'Pull Requests',
     uri: '/pull-request',
     children: [
       {
-        name: 'Pull request stats', 
+        name: 'Pull Request Stats', 
         uri: '/pull-request-stats',
         component: PullRequestStats
       },
       {
-        name: 'Quarterly trends', 
+        name: 'Quarterly Trends', 
         uri: '/quartely-trends', 
         component: QuartelyTrends
       }
@@ -74,7 +74,7 @@ const subMenuItems = [
     uri: '/contributor-stats',
     children: [
       {
-        name: 'Contributor stats', 
+        name: 'Contributor Stats', 
         uri: '/Contributors-stats',
         component: ContributorStatsPage
       }

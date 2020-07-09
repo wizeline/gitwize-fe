@@ -65,7 +65,7 @@ function CodeChangeVelocity(props) {
   const monthTo = getMonth(dateRange.date_to * 1000)
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Code change velocity</PageTitle>
+      <PageTitle information={information}>Code Change Velocity</PageTitle>
       <Grid container className={classes.root}>
         <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={12}>
             <Grid container className={classes.root}>
