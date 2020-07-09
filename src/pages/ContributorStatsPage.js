@@ -53,7 +53,7 @@ const tranformData = (data, isTableData, tableObjectInstance) => {
   return filterTableData(data, tempTableObject);
 }
 const chartLinesConfig = [{name: 'Commits', color: '#5392FF', yAxisId: 'line-1'},
-                    {name: 'Files change', color: '#F5A961', yAxisId: 'line-2'}]
+                    {name: 'Files changed', color: '#F5A961', yAxisId: 'line-2'}]
 const chartLinesAverage = {name: 'Change percentage', color: '#D3A2FF', yAxisId: 'line-3'}
 const chartBars = [{name: 'Additions', color: '#62C8BA'}, {name: 'Deletions', color: '#EC5D5C'}]
 
@@ -63,7 +63,7 @@ const tableObject = [
   {text: 'Additions', fieldName: 'additions'}, 
   {text: 'Deletions', fieldName: 'deletions'}, 
   {text: 'Net change', fieldName: 'netChanges'},
-  {text: 'Files change', fieldName: 'filesChange'},
+  {text: 'Files changed', fieldName: 'filesChange'},
   {text: 'Active days', fieldName: 'activeDays'}
 ]
 
@@ -186,7 +186,7 @@ function ContributorStatsPage(props) {
     setChartOptions(chartOptionsInit)
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
       const tableData = respone.table;
-      const maxNetChangeValue = tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b))
+      const maxNetChangeValue = (tableData && tableData.length > 0) ? tableData.flatMap(item => item.netChanges).reduce((a,b) => Math.max(a,b)) : 0
 
       const user = respone.contributors.find(item => item.author_name === chosenUser)
       let chartData;
