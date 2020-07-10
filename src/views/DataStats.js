@@ -33,13 +33,16 @@ const useStyles = makeStyles(() => ({
 }))
 
 function DataStats(props) {
-    const {tableData, chartData, tableColumn, isDisplaySearch, customFilters, chartOptions, chartBars = [], chartLines = [], tableCustomComponent} = props
+    const {onTableView, tableData, chartData, tableColumn, isDisplaySearch, customFilters, chartOptions, chartBars = [], chartLines = [], tableCustomComponent} = props
     const [isDisplayChart, toggleChartTable] = useToggle(true);
     const classes = useStyles();
     const [headerTxt, setHeaderTxt] = useState(showDate[0])
 
     const handleToggleView = () => {
         toggleChartTable();
+        if(onTableView) {
+          onTableView(isDisplayChart)
+        }
     }
 
     const handleChangeHeaderTxt = (headerText) => {

@@ -33,7 +33,7 @@ const useFilterBarStyles = makeStyles((theme) => ({
 const marginTopBetweenSelectAndDropdown = 5
 
 export default function DropdownList(props) {
-  const {data, label, onChange, value} = props
+  const {label, onChange, value, data=[]} = props
   const [selectedValue, setSelectedValue] = useState(value ? value : data[0])
   const [topPosition, setTopPosition] = useState('0px');
   const classes = useFilterBarStyles()
@@ -51,7 +51,11 @@ export default function DropdownList(props) {
     }
   }, [])
   let newDefaultValue
-  if(value) {
+  let foundIndex = -1;
+  if(data && data.length > 0) {
+    foundIndex = data.findIndex(item => item === value)
+  }
+  if(value && foundIndex === -1) {
     newDefaultValue = ( <MenuItem value={value} key={value}>
                             {value}
                         </MenuItem>)
