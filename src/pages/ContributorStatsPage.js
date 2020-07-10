@@ -216,7 +216,7 @@ function ContributorStatsPage(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Contributor Stats</PageTitle>
-      <DataStats onTableView={(isOnTableView) => handleOnTableView(isOnTableView)} tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
+      <DataStats onTableView={handleOnTableView} tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
       isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={chartOptions}/>
     </div>
   )
