@@ -139,6 +139,7 @@ function ContributorStatsPage(props) {
   const [{ dateRange }] = useContext(PageContext)
   const classes = useStyles();
   const [chosenUser, setChosenUser] = useState('Average')
+  const [isOnTableView, setOnTableView] = useState(false);
 
   const cloneTable = cloneDeep(tableObject)
   const customRenderNetChange = (rowData) => {
@@ -175,9 +176,13 @@ function ContributorStatsPage(props) {
     setChartOptions(chartOptionsInit)
     setChosenUser(userName)
   }
+
+  const handleOnTableView = (isOnTableView) => {
+    setOnTableView(isOnTableView)
+  }
   
-  const userFilter = (<Grid item xs={2} key={'user-filter'}>
-                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} value={'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
+  const userFilter = (!isOnTableView && <Grid item xs={2} key={'user-filter'}>
+                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} value={chosenUser ? chosenUser : 'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
                       </Grid>);
 
   useEffect(() => {
@@ -211,7 +216,7 @@ function ContributorStatsPage(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Contributor Stats</PageTitle>
-      <DataStats tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
+      <DataStats onTableView={handleOnTableView} tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
       isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={chartOptions}/>
     </div>
   )
