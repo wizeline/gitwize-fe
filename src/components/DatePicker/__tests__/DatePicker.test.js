@@ -1,25 +1,36 @@
 import React from 'react'
-import {mount} from 'enzyme'
+import {mount, shallow} from 'enzyme'
 import DatePicker from '../index'
 import renderer from 'react-test-renderer'
-import TextField from '@material-ui/core/TextField'
 
 describe('DatePicker', () => {
+  const labelName = 'Date Range'
 
   test('render the component correctly', () => {
     const onChange = jest.fn(),
       props = {
-        label: "Date Range",
+        label: labelName,
         onChange
       }
 
-    const DatePickerComponent = mount(<DatePicker {...props}/>);
-    const textField = DatePickerComponent.find('TextField')
-    expect(DatePickerComponent).toMatchSnapshot()
-    expect(DatePickerComponent.find('TextField')).to.have.lengthOf(1)
+    const wrapper = mount(<DatePicker {...props} />);
+    expect(wrapper.find(DatePicker).exists()).toEqual(true)
+    expect(wrapper.find(DatePicker).prop('label')).toEqual(labelName)
   })
 
   test('check dropdown displayed', () => {
+    const onChange = jest.fn(),
+      props = {
+        label: labelName,
+        onChange
+      }
+
+
+    const wrapper = renderer.create(<DatePicker {...props} />).toJSON()
+
+    expect(wrapper).toMatchSnapshot()
+    //const textField = wrapper.find('#standard-helperText')
+    //expect(textField).exists().toEqual(true)
 
   })
 
