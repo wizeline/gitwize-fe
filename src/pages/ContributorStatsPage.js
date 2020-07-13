@@ -67,6 +67,8 @@ const tableObject = [
   {text: 'Active days', fieldName: 'activeDays'}
 ]
 
+const defaultUserDropdown = {author_email: 'Average', author_name: 'Average'}
+
 const chartOptionsInit = {
   scales: {
     xAxes: [
@@ -182,7 +184,7 @@ function ContributorStatsPage(props) {
   }
   
   const userFilter = (!isOnTableView && <Grid item xs={2} key={'user-filter'}>
-                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} value={chosenUser ? chosenUser : 'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
+                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} initValue={chosenUser ? chosenUser : 'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
                       </Grid>);
 
   useEffect(() => {
@@ -203,8 +205,10 @@ function ContributorStatsPage(props) {
         chartData = respone.chart['average'];
       }
 
+      const userFilter = [defaultUserDropdown, ...respone.contributors]
+
       setMaxNetChange(maxNetChangeValue)
-      setUserFilterList(respone.contributors);
+      setUserFilterList(userFilter);
       setRepoData(tranformData(tableData, true, tableObject));
       const chartDisplayData = createDumpDataIfMissing(chartData, dateRange)
       setChartData(transformToChartData(newChartLines, chartBars, tranformData(chartDisplayData, false, tableObject), 'Date'));
