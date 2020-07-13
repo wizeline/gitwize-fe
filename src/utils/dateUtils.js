@@ -23,3 +23,11 @@ export const getNumberOfMonthForward = (date, monthsForward) => {
 export const getMonth = (date) => {
     return moment(date).month() + 1
 }
+
+export const getMonthNumberFromMonthName = (monthsName = []) => {
+    const monthArrays = [];
+    monthsName.forEach(monthName => {
+        monthArrays.push(moment().month(monthName).format("M"))
+    })
+    return monthArrays
+}

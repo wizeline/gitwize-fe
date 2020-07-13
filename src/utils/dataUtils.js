@@ -1,5 +1,5 @@
 import moment from 'moment'
-import {getMonth, getNumberOfMonthForward} from '../utils/dateUtils'
+import {getMonth, getNumberOfMonthForward, getMonthNumberFromMonthName} from '../utils/dateUtils'
 
 const dateFormat = 'Do MMM'
 
@@ -125,26 +125,11 @@ export const convertTableObjectToTableColumn =  (tableObject) => {
 export const transformChartDataWithValueAbove = (data, chartBar, dateFrom, dateTo, customFormatter) => {
   if(data) {
     const objectKeys = Object.keys(data);
-    const labels = []
-    const monthArrays = [];
-    objectKeys.forEach(key => {
-      monthArrays.push(moment().month(key).format("M"))
-    })
+    const monthArrays = getMonthNumberFromMonthName(objectKeys)
+    const chartFullData = createChartFullData(data, dateFrom, dateTo, monthArrays)
+    const labels = chartFullData.labels
+    const chartData = chartFullData.chartData
 
-    const chartData = []
-    // create dump data if not in response
-    while(dateFrom <= dateTo) {
-      const month = getMonth(dateFrom * 1000)
-      const index = monthArrays.findIndex(item => Number(item) === month)
-      const monthName = moment(month, 'M').format('MMMM');
-      if(index === -1) {
-        chartData.push(0)
-      } else {
-        chartData.push(Number(data[monthName]))
-      }
-      labels.push(monthName)
-      dateFrom = getNumberOfMonthForward(dateFrom * 1000, 1).unix()
-    }
     const dataSets = [
       {
         label: chartBar.name,
@@ -176,6 +161,30 @@ export const transformChartDataWithValueAbove = (data, chartBar, dateFrom, dateT
       labels: labels,
       datasets: dataSets
     }
+  }
+}
+
+export const createChartFullData = (data, dateFrom, dateTo, monthArrays) => {
+  const chartData = []
+  const labels = []
+  const years = []
+  while(dateFrom <= dateTo) {
+    const month = getMonth(dateFrom * 1000)
+    const index = monthArrays.findIndex(item => Number(item) === month)
+    const monthName = moment(month, 'M').format('MMMM');
+    if(index === -1) {
+      chartData.push(0)
+    } else {
+      chartData.push(Number(data[monthName]))
+    }
+    labels.push(monthName)
+    years.push(moment(dateFrom*1000).year())
+    dateFrom = getNumberOfMonthForward(dateFrom * 1000, 1).unix()
+  }
+  return {
+    chartData: chartData,
+    labels: labels,
+    years: years
   }
 }
 
@@ -214,5 +223,64 @@ export const createDumpDataIfMissing = (data, dateRange) => {
     }
   
     return result
+  }
+}
+
+export const calculateHightLightState = (responseData, dateFrom, dateTo, chartBars) => {
+  let hightLightNumber = Number.MIN_SAFE_INTEGER
+  let maxHighLightValue={};
+  const keys = Object.keys(responseData);
+  keys.forEach(key => {
+    const dataSet = responseData[key]
+    const objectKeys = Object.keys(dataSet);
+    const monthArrays = getMonthNumberFromMonthName(objectKeys)
+    const fullData = createChartFullData(dataSet, dateFrom, dateTo, monthArrays)
+    const data = fullData.chartData
+    const monthsName = fullData.labels
+    const years = fullData.years
+    const valuesArrays = []
+    const metricName = chartBars[chartBars.findIndex(chartBar => chartBar.fieldName === key)].name
+    for(let i = 1; i <= data.length; i++) {
+      const month = monthsName[i]
+      const year = years[i]
+      let value;
+      if(data[i-1] !== 0) {
+        if(key !== 'percentageRejectedPR') {
+          value = Math.round(((data[i] - data[i - 1]) / data[i - 1]) * 100)
+        } else {
+          value = data[i] - data[i - 1]
+        }
+      } else {
+        value = 100
+      }
+      valuesArrays.push({
+        value: value,
+        month: month,
+        year: year
+      })
+    }
+    for(let i = 0; i < valuesArrays.length - 1; i++) {
+     const monthFrom = valuesArrays[i].month
+     const monthTo = valuesArrays[i+1].month
+     const yearFrom = valuesArrays[i].year
+     const yearTo = valuesArrays[i+1].year
+     const value = valuesArrays[i+1].value - valuesArrays[i].value
+     if(Math.abs(value) > hightLightNumber) {
+      maxHighLightValue = {
+        hightLightNumber: value,
+        highLightTypeName: metricName,
+        highLightTime: `${monthFrom} ${yearFrom} vs ${monthTo} ${yearTo}`,
+        descriptonTxt: `${metricName} ${value < 0 ? 'reduced' : 'increased'} by ${Math.abs(value)} from ${monthFrom} ${yearFrom} to ${monthTo} ${yearTo}`
+      }
+      hightLightNumber = Math.abs(value)
+     }
+    }
+  })
+  
+  return {
+    hightLightNumber: maxHighLightValue.hightLightNumber + '%',
+    highLightTypeName: maxHighLightValue.highLightTypeName, 
+    highLightTime: maxHighLightValue.highLightTime,
+    descriptonTxt: maxHighLightValue.descriptonTxt
   }
 }
