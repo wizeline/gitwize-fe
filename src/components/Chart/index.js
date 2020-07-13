@@ -10,8 +10,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     borderRadius: 4,
     padding: '30px 40px 30px 10px',
-    height: '50vh',
-    maxHeight: '50vh'
+    height: '70vh',
+    maxHeight: '70vh'
   },
 }))
 
