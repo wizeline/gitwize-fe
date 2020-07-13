@@ -184,7 +184,7 @@ function ContributorStatsPage(props) {
   }
   
   const userFilter = (!isOnTableView && <Grid item xs={2} key={'user-filter'}>
-                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} value={chosenUser ? chosenUser : 'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
+                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} initValue={chosenUser ? chosenUser : 'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
                       </Grid>);
 
   useEffect(() => {
