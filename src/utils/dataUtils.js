@@ -238,42 +238,32 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartBa
     const data = fullData.chartData
     const monthsName = fullData.labels
     const years = fullData.years
-    const valuesArrays = []
     const metricName = chartBars[chartBars.findIndex(chartBar => chartBar.fieldName === key)].name
     for(let i = 1; i <= data.length; i++) {
-      const month = monthsName[i]
-      const year = years[i]
-      let value;
+      const monthFrom = monthsName[i-1]
+      const monthTo = monthsName[i]
+      const yearFrom = years[i-1]
+      const yearTo = years[i]
+      let value = 0;
       if(data[i-1] !== 0) {
         if(key !== 'percentageRejectedPR') {
           value = Math.round(((data[i] - data[i - 1]) / data[i - 1]) * 100)
         } else {
           value = data[i] - data[i - 1]
         }
-      } else {
+      } else if(data[i-1] !== 0){
         value = 100
       }
-      valuesArrays.push({
-        value: value,
-        month: month,
-        year: year
-      })
-    }
-    for(let i = 0; i < valuesArrays.length - 1; i++) {
-     const monthFrom = valuesArrays[i].month
-     const monthTo = valuesArrays[i+1].month
-     const yearFrom = valuesArrays[i].year
-     const yearTo = valuesArrays[i+1].year
-     const value = valuesArrays[i+1].value - valuesArrays[i].value
-     if(Math.abs(value) > hightLightNumber) {
-      maxHighLightValue = {
-        hightLightNumber: value,
-        highLightTypeName: metricName,
-        highLightTime: `${monthFrom} ${yearFrom} vs ${monthTo} ${yearTo}`,
-        descriptonTxt: `${metricName} ${value < 0 ? 'reduced' : 'increased'} by ${Math.abs(value)} from ${monthFrom} ${yearFrom} to ${monthTo} ${yearTo}`
-      }
-      hightLightNumber = Math.abs(value)
-     }
+
+      if(Math.abs(value) > hightLightNumber) {
+        maxHighLightValue = {
+          hightLightNumber: value,
+          highLightTypeName: metricName,
+          highLightTime: `${monthFrom} ${yearFrom} vs ${monthTo} ${yearTo}`,
+          descriptonTxt: `${metricName} ${value < 0 ? 'reduced' : 'increased'} by ${Math.abs(value)} from ${monthFrom} ${yearFrom} to ${monthTo} ${yearTo}`
+        }
+        hightLightNumber = Math.abs(value)
+       }
     }
   })
   
