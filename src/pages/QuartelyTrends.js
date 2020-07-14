@@ -116,7 +116,7 @@ function QuartelyTrends(props) {
             </ListItem>
           </List>
         </Grid>
-        <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={12}>
+        <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={8}>
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
                 const data = chartItem.fieldName === 'percentageRejectedPR' 
