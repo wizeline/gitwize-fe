@@ -1,14 +1,14 @@
 import React, {useEffect, useRef, useState, useContext} from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
-import { Grid } from '@material-ui/core';
+import { Grid, List, ListItem, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import Chart from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward} from '../utils/dateUtils'
 import {buildChartOptionsBasedOnMaxValue} from '../utils/chartUtils'
-import {transformChartDataWithValueAbove} from '../utils/dataUtils'
+import {transformChartDataWithValueAbove, calculateHightLightState} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels';
 
 const apiClient = new ApiClient()
@@ -78,8 +78,8 @@ const dateRange  = calculateDateRange()
 
 function QuartelyTrends(props) {
   const [responseData, setResponseData] = useState({})
-  // const [hightLightState, setHightLightState] = useState({hightLightNumber:'',highLightTypeName:'', 
-  //                                                         highLightTime: '', descriptonTxt:''})
+  const [hightLightState, setHightLightState] = useState({hightLightNumber:'',highLightTypeName:'', 
+                                                          highLightTime: '', descriptonTxt:''})
   const { authState } = useOktaAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
@@ -91,7 +91,7 @@ function QuartelyTrends(props) {
     apiClient.setAccessToken(authState.accessToken)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.quarterlyTrends.getQuarterlyTrendsStats(id, dateRange).then((data) => {
-      // setHightLightState(calculateHightLightState(data, dateFrom, dateTo, chartBars))
+      setHightLightState(calculateHightLightState(data, dateFrom, dateTo, chartBars))
       setResponseData(data)
     })
   }, [id, authState.accessToken, dateFrom, dateTo])
@@ -100,7 +100,7 @@ function QuartelyTrends(props) {
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Quarterly Trends</PageTitle>
       <Grid container className={classes.root}>
-        {/* <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={4}>
+        <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={4}>
           <List>
             <ListItem>
               <ListItemText className={classes.hightLightNumber}>{hightLightState.hightLightNumber}</ListItemText>
@@ -115,7 +115,7 @@ function QuartelyTrends(props) {
               <ListItemText className={classes.descriptonTxt}>{hightLightState.descriptonTxt}</ListItemText>
             </ListItem>
           </List>
-        </Grid> */}
+        </Grid>
         <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={12}>
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
