@@ -29,12 +29,12 @@ export default function BranchPicker(props) {
   const datePickerSize = 3;
   let branchFilterSize =  12 - (customFilters.length*2 + defaultItemSize + datePickerSize);
   branchFilterSize = branchFilterSize < 2 ? 2 : branchFilterSize;
-  let listBranch = ['master']
+  const listBranch = ['master']
   if(mainLayoutContext.repoList) {
     // const currentRepo = mainLayoutContext.repoList.find(item =>  {
     //   if(String(item.id) === mainLayoutContext.repositoryId) {
     //     return item;
-    //   } 
+    //   }
     //   return null
     // })
     // if(currentRepo) {
@@ -49,7 +49,7 @@ export default function BranchPicker(props) {
   useEffect(() => {
     dispatch({
       type: 'changeDate',
-      newDate: { 
+      newDate: {
         date_from: date.from,
         date_to: date.to
       }
@@ -71,9 +71,9 @@ export default function BranchPicker(props) {
   }
 
   const handleChangeBranchValue = (value) => {
-    /** 
+    /**
      * TODO: Users can view stats of a specific branch
-     *  */ 
+     *  */
   }
 
   const handleDatePickerValue = (value) => {
@@ -87,10 +87,10 @@ export default function BranchPicker(props) {
   return (
     <Grid container className={styles.root}>
       <Grid item xs={branchFilterSize}>
-        <DropdownList label="Branch" data={listBranch} onChange={(value) => handleChangeBranchValue(value)}/>
+        <DropdownList label="Branch" data={listBranch} onChange={handleChangeBranchValue}/>
       </Grid>
       <Grid item xs={defaultItemSize}>
-        <DropdownList label="Period" data={showDate} onChange={(value) => handleChangePeriodValue(value)}/>
+        <DropdownList label="Period" data={showDate} onChange={handleChangePeriodValue}/>
       </Grid>
       <Grid item xs={datePickerSize} style={{display: `${openDatePicker ? "block" : "none"}` }}>
         <DatePicker label="Date Range" onChange={handleDatePickerValue} />

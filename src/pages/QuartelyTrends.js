@@ -49,7 +49,7 @@ const useStyles = makeStyles(() => ({
 const chartBars = [
                     {name:'Average PR size', color: '#62C8BA', fieldName: 'averagePRSize', chartId: 'chartLegendId-1'},
                     {name:'Average PR review time', color: '#EC5D5C', fieldName: 'averagePRTime', chartId: 'chartLegendId-2'},
-                    {name:'Rejected PRs', color: '#9F55E2',fieldName: 'percentageRejectedPR', chartId: 'chartLegendId-3'}, 
+                    {name:'Rejected PRs', color: '#9F55E2',fieldName: 'percentageRejectedPR', chartId: 'chartLegendId-3'},
                   ]
 const chartLines = []
 const information = "This section will show the trends related to code changes over the last 3 months"
@@ -70,7 +70,7 @@ const customFormatter = (value, context) => {
   if(dataIndex === 0 || value === 0 ) {
     return ''
   } else {
-    return (value - dataset.data[dataIndex - 1]) + '%'
+    return `${(value - dataset.data[dataIndex - 1])}%`
   }
 }
 
