@@ -43,11 +43,18 @@ export default function DatePicker(props) {
   }
 
   const handleDayClick = (day) => {
-    const range = DateUtils.addDayToRange(day, pickedDate)
-    setPickedDate(range)
-    onChange(range)
-    if(range.from !== undefined && range.to !== undefined)
-      toggleDatePicker()
+    if(from && to) {
+      setPickedDate({
+        from: day,
+        to: undefined
+      })
+    } else {
+      const range = DateUtils.addDayToRange(day, pickedDate)
+      setPickedDate(range)
+      onChange(range)
+      if(range.from !== undefined && range.to !== undefined)
+        toggleDatePicker()
+    }
   }
 
     const { from, to } = pickedDate
@@ -92,9 +99,12 @@ export default function DatePicker(props) {
     opacity: 0.9;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), #000000;
   }
-  .Selectable .DayPicker-Day {
-    border-radius: 0 !important;
+  
+  .Selectable .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+    background-color:#EC5D5C !important;
+    border-radius: 100% !important;
   }
+  
   .Selectable .DayPicker-Day--start {
     border-radius: 100% !important;
   }
