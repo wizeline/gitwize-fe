@@ -17,6 +17,7 @@ import Navbar from '../views/Navbar'
 import Loading from '../components/Loading'
 import { ApiClient } from '../apis'
 import CodeChangeVelocity from './CodeChangeVelocity';
+import WeeklyImpact from './WeeklyImpact';
 
 const theme = createMuiTheme({  
   typography: {
@@ -43,6 +44,17 @@ const useStyles = makeStyles(() => ({
 }))
 
 const subMenuItems = [
+  {
+    name: 'Impact', 
+    uri: '/impact', 
+    children: [
+      {
+        name: 'Weekly Impact', 
+        uri: '/weekly-impact', 
+        component: WeeklyImpact
+      }
+    ]
+  },
   {
     name: 'Code Change Velocity', 
     uri: '/code-change-velocity', 

@@ -274,3 +274,23 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartBa
     descriptonTxt: maxHighLightValue.descriptonTxt
   }
 }
+
+export const buildGridItemsWeeklyImpact = (responseData, gridItems) => {
+  return gridItems.map(item => {
+    const data = responseData[item.fieldName]
+    if(item.fieldName !== 'mostChurnedFile') {
+      return {
+        name: item.name,
+        currentPeriod: data.currentPeriod,
+        previousPeriod: data.previousPeriod,
+        diffValue: Math.round(((data.currentPeriod - data.previousPeriod) / data.previousPeriod) * 100)
+      }
+    } else {
+      return {
+        name: item.name,
+        fileName: data.fileName,
+        value: data.value
+      }
+    }
+  })
+}

@@ -4,6 +4,7 @@ import StatsApiClient from './StatsApiClient'
 import ContributorStatsApiClient from './ContributorStatsApiClient'
 import CodeChangeVelocityStatsApiClient from './CodeChangeVelocityStatsApiClient'
 import QuarterlyTrendsStatsApiClient from './QuarterlyTrendsStatsApiClient'
+import WeeklyImpactApiClient from './WeeklyImpactApiClient'
 
 const { REACT_APP_API_URL } = process.env
 
@@ -17,6 +18,7 @@ export class ApiClient {
     this.contributor = new ContributorStatsApiClient(this.httpClient)
     this.codeChangeVelocity = new CodeChangeVelocityStatsApiClient(this.httpClient)
     this.quarterlyTrends = new QuarterlyTrendsStatsApiClient(this.httpClient)
+    this.weeklyImpact = new WeeklyImpactApiClient(this.httpClient)
   }
 
   setAccessToken(accessToken) {

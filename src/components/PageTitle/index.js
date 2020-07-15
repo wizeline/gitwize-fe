@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(() => ({
   tooltip: {
     background: '#000000',
-    fontSize: 9,
+    fontSize: 12,
     padding: '35px 40px 40px 26px',
     marginRight: '10vw',
     borderRadius: 8,
