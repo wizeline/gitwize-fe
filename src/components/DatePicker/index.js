@@ -22,7 +22,30 @@ const useStyles = makeStyles((theme) => ({
     background: 'rgba(0, 0, 0, 0.85)',
     color: '#ffff',
     marginTop: '10px'
+  },
+  selectable: {
+    "& .DayPicker-Month": {
+      width: "100%",
+    },
+    "& .DayPicker-Day--start": {
+      borderRadius: "100% !important"
+    },
+    "& .DayPicker-Day--end": {
+      borderRadius: "100% !important"
+    },
+    "& .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside)": {
+      opacity: 0.9,
+      background: "linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), #000000"
+    },
+    "& .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)": {
+      background: "#EC5D5C"
+    },
+    "& .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover": {
+      backgroundColor: "#EC5D5C !important",
+      borderRadius: "100% !important"
+    }
   }
+
 }))
 
 export default function DatePicker(props) {
@@ -83,43 +106,17 @@ export default function DatePicker(props) {
         />
 
       <div className='RangeExample'>
-        <Paper style={{display: `${openDayPickerTable ? "block" : "none"}` }} 
-          className={styles.datePicker}>
-        <DayPicker
-          className='Selectable'
-          numberOfMonths={2}
-          selectedDays={[from, { from, to }]}
-          modifiers={modifiers}
-          onDayClick={handleDayClick}
-          show={false}
-        />
+        <Paper  style={{display: `${openDayPickerTable ? "block" : "none"}` }} 
+                className={styles.datePicker}>
+          <DayPicker
+            className={styles.selectable}
+            numberOfMonths={2}
+            selectedDays={[from, { from, to }]}
+            modifiers={modifiers}
+            onDayClick={handleDayClick}
+            show={false}
+          />
         </Paper>
-          <style>{`
-  .Selectable .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
-    opacity: 0.9;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), #000000;
-  }
-  
-  .Selectable .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-    background-color:#EC5D5C !important;
-    border-radius: 100% !important;
-  }
-  
-  .Selectable .DayPicker-Day--start {
-    border-radius: 100% !important;
-  }
-  .Selectable .DayPicker-Day--end {
-    border-radius: 100% !important;
-  }
-  .Selectable .DayPicker-Month {
-    width: 100%
-  }
-
-  .Selectable .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
-    background: #EC5D5C;
-  }
-
-`}</style>
       </div>
       </FormControl>
       </ClickAwayListener>
