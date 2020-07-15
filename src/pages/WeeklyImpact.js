@@ -8,6 +8,7 @@ import MainLayoutContex from '../contexts/MainLayoutContext'
 import { Grid, ListItemText} from '@material-ui/core'
 import clsx from 'clsx'
 import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
+import { formatToMMDD } from '../utils/dateUtils'
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula 
                     takes into consideration more than just lines of code`
@@ -86,18 +87,29 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
+const calculatePeriod = (period) => {
+  const dateFrom = period.date_from
+  const dateTo = period.date_to
+  return {
+    dateFrom: formatToMMDD(dateFrom),
+    dateTo: formatToMMDD(dateTo)
+  }
+}
+
 function WeeklyImpact(props) {
   const {id} = props.match.params;
   const classes = useStyles();
   const { authState } = useOktaAuth();
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [gridItemsState, setGridItems] = useState([])
+  const [period, setPeriod] = useState({})
 
   useEffect(() => {
       apiClient.setAccessToken(authState.accessToken)
       mainLayout.current.handleChangeRepositoryId(id)
       apiClient.weeklyImpact.getWeeklyImpactStats(id).then((response) => {
         setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
+        setPeriod(calculatePeriod(response.period))
       })
     }, [authState.accessToken, id, mainLayout]
   )
@@ -143,7 +155,7 @@ function WeeklyImpact(props) {
       <PageTitle information={information}>Weekly Impact</PageTitle>
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.gridItem}>
-          <ListItemText className={classes.descriptionTxt}>Team accomplishment for the week of Monday 30 April to Sunday 7 May</ListItemText>
+          <ListItemText className={classes.descriptionTxt}>Team accomplishment for the week of {period.dateFrom} to {period.dateTo}</ListItemText>
         </Grid>
         <Grid item xs={12} className={classes.gridItem} style={{marginTop: '5vh'}}>
           <Grid container className={classes.subContainer}>

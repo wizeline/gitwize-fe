@@ -1,5 +1,7 @@
 import moment from 'moment'
 
+const ddddDDMM_FORMAT = 'dddd DD MMMM'
+
 export const getCurrentDate = () => {
     return moment();
 }
@@ -30,4 +32,8 @@ export const getMonthNumberFromMonthName = (monthsName = []) => {
         monthArrays.push(moment().month(monthName).format("M"))
     })
     return monthArrays
+}
+
+export const formatToMMDD = (dateString) => {
+    return moment(dateString).format(ddddDDMM_FORMAT)
 }

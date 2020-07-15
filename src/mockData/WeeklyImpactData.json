@@ -1,4 +1,8 @@
 {
+  "period": {
+    "date_from": "2020-06-29",
+    "date_to": "2020-07-05"
+  },
   "impactScore": {
     "currentPeriod": 184,
     "previousPeriod": 10
