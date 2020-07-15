@@ -43,10 +43,15 @@ const useStyles = makeStyles((theme) => ({
     "& .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover": {
       backgroundColor: "#EC5D5C !important",
       borderRadius: "100% !important"
+    },
+    "& .DayPicker-Day--disabled": {
+      color: '#dce0e02e'
     }
   }
 
 }))
+
+const today = new Date()
 
 export default function DatePicker(props) {
   const { label, onChange } = props
@@ -66,17 +71,20 @@ export default function DatePicker(props) {
   }
 
   const handleDayClick = (day) => {
-    if(from && to) {
-      setPickedDate({
-        from: day,
-        to: undefined
-      })
-    } else {
-      const range = DateUtils.addDayToRange(day, pickedDate)
-      setPickedDate(range)
-      onChange(range)
-      if(range.from !== undefined && range.to !== undefined)
-        toggleDatePicker()
+    if(day < today) {
+      console.log('valid')
+      if(from && to) {
+        setPickedDate({
+          from: day,
+          to: undefined
+        })
+      } else {
+        const range = DateUtils.addDayToRange(day, pickedDate)
+        setPickedDate(range)
+        onChange(range)
+        if(range.from !== undefined && range.to !== undefined)
+          toggleDatePicker()
+      }
     }
   }
 
@@ -115,6 +123,7 @@ export default function DatePicker(props) {
             modifiers={modifiers}
             onDayClick={handleDayClick}
             show={false}
+            disabledDays={{ after: today }}
           />
         </Paper>
       </div>
