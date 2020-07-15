@@ -126,7 +126,7 @@ function WeeklyImpact(props) {
                   <ListItemText className={classes.itemValueTxt}>{item.currentPeriod}</ListItemText>
                 </Grid>
                 <Grid item xs={12}>
-                  <ListItemText className={classes.itemDiffValueTxt} style={{background: item.diffValue > 0 ? '#62C8BA' : '#EC5D5C'}}>{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}`}</ListItemText>
+                  <ListItemText className={classes.itemDiffValueTxt} style={{background: item.diffValue > 0 ? '#62C8BA' : '#EC5D5C'}}>{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
                 </Grid>
                 <Grid item xs={12} className={classes.itemLast}>
                   <ListItemText className={clsx(classes.itemPreviousTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}>{`From previous period (${item.previousPeriod})`}</ListItemText>
