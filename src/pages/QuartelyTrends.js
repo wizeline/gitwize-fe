@@ -52,7 +52,7 @@ const chartBars = [
                     {name:'Rejected PRs', color: '#9F55E2',fieldName: 'percentageRejectedPR', chartId: 'chartLegendId-3'}, 
                   ]
 const chartLines = []
-const information = "This section will show the trends related to code changes over the last 3 months"
+const information = "This section will show PR related trends over the last 3 months"
 
 const calculateDateRange = () => {
   const currentDate = getCurrentDate()
