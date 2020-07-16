@@ -1,0 +1,22 @@
+{
+  "period": {
+    "date_from": "2020-06-29",
+    "date_to": "2020-07-05"
+  },
+  "impactScore": {
+    "currentPeriod": 184,
+    "previousPeriod": 100
+  },
+  "activeDays": {
+    "currentPeriod": 15,
+    "previousPeriod": 20
+  },
+  "commitsPerDay": {
+    "currentPeriod": 13.5,
+    "previousPeriod": 11.2
+  },
+  "mostChurnedFile": {
+    "fileName": "abdedsfdsfsfdsfdsfdsffdsfsdfsfdsfsddsadssdasdasdasdasdasdasdsadas.js",
+    "value": 30
+  }
+}
