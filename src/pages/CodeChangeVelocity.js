@@ -1,14 +1,14 @@
 import React, {useEffect, useRef, useState, useContext} from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
-import { Grid } from '@material-ui/core';
+import { Grid, List, ListItem, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import Chart from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import {getStartOfMonth, getCurrentDate, getEndOfMonth, getNumberOfMonthBackward} from '../utils/dateUtils'
 import {buildChartOptionsBasedOnMaxValue} from '../utils/chartUtils'
-import {transformChartDataWithValueAbove} from '../utils/dataUtils'
+import {transformChartDataWithValueAbove, calculateHightLightState} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels';
 
 const apiClient = new ApiClient()
@@ -17,17 +17,37 @@ const useStyles = makeStyles(() => ({
   root: {
     justifyContent: 'space-between',
     marginBottom: '1vw',
-    marginTop: 60
+    marginTop: 40
   },
   gridItem: {
     display: 'flex',
     alignItems: 'center'
+  },
+  hightLightNumber: {
+    fontSize: 65,
+    fontWeight: 'bold',
+    lineHeight: 97
+  },
+  highLightTypeName: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    lineHeight: 33
+  },
+  highLightTime: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    lineHeight: 19
+  },
+  descriptonTxt: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#6A707E',
+    opacity: 0.6
   }
 }))
 
 const chartBars = [
                     {name:'Number of commits', color: '#62C8BA', fieldName: 'commits', chartId: 'chartLegendId-1'},
-                    // {name:'New Code Percentage', color: '#EC5D5C', fieldName: 'newCodeChanges', chartId: 'chartLegendId-2'},
                     {name:'Net changes', color: '#9F55E2',fieldName: 'netChanges', chartId: 'chartLegendId-3'},
                   ]
 const chartLines = []
@@ -48,29 +68,48 @@ const dateRange  = calculateDateRange()
 
 function CodeChangeVelocity(props) {
   const [responseData, setResponseData] = useState({})
+  const [hightLightState, setHightLightState] = useState({hightLightNumber:'',highLightTypeName:'', 
+                                                          highLightTime: '', descriptonTxt:''})
   const { authState } = useOktaAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
   const classes = useStyles();
+  const dateFrom = dateRange.date_from
+  const dateTo = dateRange.date_to
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.codeChangeVelocity.getCodeChangeVelocityStats(id, dateRange).then((data) => {
+      setHightLightState(calculateHightLightState(data, dateFrom, dateTo, chartBars))
       setResponseData(data)
     })
-  }, [id, authState.accessToken])
+  }, [id, authState.accessToken, dateFrom, dateTo])
 
-  const dateFrom = dateRange.date_from
-  const dateTo = dateRange.date_to
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Code Change Velocity</PageTitle>
       <Grid container className={classes.root}>
-        <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={12}>
+        <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={4}>
+          <List>
+            <ListItem>
+              <ListItemText className={classes.hightLightNumber}>{hightLightState.hightLightNumber}</ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText className={classes.highLightTypeName}>{hightLightState.highLightTypeName}</ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText className={classes.highLightTime}>{hightLightState.highLightTime}</ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText className={classes.descriptonTxt}>{hightLightState.descriptonTxt}</ListItemText>
+            </ListItem>
+          </List>
+        </Grid>
+        <Grid className={classes.gridItem} style={{justifyContent: 'flex-end'}} item xs={8}>
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
-                return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
+                return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={6}>
                           <Chart isLegendClickable = {false} data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, dateFrom , dateTo)}
                             chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])}
                             chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
