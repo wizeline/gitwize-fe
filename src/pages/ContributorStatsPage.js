@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef} from 'react'
 import { useOktaAuth } from '@okta/okta-react'
-import * as cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep';
 
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
@@ -14,25 +14,26 @@ import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
 const apiClient = new ApiClient()
-const information = `This section will display the following data for the selected team member from the dropdown, for each day of the selected date range. 
-\n\n - Number of commits 
-\n\n - Number of additions in lines of code 
-\n\n - Number of deletions in lines of code 
-\n\n - Number of files changed or worked upon 
-\n\n - Change percentage in lines of code with respect to other team members: 
+const NET_CHANGE = 'Net change'
+const information = `This section will display the following data for the selected team member from the dropdown, for each day of the selected date range.
+\n\n - Number of commits
+\n\n - Number of additions in lines of code
+\n\n - Number of deletions in lines of code
+\n\n - Number of files changed or worked upon
+\n\n - Change percentage in lines of code with respect to other team members:
 This will indicate the amount of changes made by the user compared to other team members`
 
 const useStyles = makeStyles(() => ({
   negativeTxt: {
-    background: '#DC6660', 
+    background: '#DC6660',
   },
   maxValueTxt:{
-    background: '#7DC5BA', 
+    background: '#7DC5BA',
   },
   tableCell: {
-    borderRadius: '4px', 
-    color: 'white', 
-    height: 25, 
+    borderRadius: '4px',
+    color: 'white',
+    height: 25,
     width: '50%',
     lineHeight: '25px',
     textAlign: 'center'
@@ -59,10 +60,10 @@ const chartBars = [{name: 'Additions', color: '#62C8BA'}, {name: 'Deletions', co
 
 const tableObject = [
   {text: 'Contributor name', fieldName: 'name', searchable: true},
-  {text: 'Commits', fieldName: 'commits'}, 
-  {text: 'Additions', fieldName: 'additions'}, 
-  {text: 'Deletions', fieldName: 'deletions'}, 
-  {text: 'Net change', fieldName: 'netChanges'},
+  {text: 'Commits', fieldName: 'commits'},
+  {text: 'Additions', fieldName: 'additions'},
+  {text: 'Deletions', fieldName: 'deletions'},
+  {text: NET_CHANGE, fieldName: 'netChanges'},
   {text: 'Files changed', fieldName: 'filesChange'},
   {text: 'Active days', fieldName: 'activeDays'}
 ]
@@ -127,7 +128,6 @@ const chartOptionsInit = {
 };
 
 function ContributorStatsPage(props) {
-  
   const {id} = props.match.params;
   const [repoData, setRepoData] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -145,13 +145,13 @@ function ContributorStatsPage(props) {
 
   const cloneTable = cloneDeep(tableObject)
   const customRenderNetChange = (rowData) => {
-      const value = rowData['Net change']
+      const value = rowData[NET_CHANGE]
       if(value < 0) {
-        return (<div className={clsx(classes.tableCell, classes.negativeTxt)}>{rowData['Net change']}</div>)
+        return (<div className={clsx(classes.tableCell, classes.negativeTxt)}>{rowData[NET_CHANGE]}</div>)
       } else if(value === maxNetChange) {
-        return (<div className={clsx(classes.tableCell, classes.maxValueTxt)}>{rowData['Net change']}</div>)
+        return (<div className={clsx(classes.tableCell, classes.maxValueTxt)}>{rowData[NET_CHANGE]}</div>)
       } else {
-        return (<div>{rowData['Net change']}</div>)
+        return (<div>{rowData[NET_CHANGE]}</div>)
       }
   }
   cloneTable.forEach(item => {
@@ -165,7 +165,7 @@ function ContributorStatsPage(props) {
   const handleChangeUser = (userName) =>  {
     const chosenUser = userFilterList.find(item => item.author_name === userName)
     let chartRawData;
-    let newChartLines = cloneDeep(chartLinesConfig);
+    const newChartLines = cloneDeep(chartLinesConfig);
     if(chosenUser && chosenUser.author_email !== 'Average') {
       chartRawData = data.chart[chosenUser.author_email]
       newChartLines.push(chartLinesAverage)
@@ -182,9 +182,10 @@ function ContributorStatsPage(props) {
   const handleOnTableView = (isOnTableView) => {
     setOnTableView(isOnTableView)
   }
-  
+
   const userFilter = (!isOnTableView && <Grid item xs={2} key={'user-filter'}>
-                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} initValue={chosenUser ? chosenUser : 'Average'} placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
+                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} initValue={chosenUser ? chosenUser : 'Average'}
+                                        placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
                       </Grid>);
 
   useEffect(() => {
@@ -197,7 +198,7 @@ function ContributorStatsPage(props) {
 
       const user = respone.contributors.find(item => item.author_name === chosenUser)
       let chartData;
-      let newChartLines = cloneDeep(chartLinesConfig);
+      const newChartLines = cloneDeep(chartLinesConfig);
       if(user && user.author_email !== 'Average') {
         chartData = respone.chart[user.author_email]
         newChartLines.push(chartLinesAverage)
@@ -220,7 +221,7 @@ function ContributorStatsPage(props) {
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Contributor Stats</PageTitle>
-      <DataStats onTableView={handleOnTableView} tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]} 
+      <DataStats onTableView={handleOnTableView} tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]}
       isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={chartOptions}/>
     </div>
   )

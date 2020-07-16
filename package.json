@@ -42,7 +42,8 @@
     "test-sonar": "CI=true react-scripts test a --silent --env=jsdom --coverage --testResultsProcessor jest-sonar-reporter",
     "sonar": "node sonar-project.js",
     "lint": "eslint .",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
   },
   "eslintConfig": {
     "extends": "react-app"

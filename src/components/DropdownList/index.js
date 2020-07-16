@@ -45,7 +45,7 @@ export default function DropdownList(props) {
   }
 
   useEffect(() => {
-    if(selectRef.current) {
+    if(selectRef.current && selectRef.current.offsetParent) {
       const top = (selectRef.current.offsetParent.offsetTop + selectRef.current.offsetParent.offsetHeight + marginTopBetweenSelectAndDropdown) + 'px';
       setTopPosition(top);
     }

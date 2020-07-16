@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
 const chartBars = [
                     {name:'Number of commits', color: '#62C8BA', fieldName: 'commits', chartId: 'chartLegendId-1'},
                     // {name:'New Code Percentage', color: '#EC5D5C', fieldName: 'newCodeChanges', chartId: 'chartLegendId-2'},
-                    {name:'Net changes', color: '#9F55E2',fieldName: 'netChanges', chartId: 'chartLegendId-3'}, 
+                    {name:'Net changes', color: '#9F55E2',fieldName: 'netChanges', chartId: 'chartLegendId-3'},
                   ]
 const chartLines = []
 const information = "This section will show the trends related to code changes over the last 3 months"
@@ -71,8 +71,8 @@ function CodeChangeVelocity(props) {
             <Grid container className={classes.root}>
               {chartBars.map(chartItem => {
                 return (<Grid key={chartItem.chartId} className={classes.gridItem} item xs={4}>
-                          <Chart isLegendClickable = {false} data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, dateFrom , dateTo)} 
-                            chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])} 
+                          <Chart isLegendClickable = {false} data={transformChartDataWithValueAbove(responseData[chartItem.fieldName], chartItem, dateFrom , dateTo)}
+                            chartOptions={buildChartOptionsBasedOnMaxValue(responseData[chartItem.fieldName])}
                             chartBars={chartBars} chartLines={chartLines} chartLegendId={chartItem.chartId}/>
                         </Grid>)
               })}
