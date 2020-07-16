@@ -75,7 +75,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const apiClient = new ApiClient()
-
+const pendingMessage = 'Repository added. It may take from few minutes to few hours for the data to reflect.'
 function RepositoryCard(props) {
   const statsPage = "code-change-velocity"
   const { repo, handleDeletionOK, handleDeletionCancel } = props
@@ -104,9 +104,12 @@ function RepositoryCard(props) {
     setDeletionConfirmOpen(true)
   }
 
-  return (
-    <Card className={styles.root}>
-      <CardContent>
+  const status = repo.status
+
+  let cardContent
+  if(status === 'AVAILABLE') {
+    cardContent = (
+      <>
         <Link key ={repo.id} to={`/repository/${repo.id}/${statsPage}/`} className={styles.clickable}>
           <p style={{marginBottom: 19}} className={styles.repoName}>{repo.name}</p>
         </Link>
@@ -118,7 +121,27 @@ function RepositoryCard(props) {
             {DateTime.fromISO(repo.last_updated).toLocaleString()}
           </p>
         </div>
-        <div className={styles.footer}>
+      </>
+    )
+  } else {
+    cardContent = (
+      <>
+        <p style={{marginBottom: 12}} className={styles.repoName}>{repo.name}</p>
+        <div className={styles.repoName} style={{color: '#EFCA08'}}>
+          Pending
+        </div>
+        <div className={styles.detail} >
+          {pendingMessage}
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <Card className={styles.root}>
+      <CardContent>
+        {cardContent}
+        <div className={styles.footer} style={{opacity: status === 'AVAILABLE' ? 1 : 0.3 }}>
           <div className={styles.type}>
             <GitHubIcon className={styles.icon}/>
             <p className={styles.typeText}>GitHub</p>
