@@ -107,6 +107,7 @@ export default function RepositoryList() {
   const [repoName , setRepoName] = useState('')
   const [removeExistingRepo, setRemovexistingRepo] = useState(true)
   const [addingRepoError, setAddingRepoError] = useState('')
+  const [isLoading, setLoading] = useState(false)
   const styles = useStyles()
 
   useEffect(() => {
@@ -143,7 +144,7 @@ export default function RepositoryList() {
 
   const handleAddRepo = async (repoDetail = {}) => {
     apiClient.setAccessToken(authState.accessToken)
-
+    setLoading(true)
     try {
       const response = await apiClient.repos.createRepo(repoDetail)
 
@@ -165,6 +166,7 @@ export default function RepositoryList() {
       const error = e.response.data
       setAddingRepoError(error)
     }
+    setLoading(false)
   }
 
   const handleChangeLayout = (displayColumnGrid) => {
@@ -232,6 +234,7 @@ export default function RepositoryList() {
     <div className={clsx(styles.root, (repoList && repoList.length) === 0 ? styles.empty : styles.notEmpty, (!repoList) && styles.loadingImage)}>
       {repoListComponent}
       <AddRepositoryDialog
+        isLoading={isLoading}
         isOpen={isOpen}
         handleClose={() => handleCloseAddDialog()}
         handleAdd={(item) => handleAddRepo(item)}
