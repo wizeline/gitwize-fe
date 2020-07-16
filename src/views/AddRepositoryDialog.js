@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import clsx from 'clsx'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { getRepositoryNameFromGitHubUrl } from '../utils/apiUtils'
 
@@ -97,12 +98,14 @@ function AddRepositoryDialog(props) {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [url, setUrl] = useState('')
+  const [isLoading, setLoading] = useState(false)
   const styles = useStyles()
 
   const reset = () => {
     setUserName('')
     setPassword('')
     setUrl('')
+    setLoading(false)
   }
 
   const handleSubmit = () => {
@@ -110,6 +113,7 @@ function AddRepositoryDialog(props) {
     const data = { userName, password, url }
     const name = getRepositoryNameFromGitHubUrl(url)
     handleAdd({ ...data, name })
+    setLoading(true)
   }
 
   const handleCancel = () => {
@@ -196,7 +200,7 @@ function AddRepositoryDialog(props) {
 
           <Grid item xs={6}>
             <Button className={clsx(styles.button, styles.add)} onClick={handleSubmit} >
-              Add to list
+              {isLoading === false ? `Add to list` : <CircularProgress size={21}/>}
             </Button> 
           </Grid>
         </DialogActions>
