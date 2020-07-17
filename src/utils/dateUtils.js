@@ -37,3 +37,13 @@ export const getMonthNumberFromMonthName = (monthsName = []) => {
 export const formatToMMDD = (dateString) => {
     return moment(dateString).format(ddddDDMM_FORMAT)
 }
+
+export const getStartOfDateInSecond = (dateString) => {
+    const date = new Date(dateString * 1000)
+    return  Math.floor(date.setHours(0, 0, 0, 0) / 1000)
+}
+
+export const getEndOfDateInSecond = (dateString) => {
+    const date = new Date(dateString * 1000)
+    return Math.floor(date.setHours(23, 59, 59, 59) / 1000)
+}
