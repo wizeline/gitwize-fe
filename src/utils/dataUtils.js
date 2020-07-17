@@ -262,7 +262,7 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartBa
             hightLightNumber: value,
             highLightTypeName: metricName,
             highLightTime: `${monthFrom} ${yearFrom} vs ${monthTo} ${yearTo}`,
-            descriptonTxt: `${metricName} ${value < 0 ? 'reduced' : 'increased'} by ${Math.abs(value)} from ${monthFrom} ${yearFrom} to ${monthTo} ${yearTo}`
+            descriptonTxt: `${metricName} ${value < 0 ? 'reduced' : 'increased'} by ${Math.abs(value)} percent from ${monthFrom} ${yearFrom} to ${monthTo} ${yearTo}`
           }
           hightLightNumber = Math.abs(value)
          }
