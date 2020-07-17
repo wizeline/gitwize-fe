@@ -94,18 +94,16 @@ const REPOSITORY_ERROR_MAP = {
   "repository.invalidURL": "Invalid repo URL"
 }
 function AddRepositoryDialog(props) {
-  const { isOpen, handleClose, handleAdd, addingRepoError } = props
+  const { isOpen, handleClose, handleAdd, addingRepoError, isLoading } = props
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [url, setUrl] = useState('')
-  const [isLoading, setLoading] = useState(false)
   const styles = useStyles()
 
   const reset = () => {
     setUserName('')
     setPassword('')
     setUrl('')
-    setLoading(false)
   }
 
   const handleSubmit = () => {
@@ -113,7 +111,6 @@ function AddRepositoryDialog(props) {
     const data = { userName, password, url }
     const name = getRepositoryNameFromGitHubUrl(url)
     handleAdd({ ...data, name })
-    setLoading(true)
   }
 
   const handleCancel = () => {
