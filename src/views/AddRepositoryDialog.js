@@ -134,19 +134,21 @@ function AddRepositoryDialog(props) {
   }
 
   const toolTip = (
-    <Tooltip 
-             placement='bottom-start' 
-             enterDelay={500} 
-             enterNextDelay={500} 
+    <Tooltip
+             placement='bottom-start'
+             enterDelay={500}
+             enterNextDelay={500}
              classes={{tooltip: styles.tooltip}}
              interactive
              title={
                 <>
-                  To get the access token, please follow the guidelines on <a href="https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token" target="_blank" rel="noopener noreferrer">this page</a>
+                  To get the access token, please follow the guidelines on 
+                  <a href="https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token" 
+                  target="_blank" rel="noopener noreferrer">this page</a>
                 </>
               }
     >
-      <InfoOutlinedIcon/>        
+      <InfoOutlinedIcon/>
     </Tooltip>
   )
 
@@ -192,13 +194,13 @@ function AddRepositoryDialog(props) {
           <Grid item xs={6}>
             <Button className={clsx(styles.button, styles.cancel)} onClick={handleCancel} >
               Cancel
-            </Button> 
+            </Button>
           </Grid>
 
           <Grid item xs={6}>
             <Button className={clsx(styles.button, styles.add)} onClick={handleSubmit} >
               {isLoading === false ? `Add to list` : <CircularProgress size={21}/>}
-            </Button> 
+            </Button>
           </Grid>
         </DialogActions>
         </Container>

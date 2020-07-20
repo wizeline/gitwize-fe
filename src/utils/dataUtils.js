@@ -247,13 +247,13 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartBa
         const yearFrom = years[i-1]
         const yearTo = years[i]
         let value = 0;
-        if(data[i-1] !== 0) {
+        if(data[i-1] && data[i-1] !== 0) {
           if(key !== 'percentageRejectedPR') {
             value = Math.round(((data[i] - data[i - 1]) / data[i - 1]) * 100)
           } else {
             value = data[i] - data[i - 1]
           }
-        } else if(data[i-1] !== 0){
+        } else if(data[i-1] === 0){
           value = 100
         }
   

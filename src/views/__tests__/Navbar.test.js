@@ -1,15 +1,14 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import * as oktaLib from '@okta/okta-react'
-import Navbar from './Navbar'
-import RepositoryStats from '../pages/RepositoryStats'
-import PullRequestStats from '../pages/PullRequestStats'
-import QuartelyTrends from '../pages/QuartelyTrends'
+import Navbar from '../Navbar'
+import RepositoryStats from '../../pages/RepositoryStats'
+import PullRequestStats from '../../pages/PullRequestStats'
+import QuartelyTrends from '../../pages/QuartelyTrends'
 import Drawer from '@material-ui/core/Drawer'
 import ExpandLess from "@material-ui/icons/ExpandLess";
-import {PageProvider} from '../contexts/PageContext'
+import {PageProvider} from '../../contexts/PageContext'
 import { BrowserRouter } from 'react-router-dom'
-import { MainLayoutContexProvider } from '../contexts/MainLayoutContext'
 
 jest.mock('@okta/okta-react')
 
