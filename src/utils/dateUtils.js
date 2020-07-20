@@ -40,10 +40,10 @@ export const formatToMMDD = (dateString) => {
 
 export const getStartOfDateInSecond = (dateString) => {
     const date = new Date(dateString * 1000)
-    return  Math.floor(date.setHours(0, 0, 0, 0) / 1000)
+    return  Math.floor(date.setUTCHours(0, 0, 0, 0) / 1000)
 }
 
 export const getEndOfDateInSecond = (dateString) => {
     const date = new Date(dateString * 1000)
-    return Math.floor(date.setHours(23, 59, 59, 59) / 1000)
+    return Math.floor(date.setUTCHours(23, 59, 59, 59) / 1000)
 }
