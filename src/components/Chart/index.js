@@ -113,8 +113,8 @@ export default function Chart(props) {
 
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
-    let ci = chartRef.current.chartInstance;
-    let meta = ci.getDatasetMeta(index);
+    const ci = chartRef.current.chartInstance;
+    const meta = ci.getDatasetMeta(index);
     meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
     if(item.style.color !== 'grey') {
       item.style.color = 'grey'
@@ -142,7 +142,7 @@ export default function Chart(props) {
       display: false
     },
     legendCallback: (chartInstance) => {
-      let text = [];
+      const text = [];
       text.push('<ul>');
       for (let i = 0; i < chartInstance.data.datasets.length; i++) {
         text.push('<li><span style="background-color:' + chartInstance.data.datasets[i].backgroundColor + '"></span>');
@@ -168,7 +168,7 @@ export default function Chart(props) {
           item.addEventListener("click", e => handleClick(e, item, index, originalColor));
         }
         //keep color as grey if already disabled
-        let ci = chartRef.current.chartInstance;
+        const ci = chartRef.current.chartInstance;
         const meta = ci.getDatasetMeta(index);
         if(meta.hidden) {
           item.style.color = 'grey'
@@ -189,7 +189,7 @@ export default function Chart(props) {
           display: false
         },
         legendCallback: (chart) => {
-          let text = [];
+          const text = [];
           text.push('<ul>');
           for (let i = 0; i < chart.data.datasets.length; i++) {
             text.push('<li><span style="background-color:' + chart.data.datasets[i].backgroundColor + '"></span>');

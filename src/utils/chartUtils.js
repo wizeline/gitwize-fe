@@ -35,7 +35,7 @@ export const getChartColor = (data) => {
 }
 
 export const getChartOptions = (chartOptions, chartLines = []) => {
-  let newChartOptions = cloneDeep(chartOptions)
+  const newChartOptions = cloneDeep(chartOptions)
   if(chartLines.length > 0 && newChartOptions) {
     chartLines.forEach(item => {
       const yAxisItem = {
