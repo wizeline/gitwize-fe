@@ -156,7 +156,8 @@ export default function RepositoryList() {
         last_updated: response.last_updated,
         type: 'GitHub',
         branches: response.branches,
-        url: repoDetail.url
+        url: repoDetail.url,
+        status: response.status,
       }
 
       mainLayoutContext.current.handleChangeRepoList([...repoList, newRepo])
