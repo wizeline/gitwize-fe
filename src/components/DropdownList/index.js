@@ -54,6 +54,12 @@ export default function DropdownList(props) {
   let foundIndex = -1;
   if(data && data.length > 0) {
     foundIndex = data.findIndex(item => item === initValue)
+    
+    //if selected value is not in list data. Refresh selectedValue
+    const selectedValueIndex = data.findIndex(item => item === selectedValue)
+    if(selectedValueIndex === -1) {
+      setSelectedValue(initValue)
+    }
   }
   if(initValue && foundIndex === -1) {
     newDefaultValue = ( <MenuItem value={initValue} key={initValue}>
