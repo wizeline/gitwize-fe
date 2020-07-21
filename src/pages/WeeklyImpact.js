@@ -10,8 +10,7 @@ import clsx from 'clsx'
 import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
 import { formatToMMDD } from '../utils/dateUtils'
 
-const information = `Impact measures the magnitude of code changes, and our inhouse formula 
-                    takes into consideration more than just lines of code`
+const information = `'Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code'`
 const IMPACT_SCORE_TXT = 'Impact score'
 const gridItems = [
                     {name: IMPACT_SCORE_TXT, fieldName: 'impactScore'},
@@ -148,7 +147,10 @@ function WeeklyImpact(props) {
                   )}
                   </Grid>
                   <Grid item xs={12} className={classes.itemLast}>
-                    <ListItemText className={classes.itemPreviousTxt}>{`Edited ${item.mostChurnedFiles[0].value} times this week`}</ListItemText>
+                    {item.mostChurnedFiles.map(mostChurnedFile =>(
+                        <ListItemText className={classes.itemPreviousTxt}>{`Edited ${item.mostChurnedFiles[0].value} times this week`}</ListItemText>
+                      )
+                    )}
                   </Grid>
                 </Grid>
               </Grid>)
