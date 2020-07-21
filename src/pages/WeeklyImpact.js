@@ -17,7 +17,7 @@ const gridItems = [
                     {name: IMPACT_SCORE_TXT, fieldName: 'impactScore'},
                     {name: 'Active days', fieldName: 'activeDays'},
                     {name: 'Commits/day', fieldName: 'commitsPerDay'},
-                    {name: 'Most churned file', fieldName: 'mostChurnedFile'},
+                    {name: 'Most churned file', fieldName: 'mostChurnedFiles'},
                   ]
 
 const apiClient = new ApiClient()
@@ -123,13 +123,15 @@ function WeeklyImpact(props) {
                   <ListItemText className={clsx(classes.itemNameTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}>{item.name}</ListItemText>
                 </Grid>
                 <Grid item xs={12}>
-                  <ListItemText className={classes.itemValueTxt}>{item.currentPeriod}</ListItemText>
+                  <ListItemText className={classes.itemValueTxt}>{item.name === 'Commits/day' ? item.currentPeriod.toFixed(1) : item.currentPeriod}</ListItemText>
                 </Grid>
                 <Grid item xs={12}>
-                  <ListItemText className={classes.itemDiffValueTxt} style={{background: item.diffValue > 0 ? '#62C8BA' : '#EC5D5C'}}>{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
+                  <ListItemText className={classes.itemDiffValueTxt} style={{background: item.diffValue >= 0 ? '#62C8BA' : '#EC5D5C'}}>{`${item.diffValue >= 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
                 </Grid>
                 <Grid item xs={12} className={classes.itemLast}>
-                  <ListItemText className={clsx(classes.itemPreviousTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}>{`From previous period (${item.previousPeriod})`}</ListItemText>
+                  <ListItemText className={clsx(classes.itemPreviousTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}>
+                    {`From previous period (${item.name === 'Commits/day' ? item.previousPeriod.toFixed(1) : item.previousPeriod})`}
+                  </ListItemText>
                 </Grid>
               </Grid>
             </Grid>)
@@ -140,10 +142,12 @@ function WeeklyImpact(props) {
                     <ListItemText className={classes.itemNameTxt}>{item.name}</ListItemText>
                   </Grid>
                   <Grid item xs={12}>
-                    <ListItemText className={classes.itemChurnedFileName}>{item.fileName}</ListItemText>
+                  {item.mostChurnedFiles.map(mostChurnedFile => {
+                    return (<ListItemText className={classes.itemChurnedFileName}>{mostChurnedFile.fileName}</ListItemText>)
+                  })}
                   </Grid>
                   <Grid item xs={12} className={classes.itemLast}>
-                    <ListItemText className={classes.itemPreviousTxt}>{`Edited ${item.value} times this week`}</ListItemText>
+                    <ListItemText className={classes.itemPreviousTxt}>{`Edited ${item.mostChurnedFiles[0].value} times this week`}</ListItemText>
                   </Grid>
                 </Grid>
               </Grid>)
