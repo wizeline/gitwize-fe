@@ -10,7 +10,7 @@ import clsx from 'clsx'
 import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
 import { formatToMMDD } from '../utils/dateUtils'
 
-const information = `'Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code'`
+const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
 const IMPACT_SCORE_TXT = 'Impact score'
 const gridItems = [
                     {name: IMPACT_SCORE_TXT, fieldName: 'impactScore'},
