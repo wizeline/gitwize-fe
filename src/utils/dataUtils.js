@@ -286,7 +286,7 @@ export const buildGridItemsWeeklyImpact = (responseData, gridItems) => {
         name: item.name,
         currentPeriod: data.currentPeriod,
         previousPeriod: data.previousPeriod,
-        diffValue: Math.round(((data.currentPeriod - data.previousPeriod) / data.previousPeriod) * 100)
+        diffValue: Math.round(((data.currentPeriod - data.previousPeriod) / Math.abs(data.previousPeriod)) * 100)
       }
     } else {
       return {
