@@ -70,7 +70,7 @@ function CodeChangeVelocity(props) {
   const [responseData, setResponseData] = useState({})
   const [hightLightState, setHightLightState] = useState({hightLightNumber:'',highLightTypeName:'', 
                                                           highLightTime: '', descriptonTxt:''})
-  const { authState } = useOktaAuth()
+  const { authState, authService } = useOktaAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
   const classes = useStyles();
@@ -79,6 +79,7 @@ function CodeChangeVelocity(props) {
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
+    apiClient.setTokenManager(authService.getTokenManager())
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.codeChangeVelocity.getCodeChangeVelocityStats(id, dateRange).then((data) => {
       setHightLightState(calculateHightLightState(data, dateFrom, dateTo, chartBars))

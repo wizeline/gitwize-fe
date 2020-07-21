@@ -86,12 +86,13 @@ const chartOptions = {
 function PullRequestStats(props) {
   const [repoData, setRepoData] = useState([])
   const [chartData, setChartData] = useState([])
-  const { authState } = useOktaAuth()
+  const { authState, authService } = useOktaAuth()
   const [{ dateRange }] = useContext(PageContext)
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
 
   useEffect(() => {
+    apiClient.setTokenManager(authService.getTokenManager())
     apiClient.setAccessToken(authState.accessToken)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)

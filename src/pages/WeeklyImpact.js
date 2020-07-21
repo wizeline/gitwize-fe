@@ -98,13 +98,14 @@ const calculatePeriod = (period) => {
 function WeeklyImpact(props) {
   const {id} = props.match.params;
   const classes = useStyles();
-  const { authState } = useOktaAuth();
+  const { authState, authService } = useOktaAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [gridItemsState, setGridItems] = useState([])
   const [period, setPeriod] = useState({})
 
   useEffect(() => {
       apiClient.setAccessToken(authState.accessToken)
+      apiClient.setTokenManager(authService.getTokenManager())
       mainLayout.current.handleChangeRepositoryId(id)
       apiClient.weeklyImpact.getWeeklyImpactStats(id).then((response) => {
         setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
