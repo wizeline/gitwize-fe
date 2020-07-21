@@ -109,6 +109,7 @@ const buildRoutPath = (menuItems, baseURI='') => {
 
 const Home = () => {
   const { authState, authService } = useOktaAuth()
+  const tokenManager = authService.getTokenManager()
   const [userInfo, setUserInfo] = useState(null)
   const [repositoryId, setRepositoryId] = useState()
   const [repositoryList, setRepositoryList] = useState()
@@ -128,13 +129,14 @@ const Home = () => {
   useEffect(() => {
     if(repositoryId) {
       apiClient.setAccessToken(authState.accessToken)
+      apiClient.setTokenManager(tokenManager)
       if(repositoryList === undefined) {
         apiClient.repos.getRepoDetail(repositoryId).then((data) => {
           setRepositoryList([data])
         })
       }
     }
-  }, [authState.accessToken, repositoryId, repositoryList])
+  }, [authState.accessToken, repositoryId, repositoryList, tokenManager])
 
   const logout = async () => {
     authService.logout('/')

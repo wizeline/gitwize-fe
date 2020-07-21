@@ -4,8 +4,6 @@ import axios from 'axios'
 export class ApiHttpClient extends HttpClient {
   constructor(config) {
     super(config)
-    let isRefreshing = false
-    let failedQueue = []
 
     this.getHttpClient().interceptors.request.use(this.authInterceptor)
 
@@ -47,17 +45,12 @@ export class ApiHttpClient extends HttpClient {
       return Promise.reject(error)
     }
 
-    if (error.config._retry || error.config._queued) {
-      return Promise.reject(error)
-    }
-
     const originalRequest = error.config
 
     return new Promise((resolve, reject) => {
       this.handleTokenRefresh
         .call(this.handleTokenRefresh)
         .then((token) => {
-          console.log('handleTokenRefresh response', token)
           this.attachTokenToRequest(originalRequest, token)
           resolve(axios(originalRequest))
         })
@@ -65,8 +58,6 @@ export class ApiHttpClient extends HttpClient {
           reject(err)
         })
     })
-
-    return Promise.reject(error)
   }
 
   setAccessToken(accessToken) {

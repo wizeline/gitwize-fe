@@ -14,9 +14,9 @@ import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
 import DataStats from '../views/DataStats'
 import { cloneDeep } from 'lodash'
-import AuthService from '@okta/okta-react/dist/AuthService'
 
 const apiClient = new ApiClient()
+
 const information =
   'This section will display the number of commits, and additions/deletions in lines of code for the selected branch and date range'
 
@@ -95,13 +95,14 @@ function RepositoryStats(props) {
   const [repoData, setRepoData] = useState([])
   const [chartData, setChartData] = useState([])
   const { authState, authService } = useOktaAuth()
+  const tokenManager = authService.getTokenManager()
   const [{ dateRange }] = useContext(PageContext)
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
-    apiClient.setTokenManager(authService.getTokenManager())
+    apiClient.setTokenManager(tokenManager)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange)
@@ -110,7 +111,7 @@ function RepositoryStats(props) {
       setRepoData(tableData)
       setChartData(chartRawData)
     })
-  }, [authState.accessToken, id, dateRange])
+  }, [authState.accessToken, id, dateRange, tokenManager])
 
   return (
     <div style={{ width: '100%' }}>

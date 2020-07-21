@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
 const apiClient = new ApiClient()
+
 const NET_CHANGE = 'Net change'
 const information = `This section will display the following data for the selected team member from the dropdown, for each day of the selected date range.
 \n\n - Number of commits
@@ -137,6 +138,7 @@ function ContributorStatsPage(props) {
   const [data, setData] = useState([]);
   const [userFilterList, setUserFilterList] = useState([]);
   const { authState, authService } = useOktaAuth();
+  const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
   const classes = useStyles();
@@ -192,7 +194,7 @@ function ContributorStatsPage(props) {
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
-    apiClient.setTokenManager(authService.getTokenManager())
+    apiClient.setTokenManager(tokenManager)
     mainLayout.current.handleChangeRepositoryId(id)
     setChartOptions(chartOptionsInit)
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
@@ -219,7 +221,7 @@ function ContributorStatsPage(props) {
       setData(respone)
       setChartOptions(chartOptionsInit)
     })
-  }, [authState.accessToken, id, mainLayout, dateRange, chosenUser])
+  }, [authState.accessToken, id, mainLayout, dateRange, chosenUser, tokenManager])
 
   return (
     <div style={{ width: '100%' }}>
