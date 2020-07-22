@@ -136,7 +136,8 @@ function ContributorStatsPage(props) {
   const [chartOptions, setChartOptions] = useState()
   const [data, setData] = useState([]);
   const [userFilterList, setUserFilterList] = useState([]);
-  const { authState } = useOktaAuth();
+  const { authState, authService } = useOktaAuth();
+  const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
   const classes = useStyles();
@@ -192,6 +193,7 @@ function ContributorStatsPage(props) {
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
+    apiClient.setTokenManager(tokenManager)
     mainLayout.current.handleChangeRepositoryId(id)
     setChartOptions(chartOptionsInit)
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
@@ -218,7 +220,7 @@ function ContributorStatsPage(props) {
       setData(respone)
       setChartOptions(chartOptionsInit)
     })
-  }, [authState.accessToken, id, mainLayout, dateRange, chosenUser])
+  }, [authState.accessToken, id, mainLayout, dateRange, chosenUser, tokenManager])
 
   return (
     <div style={{ width: '100%' }}>

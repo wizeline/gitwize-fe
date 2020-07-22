@@ -24,4 +24,8 @@ export class ApiClient {
   setAccessToken(accessToken) {
     this.httpClient.setAccessToken(accessToken)
   }
+
+  setTokenManager(tokenManager) {
+    this.httpClient.setTokenManager(tokenManager)
+  }
 }

@@ -4,27 +4,35 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import { transformMetricsDataApiResponse } from '../utils/apiUtils'
-import { createReversedArray, transformToChartData, filterTableData, convertTableObjectToTableColumn} from '../utils/dataUtils'
+import {
+  createReversedArray,
+  transformToChartData,
+  filterTableData,
+  convertTableObjectToTableColumn,
+} from '../utils/dataUtils'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
 import DataStats from '../views/DataStats'
-import {cloneDeep} from 'lodash'
+import { cloneDeep } from 'lodash'
 
 const apiClient = new ApiClient()
-const information = "This section will display the number of commits, and additions/deletions in lines of code for the selected branch and date range";
+
+const information =
+  'This section will display the number of commits, and additions/deletions in lines of code for the selected branch and date range'
 
 const tableObject = [
-  {text: 'Date', fieldName: 'Date'},
-  {text: 'Commits', fieldName: 'Commits'}, 
-  {text: 'Additions', fieldName: 'Additions'}, 
-  {text: 'Deletions', fieldName: 'Deletions'}
+  { text: 'Date', fieldName: 'Date' },
+  { text: 'Commits', fieldName: 'Commits' },
+  { text: 'Additions', fieldName: 'Additions' },
+  { text: 'Deletions', fieldName: 'Deletions' },
 ]
 
 const tableColumn = convertTableObjectToTableColumn(tableObject)
-const chartLines = [{name: 'Commits', color: '#5492FF', yAxisId: 'line-1'}]
-const chartBars = [{name: 'Deletions', color: '#EC5D5C'},
-                    {name: 'Additions', color: '#62C8BA'}]
-
+const chartLines = [{ name: 'Commits', color: '#5492FF', yAxisId: 'line-1' }]
+const chartBars = [
+  { name: 'Deletions', color: '#EC5D5C' },
+  { name: 'Additions', color: '#62C8BA' },
+]
 
 const chartOptions = {
   scales: {
@@ -32,16 +40,16 @@ const chartOptions = {
       {
         display: true,
         gridLines: {
-          display: false
+          display: false,
         },
         stacked: true,
         ticks: {
-          fontColor: "#C4C4C4",
+          fontColor: '#C4C4C4',
           fontSize: 10,
           autoSkip: true,
-          autoSkipPadding: 30
-        }
-      }
+          autoSkipPadding: 30,
+        },
+      },
     ],
     yAxes: [
       {
@@ -50,21 +58,21 @@ const chartOptions = {
         position: 'left',
         id: 'y-axis-1',
         gridLines: {
-          display: true
+          display: true,
         },
         labels: {
-          show: true
+          show: true,
         },
         stacked: true,
         ticks: {
-          fontColor: "#C4C4C4",
+          fontColor: '#C4C4C4',
           fontSize: 10,
           beginAtZero: true,
           precision: 0,
-          suggestedMax: 10
-        }
-      }
-    ]
+          suggestedMax: 10,
+        },
+      },
+    ],
   },
   tooltips: {
     mode: 'label',
@@ -78,35 +86,44 @@ const chartOptions = {
         const label = data.datasets[tooltipItem.datasetIndex].label || ''
         const value = tooltipItem.value
         return `   ${label}: ${value}`
-      }
-    }
-  }
-};
+      },
+    },
+  },
+}
 
 function RepositoryStats(props) {
   const [repoData, setRepoData] = useState([])
   const [chartData, setChartData] = useState([])
-  const { authState } = useOktaAuth()
+  const { authState, authService } = useOktaAuth()
+  const tokenManager = authService.getTokenManager()
   const [{ dateRange }] = useContext(PageContext)
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
 
   useEffect(() => {
     apiClient.setAccessToken(authState.accessToken)
+    apiClient.setTokenManager(tokenManager)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
-      const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange);
-      const tableData = filterTableData(cloneDeep(createReversedArray(dataTransformed)), tableObject);
+      const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange)
+      const tableData = filterTableData(cloneDeep(createReversedArray(dataTransformed)), tableObject)
       const chartRawData = transformToChartData(chartLines, chartBars, dataTransformed, 'Date')
-      setRepoData(tableData);
-      setChartData(chartRawData);
+      setRepoData(tableData)
+      setChartData(chartRawData)
     })
-  }, [authState.accessToken, id, dateRange])
+  }, [authState.accessToken, id, dateRange, tokenManager])
 
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Repository Stats</PageTitle>
-      <DataStats chartBars={chartBars} chartLines={chartLines} tableData={repoData} chartData={chartData} tableColumn={tableColumn} chartOptions={chartOptions}/>
+      <DataStats
+        chartBars={chartBars}
+        chartLines={chartLines}
+        tableData={repoData}
+        chartData={chartData}
+        tableColumn={tableColumn}
+        chartOptions={chartOptions}
+      />
     </div>
   )
 }
