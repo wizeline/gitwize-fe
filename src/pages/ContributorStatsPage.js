@@ -14,7 +14,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
 const apiClient = new ApiClient()
-
 const NET_CHANGE = 'Net change'
 const information = `This section will display the following data for the selected team member from the dropdown, for each day of the selected date range.
 \n\n - Number of commits

@@ -8,10 +8,15 @@ jest.mock('@okta/okta-react')
 
 describe('Code change velocity', () => {
   beforeEach(() => {
+
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},
-        authService: {},
+        authService: {
+          getTokenManager: function() {
+            return null
+          }
+        },
       }
     })
   });
