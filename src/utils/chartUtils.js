@@ -1,5 +1,12 @@
+import React from 'react'
 import Papa from 'papaparse'
-import {cloneDeep} from 'lodash'
+import { cloneDeep } from 'lodash'
+import {Bar, Line} from 'react-chartjs-2';
+
+export const chartTypeEnum = {
+  LINE: 'line',
+  BAR: 'bar',
+}
 
 export const readDataFromFile = (filePath) => {
   return new Promise((resolve) => {
@@ -36,18 +43,18 @@ export const getChartColor = (data) => {
 
 export const getChartOptions = (chartOptions, chartLines = []) => {
   let newChartOptions = cloneDeep(chartOptions)
-  if(chartLines.length > 0 && newChartOptions) {
-    chartLines.forEach(item => {
+  if (chartLines.length > 0 && newChartOptions) {
+    chartLines.forEach((item) => {
       const yAxisItem = {
         type: 'linear',
         display: true,
         position: 'right',
         id: item.yAxisId,
         gridLines: {
-          display: false
+          display: false,
         },
         labels: {
-          show: true
+          show: true,
         },
         stacked: true,
         ticks: {
@@ -55,25 +62,27 @@ export const getChartOptions = (chartOptions, chartLines = []) => {
           fontSize: 10,
           beginAtZero: true,
           precision: 0,
-          suggestedMax: 10
-        }
+          suggestedMax: 10,
+        },
       }
-      newChartOptions.scales.yAxes.push(yAxisItem);
+      newChartOptions.scales.yAxes.push(yAxisItem)
     })
   }
   return newChartOptions
 }
 
 export const buildChartOptionsBasedOnMaxValue = (chartData) => {
-  if(chartData) {
+  if (chartData) {
     const chartValue = Object.values(chartData)
     let maxValue = 0
-    if(chartValue && chartValue.length !== 0) {
-      maxValue = Number(chartValue.reduce((a, b) => {
-        return Math.max(Number(a), Number(b));
-      }))
+    if (chartValue && chartValue.length !== 0) {
+      maxValue = Number(
+        chartValue.reduce((a, b) => {
+          return Math.max(Number(a), Number(b))
+        })
+      )
     }
-    return  {
+    return {
       scales: {
         xAxes: [
           {
@@ -85,12 +94,12 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
             },
             stacked: false,
             ticks: {
-              fontColor: "#C4C4C4",
+              fontColor: '#C4C4C4',
               fontSize: 10,
               autoSkip: true,
-              autoSkipPadding: 30
-            }
-          }
+              autoSkipPadding: 30,
+            },
+          },
         ],
         yAxes: [
           {
@@ -99,39 +108,50 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
             position: 'left',
             id: 'y-axis-1',
             gridLines: {
-              display: false
+              display: false,
             },
             labels: {
-              show: false
+              show: false,
             },
             stacked: false,
             ticks: {
-              fontColor: "#C4C4C4",
+              fontColor: '#C4C4C4',
               fontSize: 10,
               beginAtZero: true,
               min: 0,
-              max: maxValue < 0 ? 0: (maxValue + (maxValue/2)),
+              max: maxValue < 0 ? 0 : maxValue + maxValue / 2,
               precision: 0,
-              suggestedMax: 5
-            }
-          }
-        ]
+              suggestedMax: 5,
+            },
+          },
+        ],
       },
       tooltips: {
-        enabled: false
+        enabled: false,
       },
       plugins: {
         datalabels: {
-            anchor: 'end',
-            align: 'top',
-            offset: -3,
-            font: {
-              size: 13
-            }
-        }
+          anchor: 'end',
+          align: 'top',
+          offset: -3,
+          font: {
+            size: 13,
+          },
+        },
       },
       maintainAspectRatio: false,
     }
   }
   return null
+}
+
+export const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptions, plugins) => {
+  switch (chartType) {
+    case chartTypeEnum.LINE:
+      return (<Line ref={chartRef} data={data} options={chartOptions} plugins={plugins} />)
+    case chartTypeEnum.BAR:
+      return (<Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />)
+    default: 
+      return (<Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />)
+  }
 }

@@ -226,7 +226,7 @@ export const createDumpDataIfMissing = (data, dateRange) => {
   }
 }
 
-export const calculateHightLightState = (responseData, dateFrom, dateTo, chartBars) => {
+export const calculateHightLightState = (responseData, dateFrom, dateTo, chartItems) => {
   let hightLightNumber = Number.MIN_SAFE_INTEGER
   let maxHighLightValue={};
   const keys = Object.keys(responseData);
@@ -238,9 +238,9 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartBa
     const data = fullData.chartData
     const monthsName = fullData.labels
     const years = fullData.years
-    const chartBarIndex = chartBars.findIndex(chartBar => chartBar.fieldName === key);
+    const chartBarIndex = chartItems.findIndex(chartBar => chartBar.fieldName === key);
     if(chartBarIndex !== -1) {
-      const metricName = chartBars[chartBarIndex].name
+      const metricName = chartItems[chartBarIndex].name
       for(let i = 1; i <= data.length; i++) {
         const monthFrom = monthsName[i-1]
         const monthTo = monthsName[i]
@@ -274,7 +274,8 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartBa
     hightLightNumber: maxHighLightValue.hightLightNumber + '%',
     highLightTypeName: maxHighLightValue.highLightTypeName, 
     highLightTime: maxHighLightValue.highLightTime,
-    descriptonTxt: maxHighLightValue.descriptonTxt
+    descriptonTxt: maxHighLightValue.descriptonTxt,
+    highLightHeader: 'HIGHEST % CHANGE'
   }
 }
 
@@ -295,4 +296,76 @@ export const buildGridItemsWeeklyImpact = (responseData, gridItems) => {
       }
     }
   })
+}
+
+const calculateIndexBaseLine = (fullData, fieldName, dataIndex, chartDataItem, dateFrom, dateTo) => {
+  if(fieldName === 'percentageRejectedPR') {
+    let found = false;
+    const keysFullData = Object.keys(fullData)
+    for(let index = 0; index < keysFullData.length; index++) {
+      const dataType = keysFullData[index]
+      const dataItem = fullData[dataType]
+      const objectKeys = Object.keys(dataItem);
+      const monthArrays = getMonthNumberFromMonthName(objectKeys)
+      const chartFullData  = createChartFullData(dataItem, dateFrom, dateTo, monthArrays)
+      found = chartFullData.chartData[dataIndex] === 0 ? false : true
+      if(found) {
+        return dataIndex
+      }
+    }
+
+    return undefined
+  } else {
+    return chartDataItem[dataIndex] !== 0 ? dataIndex : undefined
+  }
+}
+
+export const calculateChartData = (fullData, chartItem, dateFrom, dateTo) => {
+  const fieldName = chartItem.fieldName
+  const dataItem = fullData[fieldName]
+  if(dataItem) {
+    const objectKeys = Object.keys(dataItem);
+    const monthArrays = getMonthNumberFromMonthName(objectKeys)
+    const chartFullData  = createChartFullData(dataItem, dateFrom, dateTo, monthArrays)
+    const dataArrays = []
+    const chartData = chartFullData.chartData
+    let indexBaseLine;
+    for(let i = 0; i < chartData.length; i++) {
+      if(indexBaseLine === undefined) {
+        indexBaseLine = calculateIndexBaseLine(fullData, fieldName, i, chartData, dateFrom, dateTo)
+        dataArrays.push(indexBaseLine !== undefined ? 0 : undefined)
+      } else {
+        const value = fieldName === 'percentageRejectedPR' 
+                      ? chartData[i] - chartData[indexBaseLine] 
+                      : Math.round(((chartData[i] - chartData[indexBaseLine]) / chartData[indexBaseLine]) * 100)
+        dataArrays.push(value)
+      }
+    }
+    const chartItemResult = {
+      label: chartItem.name,
+      type:'line',
+      data: dataArrays,
+      fill: false,
+      yAxisID: 'y-axis-1',
+      borderColor: chartItem.color,
+      backgroundColor: chartItem.color,
+      pointBorderColor: chartItem.color,
+      pointBackgroundColor: chartItem.color,
+      pointHoverBackgroundColor: chartItem.color,
+      pointHoverBorderColor: chartItem.color,
+      borderDash: chartItem.dash,
+      lineTension: 0.001,
+      datalabels: {
+        display: chartItem.dataLabelsDisplay ? true : false,
+        color: chartItem.color,
+        font: {
+          weight: 'bold'
+        }
+      }
+    }
+    return {
+      chartItemResult: chartItemResult,
+      labels: chartFullData.labels
+    }
+  }
 }
