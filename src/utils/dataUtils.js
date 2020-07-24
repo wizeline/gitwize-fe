@@ -246,41 +246,59 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartIt
       for(let i = 0; i < data.length; i++) {
         if(indexBaseLine === undefined) {
           indexBaseLine = calculateIndexBaseLine(responseData, chartItems[chartIndex].fieldName, i, data, dateFrom, dateTo)
-        } 
+        }
       }
 
-      const metricName = chartItems[chartIndex].name
-      for(let i = indexBaseLine; i < data.length; i++) {
-        const monthFrom = monthsName[indexBaseLine]
-        const monthTo = monthsName[i]
-        const yearFrom = years[indexBaseLine]
-        const yearTo = years[i]
-        let value = 0;
-        
-        if(data[indexBaseLine] !== 0) {
-          if(key !== 'percentageRejectedPR') {
-            value = Math.round(((data[i] - data[indexBaseLine]) / data[indexBaseLine]) * 100)
-          } else {
-            value = data[i] - data[indexBaseLine]
+      if(indexBaseLine === undefined && !maxHighLightValue.hightLightNumber) {
+        maxHighLightValue = {
+          hightLightNumber: '',
+          highLightTypeName: '',
+          highLightTime: '',
+          descriptonTxt: 'There is currently no data display',
+          highLightColor: chartItems[chartIndex].color
+        }
+      } else if(indexBaseLine === data.length - 1 && !maxHighLightValue.hightLightNumber) {
+        maxHighLightValue = {
+          hightLightNumber: '',
+          highLightTypeName: '',
+          highLightTime: '',
+          descriptonTxt: `There is currently no data display for ${monthsName[0]} ${years[0]} and ${monthsName[1]} ${years[1]}`,
+          highLightColor: chartItems[chartIndex].color
+        }
+      } else {
+        const metricName = chartItems[chartIndex].name
+        for(let i = indexBaseLine; i < data.length; i++) {
+          const monthFrom = monthsName[indexBaseLine]
+          const monthTo = monthsName[i]
+          const yearFrom = years[indexBaseLine]
+          const yearTo = years[i]
+          let value = 0;
+          
+          if(data[indexBaseLine] !== 0) {
+            if(key !== 'percentageRejectedPR') {
+              value = Math.round(((data[i] - data[indexBaseLine]) / data[indexBaseLine]) * 100)
+            } else {
+              value = data[i] - data[indexBaseLine]
+            }
+          }
+    
+          if(Math.abs(value) > hightLightNumber) {
+            maxHighLightValue = {
+              hightLightNumber: (value > 0 ? '+' : '') + value + '%',
+              highLightTypeName: metricName,
+              highLightTime: `${monthFrom} ${yearFrom} vs ${monthTo} ${yearTo}`,
+              descriptonTxt: `${metricName} ${value < 0 ? 'reduced' : 'increased'} by ${Math.abs(value)} percent from ${monthFrom} ${yearFrom} to ${monthTo} ${yearTo}`,
+              highLightColor: chartItems[chartIndex].color
+            }
+            hightLightNumber = Math.abs(value)
           }
         }
-  
-        if(Math.abs(value) > hightLightNumber) {
-          maxHighLightValue = {
-            hightLightNumber: (value > 0 ? '+' : '') + value,
-            highLightTypeName: metricName,
-            highLightTime: `${monthFrom} ${yearFrom} vs ${monthTo} ${yearTo}`,
-            descriptonTxt: `${metricName} ${value < 0 ? 'reduced' : 'increased'} by ${Math.abs(value)} percent from ${monthFrom} ${yearFrom} to ${monthTo} ${yearTo}`,
-            highLightColor: chartItems[chartIndex].color
-          }
-          hightLightNumber = Math.abs(value)
-         }
       }
     }
   })
   
   return {
-    hightLightNumber: maxHighLightValue.hightLightNumber + '%',
+    hightLightNumber: maxHighLightValue.hightLightNumber,
     highLightTypeName: maxHighLightValue.highLightTypeName, 
     highLightTime: maxHighLightValue.highLightTime,
     descriptonTxt: maxHighLightValue.descriptonTxt,
