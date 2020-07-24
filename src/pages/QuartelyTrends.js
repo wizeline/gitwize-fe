@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
   },
   gridItem: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   headerTxt: {
     fontSize: 15,
@@ -124,7 +124,7 @@ function QuartelyTrends(props) {
 
   const customToolTip = (tooltipModel, chartRef) => {
     // Tooltip Element
-    var tooltipEl = document.getElementById('chartjs-tooltip')
+    let tooltipEl = document.getElementById('chartjs-tooltip')
     const chartInstance = chartRef.current.chartInstance
 
     // Create element on first render
@@ -150,8 +150,8 @@ function QuartelyTrends(props) {
 
     // Set Text
     if (tooltipModel.body) {
-      var titleLines = tooltipModel.title || []
-      var bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
+      let titleLines = tooltipModel.title || []
+      let bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
 
       if (bodyLines.length > 0) {
         tooltipEl.innerHTML = '<ul></ul>'
@@ -194,22 +194,12 @@ function QuartelyTrends(props) {
                       </li>`
         }
 
-        // bodyLines.forEach((body, i) => {
-        //   var colors = tooltipModel.labelColors[i]
-        //   var style = 'background:' + colors.backgroundColor
-        //   style += '; border-color:' + colors.borderColor
-        //   style += '; border-width: 2px'
-        //   innerHtml += `<li>
-        //                   <span style="${style}"></span>${body}
-        //                 </li>`
-        // })
-
-        var tableRoot = tooltipEl.querySelector('ul')
+        let tableRoot = tooltipEl.querySelector('ul')
         tableRoot.innerHTML = innerHtml
       }
 
       // `this` will be the overall tooltip
-      var position = chartInstance.canvas.getBoundingClientRect()
+      let position = chartInstance.canvas.getBoundingClientRect()
 
       // Display, position, and set styles for font
       tooltipEl.style.opacity = 0.9
@@ -286,11 +276,18 @@ function QuartelyTrends(props) {
         ctx.fillStyle = "#6A707E"
         if(chartData) {
           const data = chartData.datasets.flatMap(dataSet => dataSet.data)
-          const index = data.findIndex((item, i) => {
-            return (i%3 === 0 && item !== undefined)
+          //find index first month
+          const indexFirstMonth = data.findIndex((item, i) => {
+            return (item !== undefined && i%3 === 0)
           })
-          if(index === -1) {
-            ctx.wrapText(`There was no activity for the month of ${chartData.labels[0]}`, 40, ctx.canvas.offsetHeight/2, ctx.canvas.offsetWidth/4, 20)
+
+          //find index second month
+          const indexSecondMonth = data.findIndex((item, i) => {
+            return (item !== undefined && i%3 === 1)
+          })
+
+          if(indexFirstMonth === -1 && indexSecondMonth !== -1) {
+            ctx.wrapText(`There was no activity for the month of ${chartData.labels[0]}`, 40, ctx.canvas.offsetHeight/2 + 30, ctx.canvas.offsetWidth/4, 20)
           }
         }
       },
@@ -317,27 +314,33 @@ function QuartelyTrends(props) {
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Quarterly Trends</PageTitle>
       <Grid container className={classes.root}>
-        <Grid className={classes.gridItem} style={{ justifyContent: 'flex-end' }} item xs={4}>
+        <Grid className={classes.gridItem} style={{ justifyContent: 'flex-start' }} item xs={4}>
           <List>
             <ListItem>
               <ListItemText disableTypography className={classes.headerTxt}>{hightLightState.highLightHeader}</ListItemText>
             </ListItem>
+            {hightLightState.hightLightNumber && 
             <ListItem>
               <ListItemText disableTypography className={classes.hightLightNumber}>{hightLightState.hightLightNumber}</ListItemText>
             </ListItem>
+            }
+            {hightLightState.highLightTypeName && 
             <ListItem>
               <ListItemText disableTypography className={classes.highLightTypeName} style={{color: hightLightState.highLightColor}}>{hightLightState.highLightTypeName}</ListItemText>
             </ListItem>
+            }
+            {hightLightState.highLightTime && 
             <ListItem>
               <ListItemText disableTypography className={classes.highLightTime}>{hightLightState.highLightTime}</ListItemText>
             </ListItem>
+            }
             <ListItem>
               <ListItemText disableTypography className={classes.descriptonTxt}>{hightLightState.descriptonTxt}</ListItemText>
             </ListItem>
           </List>
         </Grid>
-        <Grid className={classes.gridItem} style={{ justifyContent: 'flex-end' }} item xs={8}>
-          <Grid container className={classes.root}>
+        <Grid className={classes.gridItem} style={{ justifyContent: 'flex-start' }} item xs={8}>
+          <Grid container >
             <Grid className={classes.gridItem} item xs={12}>
               <Chart
                 chartType={chartTypeEnum.LINE}
