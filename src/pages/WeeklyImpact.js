@@ -144,13 +144,13 @@ function WeeklyImpact(props) {
                   </Grid>
                   <Grid item xs={12}>
                   {item.mostChurnedFiles.map(mostChurnedFile =>(
-                      <ListItemText className={classes.itemChurnedFileName}>{mostChurnedFile.fileName}</ListItemText>
+                      <ListItemText key={mostChurnedFile.fileName} className={classes.itemChurnedFileName}>{mostChurnedFile.fileName}</ListItemText>
                     )
                   )}
                   </Grid>
                   <Grid item xs={12} className={classes.itemLast}>
                     {item.mostChurnedFiles.map(mostChurnedFile =>(
-                        <ListItemText className={classes.itemPreviousTxt}>{`Edited ${item.mostChurnedFiles[0].value} times this week`}</ListItemText>
+                        <ListItemText key={mostChurnedFile.value} className={classes.itemPreviousTxt}>{`Edited ${mostChurnedFile.value} times this week`}</ListItemText>
                       )
                     )}
                   </Grid>

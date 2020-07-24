@@ -179,12 +179,13 @@ function QuartelyTrends(props) {
           if (tooltipIndex === -1) {
             style += chartItem.color
             style += '; border-color:' + chartItem.color
-            body = `${chartItems[i].name}: <div>0</div>`
+            body = `${chartItems[i].name}: <div>0 ${chartItem.unit}</div>`
           } else {
             const colors = tooltipModel.labelColors[tooltipIndex]
+            const isNegativeValue = Number(tooltipItems[tooltipIndex].value) < 0 ? true : false
             style += colors.backgroundColor
             style += '; border-color:' + colors.borderColor
-            body = `${chartItems[i].name}: <div>${chartFullData.chartData[tooltipItems[0].index]} ${chartItem.unit}</div>`
+            body = `${chartItems[i].name}: <div>${chartFullData.chartData[tooltipItems[0].index]} ${chartItem.unit} (${isNegativeValue ? '' : '+'}${tooltipItems[tooltipIndex].value}%)</div>`
           }
 
           style += '; border-width: 2px'
@@ -325,7 +326,7 @@ function QuartelyTrends(props) {
               <ListItemText disableTypography className={classes.hightLightNumber}>{hightLightState.hightLightNumber}</ListItemText>
             </ListItem>
             <ListItem>
-              <ListItemText disableTypography className={classes.highLightTypeName}>{hightLightState.highLightTypeName}</ListItemText>
+              <ListItemText disableTypography className={classes.highLightTypeName} style={{color: hightLightState.highLightColor}}>{hightLightState.highLightTypeName}</ListItemText>
             </ListItem>
             <ListItem>
               <ListItemText disableTypography className={classes.highLightTime}>{hightLightState.highLightTime}</ListItemText>
