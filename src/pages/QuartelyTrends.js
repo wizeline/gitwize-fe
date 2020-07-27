@@ -10,12 +10,13 @@ import {
   getStartOfMonth,
   getCurrentDate,
   getEndOfMonth,
-  getNumberOfMonthBackward,
-  getMonthNumberFromMonthName,
+  getNumberOfMonthBackward
 } from '../utils/dateUtils'
-import { calculateHightLightState, calculateChartData, createChartFullData } from '../utils/dataUtils'
+import { calculateHightLightState, calculateChartData } from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels'
-import { chartTypeEnum, wrapText } from '../utils/chartUtils'
+import { chartTypeEnum,
+  buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity, 
+  buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity } from '../utils/chartUtils'
 import styled from 'styled-components'
 
 const apiClient = new ApiClient()
@@ -123,93 +124,7 @@ function QuartelyTrends(props) {
   const dateTo = dateRange.date_to
 
   const customToolTip = (tooltipModel, chartRef) => {
-    // Tooltip Element
-    let tooltipEl = document.getElementById('chartjs-tooltip')
-    const chartInstance = chartRef.current.chartInstance
-
-    // Create element on first render
-    if (!tooltipEl) {
-      tooltipEl = document.createElement('div')
-      tooltipEl.id = 'chartjs-tooltip'
-      document.body.appendChild(tooltipEl)
-    }
-
-    // Hide if no tooltip
-    if (tooltipModel.opacity === 0) {
-      tooltipEl.style.opacity = 0
-      return
-    }
-
-    // Set caret Position
-    tooltipEl.classList.remove('above', 'below', 'no-transform')
-    if (tooltipModel.yAlign) {
-      tooltipEl.classList.add(tooltipModel.yAlign)
-    } else {
-      tooltipEl.classList.add('no-transform')
-    }
-
-    // Set Text
-    if (tooltipModel.body) {
-      let titleLines = tooltipModel.title || []
-      let bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
-
-      if (bodyLines.length > 0) {
-        tooltipEl.innerHTML = '<ul></ul>'
-        let innerHtml = ''
-
-        titleLines.forEach((title) => {
-          innerHtml += '<li style="font-size: 14px">' + title + '</li>'
-        })
-
-        const tooltipItems = tooltipModel.dataPoints
-        const dataSets = chartInstance.data.datasets
-
-        //find missing data set Index:
-        for (let i = 0; i < dataSets.length; i++) {
-          const tooltipIndex = tooltipItems.findIndex((item) => item.datasetIndex === i)
-          let style = 'background:'
-          let body
-
-          const chartItem = chartItems[i]
-          const chartRawData = responseData[chartItem.fieldName]
-          const rawDataKeys = Object.keys(chartRawData)
-          const monthArrays = getMonthNumberFromMonthName(rawDataKeys)
-          const chartFullData = createChartFullData(chartRawData, dateFrom, dateTo, monthArrays)
-
-          if (tooltipIndex === -1) {
-            style += chartItem.color
-            style += '; border-color:' + chartItem.color
-            body = `${chartItems[i].name}: <div>0 ${chartItem.unit}</div>`
-          } else {
-            const colors = tooltipModel.labelColors[tooltipIndex]
-            const isNegativeValue = Number(tooltipItems[tooltipIndex].value) < 0 ? true : false
-            style += colors.backgroundColor
-            style += '; border-color:' + colors.borderColor
-            body = `${chartItems[i].name}: <div>${chartFullData.chartData[tooltipItems[0].index]} ${chartItem.unit} (${isNegativeValue ? '' : '+'}${tooltipItems[tooltipIndex].value}%)</div>`
-          }
-
-          style += '; border-width: 2px'
-          innerHtml += `<li>
-                        <span style="${style}"></span>${body}
-                      </li>`
-        }
-
-        let tableRoot = tooltipEl.querySelector('ul')
-        tableRoot.innerHTML = innerHtml
-      }
-
-      // `this` will be the overall tooltip
-      let position = chartInstance.canvas.getBoundingClientRect()
-
-      // Display, position, and set styles for font
-      tooltipEl.style.opacity = 0.9
-      let left = position.left + window.pageXOffset + tooltipModel.caretX
-      tooltipEl.style.left =
-        left + tooltipEl.offsetWidth > window.innerWidth ? left - tooltipEl.offsetWidth + 'px' : left + 'px'
-      tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px'
-      tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px'
-      tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px'
-    }
+    buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity(tooltipModel, chartRef, chartItems, responseData, dateFrom, dateTo)
   }
 
   const chartOptions = {
@@ -268,32 +183,7 @@ function QuartelyTrends(props) {
     maintainAspectRatio: false,
   }
 
-  const customPlugins = [
-    {
-      afterDraw: (chartInstance, easing) => {
-        const ctx = chartInstance.chart.ctx
-        ctx.font = '9px Poppins'
-        ctx.fillStyle = "#6A707E"
-        if(chartData) {
-          const data = chartData.datasets.flatMap(dataSet => dataSet.data)
-          //find index first month
-          const indexFirstMonth = data.findIndex((item, i) => {
-            return (item !== undefined && i%3 === 0)
-          })
-
-          //find index second month
-          const indexSecondMonth = data.findIndex((item, i) => {
-            return (item !== undefined && i%3 === 1)
-          })
-          
-
-          if(indexFirstMonth === -1 && indexSecondMonth !== -1) {
-            wrapText(ctx, `There was no activity for the month of ${chartData.labels[0]}`, 40, ctx.canvas.offsetHeight/2, ctx.canvas.offsetWidth/4, 20)
-          }
-        }
-      },
-    },
-  ]
+  const customPlugins = buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity(chartData)
 
   useEffect(() => {
     apiClient.setTokenManager(tokenManager)
