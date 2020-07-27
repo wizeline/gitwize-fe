@@ -128,7 +128,6 @@ const Home = () => {
 
   useEffect(() => {
     if(repositoryId) {
-      apiClient.setAccessToken(authState.accessToken)
       apiClient.setTokenManager(tokenManager)
       if(repositoryList === undefined) {
         apiClient.repos.getRepoDetail(repositoryId).then((data) => {
