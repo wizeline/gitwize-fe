@@ -155,3 +155,31 @@ export const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptio
       return (<Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />)
   }
 }
+
+export const wrapText = (canvasContext, text, x, y, maxWidth, lineHeight) => {
+
+  let lines = text.split("\n");
+
+  for (let i = 0; i < lines.length; i++) {
+
+      let words = lines[i].split(' ');
+      let line = '';
+
+      for (let n = 0; n < words.length; n++) {
+          let testLine = line + words[n] + ' ';
+          let metrics = canvasContext.measureText(testLine);
+          let testWidth = metrics.width;
+          if (testWidth > maxWidth && n > 0) {
+            canvasContext.fillText(line, x, y);
+              line = words[n] + ' ';
+              y += lineHeight;
+          }
+          else {
+              line = testLine;
+          }
+      }
+
+      canvasContext.fillText(line, x, y);
+      y += lineHeight;
+  }
+}

@@ -15,7 +15,7 @@ import {
 } from '../utils/dateUtils'
 import { calculateHightLightState, calculateChartData, createChartFullData } from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels'
-import { chartTypeEnum } from '../utils/chartUtils'
+import { chartTypeEnum, wrapText } from '../utils/chartUtils'
 import styled from 'styled-components'
 
 const apiClient = new ApiClient()
@@ -285,9 +285,10 @@ function QuartelyTrends(props) {
           const indexSecondMonth = data.findIndex((item, i) => {
             return (item !== undefined && i%3 === 1)
           })
+          
 
           if(indexFirstMonth === -1 && indexSecondMonth !== -1) {
-            ctx.wrapText(`There was no activity for the month of ${chartData.labels[0]}`, 40, ctx.canvas.offsetHeight/2 + 30, ctx.canvas.offsetWidth/4, 20)
+            wrapText(ctx, `There was no activity for the month of ${chartData.labels[0]}`, 40, ctx.canvas.offsetHeight/2, ctx.canvas.offsetWidth/4, 20)
           }
         }
       },
