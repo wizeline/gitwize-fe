@@ -7,11 +7,11 @@ export const getCurrentDate = () => {
 }
 
 export const getStartOfMonth = (date) => {
-    return moment(date).startOf('month')
+    return moment(date).utcOffset("Z").startOf('month')
 }
 
 export const getEndOfMonth = (date) => {
-    return moment(date).endOf('month')
+    return moment(date).utcOffset("Z").endOf('month')
 }
 
 export const getNumberOfMonthBackward = (date, monthsBackward) => {
