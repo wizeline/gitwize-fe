@@ -95,7 +95,7 @@ const chartItems = [
   { name: 'Average PR review time', color: '#EC5D5C', fieldName: 'averagePRTime', unit: 'mins'},
   { name: '% of Rejected PRs', color: '#9F55E2', fieldName: 'percentageRejectedPR', unit: '%' },
 ]
-const information = 'This section will show PR related trends over the last 3 months'
+const information = 'This section will show the PR related trends over last 3 months, in terms of percentage increase/decrease with respect to the first month'
 
 const calculateDateRange = () => {
   const currentDate = getCurrentDate()
