@@ -136,7 +136,7 @@ function ContributorStatsPage(props) {
   const [chartOptions, setChartOptions] = useState()
   const [data, setData] = useState([]);
   const [userFilterList, setUserFilterList] = useState([]);
-  const { authState, authService } = useOktaAuth();
+  const { authService } = useOktaAuth();
   const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
@@ -192,7 +192,6 @@ function ContributorStatsPage(props) {
                       </Grid>);
 
   useEffect(() => {
-    apiClient.setAccessToken(authState.accessToken)
     apiClient.setTokenManager(tokenManager)
     mainLayout.current.handleChangeRepositoryId(id)
     setChartOptions(chartOptionsInit)
@@ -220,7 +219,7 @@ function ContributorStatsPage(props) {
       setData(respone)
       setChartOptions(chartOptionsInit)
     })
-  }, [authState.accessToken, id, mainLayout, dateRange, chosenUser, tokenManager])
+  }, [id, mainLayout, dateRange, chosenUser, tokenManager])
 
   return (
     <div style={{ width: '100%' }}>

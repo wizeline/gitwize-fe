@@ -7,12 +7,30 @@ import { ApiHttpClient } from './base'
 
 const BASE_URL = 'https://example.com'
 const ACCESS_TOKEN = 'eyJraWQiOiJKaDdOZF9md25vdE9ZeWw4QVp4djNOWjdNbTZRdzIwOU9QR'
+const NEW_ACCESS_TOKEN = 'eyJraWQiOiJKaDdkgkfngkfgnskfnsdkfnsdkfnsdfkjNOWjdNbTZRdzIwOU9QR'
 
 describe('ApiHttpClient', () => {
   const apiHttpClient = new ApiHttpClient({ baseURL: BASE_URL })
 
+  const tokenManager = {
+    get: function (accessToken) {
+      return new Promise((resolve) => {
+        resolve({
+          accessToken: ACCESS_TOKEN,
+        })
+      })
+    },
+    renew: function (accessToken) {
+      return new Promise((resolve) => {
+        resolve({
+          accessToken: NEW_ACCESS_TOKEN,
+        })
+      })
+    },
+  }
+
   test('should attach access token to the header', async () => {
-    apiHttpClient.setAccessToken(ACCESS_TOKEN)
+    apiHttpClient.setTokenManager(tokenManager)
     const axiosMockAdapter = new AxiosMockAdapter(axios)
     axiosMockAdapter.onGet(BASE_URL).reply(200, '')
 
@@ -20,4 +38,6 @@ describe('ApiHttpClient', () => {
 
     expect(response.config.headers.Authorization).toStrictEqual(`Bearer ${ACCESS_TOKEN}`)
   })
+
+  
 })

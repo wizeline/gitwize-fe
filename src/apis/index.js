@@ -21,10 +21,6 @@ export class ApiClient {
     this.weeklyImpact = new WeeklyImpactApiClient(this.httpClient)
   }
 
-  setAccessToken(accessToken) {
-    this.httpClient.setAccessToken(accessToken)
-  }
-
   setTokenManager(tokenManager) {
     this.httpClient.setTokenManager(tokenManager)
   }
