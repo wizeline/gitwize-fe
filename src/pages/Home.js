@@ -135,7 +135,7 @@ const Home = () => {
         })
       }
     }
-  }, [authState.accessToken, repositoryId, repositoryList, tokenManager])
+  }, [repositoryId, repositoryList, tokenManager])
 
   const logout = async () => {
     authService.logout('/')
