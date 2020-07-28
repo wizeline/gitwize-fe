@@ -73,17 +73,14 @@ export const getChartOptions = (chartOptions, chartLines = []) => {
   return newChartOptions
 }
 
-export const buildChartOptionsBasedOnMaxValue = (chartData) => {
-  if (chartData) {
-    const chartValue = Object.values(chartData)
-    let maxValue = 0
-    if (chartValue && chartValue.length !== 0) {
-      maxValue = Number(
-        chartValue.reduce((a, b) => {
-          return Math.max(Number(a), Number(b))
-        })
-      )
-    }
+export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
+  if (responseData) {
+    const arrays = chartItems.flatMap(item => responseData[item.fieldName].currentPeriod)
+    const maxValue = Number(
+      arrays.reduce((a, b) => {
+        return Math.max(Number(a), Number(b))
+      })
+    )
     return {
       scales: {
         xAxes: [
@@ -97,9 +94,10 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
             stacked: false,
             ticks: {
               fontColor: '#C4C4C4',
-              fontSize: 10,
+              fontSize: 16,
               autoSkip: true,
               autoSkipPadding: 30,
+              padding: 10
             },
           },
         ],
@@ -121,7 +119,7 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
               fontSize: 10,
               beginAtZero: true,
               min: 0,
-              max: maxValue < 0 ? 0 : maxValue + maxValue / 2,
+              max: maxValue <= 0 ? 5 : maxValue + maxValue / 4,
               precision: 0,
               suggestedMax: 5,
             },
@@ -130,6 +128,19 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
       },
       tooltips: {
         enabled: false,
+        callbacks: {
+          title: (tooltipItems, data) => {
+            const label = tooltipItems[0].label;
+            switch(label) {
+              case 'Churn':
+                return 'Churn Percentage'
+              case 'New Code':
+                return 'New Code Percentage'
+              default: 
+                return ''
+            }
+          }
+        }
       },
       plugins: {
         datalabels: {
@@ -139,6 +150,9 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
           font: {
             size: 13,
           },
+          formatter: (value) => {
+            return `${value}%`;
+        }
         },
       },
       maintainAspectRatio: false,

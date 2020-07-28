@@ -100,9 +100,9 @@ const drawNewOptions = (chartInstance, datasets, chartBars, chartLines = []) => 
 export default function Chart(props) {
 
   const chartRef = useRef(null)
-  const [isDisplayLegend, setDisplayLegend] = useState(false)
-  const {data, chartOptions, chartBars, chartLines, customToolTip, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
-          isNeedReDrawOptions = true, chartType = chartTypeEnum.BAR} = props
+  const [legendCallBackGenerate, setLegendCallBackGenerate] = useState(false)
+  const {data, chartOptions, chartBars, chartLines, customToolTip, customsStyle, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
+          isNeedReDrawOptions = true, chartType = chartTypeEnum.BAR, disableLegend = false} = props
 
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
@@ -156,7 +156,7 @@ export default function Chart(props) {
   ...customPlugins,
   {
     afterDraw: (chartInstance) => {
-      setDisplayLegend(true)
+      setLegendCallBackGenerate(true)
     }
   }]
 
@@ -165,25 +165,30 @@ export default function Chart(props) {
   }
 
   useEffect(() => {
-    if(isDisplayLegend) {
-      document.getElementById(
-        chartLegendId
-      ).innerHTML = chartRef.current.chartInstance.generateLegend();
-
-      document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
-        const originalColor = item.childNodes[0].style.backgroundColor
-        if(isLegendClickable) {
-          item.addEventListener("click", e => handleClick(e, item, index, originalColor));
-        }
-        //keep color as grey if already disabled
-        let ci = chartRef.current.chartInstance;
-        const meta = ci.getDatasetMeta(index);
-        if(meta.hidden) {
-          item.style.color = 'grey'
-          item.childNodes[0].style.backgroundColor = 'grey'
-          item.style.fontWeight = 'normal'
-        }
-      });
+    if(legendCallBackGenerate) {
+      const generateLegend = () => {
+        document.getElementById(
+          chartLegendId
+        ).innerHTML = chartRef.current.chartInstance.generateLegend();
+  
+        document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
+          const originalColor = item.childNodes[0].style.backgroundColor
+          if(isLegendClickable) {
+            item.addEventListener("click", e => handleClick(e, item, index, originalColor));
+          }
+          //keep color as grey if already disabled
+          let ci = chartRef.current.chartInstance;
+          const meta = ci.getDatasetMeta(index);
+          if(meta.hidden) {
+            item.style.color = 'grey'
+            item.childNodes[0].style.backgroundColor = 'grey'
+            item.style.fontWeight = 'normal'
+          }
+        });
+      }
+      if(!disableLegend) {
+        generateLegend()
+      }
 
       const newChartOptions = {
         ...chartOptions,
@@ -210,6 +215,7 @@ export default function Chart(props) {
           return text.join("");
         }
       }
+      
       if(customToolTip) {
         newChartOptions.tooltips.custom = buildCustomToolTip
       }
@@ -218,7 +224,7 @@ export default function Chart(props) {
       chartRef.current.chartInstance.update();
     }
   // eslint-disable-next-line
-  }, [isDisplayLegend, chartLines, chartOptions]);
+  }, [legendCallBackGenerate, chartLines, chartOptions]);
 
   let chart;
   if(data && data.length !== 0) {
@@ -227,7 +233,7 @@ export default function Chart(props) {
 
   return (
     <Grid container >
-      <Grid className={classes.root} item xs={12}>
+      <Grid className={classes.root} style={customsStyle} item xs={12}>
         {chart}
         <ChartLegend id={chartLegendId}/>
       </Grid>
