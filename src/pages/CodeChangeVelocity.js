@@ -3,7 +3,7 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { Grid, List, ListItem, ListItemText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import Chart from '../components/Chart'
+import Chart, {chartTypeEnum} from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import {
@@ -11,7 +11,7 @@ import {
 } from '../utils/dateUtils'
 import { calculateHightLightState, calculateChartData} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels'
-import { chartTypeEnum, 
+import {
   buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity,
   buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity } from '../utils/chartUtils'
 import styled from 'styled-components'

@@ -1,14 +1,7 @@
-import React from 'react'
 import Papa from 'papaparse'
 import { cloneDeep } from 'lodash'
-import { Bar, Line } from 'react-chartjs-2'
 import { createChartFullData } from '../utils/dataUtils'
 import { getMonthNumberFromMonthName } from '../utils/dateUtils'
-
-export const chartTypeEnum = {
-  LINE: 'line',
-  BAR: 'bar',
-}
 
 export const readDataFromFile = (filePath) => {
   return new Promise((resolve) => {
@@ -145,17 +138,6 @@ export const buildChartOptionsBasedOnMaxValue = (chartData) => {
     }
   }
   return null
-}
-
-export const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptions, plugins) => {
-  switch (chartType) {
-    case chartTypeEnum.LINE:
-      return <Line ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
-    case chartTypeEnum.BAR:
-      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
-    default:
-      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
-  }
 }
 
 export const wrapText = (canvasContext, text, x, y, maxWidth, lineHeight) => {

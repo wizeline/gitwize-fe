@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import styled from "styled-components";
 import Grid from '@material-ui/core/Grid'
-import {buildChartBasedOnChartType, chartTypeEnum} from '../../utils/chartUtils'
+import { Bar, Line } from 'react-chartjs-2'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,6 +12,11 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '50vh'
   },
 }))
+
+export const chartTypeEnum = {
+  LINE: 'line',
+  BAR: 'bar',
+}
 
 const ChartLegend = styled.div`
       li span {
@@ -94,6 +99,17 @@ const drawNewOptions = (chartInstance, datasets, chartBars, chartLines = []) => 
     chartInstance.options.scales.yAxes[0].display = true;
     chartInstance.options.scales.yAxes[0].gridLines.display = true;
     chartInstance.options.scales.yAxes[1].gridLines.display = false
+  }
+}
+
+const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptions, plugins) => {
+  switch (chartType) {
+    case chartTypeEnum.LINE:
+      return <Line ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+    case chartTypeEnum.BAR:
+      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+    default:
+      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
   }
 }
 
