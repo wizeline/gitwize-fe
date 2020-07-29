@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import styled from "styled-components";
+import { makeStyles, styled } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import { Bar, Line } from 'react-chartjs-2'
 
@@ -18,28 +17,31 @@ export const chartTypeEnum = {
   BAR: 'bar',
 }
 
-const ChartLegend = styled.div`
-      li span {
-        width: 40px;
-        height: 12px;
-        display: inline-block;
-        margin: 0 5px 8px 0;
-        vertical-align: -9.4px;
-      }
-      ul {
-        display: flex;
-        justify-content: center;
-        list-style: none;
-        font: 12px;
-        white-space: nowrap;
-      }
-      li {
-        cursor: pointer;
-        text-align: left;
-        margin: 0px 25px;
-        height: 20px;
-        font-weight: bold;
-      }`;
+const ChartLegend = styled('div')(({
+  theme
+}) => ({
+  "& li span": {
+    width: '40px',
+    height: '12px',
+    display: 'inline-block',
+    margin: '0 5px 8px 0',
+    verticalAlign: '-9.4px'
+  },
+  "& ul": {
+    display: 'flex',
+    justifyContent: 'center',
+    listStyle: 'none',
+    font: '12px',
+    whiteSpace: 'nowrap'
+  },
+  "& li": {
+    cursor: 'pointer',
+    textAlign: 'left',
+    margin: '0px 25px',
+    height: '20px',
+    fontWeight: 'bold'
+  }
+}))
 
 const initValue = (chartInstance, chartLines) => {
   chartInstance.options.scales.yAxes[0].display = true;
