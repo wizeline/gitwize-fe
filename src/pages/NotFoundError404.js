@@ -1,8 +1,7 @@
 import React, { useContext, useRef, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, styled } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container';
-import styled from 'styled-components'
 
 import MainLayoutContex from '../contexts/MainLayoutContext'
 const useStyles = makeStyles((theme) => ({
@@ -37,15 +36,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const ErrorCode = styled.h1`
-  font-size: 85px;
-  font-family: Poppins
-`
+const ErrorCode = styled('h1')({
+  fontSize: '85px',
+  fontFamily: 'Poppins'
+})
 
-const ErrorMessage = styled.h3`
-  font-size: 30x;
-  font-family: Poppins
-`
+const ErrorMessage = styled('h3')({
+  fontSize: '30x',
+  fontFamily: 'Poppins'
+})
 
 export default function NotFoundError404() {
   const styles = useStyles()

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useContext, useState } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 
 import PageTitle from '../components/PageTitle'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, styled } from '@material-ui/core/styles'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import { Grid, ListItemText } from '@material-ui/core'
@@ -11,7 +11,6 @@ import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
 import { formatToMMDD } from '../utils/dateUtils'
 import Chart, {chartTypeEnum} from '../components/Chart'
 import { buildChartOptionsBasedOnMaxValue } from '../utils/chartUtils'
-import styled from 'styled-components'
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
 const IMPACT_SCORE_TXT = 'Impact score'
@@ -102,42 +101,43 @@ const chartItems = [
   { name: 'Churn', color: '#EC5D5C', fieldName: 'churnPercentage', chartLegendId: 'chart-legend-2' },
 ]
 
-const ChartToolTip = styled.div`
-  & {
-    position: absolute;
-    background: rgba(0, 0, 0, 1);
-    color: white;
-    border-radius: 10px;
-    font-family: Poppins;
-    pointer-events: none;
+const ChartToolTip = styled('div')(({
+  theme
+}) => ({
+  "&": {
+    position: 'absolute',
+    background: 'rgba(0, 0, 0, 1)',
+    color: 'white',
+    borderRadius: '10px',
+    fontFamily: 'Poppins',
+    pointerEvents: 'none',
+  },  
+  "& li span": {
+    width: '12px',
+    height: '12px',
+    display: 'inline-block',
+    margin: '0 0.5vw 8px 0.5vw',
+    verticalAlign: '-9.4px'
+  },
+  "& ul": {
+    display: 'flex',
+    justifyContent: 'center',
+    listStyle: 'none',
+    fontSize: '10px',
+    flexDirection: 'column',
+    padding: '0px',
+  },
+  "& li": {
+    textAlign: 'left',
+    height: '20px',
+    fontWeight: 'bold',
+    margin: '1vh 0.5vh',
+  },
+  "& li div": {
+    float: 'right',
+    margin: '0px 1vw'
   }
-
-  li span {
-    width: 12px;
-    height: 12px;
-    display: inline-block;
-    margin: 0 0.5vw 8px 0.5vw;
-    vertical-align: -9.4px;
-  }
-  ul {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    font-size: 10px;
-    flex-direction: column;
-    padding: 0px;
-  }
-  li {
-    text-align: left;
-    height: 20px;
-    font-weight: bold;
-    margin: 1vh 0.5vh;
-  }
-  li div {
-    float: right;
-    margin: 0px 1vw;
-  }
-`
+}))
 
 const calculatePeriod = (period) => {
   const dateFrom = period.date_from
