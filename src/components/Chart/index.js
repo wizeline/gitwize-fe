@@ -2,9 +2,7 @@ import React, {useEffect, useState, useRef} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import styled from "styled-components";
 import Grid from '@material-ui/core/Grid'
-
-import {Bar} from 'react-chartjs-2';
-import { getChartOptions } from '../../utils/chartUtils';
+import { Bar, Line } from 'react-chartjs-2'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,6 +12,11 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '50vh'
   },
 }))
+
+export const chartTypeEnum = {
+  LINE: 'line',
+  BAR: 'bar',
+}
 
 const ChartLegend = styled.div`
       li span {
@@ -99,17 +102,23 @@ const drawNewOptions = (chartInstance, datasets, chartBars, chartLines = []) => 
   }
 }
 
+const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptions, plugins) => {
+  switch (chartType) {
+    case chartTypeEnum.LINE:
+      return <Line ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+    case chartTypeEnum.BAR:
+      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+    default:
+      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+  }
+}
+
 export default function Chart(props) {
 
   const chartRef = useRef(null)
   const [isDisplayLegend, setDisplayLegend] = useState(false)
-  const {data, chartOptions, chartBars, chartLines, isLegendClickable=true, chartLegendId = 'chart-legend'} = props
-
-  const plugins = [{
-      afterDraw: (chartInstance) => {
-        setDisplayLegend(true)
-      }
-  }]
+  const {data, chartOptions, chartBars, chartLines, customToolTip, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
+          isNeedRedrawOptions = true, chartType = chartTypeEnum.BAR} = props
 
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
@@ -126,12 +135,15 @@ export default function Chart(props) {
       item.style.fontWeight = 'bold'
     }
 
-    drawNewOptions(ci, ci.data.datasets, chartBars, chartLines)
+    if(isNeedRedrawOptions) {
+      drawNewOptions(ci, ci.data.datasets, chartBars, chartLines)
+    }
+
     ci.update();
   }
 
   const newChartOptions = {
-    ...getChartOptions(chartOptions, chartLines),
+    ...chartOptions,
     responsive: true,
     elements: {
       line: {
@@ -156,6 +168,18 @@ export default function Chart(props) {
     }
   }
 
+  const plugins = [
+  ...customPlugins,
+  {
+    afterDraw: (chartInstance) => {
+      setDisplayLegend(true)
+    }
+  }]
+
+  const buildCustomToolTip = (toolTipModel) => {
+    customToolTip(toolTipModel, chartRef)
+  }
+
   useEffect(() => {
     if(isDisplayLegend) {
       document.getElementById(
@@ -178,7 +202,7 @@ export default function Chart(props) {
       });
 
       const newChartOptions = {
-        ...getChartOptions(chartOptions, chartLines),
+        ...chartOptions,
         responsive: true,
         elements: {
           line: {
@@ -202,6 +226,10 @@ export default function Chart(props) {
           return text.join("");
         }
       }
+      if(customToolTip) {
+        newChartOptions.tooltips.custom = buildCustomToolTip
+      }
+      
       chartRef.current.chartInstance.options = newChartOptions
       chartRef.current.chartInstance.update();
     }
@@ -210,11 +238,7 @@ export default function Chart(props) {
 
   let chart;
   if(data && data.length !== 0) {
-    chart  = (<Bar ref={chartRef}
-                data={data}
-                options={newChartOptions}
-                plugins={plugins}
-              />)
+    chart = buildChartBasedOnChartType(chartType, chartRef, data, newChartOptions, plugins)
   } 
 
   return (

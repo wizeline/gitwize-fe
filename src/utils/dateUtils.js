@@ -7,11 +7,11 @@ export const getCurrentDate = () => {
 }
 
 export const getStartOfMonth = (date) => {
-    return moment(date).startOf('month')
+    return moment(date).utcOffset("Z").startOf('month')
 }
 
 export const getEndOfMonth = (date) => {
-    return moment(date).endOf('month')
+    return moment(date).utcOffset("Z").endOf('month')
 }
 
 export const getNumberOfMonthBackward = (date, monthsBackward) => {
@@ -47,3 +47,15 @@ export const getEndOfDateInSecond = (dateString) => {
     const date = new Date(dateString * 1000)
     return Math.floor(date.setUTCHours(23, 59, 59, 59) / 1000)
 }
+
+export const calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity = () => {
+    const currentDate = getCurrentDate()
+    const twoMonthsBackward = getNumberOfMonthBackward(Object.assign(currentDate), 2)
+    const endOfCurrentMonth = getEndOfMonth(currentDate)
+    const startOfMonthFrom = getStartOfMonth(twoMonthsBackward)
+    return {
+      date_from: startOfMonthFrom.unix(),
+      date_to: endOfCurrentMonth.unix(),
+    }
+  }
+  
