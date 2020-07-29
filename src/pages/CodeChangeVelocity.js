@@ -7,10 +7,7 @@ import Chart from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import {
-  getStartOfMonth,
-  getCurrentDate,
-  getEndOfMonth,
-  getNumberOfMonthBackward
+  calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity
 } from '../utils/dateUtils'
 import { calculateHightLightState, calculateChartData} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels'
@@ -97,19 +94,7 @@ const chartItems = [
   { name: 'Deletions in LOC', color: '#EC5D5C', fieldName: 'deletions', unit: '' },
 ]
 const information = 'This section will show the trends related to code changes over the last 3 months, in terms of percentage increase/decrease with respect to the first month'
-
-const calculateDateRange = () => {
-  const currentDate = getCurrentDate()
-  const twoMonthsBackward = getNumberOfMonthBackward(Object.assign(currentDate), 2)
-  const endOfCurrentMonth = getEndOfMonth(currentDate)
-  const startOfMonthFrom = getStartOfMonth(twoMonthsBackward)
-  return {
-    date_from: startOfMonthFrom.unix(),
-    date_to: endOfCurrentMonth.unix(),
-  }
-}
-
-const dateRange = calculateDateRange()
+const dateRange = calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity()
 
 function CodeChangeVelocity(props) {
   const { authService } = useOktaAuth()
