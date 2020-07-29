@@ -93,7 +93,6 @@ const chartItems = [
   { name: 'Deletions in LOC', color: '#EC5D5C', fieldName: 'deletions', unit: '' },
 ]
 const information = 'This section will show the trends related to code changes over the last 3 months, in terms of percentage increase/decrease with respect to the first month'
-
 const dateRange = calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity()
 
 function CodeChangeVelocity(props) {
@@ -187,7 +186,7 @@ function CodeChangeVelocity(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Quarterly Trends</PageTitle>
+      <PageTitle information={information}>Code Change Velocity</PageTitle>
       <Grid container className={classes.root}>
         <Grid className={classes.gridItem} style={{ justifyContent: 'flex-start' }} item xs={4}>
           <List>
