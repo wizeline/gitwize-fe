@@ -15,8 +15,16 @@
     "currentPeriod": 13.5,
     "previousPeriod": 11.2
   },
-  "mostChurnedFile": {
+  "mostChurnedFiles": [{
     "fileName": "abdedsfdsfsfdsfdsfdsffdsfsdfsfdsfsddsadssdasdasdasdasdasdasdsadas.js",
     "value": 30
+  }],
+  "newCodePercentage": {
+    "currentPeriod": 10,
+    "previousPeriod": 10
+  },
+  "churnPercentage": {
+    "currentPeriod": 90,
+    "previousPeriod": 23
   }
 }

@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import styled from "styled-components";
+import { makeStyles, styled } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import { Bar, Line } from 'react-chartjs-2'
 
@@ -18,28 +17,31 @@ export const chartTypeEnum = {
   BAR: 'bar',
 }
 
-const ChartLegend = styled.div`
-      li span {
-        width: 40px;
-        height: 12px;
-        display: inline-block;
-        margin: 0 5px 8px 0;
-        vertical-align: -9.4px;
-      }
-      ul {
-        display: flex;
-        justify-content: center;
-        list-style: none;
-        font: 12px;
-        white-space: nowrap;
-      }
-      li {
-        cursor: pointer;
-        text-align: left;
-        margin: 0px 25px;
-        height: 20px;
-        font-weight: bold;
-      }`;
+const ChartLegend = styled('div')(({
+  theme
+}) => ({
+  "& li span": {
+    width: '40px',
+    height: '12px',
+    display: 'inline-block',
+    margin: '0 5px 8px 0',
+    verticalAlign: '-9.4px'
+  },
+  "& ul": {
+    display: 'flex',
+    justifyContent: 'center',
+    listStyle: 'none',
+    font: '12px',
+    whiteSpace: 'nowrap'
+  },
+  "& li": {
+    cursor: 'pointer',
+    textAlign: 'left',
+    margin: '0px 25px',
+    height: '20px',
+    fontWeight: 'bold'
+  }
+}))
 
 const initValue = (chartInstance, chartLines) => {
   chartInstance.options.scales.yAxes[0].display = true;
@@ -116,9 +118,9 @@ const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptions, plu
 export default function Chart(props) {
 
   const chartRef = useRef(null)
-  const [isDisplayLegend, setDisplayLegend] = useState(false)
-  const {data, chartOptions, chartBars, chartLines, customToolTip, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
-          isNeedRedrawOptions = true, chartType = chartTypeEnum.BAR} = props
+  const [legendCallBackGenerate, setLegendCallBackGenerate] = useState(false)
+  const {data, chartOptions, chartBars, chartLines, customToolTip, customsStyle, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
+          isNeedRedrawOptions = true, chartType = chartTypeEnum.BAR, disableLegend = false} = props
 
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
@@ -172,7 +174,7 @@ export default function Chart(props) {
   ...customPlugins,
   {
     afterDraw: (chartInstance) => {
-      setDisplayLegend(true)
+      setLegendCallBackGenerate(true)
     }
   }]
 
@@ -181,25 +183,30 @@ export default function Chart(props) {
   }
 
   useEffect(() => {
-    if(isDisplayLegend) {
-      document.getElementById(
-        chartLegendId
-      ).innerHTML = chartRef.current.chartInstance.generateLegend();
-
-      document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
-        const originalColor = item.childNodes[0].style.backgroundColor
-        if(isLegendClickable) {
-          item.addEventListener("click", e => handleClick(e, item, index, originalColor));
-        }
-        //keep color as grey if already disabled
-        let ci = chartRef.current.chartInstance;
-        const meta = ci.getDatasetMeta(index);
-        if(meta.hidden) {
-          item.style.color = 'grey'
-          item.childNodes[0].style.backgroundColor = 'grey'
-          item.style.fontWeight = 'normal'
-        }
-      });
+    if(legendCallBackGenerate) {
+      const generateLegend = () => {
+        document.getElementById(
+          chartLegendId
+        ).innerHTML = chartRef.current.chartInstance.generateLegend();
+  
+        document.querySelectorAll(`#${chartLegendId} li`).forEach((item, index) => {
+          const originalColor = item.childNodes[0].style.backgroundColor
+          if(isLegendClickable) {
+            item.addEventListener("click", e => handleClick(e, item, index, originalColor));
+          }
+          //keep color as grey if already disabled
+          let ci = chartRef.current.chartInstance;
+          const meta = ci.getDatasetMeta(index);
+          if(meta.hidden) {
+            item.style.color = 'grey'
+            item.childNodes[0].style.backgroundColor = 'grey'
+            item.style.fontWeight = 'normal'
+          }
+        });
+      }
+      if(!disableLegend) {
+        generateLegend()
+      }
 
       const newChartOptions = {
         ...chartOptions,
@@ -226,6 +233,7 @@ export default function Chart(props) {
           return text.join("");
         }
       }
+      
       if(customToolTip) {
         newChartOptions.tooltips.custom = buildCustomToolTip
       }
@@ -234,7 +242,7 @@ export default function Chart(props) {
       chartRef.current.chartInstance.update();
     }
   // eslint-disable-next-line
-  }, [isDisplayLegend, chartLines, chartOptions]);
+  }, [legendCallBackGenerate, chartLines, chartOptions]);
 
   let chart;
   if(data && data.length !== 0) {
@@ -243,7 +251,7 @@ export default function Chart(props) {
 
   return (
     <Grid container >
-      <Grid className={classes.root} item xs={12}>
+      <Grid className={classes.root} style={customsStyle} item xs={12}>
         {chart}
         <ChartLegend id={chartLegendId}/>
       </Grid>

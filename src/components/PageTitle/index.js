@@ -1,10 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles ,styled} from '@material-ui/core/styles'
 
 const useStyles = makeStyles(() => ({
   tooltip: {
@@ -18,10 +17,10 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const Title = styled.h1`
-  margin-top: 20px !important;
-  font-size: 30px;
-`
+const Title = styled('h1')({
+  marginTop: '20px !important',
+  fontSize: '30px'
+})
 
 export default function PageTitle({ children, information }) {
   let infoIcon;
