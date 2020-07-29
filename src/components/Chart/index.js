@@ -102,7 +102,7 @@ export default function Chart(props) {
   const chartRef = useRef(null)
   const [isDisplayLegend, setDisplayLegend] = useState(false)
   const {data, chartOptions, chartBars, chartLines, customToolTip, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
-          isNeedReDrawOptions = true, chartType = chartTypeEnum.BAR} = props
+          isNeedRedrawOptions = true, chartType = chartTypeEnum.BAR} = props
 
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
@@ -119,7 +119,7 @@ export default function Chart(props) {
       item.style.fontWeight = 'bold'
     }
 
-    if(isNeedReDrawOptions) {
+    if(isNeedRedrawOptions) {
       drawNewOptions(ci, ci.data.datasets, chartBars, chartLines)
     }
 

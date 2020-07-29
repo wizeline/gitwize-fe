@@ -237,7 +237,7 @@ function QuartelyTrends(props) {
                 data={chartData}
                 chartOptions={chartOptions}
                 chartBars={chartItems}
-                isNeedReDrawOptions={false}
+                isNeedRedrawOptions={false}
                 customToolTip={customToolTip}
                 customPlugins={customPlugins}
               />

@@ -202,7 +202,7 @@ function CodeChangeVelocity(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Quarterly Trends</PageTitle>
+      <PageTitle information={information}>Code Change Velocity</PageTitle>
       <Grid container className={classes.root}>
         <Grid className={classes.gridItem} style={{ justifyContent: 'flex-start' }} item xs={4}>
           <List>
@@ -237,7 +237,7 @@ function CodeChangeVelocity(props) {
                 data={chartData}
                 chartOptions={chartOptions}
                 chartBars={chartItems}
-                isNeedReDrawOptions={false}
+                isNeedRedrawOptions={false}
                 customToolTip={customToolTip}
                 customPlugins={customPlugins}
               />
