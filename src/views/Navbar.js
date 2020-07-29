@@ -1,4 +1,3 @@
-import { useOktaAuth } from '@okta/okta-react'
 import React, {useState, useContext, useEffect} from 'react'
 import useToggle from '../hooks/useToggle';
 import MainLayoutContex from '../contexts/MainLayoutContext'
@@ -141,7 +140,6 @@ function Navbar (props) {
   const [repositoryName, setRepositoryName] = useState()
   const [isDisplayDashBoard, setStateDashBoard] = useState(false)
   const [isSubMenuOpen, toggleSubMenu] = useToggle(true)
-  const { authState } = useOktaAuth()
   useEffect(() => {
     if(repoId && repoList) {
       const currentRepo = repoList.find(item => String(item.id) === repoId)
@@ -150,7 +148,7 @@ function Navbar (props) {
         setStateDashBoard(true)
       }
     }
-  }, [authState.accessToken, repoId, repoList])
+  }, [repoId, repoList])
   let dashBoard
   
   const handleBackToRepo = () => {

@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import styled from "styled-components";
 import Grid from '@material-ui/core/Grid'
-import {buildChartBasedOnChartType, chartTypeEnum} from '../../utils/chartUtils'
+import { Bar, Line } from 'react-chartjs-2'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,6 +12,11 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '50vh'
   },
 }))
+
+export const chartTypeEnum = {
+  LINE: 'line',
+  BAR: 'bar',
+}
 
 const ChartLegend = styled.div`
       li span {
@@ -97,12 +102,23 @@ const drawNewOptions = (chartInstance, datasets, chartBars, chartLines = []) => 
   }
 }
 
+const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptions, plugins) => {
+  switch (chartType) {
+    case chartTypeEnum.LINE:
+      return <Line ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+    case chartTypeEnum.BAR:
+      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+    default:
+      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+  }
+}
+
 export default function Chart(props) {
 
   const chartRef = useRef(null)
   const [legendCallBackGenerate, setLegendCallBackGenerate] = useState(false)
   const {data, chartOptions, chartBars, chartLines, customToolTip, customsStyle, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
-          isNeedReDrawOptions = true, chartType = chartTypeEnum.BAR, disableLegend = false} = props
+          isNeedRedrawOptions = true, chartType = chartTypeEnum.BAR, disableLegend = false} = props
 
   const classes = useStyles()
   const handleClick = (e, item, index, originalColor) => {
@@ -119,7 +135,7 @@ export default function Chart(props) {
       item.style.fontWeight = 'bold'
     }
 
-    if(isNeedReDrawOptions) {
+    if(isNeedRedrawOptions) {
       drawNewOptions(ci, ci.data.datasets, chartBars, chartLines)
     }
 

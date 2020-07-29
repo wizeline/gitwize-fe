@@ -43,7 +43,7 @@ export class ApiHttpClient extends HttpClient {
   }
 
   interceptor = (error) => {
-    if (!this.shouldIntercept(error)) {
+    if(!this.shouldIntercept(error)) {
       return Promise.reject(error)
     }
 
@@ -62,19 +62,18 @@ export class ApiHttpClient extends HttpClient {
     })
   }
 
-  setAccessToken(accessToken) {
-    this.accessToken = accessToken
-  }
-
   setTokenManager(tokenManager) {
     this.tokenManager = tokenManager
   }
 
-  authInterceptor = (config) => {
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${this.accessToken}`,
-    }
+  authInterceptor = async (config) => {
+
+    await this.tokenManager.get('accessToken').then(token => {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token.accessToken}`,
+      }
+    })
 
     if(config.params !== undefined) {
       const dateFrom = config.params.date_from

@@ -9,8 +9,8 @@ import { Grid, ListItemText } from '@material-ui/core'
 import clsx from 'clsx'
 import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
 import { formatToMMDD } from '../utils/dateUtils'
-import Chart from '../components/Chart'
-import { chartTypeEnum, buildChartOptionsBasedOnMaxValue } from '../utils/chartUtils'
+import Chart, {chartTypeEnum} from '../components/Chart'
+import { buildChartOptionsBasedOnMaxValue } from '../utils/chartUtils'
 import styled from 'styled-components'
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
@@ -269,9 +269,9 @@ const calculateFocusData = (response, chartItems) => {
 }
 
 function WeeklyImpact(props) {
-  const { id } = props.match.params
-  const classes = useStyles()
-  const { authState, authService } = useOktaAuth()
+  const {id} = props.match.params;
+  const classes = useStyles();
+  const { authService } = useOktaAuth()
   const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [gridItemsState, setGridItems] = useState([])
@@ -279,15 +279,15 @@ function WeeklyImpact(props) {
   const [period, setPeriod] = useState({})
 
   useEffect(() => {
-    apiClient.setAccessToken(authState.accessToken)
-    apiClient.setTokenManager(tokenManager)
-    mainLayout.current.handleChangeRepositoryId(id)
-    apiClient.weeklyImpact.getWeeklyImpactStats(id).then((response) => {
-      setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
-      setPeriod(calculatePeriod(response.period))
-      setResponse(response)
-    })
-  }, [authState.accessToken, id, mainLayout, tokenManager])
+      apiClient.setTokenManager(tokenManager)
+      mainLayout.current.handleChangeRepositoryId(id)
+      apiClient.weeklyImpact.getWeeklyImpactStats(id).then((response) => {
+        setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
+        setPeriod(calculatePeriod(response.period))
+        setResponse(response)
+      })
+    }, [id, mainLayout, tokenManager]
+  )
 
   const impactSession = gridItemsState.map((item) => {
     if (item.name !== 'Most churned file') {
@@ -351,7 +351,7 @@ function WeeklyImpact(props) {
             <Grid item xs={12} className={classes.itemLast}>
               {item.mostChurnedFiles.map((mostChurnedFile) => (
                 <ListItemText
-                  key={mostChurnedFile.value}
+                  key={mostChurnedFile.fileName}
                   className={classes.itemPreviousTxt}
                 >{`Edited ${mostChurnedFile.value} times this week`}</ListItemText>
               ))}

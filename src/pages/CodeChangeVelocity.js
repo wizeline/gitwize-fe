@@ -3,18 +3,15 @@ import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { Grid, List, ListItem, ListItemText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import Chart from '../components/Chart'
+import Chart, {chartTypeEnum} from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
 import {
-  getStartOfMonth,
-  getCurrentDate,
-  getEndOfMonth,
-  getNumberOfMonthBackward
+  calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity
 } from '../utils/dateUtils'
 import { calculateHightLightState, calculateChartData} from '../utils/dataUtils'
 import 'chartjs-plugin-datalabels'
-import { chartTypeEnum, 
+import {
   buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity,
   buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity } from '../utils/chartUtils'
 import styled from 'styled-components'
@@ -90,7 +87,6 @@ const ChartToolTip = styled.div`
     margin: 0px 1vw;
   }
 `
-
 const chartItems = [
   { name: 'Number of commits', color: '#62C8BA', fieldName: 'commits', unit: ''},
   { name: 'Additions in LOC', color: '#9F55E2', fieldName: 'additions', unit: ''},
@@ -98,24 +94,13 @@ const chartItems = [
 ]
 const information = 'This section will show the trends related to code changes over the last 3 months, in terms of percentage increase/decrease with respect to the first month'
 
-const calculateDateRange = () => {
-  const currentDate = getCurrentDate()
-  const twoMonthsBackward = getNumberOfMonthBackward(Object.assign(currentDate), 2)
-  const endOfCurrentMonth = getEndOfMonth(currentDate)
-  const startOfMonthFrom = getStartOfMonth(twoMonthsBackward)
-  return {
-    date_from: startOfMonthFrom.unix(),
-    date_to: endOfCurrentMonth.unix(),
-  }
-}
-
-const dateRange = calculateDateRange()
+const dateRange = calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity()
 
 function CodeChangeVelocity(props) {
   const [hightLightState, setHightLightState] = useState({})
   const [chartData, setChartData] = useState()
   const [responseData, setResponseData] = useState()
-  const { authState, authService } = useOktaAuth()
+  const { authService } = useOktaAuth()
   const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
@@ -186,7 +171,6 @@ function CodeChangeVelocity(props) {
   const customPlugins = buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity(chartData)
 
   useEffect(() => {
-    apiClient.setAccessToken(authState.accessToken)
     apiClient.setTokenManager(tokenManager)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.codeChangeVelocity.getCodeChangeVelocityStats(id, dateRange).then((data) => {
@@ -199,7 +183,7 @@ function CodeChangeVelocity(props) {
         setResponseData(data)
       }
     })
-  }, [id, authState.accessToken, dateFrom, dateTo, tokenManager])
+  }, [id, dateFrom, dateTo, tokenManager])
 
   return (
     <div style={{ width: '100%' }}>
@@ -238,7 +222,7 @@ function CodeChangeVelocity(props) {
                 data={chartData}
                 chartOptions={chartOptions}
                 chartBars={chartItems}
-                isNeedReDrawOptions={false}
+                isNeedRedrawOptions={false}
                 customToolTip={customToolTip}
                 customPlugins={customPlugins}
               />

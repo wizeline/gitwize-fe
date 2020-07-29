@@ -128,7 +128,6 @@ const Home = () => {
 
   useEffect(() => {
     if(repositoryId) {
-      apiClient.setAccessToken(authState.accessToken)
       apiClient.setTokenManager(tokenManager)
       if(repositoryList === undefined) {
         apiClient.repos.getRepoDetail(repositoryId).then((data) => {
@@ -136,7 +135,7 @@ const Home = () => {
         })
       }
     }
-  }, [authState.accessToken, repositoryId, repositoryList, tokenManager])
+  }, [repositoryId, repositoryList, tokenManager])
 
   const logout = async () => {
     authService.logout('/')
