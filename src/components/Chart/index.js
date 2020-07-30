@@ -150,35 +150,16 @@ export default function Chart(props) {
 
       const newChartOptions = {
         ...chartOptions,
-        responsive: true,
-        elements: {
-          line: {
-            fill: false
-          }
-        },
-        legend: {
-          display: false
-        },
-        legendCallback: (chart) => {
-          let text = [];
-          text.push('<ul>');
-          for (let i = 0; i < chart.data.datasets.length; i++) {
-            text.push('<li><span style="background-color:' + chart.data.datasets[i].backgroundColor + '"></span>');
-            if (chart.data.datasets[i].label) {
-              text.push(chart.data.datasets[i].label);
-            }
-            text.push('</li>');
-          }
-          text.push('</ul>');
-          return text.join("");
-        }
       }
       
       if(customToolTip) {
         newChartOptions.tooltips.custom = buildCustomToolTip
       }
       
-      chartRef.current.chartInstance.options = newChartOptions
+      chartRef.current.chartInstance.options = {
+        ...chartRef.current.chartInstance.options,
+        ...newChartOptions
+      }
       chartRef.current.chartInstance.update();
     }
   // eslint-disable-next-line
