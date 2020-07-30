@@ -259,7 +259,7 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartIt
           hightLightNumber: '',
           highLightTypeName: '',
           highLightTime: '',
-          descriptonTxt: 'There is currently no data display',
+          descriptonTxt: 'There is currently no data to display for this quarter',
           highLightColor: chartItems[chartIndex].color,
         }
       } else if (indexBaseLine === data.length - 1 && !maxHighLightValue.hightLightNumber) {
@@ -267,7 +267,7 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartIt
           hightLightNumber: '',
           highLightTypeName: '',
           highLightTime: '',
-          descriptonTxt: `There is currently no data display for ${monthsName[0]} ${years[0]} and ${monthsName[1]} ${years[1]}`,
+          descriptonTxt: `There is currently no data to display for ${monthsName[0]} ${years[0]} and ${monthsName[1]} ${years[1]}`,
           highLightColor: chartItems[chartIndex].color,
         }
       } else {
