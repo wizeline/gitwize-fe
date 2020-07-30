@@ -336,7 +336,7 @@ export const buildGridItemsWeeklyImpact = (responseData, gridItems) => {
   })
 }
 
-const calculateIndexBaseLine = (fullData, fieldName, dataIndex, chartDataItem, dateFrom, dateTo) => {
+export const calculateIndexBaseLine = (fullData, fieldName, dataIndex, chartDataItem, dateFrom, dateTo) => {
   if (fieldName === 'percentageRejectedPR') {
     let found = false
     const keysFullData = Object.keys(fullData)

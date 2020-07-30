@@ -1,6 +1,6 @@
 import Papa from 'papaparse'
 import { cloneDeep } from 'lodash'
-import { createChartFullData } from '../utils/dataUtils'
+import { createChartFullData, calculateIndexBaseLine } from '../utils/dataUtils'
 import { getMonthNumberFromMonthName } from '../utils/dateUtils'
 
 export const readDataFromFile = (filePath) => {
@@ -240,6 +240,13 @@ export const buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity = (
         const monthArrays = getMonthNumberFromMonthName(rawDataKeys)
         const chartFullData = createChartFullData(chartRawData, dateFrom, dateTo, monthArrays)
 
+        let indexBaseLine
+        for (let i = 0; i < chartFullData.chartData.length; i++) {
+          if (indexBaseLine === undefined) {
+            indexBaseLine = calculateIndexBaseLine(responseData, chartItem.fieldName, i, chartFullData.chartData, dateFrom, dateTo)
+          }
+        }
+
         if (tooltipIndex === -1) {
           style += chartItem.color
           style += '; border-color:' + chartItem.color
@@ -247,11 +254,10 @@ export const buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity = (
         } else {
           const colors = tooltipModel.labelColors[tooltipIndex]
           const isNegativeValue = Number(tooltipItems[tooltipIndex].value) < 0 ? true : false
+          const percentageValue = `(${isNegativeValue ? '' : '+'}${tooltipItems[tooltipIndex].value}%)`
           style += colors.backgroundColor
           style += '; border-color:' + colors.borderColor
-          body = `${chartItems[i].name}: <div>${chartFullData.chartData[tooltipItems[0].index]} ${chartItem.unit} (${
-            isNegativeValue ? '' : '+'
-          }${tooltipItems[tooltipIndex].value}%)</div>`
+          body = `${chartItems[i].name}: <div>${chartFullData.chartData[tooltipItems[0].index]} ${chartItem.unit} ${tooltipItems[0].index === indexBaseLine ? '' : percentageValue} </div>`
         }
 
         style += '; border-width: 2px'

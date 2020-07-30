@@ -90,8 +90,8 @@ const ChartToolTip = styled('div')(({
 
 const chartItems = [
   { name: 'Number of commits', color: '#62C8BA', fieldName: 'commits', unit: ''},
-  { name: 'Additions in LOC', color: '#9F55E2', fieldName: 'additions', unit: ''},
-  { name: 'Deletions in LOC', color: '#EC5D5C', fieldName: 'deletions', unit: '' },
+  { name: 'Additions', color: '#9F55E2', fieldName: 'additions', unit: ''},
+  { name: 'Deletions', color: '#EC5D5C', fieldName: 'deletions', unit: '' },
 ]
 const information = 'This section will show the trends related to code changes over the last 3 months, in terms of percentage increase/decrease with respect to the first month'
 const dateRange = calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity()
