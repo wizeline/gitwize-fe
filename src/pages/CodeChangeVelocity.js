@@ -224,7 +224,6 @@ function CodeChangeVelocity(props) {
                 chartType={chartTypeEnum.LINE}
                 data={chartData}
                 chartOptions={chartOptions}
-                chartBars={chartItems}
                 customToolTip={customToolTip}
                 customPlugins={customPlugins}
               />

@@ -126,7 +126,7 @@ function DataStats(props) {
             </Grid>
           </Grid>
           {!isDisplayChart && <TableData tableData={tableData} tableColumn={tableColumn} isDisplaySearch={isDisplaySearch} customComponent={tableCustomComponent}/>}
-          {isDisplayChart && <Chart customHandleClickLegend={customHandleClickLegend} data={chartData} chartOptions={getChartOptions(chartOptions, chartLines)} chartBars={chartBars} chartLines={chartLines}/>}
+          {isDisplayChart && <Chart customHandleClickLegend={customHandleClickLegend} data={chartData} chartOptions={getChartOptions(chartOptions, chartLines)}/>}
         </>
       )
 }
