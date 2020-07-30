@@ -225,7 +225,6 @@ function CodeChangeVelocity(props) {
                 data={chartData}
                 chartOptions={chartOptions}
                 chartBars={chartItems}
-                isNeedRedrawOptions={false}
                 customToolTip={customToolTip}
                 customPlugins={customPlugins}
               />
