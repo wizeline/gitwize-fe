@@ -93,7 +93,10 @@ const chartItems = [
   { name: 'Additions', color: '#9F55E2', fieldName: 'additions', unit: ''},
   { name: 'Deletions', color: '#EC5D5C', fieldName: 'deletions', unit: '' },
 ]
-const information = 'This section will show the trends related to code changes over the last 3 months, in terms of percentage increase/decrease with respect to the first month'
+const information = `This section will show the following code change trends over last 3 months, in terms of percentage increase/decrease with respect to the first month
+\n- Number of commits
+\n- Additions in lines of code
+\n- Deletions in lines of code`
 const dateRange = calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity()
 
 function CodeChangeVelocity(props) {
