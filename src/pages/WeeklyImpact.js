@@ -383,8 +383,6 @@ function WeeklyImpact(props) {
                     chartType={chartTypeEnum.BAR}
                     data={data}
                     chartOptions={buildChartOptionsBasedOnMaxValue(response, chartItems)}
-                    chartBars={chartItem}
-                    isNeedReDrawOptions={false}
                     isLegendClickable={false}
                     chartLegendId={chartItem.chartLegendId}
                     disableLegend={true}

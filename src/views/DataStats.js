@@ -33,11 +33,76 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
+const initValue = (chartInstance, chartLines) => {
+  chartInstance.options.scales.yAxes[0].display = true;
+  chartInstance.options.scales.yAxes[0].gridLines.display = true;
+  if(chartLines && chartLines.length > 0) {
+    for(let i = 1; i <= chartLines.length; i++) {
+      chartInstance.options.scales.yAxes[i].display = true
+      chartInstance.options.scales.yAxes[i].gridLines.display = false
+    }
+  }
+}
+
+export const drawNewOptions = (chartInstance, datasets, chartBars, chartLines = []) => {
+  
+  initValue(chartInstance, chartLines)
+  
+  let numberOfLineDisabled = 0;
+  let numberOfBarDisabled = 0;
+  let i = 0;
+
+  datasets.forEach(item => {
+    const meta = chartInstance.getDatasetMeta(i);
+    if(item.type === 'line') {
+      const yAxisID = item.yAxisID
+      if(meta.hidden) {
+        numberOfLineDisabled++
+        const index = chartInstance.options.scales.yAxes.findIndex(yAxesItem => yAxesItem.id === yAxisID)
+        if(index !== -1) {
+          chartInstance.options.scales.yAxes[index].display = false
+        }
+      }
+    }
+
+    if(item.type === 'bar') {
+      if(meta.hidden) {
+        numberOfBarDisabled++
+      }
+    }
+    i++
+  })
+
+  //find minimum yAxis index with display === true, mark gridLineDisplay for it
+  let yAxisIndexMin = Number.MAX_SAFE_INTEGER;
+  for(let i = 1; i < chartInstance.options.scales.yAxes.length; i++) {
+    const yAxesValue = chartInstance.options.scales.yAxes[i]
+    if(yAxesValue.display && i<yAxisIndexMin) {
+      yAxisIndexMin = i
+    }
+  }
+
+  if(chartBars.length === numberOfBarDisabled  && chartLines.length !== numberOfLineDisabled) {
+    chartInstance.options.scales.yAxes[0].display = false;
+    chartInstance.options.scales.yAxes[0].gridLines.display = false;
+    chartInstance.options.scales.yAxes[yAxisIndexMin].gridLines.display = true
+  }
+
+  if(chartBars.length === numberOfBarDisabled  && chartLines.length === numberOfLineDisabled) {
+    chartInstance.options.scales.yAxes[0].display = true;
+    chartInstance.options.scales.yAxes[0].gridLines.display = true;
+    chartInstance.options.scales.yAxes[1].gridLines.display = false
+  }
+}
 function DataStats(props) {
     const {onTableView, tableData, chartData, tableColumn, isDisplaySearch, customFilters, chartOptions, chartBars = [], chartLines = [], tableCustomComponent} = props
     const [isDisplayChart, toggleChartTable] = useToggle(true);
     const classes = useStyles();
     const [headerTxt, setHeaderTxt] = useState(showDate[0])
+
+    const customHandleClickLegend = (chartInstance, datasets) => {
+      drawNewOptions(chartInstance, datasets, chartBars, chartLines)
+    }
 
     const handleToggleView = () => {
         toggleChartTable();
@@ -61,7 +126,7 @@ function DataStats(props) {
             </Grid>
           </Grid>
           {!isDisplayChart && <TableData tableData={tableData} tableColumn={tableColumn} isDisplaySearch={isDisplaySearch} customComponent={tableCustomComponent}/>}
-          {isDisplayChart && <Chart data={chartData} chartOptions={getChartOptions(chartOptions, chartLines)} chartBars={chartBars} chartLines={chartLines}/>}
+          {isDisplayChart && <Chart customHandleClickLegend={customHandleClickLegend} data={chartData} chartOptions={getChartOptions(chartOptions, chartLines)}/>}
         </>
       )
 }
