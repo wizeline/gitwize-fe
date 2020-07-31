@@ -10,6 +10,7 @@ import RepositoryList from '../views/RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
 import PullRequestStats from '../pages/PullRequestStats'
 import QuartelyTrends from '../pages/QuartelyTrends'
+import PullRequestSize from '../pages/PullRequestSize'
 import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
 import ContributorStatsPage from '../pages/ContributorStatsPage'
 import NotFoundError404 from '../pages/NotFoundError404'
@@ -77,8 +78,13 @@ const subMenuItems = [
       {
         name: 'Quarterly Trends', 
         uri: '/quartely-trends', 
-        component: QuartelyTrends
-      }
+        component: QuartelyTrends 
+      },
+      {
+        name: 'Pull request size', 
+        uri: '/pull-request-size', 
+        component: PullRequestSize
+      },
     ]
   },
   {
