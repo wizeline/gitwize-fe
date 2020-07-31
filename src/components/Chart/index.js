@@ -59,7 +59,7 @@ export default function Chart(props) {
   const chartRef = useRef(null)
   const [legendCallbackGenerate, setLegendCallbackGenerate] = useState(false)
   const {data, chartOptions, customToolTip, customsStyle, customHandleClickLegend, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
-          chartType = chartTypeEnum.BAR, disableLegend = false} = props
+          chartType = chartTypeEnum.BAR, isLegendDisabled = false} = props
 
   const classes = useStyles()
 
@@ -144,7 +144,7 @@ export default function Chart(props) {
           }
         });
       }
-      if(!disableLegend) {
+      if(!isLegendDisabled) {
         generateLegend()
       }
 

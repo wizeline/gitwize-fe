@@ -385,7 +385,7 @@ function WeeklyImpact(props) {
                     chartOptions={buildChartOptionsBasedOnMaxValue(response, chartItems)}
                     isLegendClickable={false}
                     chartLegendId={chartItem.chartLegendId}
-                    disableLegend={true}
+                    isLegendDisabled={true}
                     customsStyle={{ height: '30vh' }}
                     customToolTip={customToolTip}
                   />
