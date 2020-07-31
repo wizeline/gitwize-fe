@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { Grid, List, ListItem, ListItemText } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, styled } from '@material-ui/core/styles'
 import Chart, {chartTypeEnum} from '../components/Chart'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
@@ -14,7 +14,6 @@ import 'chartjs-plugin-datalabels'
 import {
   buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity,
   buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity } from '../utils/chartUtils'
-import styled from 'styled-components'
 
 const apiClient = new ApiClient()
 
@@ -51,56 +50,60 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const ChartToolTip = styled.div`
-  & {
-    position: absolute;
-    background: rgba(0, 0, 0, 1);
-    color: white;
-    border-radius: 3px;
-    font-family: Poppins;
-    pointer-events: none;
+const ChartToolTip = styled('div')(({
+  theme
+}) => ({
+  "&": {
+    position: 'absolute',
+    background: 'rgba(0, 0, 0, 1)',
+    color: 'white',
+    borderRadius: '3px',
+    fontFamily: 'Poppins',
+    pointerEvents: 'none'
+  },  
+  "& li span": {
+    width: '12px',
+    height: '12px',
+    display: 'inline-block',
+    margin: '0 0.5vw 8px 0.5vw',
+    verticalAlign: '-9.4px'
+  },
+  "& ul": {
+    display: 'flex',
+    justifyContent: 'center',
+    listStyle: 'none',
+    fontSize: '10px',
+    flexDirection: 'column',
+    padding: '0px',
+  },
+  "& li": {
+    textAlign: 'left',
+    height: '20px',
+    fontWeight: 'bold',
+    margin: '1vh 0.5vh',
+  },
+  "& li div": {
+    float: 'right',
+    margin: '0px 1vw'
   }
-
-  li span {
-    width: 12px;
-    height: 12px;
-    display: inline-block;
-    margin: 0 0.5vw 8px 0.5vw;
-    vertical-align: -9.4px;
-  }
-  ul {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    font-size: 10px;
-    flex-direction: column;
-    padding: 0px;
-  }
-  li {
-    text-align: left;
-    height: 20px;
-    font-weight: bold;
-    margin: 1vh 0.5vh;
-  }
-  li div {
-    float: right;
-    margin: 0px 1vw;
-  }
-`
+}))
 
 const chartItems = [
   { name: 'Number of commits', color: '#62C8BA', fieldName: 'commits', unit: ''},
-  { name: 'Additions in LOC', color: '#9F55E2', fieldName: 'additions', unit: ''},
-  { name: 'Deletions in LOC', color: '#EC5D5C', fieldName: 'deletions', unit: '' },
+  { name: 'Additions', color: '#9F55E2', fieldName: 'additions', unit: ''},
+  { name: 'Deletions', color: '#EC5D5C', fieldName: 'deletions', unit: '' },
 ]
-const information = 'This section will show the trends related to code changes over the last 3 months, in terms of percentage increase/decrease with respect to the first month'
+const information = `This section will show the following code change trends over last 3 months, in terms of percentage increase/decrease with respect to the first month
+\n- Number of commits
+\n- Additions in lines of code
+\n- Deletions in lines of code`
 const dateRange = calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity()
 
 function CodeChangeVelocity(props) {
-  const { authService } = useOktaAuth()
   const [hightLightState, setHightLightState] = useState({})
   const [chartData, setChartData] = useState()
   const [responseData, setResponseData] = useState()
+  const { authService } = useOktaAuth()
   const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
@@ -221,8 +224,6 @@ function CodeChangeVelocity(props) {
                 chartType={chartTypeEnum.LINE}
                 data={chartData}
                 chartOptions={chartOptions}
-                chartBars={chartItems}
-                isNeedRedrawOptions={false}
                 customToolTip={customToolTip}
                 customPlugins={customPlugins}
               />
