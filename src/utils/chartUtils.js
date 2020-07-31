@@ -112,7 +112,7 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
               fontSize: 10,
               beginAtZero: true,
               min: 0,
-              max: maxValue <= 0 ? 5 : maxValue + maxValue / 4,
+              max: (maxValue <= 0) ? 5 : (maxValue + (maxValue / 4)),
               precision: 0,
               suggestedMax: 5,
             },

@@ -57,7 +57,7 @@ const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptions, plu
 export default function Chart(props) {
 
   const chartRef = useRef(null)
-  const [legendCallBackGenerate, setLegendCallBackGenerate] = useState(false)
+  const [legendCallbackGenerate, setLegendCallbackGenerate] = useState(false)
   const {data, chartOptions, customToolTip, customsStyle, customHandleClickLegend, customPlugins = [], isLegendClickable=true, chartLegendId = 'chart-legend', 
           chartType = chartTypeEnum.BAR, disableLegend = false} = props
 
@@ -114,7 +114,7 @@ export default function Chart(props) {
   ...customPlugins,
   {
     afterDraw: (chartInstance) => {
-      setLegendCallBackGenerate(true)
+      setLegendCallbackGenerate(true)
     }
   }]
 
@@ -123,7 +123,7 @@ export default function Chart(props) {
   }
 
   useEffect(() => {
-    if(legendCallBackGenerate) {
+    if(legendCallbackGenerate) {
       const generateLegend = () => {
         document.getElementById(
           chartLegendId
@@ -163,7 +163,7 @@ export default function Chart(props) {
       chartRef.current.chartInstance.update();
     }
   // eslint-disable-next-line
-  }, [legendCallBackGenerate, chartOptions]);
+  }, [legendCallbackGenerate, chartOptions]);
 
   let chart;
   if(data && data.length !== 0) {
