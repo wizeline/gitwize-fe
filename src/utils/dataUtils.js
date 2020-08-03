@@ -95,6 +95,96 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
   }
 }
 
+export const transformDataForBubbleChart = (chartData) => {
+  let labels = []
+  let smallPullRequests = {
+    label: 'Pull Requests Size',
+    fill: false,
+    lineTension: 0.1,
+    backgroundColor: (context)=> {
+      var index = context.dataIndex;
+      var value = context.dataset.data[index];
+      return value.r < 20 ? 'rgba(98, 200, 186, 0.9)' : 'rgba(236, 93, 92, 0.9)';
+    },
+    borderColor: '#FFFFFF',
+    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+    pointRadius: 1,
+    pointHitRadius: 10,
+    data: [],
+  }
+
+  let minPrSize
+  let maxPrSize
+  const maxSizeForSmallPr = 300
+  Object.keys(chartData).forEach((key) => {
+    chartData[key].forEach((pr) => {
+      if(minPrSize === undefined || maxPrSize === undefined) {
+        minPrSize = pr.size
+        maxPrSize = pr.size
+      } else if(pr.size >= maxPrSize) {
+        maxPrSize = pr.size
+      } else if(pr.size < minPrSize) {
+        minPrSize = pr.size
+      }
+    })
+  })
+
+  Object.keys(chartData).forEach((date) => {
+    const dateLabel = moment(date).format(dateFormat)
+    labels.push(dateLabel)
+
+    const prs = chartData[date]
+
+    let prevYPosition = 0
+    let prevPrSize = 0
+
+    prs.forEach((pr) => {
+      const prSize = pr.size
+      let nomarlizedSize 
+
+      // small pull request will be scaled between 20px and 5px in size
+      if(prSize < maxSizeForSmallPr) {
+        nomarlizedSize =  (20 - 5)*((prSize  - minPrSize) / (maxSizeForSmallPr - minPrSize)) + 5
+      } else {
+       // big pull request will be scaled between 30px and 20px in size 
+        nomarlizedSize =  (30 - 20)*((prSize  - maxSizeForSmallPr) / (maxPrSize - maxSizeForSmallPr)) + 20
+      }
+
+      smallPullRequests.data.push({
+        x: dateLabel,
+        y: prevYPosition,
+        r: nomarlizedSize,
+        prTitle: pr.title,
+        creationDate: dateLabel,
+        PRSize: prSize,
+        statusOfPr: pr.status,
+        PRReviewTime: pr.review_time,
+        createdBy: pr.created_by,
+        url: pr.url
+      })
+
+      let distanceBetweenTwoPr
+      if(prevPrSize + prSize > 40) {
+        distanceBetweenTwoPr = 30
+      } else if(prevPrSize + prSize >= 20) {
+        distanceBetweenTwoPr = 20
+      } else {
+        distanceBetweenTwoPr = 15
+      }
+
+      prevYPosition += distanceBetweenTwoPr
+      prevPrSize = prSize
+    })
+  })
+
+  return {
+    labels: labels,
+    datasets: [
+      smallPullRequests,
+    ]
+  }
+}
+
 export const filterTableData = (tableData, tableColumn) => {
   if (tableData) {
     return tableData.map((item) => {

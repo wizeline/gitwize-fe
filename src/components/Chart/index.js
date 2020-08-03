@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react'
 import { makeStyles, styled } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import { Bar, Line } from 'react-chartjs-2'
+import { Bar, Line, Bubble} from 'react-chartjs-2'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
 export const chartTypeEnum = {
   LINE: 'line',
   BAR: 'bar',
+  BUBBLE: 'bubble',
 }
 
 const ChartLegend = styled('div')(({
@@ -49,8 +50,10 @@ const buildChartBasedOnChartType = (chartType, chartRef, data, chartOptions, plu
       return <Line ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
     case chartTypeEnum.BAR:
       return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+    case chartTypeEnum.BUBBLE:
+        return <Bubble ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
     default:
-      return <Bar ref={chartRef} data={data} options={chartOptions} plugins={plugins} />
+      return <Bar ref={chartRef} data={data}  />
   }
 }
 
