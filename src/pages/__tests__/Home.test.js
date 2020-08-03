@@ -29,7 +29,11 @@ describe('Home page', () => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},
-        authService: {},
+        authService: {
+          getTokenManager: ()=> {
+            return 'token'
+          }
+        },
       }
     })
   })

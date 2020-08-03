@@ -13,7 +13,10 @@ jest.mock('../../apis', () => {
       weeklyImpact: {
         getWeeklyImpactStats: jest.fn().mockReturnValue(Promise.resolve(mockResponse))
       },
-      setAccessToken: jest.fn()
+      setAccessToken: jest.fn(),
+      setTokenManager: (tokenManager) => {
+        //Do Nothing
+      }
     }))
   }
 })
@@ -23,7 +26,11 @@ describe('Weekly Impact', () => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},
-        authService: {},
+        authService: {
+          getTokenManager: () => {
+            return 'token'
+          }
+        },
       }
     })
   });
