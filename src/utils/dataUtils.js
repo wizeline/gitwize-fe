@@ -153,6 +153,13 @@ export const transformDataForBubbleChart = (chartData) => {
         x: dateLabel,
         y: prevYPosition,
         r: nomarlizedSize,
+        prTitle: pr.title,
+        creationDate: dateLabel,
+        PRSize: prSize,
+        statusOfPr: pr.status,
+        PRReviewTime: pr.review_time,
+        createdBy: pr.created_by,
+        url: pr.url
       })
 
       let distanceBetweenTwoPr
