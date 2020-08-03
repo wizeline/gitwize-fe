@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 
 import { ApiClient } from '../apis'
+import RepositorySearchBar from '../components/RepositorySearchBar'
 import GetStartedImg from '../assets/images/getstarted.png'
 import RepositoryCard from '../components/RepositoryCard'
 import AddRepositoryDialog from './AddRepositoryDialog'
@@ -99,7 +100,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function RepositoryList() {
-  const { authState } = useOktaAuth()
+  const { authService } = useOktaAuth()
+  const tokenManager = authService.getTokenManager()
   const mainLayoutContext = useRef(useContext(MainLayoutContex))
   const [isDisplayColumnGrid, setColumnLayout] = useState(false);
   const [repoList, setRepoList] = useState()
@@ -108,15 +110,16 @@ export default function RepositoryList() {
   const [removeExistingRepo, setRemovexistingRepo] = useState(true)
   const [addingRepoError, setAddingRepoError] = useState('')
   const [isLoading, setLoading] = useState(false)
+  const [searchedRepo, setSearchedRepo] = useState(null)
   const styles = useStyles()
 
   useEffect(() => {
-    apiClient.setAccessToken(authState.accessToken)
+    apiClient.setTokenManager(tokenManager)
       apiClient.repos.listRepo().then((repo) => {
         setRepoList(repo)
         mainLayoutContext.current.handleChangeRepoList(repo)
       })
-  }, [authState.accessToken])
+  }, [tokenManager])
 
   const handleAddDialog = () => {
     setOpen(true)
@@ -143,7 +146,7 @@ export default function RepositoryList() {
   const handleDeletionCancel = () => {}
 
   const handleAddRepo = async (repoDetail = {}) => {
-    apiClient.setAccessToken(authState.accessToken)
+    apiClient.setTokenManager(authService.getTokenManager())
     setLoading(true)
     try {
       const response = await apiClient.repos.createRepo(repoDetail)
@@ -156,7 +159,8 @@ export default function RepositoryList() {
         last_updated: response.last_updated,
         type: 'GitHub',
         branches: response.branches,
-        url: repoDetail.url
+        url: repoDetail.url,
+        status: response.status,
       }
 
       mainLayoutContext.current.handleChangeRepoList([...repoList, newRepo])
@@ -174,8 +178,7 @@ export default function RepositoryList() {
   }
   
   let repoListComponent;
-  
-  if(repoList !== undefined) {
+  if(repoList !== undefined && searchedRepo !== undefined) {
     repoListComponent = repoList.length === 0 ? (
       <>
         <img alt="GetStarted" src={GetStartedImg} />
@@ -198,6 +201,7 @@ export default function RepositoryList() {
         </div>
         <Grid container className={styles.gridRoot}>
           <Grid item xs={12} className={styles.gridButtonLayout}>
+            <RepositorySearchBar label={'Search Repository'} repoList={repoList} onRepositorySearching={setSearchedRepo}/>
             <Button className={clsx(isDisplayColumnGrid && styles.buttonLayoutChosen)} onClick={() => handleChangeLayout(false)}>
               <MenuRoundedIcon />
             </Button>
@@ -213,7 +217,7 @@ export default function RepositoryList() {
         </Grid>
         <Grid container className={styles.gridRoot} spacing={isDisplayColumnGrid ? 4 : 0}>
             <MessageNotification repoName={repoName} isRemovingMessage={removeExistingRepo} handleMessage={closeMessageNotification} />
-            {repoList
+            {(searchedRepo !== null ? searchedRepo : repoList)
             .slice(0)
             .reverse()
             .map((repoItem, index) => (

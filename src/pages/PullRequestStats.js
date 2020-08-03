@@ -86,13 +86,14 @@ const chartOptions = {
 function PullRequestStats(props) {
   const [repoData, setRepoData] = useState([])
   const [chartData, setChartData] = useState([])
-  const { authState } = useOktaAuth()
+  const { authService } = useOktaAuth()
+  const tokenManager = authService.getTokenManager()
   const [{ dateRange }] = useContext(PageContext)
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
 
   useEffect(() => {
-    apiClient.setAccessToken(authState.accessToken)
+    apiClient.setTokenManager(tokenManager)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const transformedData = transformMetricsDataApiResponse(data.metric, dateRange);
@@ -101,7 +102,7 @@ function PullRequestStats(props) {
       setChartData(chartRawData);
       setRepoData(repoRawData)
     })
-  }, [authState.accessToken, id, mainLayout, dateRange])
+  }, [id, mainLayout, dateRange, tokenManager])
 
   return (
     <div style={{ width: '100%' }}>

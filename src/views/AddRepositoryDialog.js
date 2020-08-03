@@ -183,7 +183,7 @@ function AddRepositoryDialog(props) {
             required
             margin="dense"
             id="projectUrl"
-            label="Project repo URL"
+            label="Project repo URL/SSH URL"
             type="text"
             fullWidth
             value={url}

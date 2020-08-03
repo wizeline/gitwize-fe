@@ -136,7 +136,8 @@ function ContributorStatsPage(props) {
   const [chartOptions, setChartOptions] = useState()
   const [data, setData] = useState([]);
   const [userFilterList, setUserFilterList] = useState([]);
-  const { authState } = useOktaAuth();
+  const { authService } = useOktaAuth();
+  const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
   const classes = useStyles();
@@ -183,13 +184,15 @@ function ContributorStatsPage(props) {
     setOnTableView(isOnTableView)
   }
 
+  const initValueChosenUser = (chosenUser && userFilterList.findIndex(item => item.author_name === chosenUser) !== -1) ? chosenUser : 'Average'
+
   const userFilter = (!isOnTableView && <Grid item xs={2} key={'user-filter'}>
-                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} initValue={chosenUser ? chosenUser : 'Average'}
+                          <DropdownList label="User" data={userFilterList.flatMap(item => item.author_name)} initValue={initValueChosenUser}
                                         placeholder="Select a User" onChange={(userName) => handleChangeUser(userName)}/>
                       </Grid>);
 
   useEffect(() => {
-    apiClient.setAccessToken(authState.accessToken)
+    apiClient.setTokenManager(tokenManager)
     mainLayout.current.handleChangeRepositoryId(id)
     setChartOptions(chartOptionsInit)
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
@@ -216,7 +219,7 @@ function ContributorStatsPage(props) {
       setData(respone)
       setChartOptions(chartOptionsInit)
     })
-  }, [authState.accessToken, id, mainLayout, dateRange, chosenUser])
+  }, [id, mainLayout, dateRange, chosenUser, tokenManager])
 
   return (
     <div style={{ width: '100%' }}>

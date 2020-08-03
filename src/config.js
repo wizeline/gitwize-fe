@@ -13,9 +13,5 @@ export default {
     scopes: ['openid', 'profile', 'email'],
     pkce: true,
     disableHttpsCheck: REACT_APP_OKTA_DISABLE_HTTPS_CHECK,
-    tokenManager: {
-      storage: 'sessionStorage',
-      autoRenew: true
-    }
   },
 }

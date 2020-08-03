@@ -11,7 +11,11 @@ describe('Contributor stats page', () => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},
-        authService: {},
+        authService: {
+          getTokenManager: function() {
+            return 
+          }
+        },
       }
     })
   });

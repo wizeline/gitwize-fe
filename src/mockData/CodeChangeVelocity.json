@@ -4,14 +4,14 @@
       "May": 121,
       "July": 32
     },
-    "newCodeChanges": {
+    "additions": {
       "May": 111,
       "June": 22,
       "July": 33
     },
-    "netChanges": {
-      "Jan": 23,
-      "Dec": 12,
-      "Feb": 35
+    "deletions": {
+      "May": 200,
+      "June": 150,
+      "July": 300
     }
 }

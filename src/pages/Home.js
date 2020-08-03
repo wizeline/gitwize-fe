@@ -9,6 +9,7 @@ import RepositoryList from '../views/RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
 import PullRequestStats from '../pages/PullRequestStats'
 import QuartelyTrends from '../pages/QuartelyTrends'
+import PullRequestSize from '../pages/PullRequestSize'
 import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
 import ContributorStatsPage from '../pages/ContributorStatsPage'
 import NotFoundError404 from '../pages/NotFoundError404'
@@ -74,10 +75,15 @@ const subMenuItems = [
         component: PullRequestStats
       },
       {
-        name: 'Quarterly Trends',
-        uri: '/quartely-trends',
-        component: QuartelyTrends
-      }
+        name: 'Quarterly Trends', 
+        uri: '/quartely-trends', 
+        component: QuartelyTrends 
+      },
+      {
+        name: 'Pull request size', 
+        uri: '/pull-request-size', 
+        component: PullRequestSize
+      },
     ]
   },
   {
@@ -108,6 +114,7 @@ const buildRoutPath = (menuItems, baseURI='') => {
 
 const Home = () => {
   const { authState, authService } = useOktaAuth()
+  const tokenManager = authService.getTokenManager()
   const [userInfo, setUserInfo] = useState(null)
   const [repositoryId, setRepositoryId] = useState()
   const [repositoryList, setRepositoryList] = useState()
@@ -126,14 +133,14 @@ const Home = () => {
 
   useEffect(() => {
     if(repositoryId) {
-      apiClient.setAccessToken(authState.accessToken)
+      apiClient.setTokenManager(tokenManager)
       if(repositoryList === undefined) {
         apiClient.repos.getRepoDetail(repositoryId).then((data) => {
           setRepositoryList([data])
         })
       }
     }
-  }, [authState.accessToken, repositoryId, repositoryList])
+  }, [repositoryId, repositoryList, tokenManager])
 
   const logout = async () => {
     authService.logout('/')

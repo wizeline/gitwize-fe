@@ -11,7 +11,11 @@ describe('Quarterly trends', () => {
     oktaLib.useOktaAuth.mockImplementation(() => {
       return {
         authState: {},
-        authService: {},
+        authService: {
+          getTokenManager: function() {
+            return null
+          }
+        },
       }
     })
   });
