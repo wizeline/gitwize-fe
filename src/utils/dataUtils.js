@@ -104,8 +104,9 @@ export const transformDataForBubbleChart = (chartData) => {
     backgroundColor: (context)=> {
       var index = context.dataIndex;
       var value = context.dataset.data[index];
-      return value.r < 20 ? '#62C8BA' : '#EC5D5C';
+      return value.r < 20 ? 'rgba(98, 200, 186, 0.9)' : 'rgba(236, 93, 92, 0.9)';
     },
+    borderColor: '#FFFFFF',
     pointHoverBackgroundColor: 'rgba(75,192,192,1)',
     pointRadius: 1,
     pointHitRadius: 10,
