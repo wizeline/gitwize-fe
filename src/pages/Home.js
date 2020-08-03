@@ -1,10 +1,9 @@
 import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
 import { PageProvider } from '../contexts/PageContext'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
 
 import RepositoryList from '../views/RepositoryList'
 import RepositoryStats from '../pages/RepositoryStats'
@@ -20,7 +19,7 @@ import { ApiClient } from '../apis'
 import CodeChangeVelocity from './CodeChangeVelocity';
 import WeeklyImpact from './WeeklyImpact';
 
-const theme = createMuiTheme({  
+const theme = createMuiTheme({
   typography: {
     fontFamily: 'Poppins',
     button: {
@@ -46,24 +45,24 @@ const useStyles = makeStyles(() => ({
 
 const subMenuItems = [
   {
-    name: 'Impact', 
-    uri: '/impact', 
+    name: 'Impact',
+    uri: '/impact',
     children: [
       {
-        name: 'Weekly Impact', 
-        uri: '/weekly-impact', 
+        name: 'Weekly Impact',
+        uri: '/weekly-impact',
         component: WeeklyImpact
       }
     ]
   },
   {
-    name: 'Code Change Velocity', 
-    uri: '/code-change-velocity', 
+    name: 'Code Change Velocity',
+    uri: '/code-change-velocity',
     component: CodeChangeVelocity
   },
   {
-    name: 'Repository Stats', 
-    uri: '/repository-stats', 
+    name: 'Repository Stats',
+    uri: '/repository-stats',
     component: RepositoryStats
   },
   {
@@ -71,7 +70,7 @@ const subMenuItems = [
     uri: '/pull-request',
     children: [
       {
-        name: 'Pull Request Stats', 
+        name: 'Pull Request Stats',
         uri: '/pull-request-stats',
         component: PullRequestStats
       },
@@ -88,11 +87,11 @@ const subMenuItems = [
     ]
   },
   {
-    name: 'Contributors', 
+    name: 'Contributors',
     uri: '/contributor-stats',
     children: [
       {
-        name: 'Contributor Stats', 
+        name: 'Contributor Stats',
         uri: '/Contributors-stats',
         component: ContributorStatsPage
       }

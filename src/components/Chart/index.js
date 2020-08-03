@@ -67,8 +67,8 @@ export default function Chart(props) {
   const classes = useStyles()
 
   const handleClick = (e, item, index, originalColor) => {
-    let ci = chartRef.current.chartInstance;
-    let meta = ci.getDatasetMeta(index);
+    const ci = chartRef.current.chartInstance;
+    const meta = ci.getDatasetMeta(index);
     meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
     if(item.style.color !== 'grey') {
       item.style.color = 'grey'
@@ -99,7 +99,7 @@ export default function Chart(props) {
       display: false
     },
     legendCallback: (chartInstance) => {
-      let text = [];
+      const text = [];
       text.push('<ul>');
       for (let i = 0; i < chartInstance.data.datasets.length; i++) {
         text.push('<li><span style="background-color:' + chartInstance.data.datasets[i].backgroundColor + '"></span>');

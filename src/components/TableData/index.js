@@ -6,8 +6,7 @@ const defaultPageSize = 7
 
 export default function TableData(props) {
   const { tableData, tableColumn, isDisplaySearch = false, customComponent } = props
-  let tableObject;
-  tableObject = (<MaterialTable
+  const tableObject = (<MaterialTable
                   columns={tableColumn}
                   data={tableData}
                   options={{
