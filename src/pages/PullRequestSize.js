@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles,styled } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import { useOktaAuth } from '@okta/okta-react'
 
@@ -111,9 +111,68 @@ const chartOptions = {
   },
   tooltips: {
     mode: 'label',
-    enabled: true,
+    enabled: false,
   },
   maintainAspectRatio: false,
+}
+
+const BubbleChartToolTip = styled('div')(({
+  theme
+}) => ({
+  "&": {
+    position: 'absolute',
+    background: 'rgba(0, 0, 0, 1)',
+    color: 'white',
+    borderRadius: '3px',
+    fontFamily: 'Poppins',
+    pointerEvents: 'auto',
+  },
+  "& li span": {
+    width: '12px',
+    height: '12px',
+    display: 'inline-block',
+    margin: '0 0.5vw 8px 0.5vw',
+    verticalAlign: '-9.4px'
+  },
+  "& ul": {
+    display: 'flex',
+    justifyContent: 'center',
+    listStyle: 'none',
+    fontSize: '10px',
+    flexDirection: 'column',
+    padding: '0px',
+  },
+  "& li": {
+    fontSize: 10,
+    textAlign: 'left',
+    height: '20px',
+    fontWeight: 'bold',
+    margin: '1vh 0.5vw',
+    color: "#CACACA"
+  },
+  "& li div": {
+    float: 'right',
+    margin: '0px 1vw 0px 5vw',
+    color: 'white',
+    fontWeight: 'bolder'
+  },
+  "& li.title": {
+    fontSize: "16px",
+    color: 'white',
+    fontWeight: 'bold'
+  },
+  "& .toolTipButton": {
+    width: '100%',
+    height: '3vh',
+    cursor: 'pointer'
+  },
+  "&.nothover:not(:hover)": {
+    display: 'none'
+  }
+}))
+
+const handleClickButton = (e, item, index) => {
+  console.log(index)
 }
 
 function PullRequestSize(props) {
@@ -125,6 +184,78 @@ function PullRequestSize(props) {
   const classes = useStyles()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
+
+  const bubbleCustomToolTip = (tooltipModel, chartRef) => {
+    // Tooltip Element
+  let tooltipEl = document.getElementById('chartjs-tooltip-1')
+  const chartInstance = chartRef.current.chartInstance
+  // Create element on first render
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div')
+    tooltipEl.id = 'chartjs-tooltip'
+    document.body.appendChild(tooltipEl)
+  }
+  // Hide if no tooltip
+  tooltipEl.classList.remove('nothover')
+  if (tooltipModel.opacity === 0) {
+    tooltipEl.classList.add('nothover')
+    tooltipEl.style.opacity = null
+    return
+  }
+  // Set caret Position
+  tooltipEl.classList.remove('above', 'below', 'no-transform')
+  if (tooltipModel.yAlign) {
+    tooltipEl.classList.add(tooltipModel.yAlign)
+  } else {
+    tooltipEl.classList.add('no-transform')
+  }
+  // Set Text
+  if (tooltipModel.body) {
+    let bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
+    if (bodyLines.length > 0) {
+      tooltipEl.innerHTML = '<ul></ul>'
+      let innerHtml = ''
+      const tooltipItems = tooltipModel.dataPoints
+      const dataSets = chartInstance.data.datasets
+      console.log(dataSets)
+      console.log(tooltipItems)
+      //find missing data set Index:
+      innerHtml += `
+                  <li class="title"> PR Title </li>
+                  <li>
+                      PR Creation Date: <div> 15th Jul </div>
+                  </li>
+                  <li>
+                      PR Size: <div> 350 </div>
+                  </li>
+                  <li>
+                      Status of PR: <div> Merged </div>
+                  </li>
+                  <li>
+                      PR Review Time: <div> 24hrs </div>
+                  </li>
+                  <li>
+                      Created by <div> User A </div>
+                  </li>
+                  <li><button class="toolTipButton">View PR</button></li>`
+      let tableRoot = tooltipEl.querySelector('ul')
+      tableRoot.innerHTML = innerHtml
+    }
+    document.querySelectorAll(`.toolTipButton`).forEach((item, index) => {
+      item.addEventListener("click", e => handleClickButton(e, item, index));
+    })
+    // `this` will be the overall tooltip
+    let position = chartInstance.canvas.getBoundingClientRect()
+    // Display, position, and set styles for font
+    tooltipEl.style.opacity = 0.9
+    let left = position.left + window.pageXOffset + tooltipModel.caretX
+    tooltipEl.style.left =
+    left + tooltipEl.offsetWidth > window.innerWidth ? left - tooltipEl.offsetWidth + 'px' : left + 'px'
+    tooltipEl.style.top = position.top + window.pageYOffset + 'px'
+    tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px'
+    tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px'
+    }
+  }
 
   useEffect(() => {
     apiClient.setTokenManager(tokenManager)
@@ -146,7 +277,9 @@ function PullRequestSize(props) {
       <Paper className={classes.textStyle} elevation={0} square={true} variant="elevation">
         {headerTxt}
       </Paper>
-      <Chart chartType={chartTypeEnum.BUBBLE} data={chartData} chartOptions={chartOptions} isLegendDisabled={true} />
+      <Chart chartType={chartTypeEnum.BUBBLE} data={chartData} chartOptions={chartOptions} isLegendDisabled={true} 
+         customToolTip={bubbleCustomToolTip}/>
+      <BubbleChartToolTip id="chartjs-tooltip-1"/>
     </div>
   )
 }
