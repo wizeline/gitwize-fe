@@ -199,7 +199,7 @@ export const createDumpDataIfMissing = (data, dateRange) => {
         result.push({
           date: data[index].date,
           additions: data[index] ? data[index].additions : 0,
-          changePercent: data[index] ? data[index].changePercent : 0,
+          changePercent: data[index] ? data[index].changePercent.toFixed(2) : 0,
           commits: data[index] ? data[index].commits : 0,
           deletions: data[index] ? data[index].deletions : 0,
           filesChange: data[index] ? data[index].filesChange : 0,
