@@ -163,8 +163,11 @@ const BubbleChartToolTip = styled('div')(({
   },
   "& .toolTipButton": {
     width: '100%',
-    height: '3vh',
-    cursor: 'pointer'
+    height: '37px',
+    cursor: 'pointer',
+    background: 'rgba(255, 255, 255, 0.09);',
+    borderRadius: 8,
+    color: '#FFFFFF'
   },
   "&.nothover:not(:hover)": {
     display: 'none'
@@ -217,25 +220,25 @@ function PullRequestSize(props) {
       let innerHtml = ''
       const tooltipItems = tooltipModel.dataPoints
       const dataSets = chartInstance.data.datasets
-      console.log(dataSets)
-      console.log(tooltipItems)
+      const index = tooltipItems[0].index
+      const fullData = dataSets[0].data[index]
       //find missing data set Index:
       innerHtml += `
-                  <li class="title"> PR Title </li>
+                  <li class="title"> ${fullData.prTitle} </li>
                   <li>
-                      PR Creation Date: <div> 15th Jul </div>
+                      PR Creation Date: <div> ${fullData.creationDate} </div>
                   </li>
                   <li>
-                      PR Size: <div> 350 </div>
+                      PR Size: <div> ${fullData.PRSize} </div>
                   </li>
                   <li>
-                      Status of PR: <div> Merged </div>
+                      Status of PR: <div> ${fullData.statusOfPr} </div>
                   </li>
                   <li>
-                      PR Review Time: <div> 24hrs </div>
+                      PR Review Time: <div> ${fullData.PRReviewTime} </div>
                   </li>
                   <li>
-                      Created by <div> User A </div>
+                      Created by <div> ${fullData.createdBy} </div>
                   </li>
                   <li><button class="toolTipButton">View PR</button></li>`
       let tableRoot = tooltipEl.querySelector('ul')
@@ -251,7 +254,7 @@ function PullRequestSize(props) {
     let left = position.left + window.pageXOffset + tooltipModel.caretX
     tooltipEl.style.left =
     left + tooltipEl.offsetWidth > window.innerWidth ? left - tooltipEl.offsetWidth + 'px' : left + 'px'
-    tooltipEl.style.top = position.top + window.pageYOffset + 'px'
+    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.y + 'px'
     tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px'
     tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px'
     }
