@@ -15,7 +15,7 @@ import { buildCustomToolTipPullRequestSize } from '../utils/chartUtils'
 const apiClient = new ApiClient()
 const showDate = ['Last 7 Days', 'Last 14 Days', 'Last 21 Days', 'Last 30 Days', 'Custom']
 const information = `This section will display the size of all the PRs created in the selected date range in form of circles. 
-  A bigger circle means a bigger PR. Prs with more than 300 lines of code are shown as red. 
+  A bigger circle means a bigger PR. PRs with more than 300 lines of code are shown as red. 
   Every circle will have a tooltip which will show some details about the PR, and an actual link to the PR.`
 
 const useStyles = makeStyles(() => ({
