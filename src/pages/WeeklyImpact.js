@@ -220,7 +220,7 @@ const customToolTip = (tooltipModel, chartRef) => {
         let label
         switch (tooltipItems[0].label) {
           case 'Churn':
-            label = 'What percentage of total changes is churn/refactoring'
+            label = 'What percentage of total changes is churn or refactoring'
             break
           case 'New Code':
             label = 'What percentage of total changes is new lines of code'
@@ -369,7 +369,7 @@ function WeeklyImpact(props) {
           Development Focus
         </ListItemText>
         <ListItemText disableTypography className={classes.developmentFocusDesc}>
-          {`Team focus most on ${calculateFocusData(response, chartItems)} in last week`}
+          {`Team focused most on ${calculateFocusData(response, chartItems)} in last week`}
         </ListItemText>
       </Grid>
       <Grid item xs={4}>
