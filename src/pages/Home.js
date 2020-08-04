@@ -75,8 +75,8 @@ const subMenuItems = [
         component: PullRequestStats
       },
       {
-        name: 'Quarterly Trends', 
-        uri: '/quartely-trends', 
+        name: 'Monthly Trends', 
+        uri: '/monthly-trends', 
         component: QuartelyTrends 
       },
       {
