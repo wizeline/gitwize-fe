@@ -375,7 +375,7 @@ export const buildCustomToolTipPullRequestSize = (tooltipModel, chartRef) => {
                        Status of PR: <div> ${fullData.statusOfPr} </div>
                    </li>
                    <li>
-                       PR Review Time: <div> ${fullData.PRReviewTime} </div>
+                       PR Review Time: <div> ${fullData.PRReviewTime} hrs</div>
                    </li>
                    <li>
                        Created by <div> ${fullData.createdBy} </div>
