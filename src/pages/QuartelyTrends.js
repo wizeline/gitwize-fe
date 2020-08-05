@@ -90,7 +90,7 @@ const ChartToolTip = styled('div')(({
 
 const chartItems = [
   { name: 'Average PR size', color: '#62C8BA', fieldName: 'averagePRSize', unit: ''},
-  { name: 'Average PR review time', color: '#EC5D5C', fieldName: 'averagePRTime', unit: 'mins'},
+  { name: 'Average PR review time', color: '#EC5D5C', fieldName: 'averagePRTime', unit: 'hrs'},
   { name: '% of Rejected PRs', color: '#9F55E2', fieldName: 'percentageRejectedPR', unit: '%' },
 ]
 const information = 'This section will show the PR related trends over last 3 months, in terms of percentage increase/decrease with respect to the first month'
