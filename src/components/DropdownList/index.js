@@ -33,7 +33,7 @@ const useFilterBarStyles = makeStyles((theme) => ({
 const marginTopBetweenSelectAndDropdown = 5
 
 export default function DropdownList(props) {
-  const {label, onChange, initValue, data=[], disabled=false} = props
+  const {label, onChange, initValue, data=[], isDisabled=false} = props
   const [selectedValue, setSelectedValue] = useState(initValue ? initValue : data[0])
   const [topPosition, setTopPosition] = useState('0px');
   const classes = useFilterBarStyles()
@@ -81,7 +81,7 @@ export default function DropdownList(props) {
             id: 'uncontrolled-native',
           }}
           MenuProps={{ classes: { paper: classes.select }, style: {position:'absolute', top: topPosition} }}
-          disabled={disabled}
+          disabled={isDisabled}
         >
           {newDefaultValue}
           {data.map((item) => (
