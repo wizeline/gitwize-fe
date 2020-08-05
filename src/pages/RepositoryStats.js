@@ -92,6 +92,7 @@ const chartOptions = {
 }
 
 function RepositoryStats(props) {
+  const {pageTitle} = props
   const [repoData, setRepoData] = useState([])
   const [chartData, setChartData] = useState([])
   const { authService } = useOktaAuth()
@@ -114,7 +115,7 @@ function RepositoryStats(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Repository Stats</PageTitle>
+      <PageTitle information={information}>{pageTitle}</PageTitle>
       <DataStats
         chartBars={chartBars}
         chartLines={chartLines}

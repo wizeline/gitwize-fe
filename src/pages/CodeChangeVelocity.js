@@ -100,6 +100,7 @@ const information = `This section will show the following code change trends ove
 const dateRange = calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity()
 
 function CodeChangeVelocity(props) {
+  const {pageTitle} = props
   const [hightLightState, setHightLightState] = useState({})
   const [chartData, setChartData] = useState()
   const [responseData, setResponseData] = useState()
@@ -190,7 +191,7 @@ function CodeChangeVelocity(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Code Change Velocity</PageTitle>
+      <PageTitle information={information}>{pageTitle}</PageTitle>
       <Grid container className={classes.root}>
         <Grid className={classes.gridItem} style={{ justifyContent: 'flex-start' }} item xs={4}>
           <List>
