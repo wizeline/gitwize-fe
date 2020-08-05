@@ -206,7 +206,7 @@ function PullRequestSize(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Pull request size</PageTitle>
+      <PageTitle information={information}>Pull Request Size</PageTitle>
       <BranchFilter showDate={showDate} onPeriodChange={(headerText) => handleChangeHeaderTxt(headerText)} />
       <Paper className={classes.textStyle} elevation={0} square={true} variant="elevation">
         {headerTxt}
