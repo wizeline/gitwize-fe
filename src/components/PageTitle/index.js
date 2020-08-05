@@ -19,7 +19,8 @@ const useStyles = makeStyles(() => ({
 
 const Title = styled('h1')({
   marginTop: '20px !important',
-  fontSize: '30px'
+  fontSize: '30px',
+  fontFamily: 'Poppins',
 })
 
 export default function PageTitle({ children, information }) {
