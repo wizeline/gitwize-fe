@@ -352,6 +352,8 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartIt
         }
       }
 
+      const unit = chartItems[chartIndex].unit ? chartItems[chartIndex].unit : ''
+
       if (indexBaseLine === undefined && !maxHighLightValue.hightLightNumber) {
         maxHighLightValue = {
           hightLightNumber: '',
@@ -392,7 +394,7 @@ export const calculateHightLightState = (responseData, dateFrom, dateTo, chartIt
               highLightTime: `${monthFrom} ${yearFrom} vs ${monthTo} ${yearTo}`,
               descriptonTxt: `${metricName} ${value < 0 ? 'reduced' : 'increased'} by ${Math.abs(
                 value
-              )} percent from ${monthFrom} ${yearFrom} to ${monthTo} ${yearTo}`,
+              )} percent from ${monthFrom} ${yearFrom} (${data[indexBaseLine]}${unit}) to ${monthTo} ${yearTo} (${data[i]}${unit})`,
               highLightColor: chartItems[chartIndex].color,
             }
             hightLightNumber = Math.abs(value)
