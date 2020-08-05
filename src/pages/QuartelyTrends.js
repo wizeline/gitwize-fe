@@ -97,6 +97,7 @@ const information = 'This section will show the PR related trends over last 3 mo
 const dateRange = calculateDateRangeQuarterlyTrendsAndCodeChangeVelocity()
 
 function QuartelyTrends(props) {
+  const {pageTitle} = props
   const [hightLightState, setHightLightState] = useState({})
   const [chartData, setChartData] = useState()
   const [responseData, setResponseData] = useState()
@@ -187,7 +188,7 @@ function QuartelyTrends(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Monthly Trends</PageTitle>
+      <PageTitle information={information}>{pageTitle}</PageTitle>
       <Grid container className={classes.root}>
         <Grid className={classes.gridItem} style={{ justifyContent: 'flex-start' }} item xs={4}>
           <List>

@@ -106,7 +106,8 @@ const buildRoutPath = (menuItems, baseURI='') => {
     } else {
       return {
         uri: baseURI+item.uri,
-        component: item.component
+        component: item.component,
+        name: item.name
       }
     }
   })
@@ -187,14 +188,17 @@ const Home = () => {
         <Container>
           <Switch>
             <Route path="/" exact component={RepositoryList} />
-              {buildRoutPath(subMenuItems).map((item, index) => (
-            <Route
-              exact
-              key={item.uri}
-              path={`/repository/:id${item.uri}`}
-              component={item.component}
-            />
-            ))}
+              {buildRoutPath(subMenuItems).map((item, index) => {
+                const Mycomponent = item.component
+                return (
+                  <Route
+                    exact
+                    key={item.uri}
+                    path={`/repository/:id${item.uri}`}
+                    render={props => <Mycomponent pageTitle={item.name} {...props}/>}
+                  />
+                )}
+              )}
             <Route component={NotFoundError404} />
           </Switch>
         </Container>

@@ -178,6 +178,7 @@ const BubbleChartToolTip = styled('div')(({ theme }) => ({
 }))
 
 function PullRequestSize(props) {
+  const {pageTitle} = props
   const [headerTxt, setHeaderTxt] = useState(showDate[0])
   const [chartData, setChartData] = useState()
   const { authService } = useOktaAuth()
@@ -206,7 +207,7 @@ function PullRequestSize(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Pull Request Size</PageTitle>
+      <PageTitle information={information}>{pageTitle}</PageTitle>
       <BranchFilter showDate={showDate} onPeriodChange={(headerText) => handleChangeHeaderTxt(headerText)} />
       <Paper className={classes.textStyle} elevation={0} square={true} variant="elevation">
         {headerTxt}

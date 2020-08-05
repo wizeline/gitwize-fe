@@ -128,6 +128,7 @@ const chartOptionsInit = {
 };
 
 function ContributorStatsPage(props) {
+  const {pageTitle} = props
   const {id} = props.match.params;
   const [repoData, setRepoData] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -223,7 +224,7 @@ function ContributorStatsPage(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <PageTitle information={information}>Contributor Stats</PageTitle>
+      <PageTitle information={information}>{pageTitle}</PageTitle>
       <DataStats onTableView={handleOnTableView} tableData={repoData} chartData={chartData} tableColumn={tableColumns} customFilters={[userFilter]}
       isDisplaySearch={true} chartBars={chartBars} chartLines={chartLines} chartOptions={chartOptions}/>
     </div>
