@@ -362,6 +362,17 @@ export const buildCustomToolTipPullRequestSize = (tooltipModel, chartRef) => {
       const dataSets = chartInstance.data.datasets
       const index = tooltipItems[0].index
       const fullData = dataSets[0].data[index]
+      let prReviewTime
+      
+      if(fullData.statusOfPr !== 'opened') {
+        const reviewTime =  fullData.PRReviewTime >= 60 ? `${(fullData.PRReviewTime / 60).toFixed(1)} hrs`  : `${fullData.PRReviewTime} mins`
+        
+        prReviewTime = `<li>
+                          PR Review Time: <div> ${reviewTime}</div>
+                        </li>`
+      } else {
+        prReviewTime = ``
+      }
       //find missing data set Index:
       innerHtml += `
                    <li class="title"> ${fullData.prTitle} </li>
@@ -374,9 +385,7 @@ export const buildCustomToolTipPullRequestSize = (tooltipModel, chartRef) => {
                    <li>
                        Status of PR: <div> ${fullData.statusOfPr} </div>
                    </li>
-                   <li>
-                       PR Review Time: <div> ${fullData.PRReviewTime} hrs</div>
-                   </li>
+                   ${prReviewTime}
                    <li>
                        Created by <div> ${fullData.createdBy} </div>
                    </li>

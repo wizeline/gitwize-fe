@@ -156,7 +156,7 @@ export const transformDataForBubbleChart = (chartData) => {
           y: prevYPosition,
           r: nomarlizedSize,
           prTitle: pr.title,
-          creationDate: dateLabel,
+          creationDate: pr.created_date,
           PRSize: prSize,
           statusOfPr: pr.status,
           PRReviewTime: pr.review_time,
