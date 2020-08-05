@@ -80,7 +80,7 @@ const subMenuItems = [
         component: QuartelyTrends 
       },
       {
-        name: 'Pull request size', 
+        name: 'Pull Request Size', 
         uri: '/pull-request-size', 
         component: PullRequestSize
       },
