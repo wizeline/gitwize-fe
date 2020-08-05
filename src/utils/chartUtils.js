@@ -68,7 +68,7 @@ export const getChartOptions = (chartOptions, chartLines = []) => {
 
 export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
   if (responseData) {
-    const arrays = chartItems.flatMap(item => responseData[item.fieldName].currentPeriod)
+    const arrays = chartItems.flatMap((item) => responseData[item.fieldName].currentPeriod)
     const maxValue = Number(
       arrays.reduce((a, b) => {
         return Math.max(Number(a), Number(b))
@@ -90,7 +90,7 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
               fontSize: 16,
               autoSkip: true,
               autoSkipPadding: 30,
-              padding: 10
+              padding: 10,
             },
           },
         ],
@@ -112,7 +112,7 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
               fontSize: 10,
               beginAtZero: true,
               min: 0,
-              max: (maxValue <= 0) ? 5 : (maxValue + (maxValue / 4)),
+              max: maxValue <= 0 ? 5 : maxValue + maxValue / 4,
               precision: 0,
               suggestedMax: 5,
             },
@@ -123,17 +123,17 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
         enabled: false,
         callbacks: {
           title: (tooltipItems, data) => {
-            const label = tooltipItems[0].label;
-            switch(label) {
+            const label = tooltipItems[0].label
+            switch (label) {
               case 'Churn':
                 return 'Churn Percentage'
               case 'New Code':
                 return 'New Code Percentage'
-              default: 
+              default:
                 return ''
             }
-          }
-        }
+          },
+        },
       },
       plugins: {
         datalabels: {
@@ -144,7 +144,7 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
             size: 13,
           },
           formatter: (value) => {
-            return `${value}%`;
+            return `${value.toFixed(2)}%`;
         }
         },
       },
@@ -243,7 +243,14 @@ export const buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity = (
         let indexBaseLine
         for (let i = 0; i < chartFullData.chartData.length; i++) {
           if (indexBaseLine === undefined) {
-            indexBaseLine = calculateIndexBaseLine(responseData, chartItem.fieldName, i, chartFullData.chartData, dateFrom, dateTo)
+            indexBaseLine = calculateIndexBaseLine(
+              responseData,
+              chartItem.fieldName,
+              i,
+              chartFullData.chartData,
+              dateFrom,
+              dateTo
+            )
           }
         }
 
@@ -257,7 +264,9 @@ export const buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity = (
           const percentageValue = `(${isNegativeValue ? '' : '+'}${tooltipItems[tooltipIndex].value}%)`
           style += colors.backgroundColor
           style += '; border-color:' + colors.borderColor
-          body = `${chartItems[i].name}: <div>${chartFullData.chartData[tooltipItems[0].index]} ${chartItem.unit} ${tooltipItems[0].index === indexBaseLine ? '' : percentageValue} </div>`
+          body = `${chartItems[i].name}: <div>${chartFullData.chartData[tooltipItems[0].index]} ${chartItem.unit} ${
+            tooltipItems[0].index === indexBaseLine ? '' : percentageValue
+          } </div>`
         }
 
         style += '; border-width: 2px'
@@ -317,4 +326,78 @@ export const buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity = (chartData)
       },
     },
   ]
+}
+
+export const buildCustomToolTipPullRequestSize = (tooltipModel, chartRef) => {
+  // Tooltip Element
+  let tooltipEl = document.getElementById('chartjs-tooltip-1')
+  const chartInstance = chartRef.current.chartInstance
+  // Create element on first render
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div')
+    tooltipEl.id = 'chartjs-tooltip'
+    document.body.appendChild(tooltipEl)
+  }
+  // Hide if no tooltip
+  tooltipEl.classList.remove('nothover')
+  if (tooltipModel.opacity === 0) {
+    tooltipEl.classList.add('nothover')
+    tooltipEl.style.opacity = null
+    return
+  }
+  // Set caret Position
+  tooltipEl.classList.remove('above', 'below', 'no-transform')
+  if (tooltipModel.yAlign) {
+    tooltipEl.classList.add(tooltipModel.yAlign)
+  } else {
+    tooltipEl.classList.add('no-transform')
+  }
+  // Set Text
+  if (tooltipModel.body) {
+    let bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
+    if (bodyLines.length > 0) {
+      tooltipEl.innerHTML = '<ul></ul>'
+      let innerHtml = ''
+      const tooltipItems = tooltipModel.dataPoints
+      const dataSets = chartInstance.data.datasets
+      const index = tooltipItems[0].index
+      const fullData = dataSets[0].data[index]
+      //find missing data set Index:
+      innerHtml += `
+                   <li class="title"> ${fullData.prTitle} </li>
+                   <li>
+                       PR Creation Date: <div> ${fullData.creationDate} </div>
+                   </li>
+                   <li>
+                       PR Size: <div> ${fullData.PRSize} </div>
+                   </li>
+                   <li>
+                       Status of PR: <div> ${fullData.statusOfPr} </div>
+                   </li>
+                   <li>
+                       PR Review Time: <div> ${fullData.PRReviewTime} </div>
+                   </li>
+                   <li>
+                       Created by <div> ${fullData.createdBy} </div>
+                   </li>
+                   <a href=${fullData.url}><button class="toolTipButton">View PR</button></a>`
+      let tableRoot = tooltipEl.querySelector('ul')
+      tableRoot.innerHTML = innerHtml
+    }
+    document.querySelectorAll(`.toolTipButton`).forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        // TODO: View PR
+      })
+    })
+    // `this` will be the overall tooltip
+    let position = chartInstance.canvas.getBoundingClientRect()
+    // Display, position, and set styles for font
+    tooltipEl.style.opacity = 0.9
+    let left = position.left + window.pageXOffset + tooltipModel.caretX
+    tooltipEl.style.left =
+      left + tooltipEl.offsetWidth > window.innerWidth ? left - tooltipEl.offsetWidth + 'px' : left + 'px'
+    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.y + 'px'
+    tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px'
+    tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px'
+  }
 }

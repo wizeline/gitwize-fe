@@ -98,21 +98,15 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
 export const transformDataForBubbleChart = (chartData) => {
   let labels = []
   let smallPullRequests = {
-    label: 'Small Pull Requests',
+    label: 'Pull Requests Size',
     fill: false,
     lineTension: 0.1,
-    backgroundColor: '#62C8BA',
-    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-    pointRadius: 1,
-    pointHitRadius: 10,
-    data: [],
-  }
-
-  let bigPullRequests = {
-    label: 'Big Pull Requests',
-    fill: false,
-    lineTension: 0.1,
-    backgroundColor: '#EC5D5C',
+    backgroundColor: (context)=> {
+      var index = context.dataIndex;
+      var value = context.dataset.data[index];
+      return value.r < 20 ? 'rgba(98, 200, 186, 0.9)' : 'rgba(236, 93, 92, 0.9)';
+    },
+    borderColor: '#FFFFFF',
     pointHoverBackgroundColor: 'rgba(75,192,192,1)',
     pointRadius: 1,
     pointHitRadius: 10,
@@ -146,26 +140,28 @@ export const transformDataForBubbleChart = (chartData) => {
 
     prs.forEach((pr) => {
       const prSize = pr.size
+      let nomarlizedSize 
 
       // small pull request will be scaled between 20px and 5px in size
       if(prSize < maxSizeForSmallPr) {
-        const nomarlizedSize =  (20 - 5)*((prSize  - minPrSize) / (maxSizeForSmallPr - minPrSize)) + 5
-
-        smallPullRequests.data.push({
-          x: dateLabel,
-          y: prevYPosition,
-          r: nomarlizedSize,
-        })
+        nomarlizedSize =  (20 - 5)*((prSize  - minPrSize) / (maxSizeForSmallPr - minPrSize)) + 5
       } else {
        // big pull request will be scaled between 30px and 20px in size 
-        const nomarlizedSize =  (30 - 20)*((prSize  - maxSizeForSmallPr) / (maxPrSize - maxSizeForSmallPr)) + 20
-
-        bigPullRequests.data.push({
-          x: dateLabel,
-          y: prevYPosition,
-          r: nomarlizedSize,
-        })
+        nomarlizedSize =  (30 - 20)*((prSize  - maxSizeForSmallPr) / (maxPrSize - maxSizeForSmallPr)) + 20
       }
+
+      smallPullRequests.data.push({
+        x: dateLabel,
+        y: prevYPosition,
+        r: nomarlizedSize,
+        prTitle: pr.title,
+        creationDate: dateLabel,
+        PRSize: prSize,
+        statusOfPr: pr.status,
+        PRReviewTime: pr.review_time,
+        createdBy: pr.created_by,
+        url: pr.url
+      })
 
       let distanceBetweenTwoPr
       if(prevPrSize + prSize > 40) {
@@ -185,7 +181,6 @@ export const transformDataForBubbleChart = (chartData) => {
     labels: labels,
     datasets: [
       smallPullRequests,
-      bigPullRequests,
     ]
   }
 }
@@ -294,7 +289,7 @@ export const createDumpDataIfMissing = (data, dateRange) => {
         result.push({
           date: data[index].date,
           additions: data[index] ? data[index].additions : 0,
-          changePercent: data[index] ? data[index].changePercent : 0,
+          changePercent: data[index] ? data[index].changePercent.toFixed(2) : 0,
           commits: data[index] ? data[index].commits : 0,
           deletions: data[index] ? data[index].deletions : 0,
           filesChange: data[index] ? data[index].filesChange : 0,

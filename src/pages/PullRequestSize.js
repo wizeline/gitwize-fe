@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, styled } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import { useOktaAuth } from '@okta/okta-react'
 
@@ -10,6 +10,7 @@ import MainLayoutContex from '../contexts/MainLayoutContext'
 import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
 import Chart, { chartTypeEnum } from '../components/Chart'
+import { buildCustomToolTipPullRequestSize } from '../utils/chartUtils'
 
 const apiClient = new ApiClient()
 const showDate = ['Last 7 Days', 'Last 14 Days', 'Last 21 Days', 'Last 30 Days', 'Custom']
@@ -85,7 +86,7 @@ const chartOptions = {
     yAxes: [
       {
         type: 'linear',
-        display: true,
+        display: false,
         position: 'left',
         id: 'y-axis-1',
         gridLines: {
@@ -96,7 +97,7 @@ const chartOptions = {
           zeroLineWidth: 0,
         },
         labels: {
-          show: true,
+          show: false,
           overflow: 'justify',
         },
         stacked: false,
@@ -111,10 +112,67 @@ const chartOptions = {
   },
   tooltips: {
     mode: 'label',
-    enabled: true,
+    enabled: false,
   },
   maintainAspectRatio: false,
 }
+
+const BubbleChartToolTip = styled('div')(({ theme }) => ({
+  '&': {
+    position: 'absolute',
+    background: 'rgba(0, 0, 0, 0.85)',
+    color: 'white',
+    borderRadius: '3px',
+    fontFamily: 'Poppins',
+    pointerEvents: 'auto',
+  },
+  '& li span': {
+    width: '12px',
+    height: '12px',
+    display: 'inline-block',
+    margin: '0 0.5vw 8px 0.5vw',
+    verticalAlign: '-9.4px',
+  },
+  '& ul': {
+    display: 'flex',
+    justifyContent: 'center',
+    listStyle: 'none',
+    fontSize: '14px',
+    flexDirection: 'column',
+    padding: '0px',
+  },
+  '& li': {
+    fontSize: 10,
+    textAlign: 'left',
+    height: '20px',
+    fontWeight: 'bold',
+    margin: '1vh 0.5vw',
+    color: '#CACACA',
+  },
+  '& li div': {
+    float: 'right',
+    margin: '0px 1vw 0px 5vw',
+    color: 'white',
+    fontWeight: 'bolder',
+  },
+  '& li.title': {
+    fontSize: '16px',
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  '& .toolTipButton': {
+    width: '100%',
+    height: '37px',
+    cursor: 'pointer',
+    background: 'rgba(255, 255, 255, 0.09);',
+    borderRadius: 8,
+    color: '#FFFFFF',
+    border: 'none',
+  },
+  '&.nothover:not(:hover)': {
+    display: 'none',
+  },
+}))
 
 function PullRequestSize(props) {
   const [headerTxt, setHeaderTxt] = useState(showDate[0])
@@ -125,6 +183,10 @@ function PullRequestSize(props) {
   const classes = useStyles()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
+
+  const customToolTip = (tooltipModel, chartRef) => {
+    buildCustomToolTipPullRequestSize(tooltipModel, chartRef)
+  }
 
   useEffect(() => {
     apiClient.setTokenManager(tokenManager)
@@ -146,7 +208,14 @@ function PullRequestSize(props) {
       <Paper className={classes.textStyle} elevation={0} square={true} variant="elevation">
         {headerTxt}
       </Paper>
-      <Chart chartType={chartTypeEnum.BUBBLE} data={chartData} chartOptions={chartOptions} isLegendDisabled={true} />
+      <Chart
+        chartType={chartTypeEnum.BUBBLE}
+        data={chartData}
+        chartOptions={chartOptions}
+        isLegendDisabled={true}
+        customToolTip={customToolTip}
+      />
+      <BubbleChartToolTip id="chartjs-tooltip-1" />
     </div>
   )
 }
