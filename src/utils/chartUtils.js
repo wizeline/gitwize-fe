@@ -144,7 +144,7 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
             size: 13,
           },
           formatter: (value) => {
-            return `${value.toFixed(2)}%`;
+            return `${value.toFixed(0)}%`;
         }
         },
       },
