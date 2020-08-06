@@ -7,8 +7,7 @@ commands:
       - run: 
           name: Yarn install, build, and test
           command: |
-            yarn config set registry https://registry.npmjs.org
-            rm yarn.lock
+            yarn cache clean
             yarn install
             yarn build
             yarn test
@@ -58,8 +57,7 @@ commands:
               export REACT_APP_OKTA_ISSUER=${PROD_REACT_APP_OKTA_ISSUER}
               export REACT_APP_OKTA_DISABLE_HTTPS_CHECK=${PROD_REACT_APP_OKTA_DISABLE_HTTPS_CHECK}
             fi
-            yarn config set registry https://registry.npmjs.org
-            rm yarn.lock
+            yarn cache clean
             yarn install
             yarn build
             cp -f $BUILD_INFO build/$BUILD_INFO
