@@ -90,7 +90,7 @@ export function SubMenuItemNode (props) {
 		setParentChosen(parentChosenValue)
 	}, [children, baseURI, currentURI])
 
-	return (<List>
+	return (<List className={classes.notPaddingTopBottomRight}>
             <ListItem className={clsx(classes.root, classes.notPaddingTopBottomRight)}>
               <Button className={clsx(classes.buttonText, (isParentChosen) && classes.chosenParent)} onClick={() => handleToggleDisplay()}>
                 <ListItemText classes={{primary: classes.textTruncated}} primary={name}/>
@@ -119,7 +119,7 @@ export function SubMenuItemLeaf(props) {
 		setChangeClass(!baseURI && currentURI.includes(uri))
 	}, [baseURI, currentURI, uri])
 
-	return (<List>
+	return (<List className={classes.notPaddingTopBottomRight}>
             <ListItem className={classes.notPaddingTopBottomRight} key={name}>
               <Button className={clsx(!baseURI && classes.buttonText, baseURI && classes.buttonSubMenutext, (isChangeClass) && classes.chosenParent)}>
                 <NavLink className={clsx(classes.navText, (isChangeClass) && classes.chosenWithoutParent)} activeClassName={classes.chosenButton} key={name} to={`/repository/${repoId}${parentURI}${uri}`} style={{ width: '100%' }} onClick={handleLink}>
