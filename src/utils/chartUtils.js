@@ -389,7 +389,7 @@ export const buildCustomToolTipPullRequestSize = (tooltipModel, chartRef) => {
                    <li>
                        Created by <div> ${fullData.createdBy} </div>
                    </li>
-                   <a href=${fullData.url}><button class="toolTipButton">View PR</button></a>`
+                   <a href=${fullData.url} target="_blank"><button class="toolTipButton">View PR</button></a>`
       let tableRoot = tooltipEl.querySelector('ul')
       tableRoot.innerHTML = innerHtml
     }
