@@ -9,8 +9,10 @@ import { Grid, ListItemText, List, Divider, Paper } from '@material-ui/core'
 import clsx from 'clsx'
 import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
 import { formatToMMDD } from '../utils/dateUtils'
-import Chart, {chartTypeEnum} from '../components/Chart'
+import Chart, { chartTypeEnum } from '../components/Chart'
 import { buildChartOptionsBasedOnMaxValue } from '../utils/chartUtils'
+import DatePicker from '../components/DatePicker'
+import {getDayStartOfCurrentWeek, addNumberOfDays, getDayStartOfWeekPointOfTime} from '../utils/dateUtils'
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
 const IMPACT_SCORE_TXT = 'Impact score'
@@ -22,21 +24,36 @@ const gridItems = [
 ]
 
 const impactScoreItems = [
-  {name: 'files', fieldName: 'fileChanged', 
-    dropDescription: 'Fewer number of files was changed', 
-    increaseDescription: 'More number of files was changed'},
-  {name: 'insertions points', fieldName: 'insertionPoints', 
-    dropDescription: 'There were lesser number of insertion points', 
-    increaseDescription: 'There was more number of insertion points'},
-  {name: 'old codes', fieldName: ['legacyPercentage', 'churnPercentage'], 
-    dropDescription: 'Lesser edits was made to old code', 
-    increaseDescription: 'More edits was made to old code'},
-  {name: 'new codes', fieldName: 'newCodePercentage', 
-    dropDescription: 'Lesser new code was written', 
-    increaseDescription: 'More new code was written'},
-  {name: 'lines of code', fieldName: 'additions', 
-    dropDescription: 'Fewer lines of code were added', 
-    increaseDescription: 'More lines of code were added'}
+  {
+    name: 'files',
+    fieldName: 'fileChanged',
+    dropDescription: 'Fewer number of files was changed',
+    increaseDescription: 'More number of files was changed',
+  },
+  {
+    name: 'insertions points',
+    fieldName: 'insertionPoints',
+    dropDescription: 'There were lesser number of insertion points',
+    increaseDescription: 'There was more number of insertion points',
+  },
+  {
+    name: 'old codes',
+    fieldName: ['legacyPercentage', 'churnPercentage'],
+    dropDescription: 'Lesser edits was made to old code',
+    increaseDescription: 'More edits was made to old code',
+  },
+  {
+    name: 'new codes',
+    fieldName: 'newCodePercentage',
+    dropDescription: 'Lesser new code was written',
+    increaseDescription: 'More new code was written',
+  },
+  {
+    name: 'lines of code',
+    fieldName: 'additions',
+    dropDescription: 'Fewer lines of code were added',
+    increaseDescription: 'More lines of code were added',
+  },
 ]
 
 const apiClient = new ApiClient()
@@ -49,7 +66,7 @@ const useStyles = makeStyles(() => ({
   subContainer: {
     width: '100%',
     height: '32vh',
-    alignContent: 'flex-start'
+    alignContent: 'flex-start',
   },
   gridItem: {
     display: 'flex',
@@ -115,14 +132,14 @@ const useStyles = makeStyles(() => ({
   },
   reasonRoot: {
     width: '95%',
-    marginTop: '3vh'
+    marginTop: '3vh',
   },
   reasonTxt: {
     fontSize: 15,
     lineHeight: '5vh',
     margin: '0px 0px 0px 1vw',
-    height: '5vh'
-  }
+    height: '5vh',
+  },
 }))
 
 const chartItems = [
@@ -130,25 +147,23 @@ const chartItems = [
   { name: 'Churn', color: '#EC5D5C', fieldName: 'churnPercentage', chartLegendId: 'chart-legend-2' },
 ]
 
-const ChartToolTip = styled('div')(({
-  theme
-}) => ({
-  "&": {
+const ChartToolTip = styled('div')(({ theme }) => ({
+  '&': {
     position: 'absolute',
     background: 'rgba(0, 0, 0, 1)',
     color: 'white',
     borderRadius: '10px',
     fontFamily: 'Poppins',
     pointerEvents: 'none',
-  },  
-  "& li span": {
+  },
+  '& li span': {
     width: '12px',
     height: '12px',
     display: 'inline-block',
     margin: '0 0.5vw 8px 0.5vw',
-    verticalAlign: '-9.4px'
+    verticalAlign: '-9.4px',
   },
-  "& ul": {
+  '& ul': {
     display: 'flex',
     justifyContent: 'center',
     listStyle: 'none',
@@ -156,16 +171,16 @@ const ChartToolTip = styled('div')(({
     flexDirection: 'column',
     padding: '0px',
   },
-  "& li": {
+  '& li': {
     textAlign: 'left',
     height: '20px',
     fontWeight: 'bold',
     margin: '1vh 0.5vh',
   },
-  "& li div": {
+  '& li div': {
     float: 'right',
-    margin: '0px 1vw'
-  }
+    margin: '0px 1vw',
+  },
 }))
 
 const calculatePeriod = (period) => {
@@ -280,17 +295,17 @@ const customToolTip = (tooltipModel, chartRef) => {
 }
 
 const calculateFocusData = (response, chartItems) => {
-  if(response) {
+  if (response) {
     let focusItemIndex = -1
     let maxValue = Number.MIN_SAFE_INTEGER
     chartItems.forEach((item, i) => {
-      const value  = response[item.fieldName].currentPeriod;
-      if(value > maxValue) {
+      const value = response[item.fieldName].currentPeriod
+      if (value > maxValue) {
         maxValue = value
         focusItemIndex = i
       }
     })
-    if(focusItemIndex !== -1) {
+    if (focusItemIndex !== -1) {
       return chartItems[focusItemIndex].name
     }
     return ''
@@ -328,29 +343,53 @@ const buildImpactScoreReasonSession = (response) => {
   }
 }
 
+const initDateRangeValue = () => {
+  const monDayOfCurrentWeek = getDayStartOfCurrentWeek()
+  const dateFrom = addNumberOfDays(monDayOfCurrentWeek, -7)
+  const dateTo = addNumberOfDays(dateFrom, 6)
+  return {
+    from: dateFrom.toDate(),
+    to: dateTo.toDate()
+  }
+}
+
 function WeeklyImpact(props) {
-  const {id} = props.match.params;
-  const classes = useStyles();
+  const { id } = props.match.params
+  const classes = useStyles()
   const { authService } = useOktaAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [gridItemsState, setGridItems] = useState([])
   const [response, setResponse] = useState()
   const [reasoneImpactScore, setReasoneImpactScore] = useState([])
   const [period, setPeriod] = useState({})
+  const [dateRange, setDateRange] = useState(initDateRangeValue())
 
   useEffect(() => {
-      apiClient.setAuthService(authService)
-      mainLayout.current.handleChangeRepositoryId(id)
-      apiClient.weeklyImpact.getWeeklyImpactStats(id).then((response) => {
-        setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
-        setPeriod(calculatePeriod(response.period))
-        setReasoneImpactScore(buildImpactScoreReasonSession(response))
-        setResponse(response)
-      }).catch(e => {
-        console.log(e)
-      })
-    }, [id, mainLayout, authService]
-  )
+    apiClient.setAuthService(authService)
+    mainLayout.current.handleChangeRepositoryId(id)
+    apiClient.weeklyImpact.getWeeklyImpactStats(id, dateRange).then((response) => {
+      setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
+      setPeriod(calculatePeriod(response.period))
+      setReasoneImpactScore(buildImpactScoreReasonSession(response))
+      setResponse(response)
+    })
+  }, [id, mainLayout, authService, dateRange])
+
+  const handleDayClick = (day) => {
+    const dateFrom = getDayStartOfWeekPointOfTime(day)
+    const dateTo = addNumberOfDays(dateFrom, 6)
+    
+    const dateRangeValue = {
+      from: dateFrom.toDate(),
+      to: dateTo.toDate()
+    }
+
+    setDateRange(dateRangeValue)
+    return {
+      from: dateFrom.toDate(),
+      to: dateTo.toDate()
+    }
+  }
 
   const impactSession = gridItemsState.map((item) => {
     if (item.name !== 'Most churned file') {
@@ -378,13 +417,14 @@ function WeeklyImpact(props) {
                 {item.name === 'Commits/day' ? item.currentPeriod.toFixed(1) : item.currentPeriod}
               </ListItemText>
             </Grid>
-            {item.diffValue !== undefined &&
-            <Grid item xs={12}>
-              <ListItemText
-                className={classes.itemDiffValueTxt}
-                style={{ background: item.diffValue >= 0 ? '#62C8BA' : '#EC5D5C' }}
-              >{`${item.diffValue >= 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
-            </Grid>}
+            {item.diffValue !== undefined && (
+              <Grid item xs={12}>
+                <ListItemText
+                  className={classes.itemDiffValueTxt}
+                  style={{ background: item.diffValue >= 0 ? '#62C8BA' : '#EC5D5C' }}
+                >{`${item.diffValue >= 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
+              </Grid>
+            )}
             <Grid item xs={12} className={classes.itemLast}>
               <ListItemText
                 className={clsx(classes.itemPreviousTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}
@@ -465,18 +505,22 @@ function WeeklyImpact(props) {
     <Grid container className={classes.subContainer}>
       <Grid item xs={12}>
         <ListItemText disableTypography className={classes.developmentFocusHeader}>
-          Why did the impact score {(response && response.impactScore.currentPeriod < response.impactScore.previousPeriod) > 0 ? 'drop' : 'increase'}?
+          Why did the impact score{' '}
+          {(response && response.impactScore.currentPeriod < response.impactScore.previousPeriod) > 0
+            ? 'drop'
+            : 'increase'}
+          ?
         </ListItemText>
       </Grid>
       <Grid item xs={12}>
         <Paper className={classes.reasonRoot}>
           <List>
-            {reasoneImpactScore.map((item,index) => (
+            {reasoneImpactScore.map((item, index) => (
               <>
                 <ListItemText disableTypography className={classes.reasonTxt}>
                   {item}
                 </ListItemText>
-                {index !== (reasoneImpactScore.length - 1) && <Divider/>}
+                {index !== reasoneImpactScore.length - 1 && <Divider />}
               </>
             ))}
           </List>
@@ -489,6 +533,14 @@ function WeeklyImpact(props) {
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Weekly Impact</PageTitle>
       <Grid container className={classes.root}>
+        <Grid item xs={4} style={{ marginBottom: '2vh' }}>
+          <DatePicker
+            label="Date Range"
+            customDisabledDays={{ daysOfWeek: [0, 2, 3, 4, 5, 6], after: new Date() }}
+            customDayClick={handleDayClick}
+            initDateRange={dateRange}
+          />
+        </Grid>
         <Grid item xs={12} className={classes.gridItem}>
           <ListItemText className={classes.descriptionTxt}>
             Team accomplishment for the week of {period.dateFrom} to {period.dateTo}
@@ -500,7 +552,7 @@ function WeeklyImpact(props) {
           </Grid>
         </Grid>
         <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
-            {reasonsSession}
+          {reasonsSession}
         </Grid>
         <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
           {developerFocusSession}

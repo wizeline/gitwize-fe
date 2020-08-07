@@ -54,8 +54,8 @@ const useStyles = makeStyles((theme) => ({
 const today = new Date()
 
 export default function DatePicker(props) {
-  const { label, onChange } = props
-  const [pickedDate, setPickedDate] = useState({
+  const { label, onChange, customDisabledDays, customDayClick, initDateRange } = props
+  const [pickedDate, setPickedDate] = useState(initDateRange ? initDateRange: {
     from: undefined,
     to: undefined
   })
@@ -72,7 +72,6 @@ export default function DatePicker(props) {
 
   const handleDayClick = (day) => {
     if(day < today) {
-      console.log('valid')
       if(from && to) {
         setPickedDate({
           from: day,
@@ -82,9 +81,18 @@ export default function DatePicker(props) {
         const range = DateUtils.addDayToRange(day, pickedDate)
         setPickedDate(range)
         onChange(range)
-        if(range.from !== undefined && range.to !== undefined)
+        if(range.from !== undefined && range.to !== undefined) {
           toggleDatePicker()
+        }
       }
+    }
+  }
+
+  const handleCustomDayClick = (day) => {
+    const pickedDate = customDayClick(day)
+    setPickedDate(pickedDate)
+    if(pickedDate.from !== undefined && pickedDate.to !== undefined) {
+      toggleDatePicker()
     }
   }
 
@@ -121,9 +129,10 @@ export default function DatePicker(props) {
             numberOfMonths={2}
             selectedDays={[from, { from, to }]}
             modifiers={modifiers}
-            onDayClick={handleDayClick}
+            onDayClick={customDayClick ? handleCustomDayClick: handleDayClick}
             show={false}
-            disabledDays={{ after: today }}
+            disabledDays={customDisabledDays ? customDisabledDays : { after: today }}
+            firstDayOfWeek={ 1 }
           />
         </Paper>
       </div>
