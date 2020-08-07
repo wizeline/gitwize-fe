@@ -5,7 +5,7 @@ import PageTitle from '../components/PageTitle'
 import { makeStyles, styled } from '@material-ui/core/styles'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import { Grid, ListItemText } from '@material-ui/core'
+import { Grid, ListItemText, List, Divider, Paper } from '@material-ui/core'
 import clsx from 'clsx'
 import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
 import { formatToMMDD } from '../utils/dateUtils'
@@ -21,6 +21,24 @@ const gridItems = [
   { name: 'Most churned file', fieldName: 'mostChurnedFiles' },
 ]
 
+const impactScoreItems = [
+  {name: 'files', fieldName: 'fileChanged', 
+    dropDescription: 'Fewer number of files was changed', 
+    increaseDescription: 'More number of files was changed'},
+  {name: 'insertions points', fieldName: 'insertionPoints', 
+    dropDescription: 'There were lesser number of insertion points', 
+    increaseDescription: 'There was more number of insertion points'},
+  {name: 'old codes', fieldName: ['legacyPercentage', 'churnPercentage'], 
+    dropDescription: 'Lesser edits was made to old code', 
+    increaseDescription: 'More edits was made to old code'},
+  {name: 'new codes', fieldName: 'newCodePercentage', 
+    dropDescription: 'Lesser new code was written', 
+    increaseDescription: 'More new code was written'},
+  {name: 'lines of code', fieldName: 'additions', 
+    dropDescription: 'Fewer lines of code were added', 
+    increaseDescription: 'More lines of code were added'}
+]
+
 const apiClient = new ApiClient()
 const useStyles = makeStyles(() => ({
   root: {
@@ -30,7 +48,8 @@ const useStyles = makeStyles(() => ({
   },
   subContainer: {
     width: '100%',
-    height: '33vh',
+    height: '32vh',
+    alignContent: 'flex-start'
   },
   gridItem: {
     display: 'flex',
@@ -94,6 +113,16 @@ const useStyles = makeStyles(() => ({
     fontSize: 16,
     color: '#6A707E',
   },
+  reasonRoot: {
+    width: '95%',
+    marginTop: '3vh'
+  },
+  reasonTxt: {
+    fontSize: 15,
+    lineHeight: '5vh',
+    margin: '0px 0px 0px 1vw',
+    height: '5vh'
+  }
 }))
 
 const chartItems = [
@@ -268,6 +297,37 @@ const calculateFocusData = (response, chartItems) => {
   }
 }
 
+const buildImpactScoreReasonSession = (response) => {
+  let impactReasoneResult = []
+  if (response) {
+    if (
+      response.impactScore.currentPeriod === 0 &&
+      response.activeDays.currentPeriod === 0 &&
+      response.commitsPerDay.currentPeriod === 0
+    ) {
+      impactReasoneResult.push('There was no activity recorded in the last week')
+    } else {
+      const isDropped = response.impactScore.currentPeriod < response.impactScore.previousPeriod
+      impactReasoneResult = impactScoreItems.flatMap((item) => {
+        let previousValue = 0
+        let currentValue = 0
+        if (item.name !== 'old codes') {
+          previousValue = response[item.fieldName].previousPeriod
+          currentValue = response[item.fieldName].currentPeriod
+        } else {
+          previousValue = response[item.fieldName[0]].previousPeriod + response[item.fieldName[1]].previousPeriod
+          currentValue = response[item.fieldName[0]].currentPeriod + response[item.fieldName[1]].currentPeriod
+        }
+        if (isDropped === (currentValue < previousValue)) {
+          return `${item[isDropped ? 'dropDescription' : 'increaseDescription']} (${previousValue} - ${currentValue})`
+        }
+        return ''
+      })
+    }
+    return impactReasoneResult.filter((item) => item !== '')
+  }
+}
+
 function WeeklyImpact(props) {
   const {id} = props.match.params;
   const classes = useStyles();
@@ -275,6 +335,7 @@ function WeeklyImpact(props) {
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [gridItemsState, setGridItems] = useState([])
   const [response, setResponse] = useState()
+  const [reasoneImpactScore, setReasoneImpactScore] = useState([])
   const [period, setPeriod] = useState({})
 
   useEffect(() => {
@@ -283,6 +344,7 @@ function WeeklyImpact(props) {
       apiClient.weeklyImpact.getWeeklyImpactStats(id).then((response) => {
         setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
         setPeriod(calculatePeriod(response.period))
+        setReasoneImpactScore(buildImpactScoreReasonSession(response))
         setResponse(response)
       }).catch(e => {
         console.log(e)
@@ -303,7 +365,7 @@ function WeeklyImpact(props) {
             item.name === IMPACT_SCORE_TXT && classes.highlightSubGridItem
           )}
         >
-          <Grid container style={{ height: '100%' }}>
+          <Grid container style={{ height: '32vh' }}>
             <Grid item xs={12}>
               <ListItemText
                 className={clsx(classes.itemNameTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}
@@ -338,7 +400,7 @@ function WeeklyImpact(props) {
     } else {
       return (
         <Grid key={item.name} item xs={3} className={clsx(classes.gridItem, classes.subGridItem)}>
-          <Grid container style={{ height: '100%' }}>
+          <Grid container style={{ height: '32vh' }}>
             <Grid item xs={12}>
               <ListItemText className={classes.itemNameTxt}>{item.name}</ListItemText>
             </Grid>
@@ -399,6 +461,30 @@ function WeeklyImpact(props) {
     </Grid>
   )
 
+  const reasonsSession = (
+    <Grid container className={classes.subContainer}>
+      <Grid item xs={12}>
+        <ListItemText disableTypography className={classes.developmentFocusHeader}>
+          Why did the impact score {(response && response.impactScore.currentPeriod < response.impactScore.previousPeriod) > 0 ? 'drop' : 'increase'}?
+        </ListItemText>
+      </Grid>
+      <Grid item xs={12}>
+        <Paper className={classes.reasonRoot}>
+          <List>
+            {reasoneImpactScore.map((item,index) => (
+              <>
+                <ListItemText disableTypography className={classes.reasonTxt}>
+                  {item}
+                </ListItemText>
+                {index !== (reasoneImpactScore.length - 1) && <Divider/>}
+              </>
+            ))}
+          </List>
+        </Paper>
+      </Grid>
+    </Grid>
+  )
+
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Weekly Impact</PageTitle>
@@ -412,6 +498,9 @@ function WeeklyImpact(props) {
           <Grid container className={classes.subContainer}>
             {impactSession}
           </Grid>
+        </Grid>
+        <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
+            {reasonsSession}
         </Grid>
         <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
           {developerFocusSession}

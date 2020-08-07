@@ -4,27 +4,47 @@
     "date_to": "2020-07-05"
   },
   "impactScore": {
-    "currentPeriod": 184,
-    "previousPeriod": 100
+    "currentPeriod": 9,
+    "previousPeriod": 10
   },
   "activeDays": {
     "currentPeriod": 15,
-    "previousPeriod": 20
+    "previousPeriod": 12
   },
   "commitsPerDay": {
     "currentPeriod": 13.5,
     "previousPeriod": 11.2
   },
   "mostChurnedFiles": [{
-    "fileName": "abdedsfdsfsfdsfdsfdsffdsfsdfsfdsfsddsadssdasdasdasdasdasdasdsadas.js",
+    "fileName": "abc.js",
     "value": 30
   }],
   "newCodePercentage": {
-    "currentPeriod": 10,
-    "previousPeriod": 10
+    "currentPeriod": 25.23,
+    "previousPeriod": 10.35
   },
   "churnPercentage": {
-    "currentPeriod": 90,
-    "previousPeriod": 23
+    "currentPeriod": 17.21,
+    "previousPeriod": 23.22
+  },
+  "legacyPercentage": {
+    "currentPeriod": 17.33,
+    "previousPeriod": 23.44
+  },
+  "fileChanged": {
+    "currentPeriod": 40,
+    "previousPeriod": 30
+  },
+  "insertionPoints": {
+    "currentPeriod": 10,
+    "previousPeriod": 15
+  },
+  "additions": {
+    "currentPeriod": 10,
+    "previousPeriod": 15
+  },
+  "deletions": {
+    "currentPeriod": 10,
+    "previousPeriod": 15
   }
 }
