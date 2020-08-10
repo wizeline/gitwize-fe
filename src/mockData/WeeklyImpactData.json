@@ -9,7 +9,7 @@
   },
   "activeDays": {
     "currentPeriod": 15,
-    "previousPeriod": 12
+    "previousPeriod": 15
   },
   "commitsPerDay": {
     "currentPeriod": 13.5,
@@ -48,7 +48,7 @@
     "previousPeriod": 15
   },
   "unusualFiles":[{
-    "fileName": "testFile.js",
+    "fileName": "testFile2.js",
     "additions": 1001
   },
   {

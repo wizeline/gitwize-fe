@@ -436,8 +436,8 @@ function WeeklyImpact(props) {
               <Grid item xs={12}>
                 <ListItemText
                   className={classes.itemDiffValueTxt}
-                  style={{ background: item.diffValue >= 0 ? '#62C8BA' : '#EC5D5C' }}
-                >{`${item.diffValue >= 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
+                  style={{ background: item.diffValue > 0 ? '#62C8BA' : item.diffValue === 0 ? '#C4C4C4' : '#EC5D5C' }}
+                >{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
               </Grid>
             )}
             <Grid item xs={12} className={classes.itemLast}>
