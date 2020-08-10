@@ -12,8 +12,8 @@ import { formatToMMDD } from '../utils/dateUtils'
 import Chart, { chartTypeEnum } from '../components/Chart'
 import { buildChartOptionsBasedOnMaxValue } from '../utils/chartUtils'
 import DatePicker from '../components/DatePicker'
-import {getDayStartOfCurrentWeek, addNumberOfDays, getDayStartOfWeekPointOfTime} from '../utils/dateUtils'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import { getDayStartOfCurrentWeek, addNumberOfDays, getDayStartOfWeekPointOfTime } from '../utils/dateUtils'
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
 const IMPACT_SCORE_TXT = 'Impact score'
@@ -148,14 +148,14 @@ const useStyles = makeStyles(() => ({
     marginRight: '10vw',
     borderRadius: 8,
     minHeight: 100,
-    whiteSpace: 'pre-line'
+    whiteSpace: 'pre-line',
   },
   tooltipIcon: {
-    marginTop: '3vh'
+    marginTop: '3vh',
   },
   impactScoreUnitTxt: {
-    fontSize: '15px'
-  }
+    fontSize: '15px',
+  },
 }))
 
 const chartItems = [
@@ -372,7 +372,7 @@ const initDateRangeValue = () => {
   const dateTo = addNumberOfDays(dateFrom, 6)
   return {
     from: dateFrom.toDate(),
-    to: dateTo.toDate()
+    to: dateTo.toDate(),
   }
 }
 
@@ -403,16 +403,16 @@ function WeeklyImpact(props) {
   const handleDayClick = (day) => {
     const dateFrom = getDayStartOfWeekPointOfTime(day)
     const dateTo = addNumberOfDays(dateFrom, 6)
-    
+
     const dateRangeValue = {
       from: dateFrom.toDate(),
-      to: dateTo.toDate()
+      to: dateTo.toDate(),
     }
 
     setDateRange(dateRangeValue)
     return {
       from: dateFrom.toDate(),
-      to: dateTo.toDate()
+      to: dateTo.toDate(),
     }
   }
 
@@ -431,28 +431,33 @@ function WeeklyImpact(props) {
         >
           <Grid container style={{ height: '32vh' }}>
             <Grid item xs={12}>
-              <Grid container style={{alignItems: 'flex-end'}}>
+              <Grid container style={{ alignItems: 'flex-end' }}>
                 <Grid item>
-                <ListItemText
-                  className={clsx(classes.itemNameTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}>
-                  {item.name}
-                </ListItemText>
+                  <ListItemText
+                    className={clsx(classes.itemNameTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}
+                  >
+                    {item.name}
+                  </ListItemText>
                 </Grid>
-                <Grid item style={{marginLeft: '0.5vw'}}>
-                {(item.name === IMPACT_SCORE_TXT) && 
-                    <Tooltip title={impactScoreToolTipInformation} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: classes.toolTipTxt}}>
-                      <InfoOutlinedIcon/>        
-                    </Tooltip>}
+                <Grid item style={{ marginLeft: '0.5vw' }}>
+                  {item.name === IMPACT_SCORE_TXT && (
+                    <Tooltip
+                      title={impactScoreToolTipInformation}
+                      placement="bottom-start"
+                      enterDelay={500}
+                      enterNextDelay={500}
+                      classes={{ tooltip: classes.toolTipTxt }}
+                    >
+                      <InfoOutlinedIcon />
+                    </Tooltip>
+                  )}
                 </Grid>
               </Grid>
             </Grid>
             <Grid item xs={12}>
               <ListItemText className={classes.itemValueTxt}>
-                {item.name === 'Commits/day' ? item.currentPeriod.toFixed(1) : item.currentPeriod} 
-                {(item.name === IMPACT_SCORE_TXT) && 
-                <span className={classes.impactScoreUnitTxt}>
-                  pts
-                </span>}
+                {item.name === 'Commits/day' ? item.currentPeriod.toFixed(1) : item.currentPeriod}
+                {item.name === IMPACT_SCORE_TXT && <span className={classes.impactScoreUnitTxt}>pts</span>}
               </ListItemText>
             </Grid>
             {item.diffValue !== undefined && (
@@ -460,7 +465,7 @@ function WeeklyImpact(props) {
                 <ListItemText
                   className={classes.itemDiffValueTxt}
                   style={{ background: item.diffValue > 0 ? '#62C8BA' : item.diffValue === 0 ? '#C4C4C4' : '#EC5D5C' }}
-            >{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
+                >{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
               </Grid>
             )}
             <Grid item xs={12} className={classes.itemLast}>
@@ -469,7 +474,7 @@ function WeeklyImpact(props) {
               >
                 {`From previous period (${
                   item.name === 'Commits/day' ? item.previousPeriod.toFixed(1) : item.previousPeriod
-                }${(item.name === IMPACT_SCORE_TXT) ? ' pts' : ''})`}
+                }${item.name === IMPACT_SCORE_TXT ? ' pts' : ''})`}
               </ListItemText>
             </Grid>
           </Grid>
@@ -569,17 +574,21 @@ function WeeklyImpact(props) {
 
   const unsualFilesView = unsualFiles ? (
     <Grid item xs={12} className={classes.gridItem}>
-      <Grid container style={{width: '100%'}}>
+      <Grid container style={{ width: '100%' }}>
         <Grid item xs={12}>
-          <Grid container style={{alignItems: 'center'}}>
+          <Grid container style={{ alignItems: 'center' }}>
             <Grid item className={classes.tooltipIcon}>
-              <ListItemText className={classes.descriptionTxt}>
-                Unsual files
-              </ListItemText>
+              <ListItemText className={classes.descriptionTxt}>Unsual files</ListItemText>
             </Grid>
-            <Grid item className={classes.tooltipIcon} style={{marginLeft: '0.5vw'}}>
-              <Tooltip title={'Files with exceptionally high number of additions in lines of code'} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: classes.toolTipTxt}}>
-                <InfoOutlinedIcon/>        
+            <Grid item className={classes.tooltipIcon} style={{ marginLeft: '0.5vw' }}>
+              <Tooltip
+                title={'Files with exceptionally high number of additions in lines of code'}
+                placement="bottom-start"
+                enterDelay={500}
+                enterNextDelay={500}
+                classes={{ tooltip: classes.toolTipTxt }}
+              >
+                <InfoOutlinedIcon />
               </Tooltip>
             </Grid>
           </Grid>
@@ -587,12 +596,12 @@ function WeeklyImpact(props) {
         <Grid item xs={12}>
           <Paper className={classes.reasonRoot}>
             <List>
-              {unsualFiles.map((unsualFile,index) => (
+              {unsualFiles.map((unsualFile, index) => (
                 <>
-                <ListItemText disableTypography className={classes.reasonTxt}>
-                  {unsualFile.fileName}
-                </ListItemText>
-                {index !== unsualFiles.length - 1 && <Divider />}
+                  <ListItemText disableTypography className={classes.reasonTxt}>
+                    {unsualFile.fileName}
+                  </ListItemText>
+                  {index !== unsualFiles.length - 1 && <Divider />}
                 </>
               ))}
             </List>
