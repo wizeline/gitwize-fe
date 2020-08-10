@@ -141,7 +141,7 @@ const useStyles = makeStyles(() => ({
     margin: '0px 0px 0px 1vw',
     height: '5vh',
   },
-  unsualFilesToolTip: {
+  toolTipTxt: {
     background: '#000000',
     fontSize: 9,
     padding: '35px 40px 40px 26px',
@@ -152,6 +152,9 @@ const useStyles = makeStyles(() => ({
   },
   tooltipIcon: {
     marginTop: '3vh'
+  },
+  impactScoreUnitTxt: {
+    fontSize: '15px'
   }
 }))
 
@@ -325,6 +328,13 @@ const calculateFocusData = (response, chartItems) => {
   }
 }
 
+const impactScoreToolTipInformation = `Impact score is calculated using the following metrics, giving different weightage to all
+\nNumber of files changed
+\nNumber of insertion points/edit locations
+\nWhat percentage of work is edits to old code
+\nWhat percentage of work is newly written code
+\nAdditions in lines of code`
+
 const buildImpactScoreReasonSession = (response) => {
   let impactReasoneResult = []
   if (response) {
@@ -421,15 +431,28 @@ function WeeklyImpact(props) {
         >
           <Grid container style={{ height: '32vh' }}>
             <Grid item xs={12}>
-              <ListItemText
-                className={clsx(classes.itemNameTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}
-              >
-                {item.name}
-              </ListItemText>
+              <Grid container style={{alignItems: 'flex-end'}}>
+                <Grid item>
+                <ListItemText
+                  className={clsx(classes.itemNameTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}>
+                  {item.name}
+                </ListItemText>
+                </Grid>
+                <Grid item style={{marginLeft: '0.5vw'}}>
+                {(item.name === IMPACT_SCORE_TXT) && 
+                    <Tooltip title={impactScoreToolTipInformation} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: classes.toolTipTxt}}>
+                      <InfoOutlinedIcon/>        
+                    </Tooltip>}
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={12}>
               <ListItemText className={classes.itemValueTxt}>
-                {item.name === 'Commits/day' ? item.currentPeriod.toFixed(1) : item.currentPeriod}
+                {item.name === 'Commits/day' ? item.currentPeriod.toFixed(1) : item.currentPeriod} 
+                {(item.name === IMPACT_SCORE_TXT) && 
+                <span className={classes.impactScoreUnitTxt}>
+                  pts
+                </span>}
               </ListItemText>
             </Grid>
             {item.diffValue !== undefined && (
@@ -437,7 +460,7 @@ function WeeklyImpact(props) {
                 <ListItemText
                   className={classes.itemDiffValueTxt}
                   style={{ background: item.diffValue > 0 ? '#62C8BA' : item.diffValue === 0 ? '#C4C4C4' : '#EC5D5C' }}
-                >{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
+            >{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
               </Grid>
             )}
             <Grid item xs={12} className={classes.itemLast}>
@@ -446,7 +469,7 @@ function WeeklyImpact(props) {
               >
                 {`From previous period (${
                   item.name === 'Commits/day' ? item.previousPeriod.toFixed(1) : item.previousPeriod
-                })`}
+                }${(item.name === IMPACT_SCORE_TXT) ? ' pts' : ''})`}
               </ListItemText>
             </Grid>
           </Grid>
@@ -548,14 +571,14 @@ function WeeklyImpact(props) {
     <Grid item xs={12} className={classes.gridItem}>
       <Grid container style={{width: '100%'}}>
         <Grid item xs={12}>
-          <Grid container style={{alignItems: 'flex-end'}}>
-            <Grid item xs={1} className={classes.tooltipIcon}>
+          <Grid container style={{alignItems: 'center'}}>
+            <Grid item className={classes.tooltipIcon}>
               <ListItemText className={classes.descriptionTxt}>
                 Unsual files
               </ListItemText>
             </Grid>
-            <Grid item xs={11} className={classes.tooltipIcon}>
-              <Tooltip title={'Files with exceptionally high number of additions in lines of code'} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: classes.unsualFilesToolTip}}>
+            <Grid item className={classes.tooltipIcon} style={{marginLeft: '0.5vw'}}>
+              <Tooltip title={'Files with exceptionally high number of additions in lines of code'} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: classes.toolTipTxt}}>
                 <InfoOutlinedIcon/>        
               </Tooltip>
             </Grid>
