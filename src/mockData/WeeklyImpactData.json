@@ -46,5 +46,13 @@
   "deletions": {
     "currentPeriod": 10,
     "previousPeriod": 15
-  }
+  },
+  "unusualFiles":[{
+    "fileName": "testFile.js",
+    "additions": 1001
+  },
+  {
+    "fileName": "testFile.js",
+    "addtions": 1001
+  }]
 }

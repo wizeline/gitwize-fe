@@ -5,7 +5,7 @@ import PageTitle from '../components/PageTitle'
 import { makeStyles, styled } from '@material-ui/core/styles'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import { Grid, ListItemText, List, Divider, Paper } from '@material-ui/core'
+import { Grid, ListItemText, List, Divider, Paper, Tooltip } from '@material-ui/core'
 import clsx from 'clsx'
 import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
 import { formatToMMDD } from '../utils/dateUtils'
@@ -13,6 +13,7 @@ import Chart, { chartTypeEnum } from '../components/Chart'
 import { buildChartOptionsBasedOnMaxValue } from '../utils/chartUtils'
 import DatePicker from '../components/DatePicker'
 import {getDayStartOfCurrentWeek, addNumberOfDays, getDayStartOfWeekPointOfTime} from '../utils/dateUtils'
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
 const IMPACT_SCORE_TXT = 'Impact score'
@@ -140,6 +141,18 @@ const useStyles = makeStyles(() => ({
     margin: '0px 0px 0px 1vw',
     height: '5vh',
   },
+  unsualFilesToolTip: {
+    background: '#000000',
+    fontSize: 9,
+    padding: '35px 40px 40px 26px',
+    marginRight: '10vw',
+    borderRadius: 8,
+    minHeight: 100,
+    whiteSpace: 'pre-line'
+  },
+  tooltipIcon: {
+    marginTop: '3vh'
+  }
 }))
 
 const chartItems = [
@@ -362,6 +375,7 @@ function WeeklyImpact(props) {
   const [response, setResponse] = useState()
   const [reasoneImpactScore, setReasoneImpactScore] = useState([])
   const [period, setPeriod] = useState({})
+  const [unsualFiles, setUnsualFiles] = useState([])
   const [dateRange, setDateRange] = useState(initDateRangeValue())
 
   useEffect(() => {
@@ -371,6 +385,7 @@ function WeeklyImpact(props) {
       setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
       setPeriod(calculatePeriod(response.period))
       setReasoneImpactScore(buildImpactScoreReasonSession(response))
+      setUnsualFiles(response.unusualFiles)
       setResponse(response)
     })
   }, [id, mainLayout, authService, dateRange])
@@ -529,6 +544,41 @@ function WeeklyImpact(props) {
     </Grid>
   )
 
+  const unsualFilesView = unsualFiles ? (
+    <Grid item xs={12} className={classes.gridItem}>
+      <Grid container style={{width: '100%'}}>
+        <Grid item xs={12}>
+          <Grid container style={{alignItems: 'flex-end'}}>
+            <Grid item xs={1} className={classes.tooltipIcon}>
+              <ListItemText className={classes.descriptionTxt}>
+                Unsual files
+              </ListItemText>
+            </Grid>
+            <Grid item xs={11} className={classes.tooltipIcon}>
+              <Tooltip title={'Files with exceptionally high number of additions in lines of code'} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: classes.unsualFilesToolTip}}>
+                <InfoOutlinedIcon/>        
+              </Tooltip>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.reasonRoot}>
+            <List>
+              {unsualFiles.map((unsualFile,index) => (
+                <>
+                <ListItemText disableTypography className={classes.reasonTxt}>
+                  {unsualFile.fileName}
+                </ListItemText>
+                {index !== unsualFiles.length - 1 && <Divider />}
+                </>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Grid>
+  ) : undefined
+
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Weekly Impact</PageTitle>
@@ -551,6 +601,7 @@ function WeeklyImpact(props) {
             {impactSession}
           </Grid>
         </Grid>
+        {unsualFilesView}
         <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
           {reasonsSession}
         </Grid>
