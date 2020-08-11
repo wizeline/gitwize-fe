@@ -272,21 +272,22 @@ function WeeklyImpact(props) {
   const {id} = props.match.params;
   const classes = useStyles();
   const { authService } = useOktaAuth()
-  const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [gridItemsState, setGridItems] = useState([])
   const [response, setResponse] = useState()
   const [period, setPeriod] = useState({})
 
   useEffect(() => {
-      apiClient.setTokenManager(tokenManager)
+      apiClient.setAuthService(authService)
       mainLayout.current.handleChangeRepositoryId(id)
       apiClient.weeklyImpact.getWeeklyImpactStats(id).then((response) => {
         setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
         setPeriod(calculatePeriod(response.period))
         setResponse(response)
+      }).catch(e => {
+        console.log(e)
       })
-    }, [id, mainLayout, tokenManager]
+    }, [id, mainLayout, authService]
   )
 
   const impactSession = gridItemsState.map((item) => {

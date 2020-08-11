@@ -31,7 +31,8 @@ export class ApiHttpClient extends HttpClient {
 
   handleTokenRefresh = () => {
     return new Promise((resolve, reject) => {
-      this.tokenManager
+      this.authService
+        .getTokenManager()
         .renew('accessToken')
         .then((token) => {
           resolve(token.accessToken)
@@ -43,7 +44,7 @@ export class ApiHttpClient extends HttpClient {
   }
 
   interceptor = (error) => {
-    if(!this.shouldIntercept(error)) {
+    if (!this.shouldIntercept(error)) {
       return Promise.reject(error)
     }
 
@@ -62,26 +63,34 @@ export class ApiHttpClient extends HttpClient {
     })
   }
 
-  setTokenManager(tokenManager) {
-    this.tokenManager = tokenManager
+  setAuthService(authService) {
+    this.authService = authService
+  }
+
+  sessionExpireHandler = () => {
+    window.alert('Your session has expired. Please login again')
+    this.authService.login('/')
   }
 
   authInterceptor = async (config) => {
+    await this.authService
+      .getTokenManager()
+      .get('accessToken')
+      .then((token) => {
+        if (token === undefined) {
+          this.sessionExpireHandler()
+        } else {
+          this.attachTokenToRequest(config, token.accessToken)
+        }
+      })
 
-    await this.tokenManager.get('accessToken').then(token => {
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${token.accessToken}`,
-      }
-    })
-
-    if(config.params !== undefined) {
+    if (config.params !== undefined) {
       const dateFrom = config.params.date_from
       const dateTo = config.params.date_to
       config.params = {
         ...config.params,
         date_from: getStartOfDateInSecond(dateFrom),
-        date_to: getEndOfDateInSecond(dateTo)
+        date_to: getEndOfDateInSecond(dateTo),
       }
     }
 

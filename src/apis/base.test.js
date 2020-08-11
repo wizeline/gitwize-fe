@@ -12,25 +12,30 @@ const NEW_ACCESS_TOKEN = 'eyJraWQiOiJKaDdkgkfngkfgnskfnsdkfnsdkfnsdfkjNOWjdNbTZR
 describe('ApiHttpClient', () => {
   const apiHttpClient = new ApiHttpClient({ baseURL: BASE_URL })
 
-  const tokenManager = {
-    get: function (accessToken) {
-      return new Promise((resolve) => {
-        resolve({
-          accessToken: ACCESS_TOKEN,
-        })
-      })
-    },
-    renew: function (accessToken) {
-      return new Promise((resolve) => {
-        resolve({
-          accessToken: NEW_ACCESS_TOKEN,
-        })
-      })
-    },
+  const authService = {
+    getTokenManager: function() {
+      return {
+        get: function (accessToken) {
+          return new Promise((resolve) => {
+            resolve({
+              accessToken: ACCESS_TOKEN,
+            })
+          })
+        },
+        renew: function (accessToken) {
+          return new Promise((resolve) => {
+            resolve({
+              accessToken: NEW_ACCESS_TOKEN,
+            })
+          })
+        },
+      }
+    }
+   
   }
 
   test('should attach access token to the header', async () => {
-    apiHttpClient.setTokenManager(tokenManager)
+    apiHttpClient.setAuthService(authService)
     const axiosMockAdapter = new AxiosMockAdapter(axios)
     axiosMockAdapter.onGet(BASE_URL).reply(200, '')
 

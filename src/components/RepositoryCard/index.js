@@ -81,7 +81,6 @@ function RepositoryCard(props) {
   const { repo, handleDeletionOK, handleDeletionCancel } = props
   const styles = useStyles()
   const { authService } = useOktaAuth()
-  const tokenManager = authService.getTokenManager()
   const [deletionConfirmOpen, setDeletionConfirmOpen] = useState(false)
 
   const alertHeader = "Repository Deletion"
@@ -89,7 +88,7 @@ function RepositoryCard(props) {
 
 
   const handleDeletionConfirmationOK = async (repoDetail = {}) => {
-    apiClient.setTokenManager(tokenManager)
+    apiClient.setAuthService(authService)
     await apiClient.repos.deleteRepo(repo.id)
     // TODO error handling
     handleDeletionOK(repo)
