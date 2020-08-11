@@ -1,0 +1,22 @@
+{
+  "qualityGates": "failed",
+  "codeSmells": 20,
+  "codeCoveragePercentage": 3.8,
+  "duplicationPercentage": 20.3,
+  "duplicationBlocks": 20,
+  "cognitiveComplexity": 32,
+  "cyclomaticComplexity": 20,
+  "securityHotspots": 5,
+  "bugs": {
+    "value": 6,
+    "rating": "A"
+  },
+  "vulnerabilities": {
+    "value": 3,
+    "rating": "C"
+  },
+  "technicalDept": {
+    "value": 7,
+    "rating": "D"
+  }
+}

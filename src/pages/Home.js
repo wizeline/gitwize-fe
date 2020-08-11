@@ -18,6 +18,7 @@ import Loading from '../components/Loading'
 import { ApiClient } from '../apis'
 import CodeChangeVelocity from './CodeChangeVelocity';
 import WeeklyImpact from './WeeklyImpact';
+import CodeQuality from './CodeQuality';
 
 const theme = createMuiTheme({
   typography: {
@@ -59,6 +60,11 @@ const subMenuItems = [
     name: 'Code Change Velocity',
     uri: '/code-change-velocity',
     component: CodeChangeVelocity
+  },
+  {
+    name: 'Code Quality',
+    uri: '/code-quality',
+    component: CodeQuality
   },
   {
     name: 'Repository Stats',

@@ -6,6 +6,7 @@ import CodeChangeVelocityStatsApiClient from './CodeChangeVelocityStatsApiClient
 import QuarterlyTrendsStatsApiClient from './QuarterlyTrendsStatsApiClient'
 import WeeklyImpactApiClient from './WeeklyImpactApiClient'
 import PullRequestSizeApiClient from './PullRequestSizeApiClient'
+import CodeQualityStatsApiClient from './CodeQualityApiClient'
 
 const { REACT_APP_API_URL } = process.env
 
@@ -21,6 +22,7 @@ export class ApiClient {
     this.quarterlyTrends = new QuarterlyTrendsStatsApiClient(this.httpClient)
     this.weeklyImpact = new WeeklyImpactApiClient(this.httpClient)
     this.pullRequestSize = new PullRequestSizeApiClient(this.httpClient)
+    this.codeQuality = new CodeQualityStatsApiClient(this.httpClient)
   }
 
   setAuthService(authServie) {
