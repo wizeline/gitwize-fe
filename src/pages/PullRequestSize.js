@@ -182,7 +182,6 @@ function PullRequestSize(props) {
   const [headerTxt, setHeaderTxt] = useState(showDate[0])
   const [chartData, setChartData] = useState()
   const { authService } = useOktaAuth()
-  const tokenManager = authService.getTokenManager()
   const [{ dateRange }] = useContext(PageContext)
   const classes = useStyles()
   const mainLayout = useRef(useContext(MainLayoutContex))
@@ -193,13 +192,13 @@ function PullRequestSize(props) {
   }
 
   useEffect(() => {
-    apiClient.setTokenManager(tokenManager)
+    apiClient.setAuthService(authService)
     apiClient.pullRequestSize.getPullRequestSize(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const transformedData = transformDataForBubbleChart(data)
       setChartData(transformedData)
     })
-  }, [tokenManager, dateRange, id, mainLayout])
+  }, [dateRange, id, mainLayout, authService])
 
   const handleChangeHeaderTxt = (headerText) => {
     setHeaderTxt(headerText)

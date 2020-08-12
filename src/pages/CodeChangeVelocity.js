@@ -105,7 +105,6 @@ function CodeChangeVelocity(props) {
   const [chartData, setChartData] = useState()
   const [responseData, setResponseData] = useState()
   const { authService } = useOktaAuth()
-  const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
   const classes = useStyles()
@@ -175,7 +174,7 @@ function CodeChangeVelocity(props) {
   const customPlugins = buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity(chartData)
 
   useEffect(() => {
-    apiClient.setTokenManager(tokenManager)
+    apiClient.setAuthService(authService)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.codeChangeVelocity.getCodeChangeVelocityStats(id, dateRange).then((data) => {
       setHightLightState(calculateHightLightState(data, dateFrom, dateTo, chartItems))
@@ -187,7 +186,7 @@ function CodeChangeVelocity(props) {
         setResponseData(data)
       }
     })
-  }, [id, dateFrom, dateTo, tokenManager])
+  }, [id, dateFrom, dateTo, authService])
 
   return (
     <div style={{ width: '100%' }}>

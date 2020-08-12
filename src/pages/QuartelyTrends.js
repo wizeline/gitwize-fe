@@ -102,7 +102,6 @@ function QuartelyTrends(props) {
   const [chartData, setChartData] = useState()
   const [responseData, setResponseData] = useState()
   const { authService } = useOktaAuth()
-  const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
   const classes = useStyles()
@@ -172,7 +171,7 @@ function QuartelyTrends(props) {
   const customPlugins = buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity(chartData)
 
   useEffect(() => {
-    apiClient.setTokenManager(tokenManager)
+    apiClient.setAuthService(authService)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.quarterlyTrends.getQuarterlyTrendsStats(id, dateRange).then((data) => {
       setHightLightState(calculateHightLightState(data, dateFrom, dateTo, chartItems))
@@ -184,7 +183,7 @@ function QuartelyTrends(props) {
         setResponseData(data)
       }
     })
-  }, [id, dateFrom, dateTo, tokenManager])
+  }, [id, dateFrom, dateTo, authService])
 
   return (
     <div style={{ width: '100%' }}>

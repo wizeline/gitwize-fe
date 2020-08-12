@@ -101,7 +101,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RepositoryList() {
   const { authService } = useOktaAuth()
-  const tokenManager = authService.getTokenManager()
   const mainLayoutContext = useRef(useContext(MainLayoutContex))
   const [isDisplayColumnGrid, setColumnLayout] = useState(false);
   const [repoList, setRepoList] = useState()
@@ -114,12 +113,12 @@ export default function RepositoryList() {
   const styles = useStyles()
 
   useEffect(() => {
-    apiClient.setTokenManager(tokenManager)
+    apiClient.setAuthService(authService)
       apiClient.repos.listRepo().then((repo) => {
         setRepoList(repo)
         mainLayoutContext.current.handleChangeRepoList(repo)
       })
-  }, [tokenManager])
+  }, [authService])
 
   const handleAddDialog = () => {
     setOpen(true)
@@ -146,7 +145,7 @@ export default function RepositoryList() {
   const handleDeletionCancel = () => {}
 
   const handleAddRepo = async (repoDetail = {}) => {
-    apiClient.setTokenManager(authService.getTokenManager())
+    apiClient.setAuthService(authService)
     setLoading(true)
     try {
       const response = await apiClient.repos.createRepo(repoDetail)

@@ -23,7 +23,7 @@ export class ApiClient {
     this.pullRequestSize = new PullRequestSizeApiClient(this.httpClient)
   }
 
-  setTokenManager(tokenManager) {
-    this.httpClient.setTokenManager(tokenManager)
+  setAuthService(authServie) {
+    this.httpClient.setAuthService(authServie)
   }
 }
