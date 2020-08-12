@@ -15,7 +15,7 @@
     "value": 3,
     "rating": "C"
   },
-  "technicalDept": {
+  "technicalDebt": {
     "value": 7,
     "rating": "D"
   }

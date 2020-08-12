@@ -9,6 +9,9 @@ import Chip from '@material-ui/core/Chip'
 import Tooltip from '@material-ui/core/Tooltip'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import Avatar from '@material-ui/core/Avatar'
+import Accordion from '@material-ui/core/Accordion'
+import AccordionDetails from '@material-ui/core/AccordionDetails'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
 
 const information = `This section displays following insights from SonarQube
 \n- Overall code quality rating
@@ -56,7 +59,7 @@ const qualityItems = [
         name: 'Technical Debt',
         tooltip: `The estimated time it will take to fix all Code Smells.`,
         isRating: true,
-        fieldName: 'technicalDept',
+        fieldName: 'technicalDebt',
       },
       {
         name: 'Code Smells',
@@ -139,6 +142,9 @@ const useStyles = makeStyles(() => ({
     fontSize: '1vw',
     fontWeight: 'bold',
   },
+  headerTooltipIcon: {
+    marginLeft: '1vw',
+  },
   qualityGateGrid: {
     alignItems: 'center',
   },
@@ -173,6 +179,14 @@ const useStyles = makeStyles(() => ({
     height: '3vh',
     fontSize: '1.7vh',
   },
+  accordionStyle: {
+    width: '100%',
+    boxShadow: 'unset',
+    background: 'unset',
+  },
+  accordionSummaryContent: {
+    alignItems: 'center',
+  },
 }))
 
 function CodeQuality(props) {
@@ -197,83 +211,89 @@ function CodeQuality(props) {
       return qualityItems.map((qualityItem) => {
         const children = qualityItem.childrend
         return (
-          <Grid item xs={12} className={classes.qualityItemGrid}>
+          <Grid key={qualityItem.name} item xs={12} className={classes.qualityItemGrid}>
             <Grid container spacing={2} className={classes.qualityGateGrid}>
-              <Grid item>
-                <ListItemText disableTypography className={classes.headerTxt}>
-                  {qualityItem.name}
-                </ListItemText>
-              </Grid>
-              <Grid item>
-                <Tooltip
-                  title={qualityItem.tooltip}
-                  placement="bottom-start"
-                  enterDelay={500}
-                  enterNextDelay={500}
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <InfoOutlinedIcon />
-                </Tooltip>
-              </Grid>
-              <Grid item xs={12}>
-                <Grid container spacing={2}>
-                  {children.map((child) => {
-                    const xsSize = 12 / children.length
-                    let value = ''
-                    let rating = ''
-                    if (child.isRating) {
-                      const objectValue = response[child.fieldName]
-                      value = objectValue.value
-                      rating = objectValue.rating
-                    } else {
-                      value = response[child.fieldName]
-                    }
-                    return (
-                      <Grid item xs={xsSize}>
-                        <Paper className={classes.paperItem}>
-                          <Grid container style={{ height: 'inherit' }}>
-                            <Grid item xs={10}>
-                              <ListItemText disableTypography className={classes.subHeaderTxt}>
-                                {child.name}
-                              </ListItemText>
-                            </Grid>
-                            <Grid item xs={2}>
-                              <Tooltip
-                                title={child.tooltip}
-                                placement="bottom-start"
-                                enterDelay={500}
-                                enterNextDelay={500}
-                                classes={{ tooltip: classes.tooltip }}
-                              >
-                                <InfoOutlinedIcon className={classes.subTooltipIcon} />
-                              </Tooltip>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Grid container style={{ justifyContent: 'center' }}>
-                                <Grid item>
-                                  <ListItemText disableTypography className={classes.valueTxt}>
-                                    {value}
+              <Accordion className={classes.accordionStyle} defaultExpanded={true}>
+                <AccordionSummary classes={{ content: classes.accordionSummaryContent }}>
+                  <Grid item>
+                    <ListItemText disableTypography className={classes.headerTxt}>
+                      {qualityItem.name}
+                    </ListItemText>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip
+                      title={qualityItem.tooltip}
+                      placement="bottom-start"
+                      enterDelay={500}
+                      enterNextDelay={500}
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <InfoOutlinedIcon className={classes.headerTooltipIcon} />
+                    </Tooltip>
+                  </Grid>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid item xs={12}>
+                    <Grid container spacing={2}>
+                      {children.map((child) => {
+                        const xsSize = 12 / children.length
+                        let value = ''
+                        let rating = ''
+                        if (child.isRating) {
+                          const objectValue = response[child.fieldName]
+                          value = objectValue.value
+                          rating = objectValue.rating
+                        } else {
+                          value = response[child.fieldName]
+                        }
+                        return (
+                          <Grid key={child.name} item xs={xsSize}>
+                            <Paper className={classes.paperItem}>
+                              <Grid container style={{ height: 'inherit' }}>
+                                <Grid item xs={10}>
+                                  <ListItemText disableTypography className={classes.subHeaderTxt}>
+                                    {child.name}
                                   </ListItemText>
                                 </Grid>
-                                <Grid item>
-                                  {child.isRating && (
-                                    <Avatar
-                                      className={classes.ratingIcon}
-                                      style={{ background: backGroundColorRating[rating] }}
-                                    >
-                                      {rating}
-                                    </Avatar>
-                                  )}
+                                <Grid item xs={2}>
+                                  <Tooltip
+                                    title={child.tooltip}
+                                    placement="bottom-start"
+                                    enterDelay={500}
+                                    enterNextDelay={500}
+                                    classes={{ tooltip: classes.tooltip }}
+                                  >
+                                    <InfoOutlinedIcon className={classes.subTooltipIcon} />
+                                  </Tooltip>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <Grid container style={{ justifyContent: 'center' }}>
+                                    <Grid item>
+                                      <ListItemText disableTypography className={classes.valueTxt}>
+                                        {value}
+                                      </ListItemText>
+                                    </Grid>
+                                    <Grid item>
+                                      {child.isRating && (
+                                        <Avatar
+                                          className={classes.ratingIcon}
+                                          style={{ background: backGroundColorRating[rating] }}
+                                        >
+                                          {rating}
+                                        </Avatar>
+                                      )}
+                                    </Grid>
+                                  </Grid>
                                 </Grid>
                               </Grid>
-                            </Grid>
+                            </Paper>
                           </Grid>
-                        </Paper>
-                      </Grid>
-                    )
-                  })}
-                </Grid>
-              </Grid>
+                        )
+                      })}
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
           </Grid>
         )
