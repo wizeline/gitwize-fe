@@ -161,6 +161,7 @@ const useStyles = makeStyles(() => ({
 const chartItems = [
   { name: 'New Code', color: '#62C8BA', fieldName: 'newCodePercentage', chartLegendId: 'chart-legend-1' },
   { name: 'Churn', color: '#EC5D5C', fieldName: 'churnPercentage', chartLegendId: 'chart-legend-2' },
+  { name: 'Legacy refactor', color: '#9F55E2', fieldName: 'legacyPercentage', chartLegendId: 'chart-legend-3' },
 ]
 
 const ChartToolTip = styled('div')(({ theme }) => ({
@@ -280,10 +281,13 @@ const customToolTip = (tooltipModel, chartRef) => {
         let label
         switch (tooltipItems[0].label) {
           case 'Churn':
-            label = 'What percentage of total changes is churn or refactoring'
+            label = 'What percentage of total changes was churn. Churn is the code that was changed within 21 days of writing.'
             break
           case 'New Code':
             label = 'What percentage of total changes is new lines of code'
+            break
+          case 'Legacy refactor':
+            label = 'What percentage of total changes was refactoring. Legacy refactor is the code that was changed after 21 days of writing.'
             break
           default:
             label = ''
@@ -508,15 +512,20 @@ function WeeklyImpact(props) {
     }
   })
 
+  const iSFocusHavingData = response && (chartItems.findIndex(item => response[item.fieldName].currentPeriod !== 0) !== -1)
+
   const developerFocusSession = (
     <Grid container className={classes.subContainer}>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <ListItemText disableTypography className={classes.developmentFocusHeader}>
           Development Focus
         </ListItemText>
-        <ListItemText disableTypography className={classes.developmentFocusDesc}>
+        {iSFocusHavingData && <ListItemText disableTypography className={classes.developmentFocusDesc}>
           {`Team focused most on ${calculateFocusData(response, chartItems)} in last week`}
-        </ListItemText>
+        </ListItemText>}
+        {!iSFocusHavingData && <ListItemText disableTypography className={classes.developmentFocusDesc}>
+          {`There was no activity recorded in the last week`}
+        </ListItemText>}
       </Grid>
       <Grid item xs={4}>
         <Grid container className={classes.subContainer}>
@@ -524,7 +533,7 @@ function WeeklyImpact(props) {
             chartItems.map((chartItem) => {
               const data = calculateChartData(response[chartItem.fieldName], chartItem)
               return (
-                <Grid key={chartItem.fieldName} item xs={6}>
+                <Grid key={chartItem.fieldName} item xs={4}>
                   <Chart
                     chartType={chartTypeEnum.BAR}
                     data={data}

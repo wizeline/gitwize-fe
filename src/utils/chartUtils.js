@@ -87,10 +87,10 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
             stacked: false,
             ticks: {
               fontColor: '#C4C4C4',
-              fontSize: 16,
+              fontSize: 12,
               autoSkip: true,
               autoSkipPadding: 30,
-              padding: 10,
+              padding: 10
             },
           },
         ],
@@ -129,6 +129,8 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
                 return 'Churn Percentage'
               case 'New Code':
                 return 'New Code Percentage'
+              case 'Legacy refactor':
+                return 'Legacy refactor'
               default:
                 return ''
             }
