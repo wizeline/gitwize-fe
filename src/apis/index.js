@@ -6,7 +6,7 @@ import CodeChangeVelocityStatsApiClient from './CodeChangeVelocityStatsApiClient
 import QuarterlyTrendsStatsApiClient from './QuarterlyTrendsStatsApiClient'
 import WeeklyImpactApiClient from './WeeklyImpactApiClient'
 import PullRequestSizeApiClient from './PullRequestSizeApiClient'
-import CodeQualityStatsApiClient from './CodeQualityApiClient'
+import CodeQualityStatsApiClient from './CodeQualityStatsApiClient'
 
 const { REACT_APP_API_URL } = process.env
 
