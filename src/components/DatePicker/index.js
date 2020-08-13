@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import DayPicker, { DateUtils } from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
+import React, { useState } from 'react'
+import DayPicker, { DateUtils } from 'react-day-picker'
+import 'react-day-picker/lib/style.css'
 import Paper from '@material-ui/core/Paper'
 import FormControl from '@material-ui/core/FormControl'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 const useStyles = makeStyles((theme) => ({
@@ -21,44 +21,47 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 99,
     background: 'rgba(0, 0, 0, 0.85)',
     color: '#ffff',
-    marginTop: '10px'
+    marginTop: '10px',
   },
   selectable: {
-    "& .DayPicker-Month": {
-      width: "100%",
+    '& .DayPicker-Month': {
+      width: '100%',
     },
-    "& .DayPicker-Day--start": {
-      borderRadius: "100% !important"
+    '& .DayPicker-Day--start': {
+      borderRadius: '100% !important',
     },
-    "& .DayPicker-Day--end": {
-      borderRadius: "100% !important"
+    '& .DayPicker-Day--end': {
+      borderRadius: '100% !important',
     },
-    "& .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside)": {
+    '& .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside)': {
       opacity: 0.9,
-      background: "linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), #000000"
+      background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), #000000',
     },
-    "& .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)": {
-      background: "#EC5D5C"
+    '& .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)': {
+      background: '#EC5D5C',
     },
-    "& .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover": {
-      backgroundColor: "#EC5D5C !important",
-      borderRadius: "100% !important"
+    '& .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover': {
+      backgroundColor: '#EC5D5C !important',
+      borderRadius: '100% !important',
     },
-    "& .DayPicker-Day--disabled": {
-      color: '#dce0e02e'
-    }
-  }
-
+    '& .DayPicker-Day--disabled': {
+      color: '#dce0e02e',
+    },
+  },
 }))
 
 const today = new Date()
 
 export default function DatePicker(props) {
   const { label, onChange, customDisabledDays, customDayClick, initDateRange } = props
-  const [pickedDate, setPickedDate] = useState(initDateRange ? initDateRange: {
-    from: undefined,
-    to: undefined
-  })
+  const [pickedDate, setPickedDate] = useState(
+    initDateRange
+      ? initDateRange
+      : {
+          from: undefined,
+          to: undefined,
+        }
+  )
   const [openDayPickerTable, setOpenDayPickerTable] = useState(false)
   const styles = useStyles()
 
@@ -67,21 +70,21 @@ export default function DatePicker(props) {
   }
 
   const toggleDatePicker = () => {
-    setOpenDayPickerTable((prev) => !prev);
+    setOpenDayPickerTable((prev) => !prev)
   }
 
   const handleDayClick = (day) => {
-    if(day < today) {
-      if(from && to) {
+    if (day < today) {
+      if (from && to) {
         setPickedDate({
           from: day,
-          to: undefined
+          to: undefined,
         })
       } else {
         const range = DateUtils.addDayToRange(day, pickedDate)
         setPickedDate(range)
         onChange(range)
-        if(range.from !== undefined && range.to !== undefined) {
+        if (range.from !== undefined && range.to !== undefined) {
           toggleDatePicker()
         }
       }
@@ -91,28 +94,25 @@ export default function DatePicker(props) {
   const handleCustomDayClick = (day) => {
     const pickedDate = customDayClick(day)
     setPickedDate(pickedDate)
-    if(pickedDate.from !== undefined && pickedDate.to !== undefined) {
+    if (pickedDate.from !== undefined && pickedDate.to !== undefined) {
       toggleDatePicker()
     }
   }
 
-    const { from, to } = pickedDate
-    const modifiers = { start: pickedDate.from, end: pickedDate.to };
+  const { from, to } = pickedDate
+  const modifiers = { start: pickedDate.from, end: pickedDate.to }
 
-    const selectedDateRange = () => {
-      if(!from && !to)
-        return 'Please select the first day'
-      if (from && !to)
-        return 'Please select the last day'
-      if(from && to)
-        return  `Selected from ${from.toLocaleDateString()} - ${to.toLocaleDateString()}`
-    }
+  const selectedDateRange = () => {
+    if (!from && !to) return 'Please select the first day'
+    if (from && !to) return 'Please select the last day'
+    if (from && to) return `Selected from ${from.toLocaleDateString()} - ${to.toLocaleDateString()}`
+  }
 
-    return (
-      <ClickAwayListener onClickAway={handleClickAway}>
+  return (
+    <ClickAwayListener onClickAway={handleClickAway}>
       <FormControl className={styles.formControl}>
         <TextField
-          id='standard-helperText'
+          id="standard-helperText"
           label={label}
           value={selectedDateRange()}
           InputProps={{
@@ -121,22 +121,21 @@ export default function DatePicker(props) {
           onClick={toggleDatePicker}
         />
 
-      <div className='RangeExample'>
-        <Paper  style={{display: `${openDayPickerTable ? "block" : "none"}` }} 
-                className={styles.datePicker}>
-          <DayPicker
-            className={styles.selectable}
-            numberOfMonths={2}
-            selectedDays={[from, { from, to }]}
-            modifiers={modifiers}
-            onDayClick={customDayClick ? handleCustomDayClick: handleDayClick}
-            show={false}
-            disabledDays={customDisabledDays ? customDisabledDays : { after: today }}
-            firstDayOfWeek={ 1 }
-          />
-        </Paper>
-      </div>
+        <div className="RangeExample">
+          <Paper style={{ display: `${openDayPickerTable ? 'block' : 'none'}` }} className={styles.datePicker}>
+            <DayPicker
+              className={styles.selectable}
+              numberOfMonths={2}
+              selectedDays={[from, { from, to }]}
+              modifiers={modifiers}
+              onDayClick={customDayClick ? handleCustomDayClick : handleDayClick}
+              show={false}
+              disabledDays={customDisabledDays ? customDisabledDays : { after: today }}
+              firstDayOfWeek={1}
+            />
+          </Paper>
+        </div>
       </FormControl>
-      </ClickAwayListener>
-    );
+    </ClickAwayListener>
+  )
 }
