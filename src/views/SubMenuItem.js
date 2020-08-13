@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
 		width: '100%',
 		fontStyle: 'normal',
 		fontWeight: 500,
-		fontSize: '14px',
+		fontSize: '1.5vh',
 		lineHeight: '21px',
 		color: '#C5C5C5',
 	},
@@ -48,7 +48,7 @@ const useStyles = makeStyles(() => ({
 		color: '#C5C5C5'
 	},
 	buttonSubMenutext: {
-		fontSize: '12px',
+		fontSize: '1.4vh',
 	},
 	textTruncated: {
 		whiteSpace: 'nowrap',
