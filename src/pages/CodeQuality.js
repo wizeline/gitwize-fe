@@ -193,18 +193,17 @@ function CodeQuality(props) {
   const { pageTitle } = props
   const { id } = props.match.params
   const { authService } = useOktaAuth()
-  const tokenManager = authService.getTokenManager()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [response, setResponse] = useState()
   const classes = useStyles()
 
   useEffect(() => {
-    apiClient.setTokenManager(tokenManager)
+    apiClient.setAuthService(authService)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.codeQuality.getCodeQualityStats(id).then((response) => {
       setResponse(response)
     })
-  }, [id, tokenManager])
+  }, [id, authService])
 
   const buildCodeQuality = () => {
     if (response) {
