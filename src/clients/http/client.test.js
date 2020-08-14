@@ -36,7 +36,7 @@ axiosMockAdapter.onAny(`${baseURL}/`).reply(({ method, data, params }) => {
     case 'POST':
     case 'PATCH':
     case 'PUT':
-      if (body.message === 'KO') {
+      if (body && body.message === 'KO') {
         return [500, koResponse]
       }
       return [200, okResponse]
