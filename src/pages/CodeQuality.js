@@ -60,6 +60,7 @@ const qualityItems = [
         tooltip: `The estimated time it will take to fix all Code Smells.`,
         isRating: true,
         fieldName: 'technicalDebt',
+        unit: 'hr'
       },
       {
         name: 'Code Smells',
@@ -245,6 +246,10 @@ function CodeQuality(props) {
                         } else {
                           value = response[child.fieldName]
                         }
+
+                        if(child.name === 'Technical Debt') {
+                          value = (value / 60).toFixed(1) 
+                        }
                         return (
                           <Grid key={child.name} item xs={xsSize}>
                             <Paper className={classes.paperItem}>
@@ -269,7 +274,7 @@ function CodeQuality(props) {
                                   <Grid container style={{ justifyContent: 'center' }}>
                                     <Grid item>
                                       <ListItemText disableTypography className={classes.valueTxt}>
-                                        {value}
+                                        {value} {child.unit ? child.unit : ''}
                                       </ListItemText>
                                     </Grid>
                                     <Grid item>
