@@ -17,10 +17,13 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
 const IMPACT_SCORE_TXT = 'Impact score'
+const COMMITS_PER_DAY = 'Commits/day'
+const CHART_TOOLTIP = 'chartjs-tooltip'
+
 const gridItems = [
   { name: IMPACT_SCORE_TXT, fieldName: 'impactScore' },
   { name: 'Active days', fieldName: 'activeDays' },
-  { name: 'Commits/day', fieldName: 'commitsPerDay' },
+  { name: COMMITS_PER_DAY, fieldName: 'commitsPerDay' },
   { name: 'Most churned file', fieldName: 'mostChurnedFiles' },
 ]
 
@@ -239,13 +242,13 @@ const calculateChartData = (data, chartItem) => {
 
 const customToolTip = (tooltipModel, chartRef) => {
   // Tooltip Element
-  let tooltipEl = document.getElementById('chartjs-tooltip')
+  let tooltipEl = document.getElementById(CHART_TOOLTIP)
   const chartInstance = chartRef.current.chartInstance
 
   // Create element on first render
   if (!tooltipEl) {
     tooltipEl = document.createElement('div')
-    tooltipEl.id = 'chartjs-tooltip'
+    tooltipEl.id = CHART_TOOLTIP
     document.body.appendChild(tooltipEl)
   }
 
@@ -265,8 +268,8 @@ const customToolTip = (tooltipModel, chartRef) => {
 
   // Set Text
   if (tooltipModel.body) {
-    let titleLines = tooltipModel.title || []
-    let bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
+    const titleLines = tooltipModel.title || []
+    const bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
 
     if (bodyLines.length > 0) {
       tooltipEl.innerHTML = '<ul></ul>'
@@ -295,17 +298,17 @@ const customToolTip = (tooltipModel, chartRef) => {
         innerHtml += `<li>
                       ${label}
                     </li>`
-        let tableRoot = tooltipEl.querySelector('ul')
+        const tableRoot = tooltipEl.querySelector('ul')
         tableRoot.innerHTML = innerHtml
       }
     }
 
     // `this` will be the overall tooltip
-    let position = chartInstance.canvas.getBoundingClientRect()
+    const position = chartInstance.canvas.getBoundingClientRect()
 
     // Display, position, and set styles for font
     tooltipEl.style.opacity = 0.9
-    let left = position.left + window.pageXOffset + tooltipModel.caretX
+    const left = position.left + window.pageXOffset + tooltipModel.caretX
     tooltipEl.style.left =
       left + tooltipEl.offsetWidth > window.innerWidth ? left - tooltipEl.offsetWidth + 'px' : left + 'px'
     tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px'
@@ -466,7 +469,7 @@ function WeeklyImpact(props) {
             </Grid>
             <Grid item xs={12}>
               <ListItemText className={classes.itemValueTxt}>
-                {item.name === 'Commits/day' ? item.currentPeriod.toFixed(1) : item.currentPeriod}
+                {item.name === COMMITS_PER_DAY ? item.currentPeriod.toFixed(1) : item.currentPeriod}
                 {item.name === IMPACT_SCORE_TXT && <span className={classes.impactScoreUnitTxt}>pts</span>}
               </ListItemText>
             </Grid>
@@ -483,7 +486,7 @@ function WeeklyImpact(props) {
                 className={clsx(classes.itemPreviousTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}
               >
                 {`From previous period (${
-                  item.name === 'Commits/day' ? item.previousPeriod.toFixed(1) : item.previousPeriod
+                  item.name === COMMITS_PER_DAY ? item.previousPeriod.toFixed(1) : item.previousPeriod
                 }${item.name === IMPACT_SCORE_TXT ? ' pts' : ''})`}
               </ListItemText>
             </Grid>
@@ -553,7 +556,7 @@ function WeeklyImpact(props) {
                 </Grid>
               )
             })}
-          <ChartToolTip id={'chartjs-tooltip'} />
+          <ChartToolTip id={CHART_TOOLTIP} />
         </Grid>
       </Grid>
     </Grid>

@@ -12,10 +12,15 @@ export const createReversedArray = (array) => {
 export const transformPeriodToDateRange = (period) => {
   const today = new Date()
   let endDay = null
-  if (period === 'Last 7 Days') endDay = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000)
-  else if (period === 'Last 14 Days') endDay = new Date(today.getTime() - 13 * 24 * 60 * 60 * 1000)
-  else if (period === 'Last 21 Days') endDay = new Date(today.getTime() - 20 * 24 * 60 * 60 * 1000)
-  else if (period === 'Last 30 Days') endDay = new Date(today.getTime() - 29 * 24 * 60 * 60 * 1000)
+  if (period === 'Last 7 Days') {
+    endDay = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000)
+  } else if (period === 'Last 14 Days') {
+    endDay = new Date(today.getTime() - 13 * 24 * 60 * 60 * 1000)
+  } else if (period === 'Last 21 Days') {
+    endDay = new Date(today.getTime() - 20 * 24 * 60 * 60 * 1000)
+  } else if (period === 'Last 30 Days') {
+    endDay = new Date(today.getTime() - 29 * 24 * 60 * 60 * 1000)
+  }
 
   return {
     period_date_from: endDay,
@@ -24,7 +29,7 @@ export const transformPeriodToDateRange = (period) => {
 }
 
 export const transformToChartData = (lines, bars, rawData, xAxis) => {
-  let dataSets = []
+  const dataSets = []
   let labels
   if (xAxis === 'Date') {
     labels = rawData.flatMap((item) => moment(item[xAxis]).format(dateFormat))
@@ -33,7 +38,7 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
   }
   lines.forEach((chartItem) => {
     const dataArray = rawData.flatMap((rawDataItem) => rawDataItem[chartItem.name])
-    let yAxisId = chartItem.yAxisId
+    const yAxisId = chartItem.yAxisId
     const dataSetsItem = {
       label: chartItem.name,
       type: 'line',
@@ -96,8 +101,8 @@ export const transformToChartData = (lines, bars, rawData, xAxis) => {
 }
 
 export const transformDataForBubbleChart = (chartData) => {
-  let labels = []
-  let smallPullRequests = {
+  const labels = []
+  const smallPullRequests = {
     label: 'Pull Requests Size',
     fill: false,
     lineTension: 0.1,

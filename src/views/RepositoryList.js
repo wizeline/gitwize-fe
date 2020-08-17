@@ -16,6 +16,8 @@ import MessageNotification from '../components/MesageNotification'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import MainLayoutContex from '../contexts/MainLayoutContext';
 
+const FLEX_ALIGN = 'flex-start'
+
 const apiClient = new ApiClient()
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,12 +36,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   notEmpty: {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    alignItems: FLEX_ALIGN,
+    justifyContent: FLEX_ALIGN,
 
     '>.textSmallDisabled': {
       display: 'flex',
-      alignItems: 'flex-start',
+      alignItems: FLEX_ALIGN,
     },
   },
   rowAlign: {

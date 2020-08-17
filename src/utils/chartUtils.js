@@ -3,6 +3,9 @@ import { cloneDeep } from 'lodash'
 import { createChartFullData, calculateIndexBaseLine } from '../utils/dataUtils'
 import { getMonthNumberFromMonthName } from '../utils/dateUtils'
 
+const CHART_TOOLTIP = 'chartjs-tooltip'
+const NO_TRANSFORM = 'no-transform'
+
 export const readDataFromFile = (filePath) => {
   return new Promise((resolve) => {
     Papa.parse(filePath, {
@@ -37,7 +40,7 @@ export const getChartColor = (data) => {
 }
 
 export const getChartOptions = (chartOptions, chartLines = []) => {
-  let newChartOptions = cloneDeep(chartOptions)
+  const newChartOptions = cloneDeep(chartOptions)
   if (chartLines.length > 0 && newChartOptions) {
     chartLines.forEach((item) => {
       const yAxisItem = {
@@ -157,16 +160,16 @@ export const buildChartOptionsBasedOnMaxValue = (responseData, chartItems) => {
 }
 
 export const wrapText = (canvasContext, text, x, y, maxWidth, lineHeight) => {
-  let lines = text.split('\n')
+  const lines = text.split('\n')
 
   for (let i = 0; i < lines.length; i++) {
-    let words = lines[i].split(' ')
+    const words = lines[i].split(' ')
     let line = ''
 
     for (let n = 0; n < words.length; n++) {
-      let testLine = line + words[n] + ' '
-      let metrics = canvasContext.measureText(testLine)
-      let testWidth = metrics.width
+      const testLine = line + words[n] + ' '
+      const metrics = canvasContext.measureText(testLine)
+      const testWidth = metrics.width
       if (testWidth > maxWidth && n > 0) {
         canvasContext.fillText(line, x, y)
         line = words[n] + ' '
@@ -190,13 +193,13 @@ export const buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity = (
   dateTo
 ) => {
   // Tooltip Element
-  let tooltipEl = document.getElementById('chartjs-tooltip')
+  let tooltipEl = document.getElementById(CHART_TOOLTIP)
   const chartInstance = chartRef.current.chartInstance
 
   // Create element on first render
   if (!tooltipEl) {
     tooltipEl = document.createElement('div')
-    tooltipEl.id = 'chartjs-tooltip'
+    tooltipEl.id = CHART_TOOLTIP
     document.body.appendChild(tooltipEl)
   }
 
@@ -207,17 +210,17 @@ export const buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity = (
   }
 
   // Set caret Position
-  tooltipEl.classList.remove('above', 'below', 'no-transform')
+  tooltipEl.classList.remove('above', 'below', NO_TRANSFORM)
   if (tooltipModel.yAlign) {
     tooltipEl.classList.add(tooltipModel.yAlign)
   } else {
-    tooltipEl.classList.add('no-transform')
+    tooltipEl.classList.add(NO_TRANSFORM)
   }
 
   // Set Text
   if (tooltipModel.body) {
-    let titleLines = tooltipModel.title || []
-    let bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
+    const titleLines = tooltipModel.title || []
+    const bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
 
     if (bodyLines.length > 0) {
       tooltipEl.innerHTML = '<ul></ul>'
@@ -277,16 +280,16 @@ export const buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity = (
                     </li>`
       }
 
-      let tableRoot = tooltipEl.querySelector('ul')
+      const tableRoot = tooltipEl.querySelector('ul')
       tableRoot.innerHTML = innerHtml
     }
 
     // `this` will be the overall tooltip
-    let position = chartInstance.canvas.getBoundingClientRect()
+    const position = chartInstance.canvas.getBoundingClientRect()
 
     // Display, position, and set styles for font
     tooltipEl.style.opacity = 0.9
-    let left = position.left + window.pageXOffset + tooltipModel.caretX
+    const left = position.left + window.pageXOffset + tooltipModel.caretX
     tooltipEl.style.left =
       left + tooltipEl.offsetWidth > window.innerWidth ? left - tooltipEl.offsetWidth + 'px' : left + 'px'
     tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px'
@@ -337,7 +340,7 @@ export const buildCustomToolTipPullRequestSize = (tooltipModel, chartRef) => {
   // Create element on first render
   if (!tooltipEl) {
     tooltipEl = document.createElement('div')
-    tooltipEl.id = 'chartjs-tooltip'
+    tooltipEl.id = CHART_TOOLTIP
     document.body.appendChild(tooltipEl)
   }
   // Hide if no tooltip
@@ -348,15 +351,15 @@ export const buildCustomToolTipPullRequestSize = (tooltipModel, chartRef) => {
     return
   }
   // Set caret Position
-  tooltipEl.classList.remove('above', 'below', 'no-transform')
+  tooltipEl.classList.remove('above', 'below', NO_TRANSFORM)
   if (tooltipModel.yAlign) {
     tooltipEl.classList.add(tooltipModel.yAlign)
   } else {
-    tooltipEl.classList.add('no-transform')
+    tooltipEl.classList.add(NO_TRANSFORM)
   }
   // Set Text
   if (tooltipModel.body) {
-    let bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
+    const bodyLines = tooltipModel.body.map((bodyItem) => bodyItem.lines)
     if (bodyLines.length > 0) {
       tooltipEl.innerHTML = '<ul></ul>'
       let innerHtml = ''
@@ -392,19 +395,14 @@ export const buildCustomToolTipPullRequestSize = (tooltipModel, chartRef) => {
                        Created by <div> ${fullData.createdBy} </div>
                    </li>
                    <a href=${fullData.url} target="_blank"><button class="toolTipButton">View PR</button></a>`
-      let tableRoot = tooltipEl.querySelector('ul')
+      const tableRoot = tooltipEl.querySelector('ul')
       tableRoot.innerHTML = innerHtml
     }
-    document.querySelectorAll(`.toolTipButton`).forEach((item, index) => {
-      item.addEventListener('click', (e) => {
-        // TODO: View PR
-      })
-    })
     // `this` will be the overall tooltip
-    let position = chartInstance.canvas.getBoundingClientRect()
+    const position = chartInstance.canvas.getBoundingClientRect()
     // Display, position, and set styles for font
     tooltipEl.style.opacity = 0.9
-    let left = position.left + window.pageXOffset + tooltipModel.caretX
+    const left = position.left + window.pageXOffset + tooltipModel.caretX
     tooltipEl.style.left =
       left + tooltipEl.offsetWidth > window.innerWidth ? left - tooltipEl.offsetWidth + 'px' : left + 'px'
     tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.y + 'px'

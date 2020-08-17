@@ -15,6 +15,8 @@ import {
   buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity, 
   buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity } from '../utils/chartUtils'
 
+  const FLEX_ALIGN = 'flex-start' 
+
 const apiClient = new ApiClient()
 
 const useStyles = makeStyles(() => ({
@@ -25,7 +27,7 @@ const useStyles = makeStyles(() => ({
   },
   gridItem: {
     display: 'flex',
-    alignItems: 'flex-start',
+    alignItems: FLEX_ALIGN,
   },
   headerTxt: {
     fontSize: 15,
@@ -189,7 +191,7 @@ function QuartelyTrends(props) {
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>{pageTitle}</PageTitle>
       <Grid container className={classes.root}>
-        <Grid className={classes.gridItem} style={{ justifyContent: 'flex-start' }} item xs={4}>
+        <Grid className={classes.gridItem} style={{ justifyContent: FLEX_ALIGN }} item xs={4}>
           <List>
             <ListItem>
               <ListItemText disableTypography className={classes.headerTxt}>{hightLightState.highLightHeader}</ListItemText>
@@ -214,7 +216,7 @@ function QuartelyTrends(props) {
             </ListItem>
           </List>
         </Grid>
-        <Grid className={classes.gridItem} style={{ justifyContent: 'flex-start' }} item xs={8}>
+        <Grid className={classes.gridItem} style={{ justifyContent: FLEX_ALIGN }} item xs={8}>
           <Grid container >
             <Grid className={classes.gridItem} item xs={12}>
               <Chart
