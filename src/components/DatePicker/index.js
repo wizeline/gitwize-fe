@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
+const ONEHUNDRED_PERCENT_IMPORTANT = '100% !important'
 const useStyles = makeStyles((theme) => ({
   formControl: {
     marginTop: theme.spacing(2),
@@ -28,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
     '& .DayPicker-Day--start': {
-      borderRadius: '100% !important',
+      borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
     },
     '& .DayPicker-Day--end': {
-      borderRadius: '100% !important',
+      borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
     },
     '& .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside)': {
       opacity: 0.9,
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover': {
       backgroundColor: '#EC5D5C !important',
-      borderRadius: '100% !important',
+      borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
     },
     '& .DayPicker-Day--disabled': {
       color: '#dce0e02e',
@@ -103,9 +104,19 @@ export default function DatePicker(props) {
   const modifiers = { start: pickedDate.from, end: pickedDate.to }
 
   const selectedDateRange = () => {
-    if (!from && !to) return 'Please select the first day'
-    if (from && !to) return 'Please select the last day'
-    if (from && to) return `Selected from ${from.toLocaleDateString()} - ${to.toLocaleDateString()}`
+    if (!from && !to) {
+      return 'Please select the first day'
+    }
+
+    if (from && !to) {
+      return 'Please select the last day'
+    }
+
+    if (from && to) {
+      return `Selected from ${from.toLocaleDateString()} - ${to.toLocaleDateString()}`
+    }
+
+    return ''
   }
 
   return (

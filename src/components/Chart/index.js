@@ -138,7 +138,7 @@ export default function Chart(props) {
             item.addEventListener("click", e => handleClick(e, item, index, originalColor));
           }
           //keep color as grey if already disabled
-          let ci = chartRef.current.chartInstance;
+          const ci = chartRef.current.chartInstance;
           const meta = ci.getDatasetMeta(index);
           if(meta.hidden) {
             item.style.color = 'grey'
