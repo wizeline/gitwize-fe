@@ -360,6 +360,12 @@ const buildImpactScoreReasonSession = (response) => {
           previousValue = response[item.fieldName[0]].previousPeriod + response[item.fieldName[1]].previousPeriod
           currentValue = response[item.fieldName[0]].currentPeriod + response[item.fieldName[1]].currentPeriod
         }
+
+        if(item.name === 'old codes' || item.name === 'new codes') {
+          previousValue = previousValue.toFixed(2)
+          currentValue = currentValue.toFixed(2)
+        }
+
         if (isDropped === (currentValue < previousValue)) {
           return `${item[isDropped ? 'dropDescription' : 'increaseDescription']} (${previousValue} - ${currentValue})`
         }
