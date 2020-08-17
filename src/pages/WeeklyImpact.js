@@ -633,7 +633,7 @@ function WeeklyImpact(props) {
         <Grid item xs={4} style={{ marginBottom: '2vh' }}>
           <DatePicker
             label="Date Range"
-            customDisabledDays={[{ daysOfWeek: [0, 2, 3, 4, 5, 6]}, {after: new Date()}]}
+            customDisabledDays={[{ daysOfWeek: [2, 3, 4, 5, 6]}, {after: new Date()}]}
             customDayClick={handleDayClick}
             initDateRange={dateRange}
           />
