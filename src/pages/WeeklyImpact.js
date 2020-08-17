@@ -5,12 +5,15 @@ import PageTitle from '../components/PageTitle'
 import { makeStyles, styled } from '@material-ui/core/styles'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
-import { Grid, ListItemText } from '@material-ui/core'
+import { Grid, ListItemText, List, Divider, Paper, Tooltip } from '@material-ui/core'
 import clsx from 'clsx'
 import { buildGridItemsWeeklyImpact } from '../utils/dataUtils'
 import { formatToMMDD } from '../utils/dateUtils'
-import Chart, {chartTypeEnum} from '../components/Chart'
+import Chart, { chartTypeEnum } from '../components/Chart'
 import { buildChartOptionsBasedOnMaxValue } from '../utils/chartUtils'
+import DatePicker from '../components/DatePicker'
+import { getDayStartOfCurrentWeek, addNumberOfDays, getDayStartOfWeekPointOfTime } from '../utils/dateUtils'
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
 const IMPACT_SCORE_TXT = 'Impact score'
@@ -19,6 +22,39 @@ const gridItems = [
   { name: 'Active days', fieldName: 'activeDays' },
   { name: 'Commits/day', fieldName: 'commitsPerDay' },
   { name: 'Most churned file', fieldName: 'mostChurnedFiles' },
+]
+
+const impactScoreItems = [
+  {
+    name: 'files',
+    fieldName: 'fileChanged',
+    dropDescription: 'Fewer number of files was changed',
+    increaseDescription: 'More number of files was changed',
+  },
+  {
+    name: 'insertions points',
+    fieldName: 'insertionPoints',
+    dropDescription: 'There were lesser number of insertion points',
+    increaseDescription: 'There was more number of insertion points',
+  },
+  {
+    name: 'old codes',
+    fieldName: ['legacyPercentage', 'churnPercentage'],
+    dropDescription: 'Lesser edits was made to old code',
+    increaseDescription: 'More edits was made to old code',
+  },
+  {
+    name: 'new codes',
+    fieldName: 'newCodePercentage',
+    dropDescription: 'Lesser new code was written',
+    increaseDescription: 'More new code was written',
+  },
+  {
+    name: 'lines of code',
+    fieldName: 'additions',
+    dropDescription: 'Fewer lines of code were added',
+    increaseDescription: 'More lines of code were added',
+  },
 ]
 
 const apiClient = new ApiClient()
@@ -30,7 +66,8 @@ const useStyles = makeStyles(() => ({
   },
   subContainer: {
     width: '100%',
-    height: '33vh',
+    height: '32vh',
+    alignContent: 'flex-start',
   },
   gridItem: {
     display: 'flex',
@@ -94,32 +131,56 @@ const useStyles = makeStyles(() => ({
     fontSize: 16,
     color: '#6A707E',
   },
+  reasonRoot: {
+    width: '95%',
+    marginTop: '3vh',
+  },
+  reasonTxt: {
+    fontSize: 15,
+    lineHeight: '5vh',
+    margin: '0px 0px 0px 1vw',
+    height: '5vh',
+  },
+  toolTipTxt: {
+    background: '#000000',
+    fontSize: 9,
+    padding: '35px 40px 40px 26px',
+    marginRight: '10vw',
+    borderRadius: 8,
+    minHeight: 100,
+    whiteSpace: 'pre-line',
+  },
+  tooltipIcon: {
+    marginTop: '3vh',
+  },
+  impactScoreUnitTxt: {
+    fontSize: '15px',
+  },
 }))
 
 const chartItems = [
   { name: 'New Code', color: '#62C8BA', fieldName: 'newCodePercentage', chartLegendId: 'chart-legend-1' },
   { name: 'Churn', color: '#EC5D5C', fieldName: 'churnPercentage', chartLegendId: 'chart-legend-2' },
+  { name: 'Legacy refactor', color: '#9F55E2', fieldName: 'legacyPercentage', chartLegendId: 'chart-legend-3' },
 ]
 
-const ChartToolTip = styled('div')(({
-  theme
-}) => ({
-  "&": {
+const ChartToolTip = styled('div')(({ theme }) => ({
+  '&': {
     position: 'absolute',
     background: 'rgba(0, 0, 0, 1)',
     color: 'white',
     borderRadius: '10px',
     fontFamily: 'Poppins',
     pointerEvents: 'none',
-  },  
-  "& li span": {
+  },
+  '& li span': {
     width: '12px',
     height: '12px',
     display: 'inline-block',
     margin: '0 0.5vw 8px 0.5vw',
-    verticalAlign: '-9.4px'
+    verticalAlign: '-9.4px',
   },
-  "& ul": {
+  '& ul': {
     display: 'flex',
     justifyContent: 'center',
     listStyle: 'none',
@@ -127,16 +188,16 @@ const ChartToolTip = styled('div')(({
     flexDirection: 'column',
     padding: '0px',
   },
-  "& li": {
+  '& li': {
     textAlign: 'left',
     height: '20px',
     fontWeight: 'bold',
     margin: '1vh 0.5vh',
   },
-  "& li div": {
+  '& li div': {
     float: 'right',
-    margin: '0px 1vw'
-  }
+    margin: '0px 1vw',
+  },
 }))
 
 const calculatePeriod = (period) => {
@@ -220,10 +281,13 @@ const customToolTip = (tooltipModel, chartRef) => {
         let label
         switch (tooltipItems[0].label) {
           case 'Churn':
-            label = 'What percentage of total changes is churn or refactoring'
+            label = 'What percentage of total changes was churn. Churn is the code that was changed within 21 days of writing.'
             break
           case 'New Code':
             label = 'What percentage of total changes is new lines of code'
+            break
+          case 'Legacy refactor':
+            label = 'What percentage of total changes was refactoring. Legacy refactor is the code that was changed after 21 days of writing.'
             break
           default:
             label = ''
@@ -251,44 +315,110 @@ const customToolTip = (tooltipModel, chartRef) => {
 }
 
 const calculateFocusData = (response, chartItems) => {
-  if(response) {
+  if (response) {
     let focusItemIndex = -1
     let maxValue = Number.MIN_SAFE_INTEGER
     chartItems.forEach((item, i) => {
-      const value  = response[item.fieldName].currentPeriod;
-      if(value > maxValue) {
+      const value = response[item.fieldName].currentPeriod
+      if (value > maxValue) {
         maxValue = value
         focusItemIndex = i
       }
     })
-    if(focusItemIndex !== -1) {
+    if (focusItemIndex !== -1) {
       return chartItems[focusItemIndex].name
     }
     return ''
   }
 }
 
+const impactScoreToolTipInformation = `Impact score is calculated using the following metrics, giving different weightage to all
+\nNumber of files changed
+\nNumber of insertion points/edit locations
+\nWhat percentage of work is edits to old code
+\nWhat percentage of work is newly written code
+\nAdditions in lines of code`
+
+const buildImpactScoreReasonSession = (response) => {
+  let impactReasoneResult = []
+  if (response) {
+    if (
+      response.impactScore.currentPeriod === 0 &&
+      response.activeDays.currentPeriod === 0 &&
+      response.commitsPerDay.currentPeriod === 0
+    ) {
+      impactReasoneResult.push('There was no activity recorded in the last week')
+    } else {
+      const isDropped = response.impactScore.currentPeriod < response.impactScore.previousPeriod
+      impactReasoneResult = impactScoreItems.flatMap((item) => {
+        let previousValue = 0
+        let currentValue = 0
+        if (item.name !== 'old codes') {
+          previousValue = response[item.fieldName].previousPeriod
+          currentValue = response[item.fieldName].currentPeriod
+        } else {
+          previousValue = response[item.fieldName[0]].previousPeriod + response[item.fieldName[1]].previousPeriod
+          currentValue = response[item.fieldName[0]].currentPeriod + response[item.fieldName[1]].currentPeriod
+        }
+        if (isDropped === (currentValue < previousValue)) {
+          return `${item[isDropped ? 'dropDescription' : 'increaseDescription']} (${previousValue} - ${currentValue})`
+        }
+        return ''
+      })
+    }
+    return impactReasoneResult.filter((item) => item !== '')
+  }
+}
+
+const initDateRangeValue = () => {
+  const monDayOfCurrentWeek = getDayStartOfCurrentWeek()
+  const dateFrom = addNumberOfDays(monDayOfCurrentWeek, -7)
+  const dateTo = addNumberOfDays(dateFrom, 6)
+  return {
+    from: dateFrom.toDate(),
+    to: dateTo.toDate(),
+  }
+}
+
 function WeeklyImpact(props) {
-  const {id} = props.match.params;
-  const classes = useStyles();
+  const { id } = props.match.params
+  const classes = useStyles()
   const { authService } = useOktaAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [gridItemsState, setGridItems] = useState([])
   const [response, setResponse] = useState()
+  const [reasoneImpactScore, setReasoneImpactScore] = useState([])
   const [period, setPeriod] = useState({})
+  const [unsualFiles, setUnsualFiles] = useState([])
+  const [dateRange, setDateRange] = useState(initDateRangeValue())
 
   useEffect(() => {
-      apiClient.setAuthService(authService)
-      mainLayout.current.handleChangeRepositoryId(id)
-      apiClient.weeklyImpact.getWeeklyImpactStats(id).then((response) => {
-        setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
-        setPeriod(calculatePeriod(response.period))
-        setResponse(response)
-      }).catch(e => {
-        console.log(e)
-      })
-    }, [id, mainLayout, authService]
-  )
+    apiClient.setAuthService(authService)
+    mainLayout.current.handleChangeRepositoryId(id)
+    apiClient.weeklyImpact.getWeeklyImpactStats(id, dateRange).then((response) => {
+      setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
+      setPeriod(calculatePeriod(response.period))
+      setReasoneImpactScore(buildImpactScoreReasonSession(response))
+      setUnsualFiles(response.unusualFiles)
+      setResponse(response)
+    })
+  }, [id, mainLayout, authService, dateRange])
+
+  const handleDayClick = (day) => {
+    const dateFrom = getDayStartOfWeekPointOfTime(day)
+    const dateTo = addNumberOfDays(dateFrom, 6)
+
+    const dateRangeValue = {
+      from: dateFrom.toDate(),
+      to: dateTo.toDate(),
+    }
+
+    setDateRange(dateRangeValue)
+    return {
+      from: dateFrom.toDate(),
+      to: dateTo.toDate(),
+    }
+  }
 
   const impactSession = gridItemsState.map((item) => {
     if (item.name !== 'Most churned file') {
@@ -303,33 +433,52 @@ function WeeklyImpact(props) {
             item.name === IMPACT_SCORE_TXT && classes.highlightSubGridItem
           )}
         >
-          <Grid container style={{ height: '100%' }}>
+          <Grid container style={{ height: '32vh' }}>
             <Grid item xs={12}>
-              <ListItemText
-                className={clsx(classes.itemNameTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}
-              >
-                {item.name}
-              </ListItemText>
+              <Grid container style={{ alignItems: 'flex-end' }}>
+                <Grid item>
+                  <ListItemText
+                    className={clsx(classes.itemNameTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}
+                  >
+                    {item.name}
+                  </ListItemText>
+                </Grid>
+                <Grid item style={{ marginLeft: '0.5vw' }}>
+                  {item.name === IMPACT_SCORE_TXT && (
+                    <Tooltip
+                      title={impactScoreToolTipInformation}
+                      placement="bottom-start"
+                      enterDelay={500}
+                      enterNextDelay={500}
+                      classes={{ tooltip: classes.toolTipTxt }}
+                    >
+                      <InfoOutlinedIcon />
+                    </Tooltip>
+                  )}
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={12}>
               <ListItemText className={classes.itemValueTxt}>
                 {item.name === 'Commits/day' ? item.currentPeriod.toFixed(1) : item.currentPeriod}
+                {item.name === IMPACT_SCORE_TXT && <span className={classes.impactScoreUnitTxt}>pts</span>}
               </ListItemText>
             </Grid>
-            {item.diffValue !== undefined &&
-            <Grid item xs={12}>
-              <ListItemText
-                className={classes.itemDiffValueTxt}
-                style={{ background: item.diffValue >= 0 ? '#62C8BA' : '#EC5D5C' }}
-              >{`${item.diffValue >= 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
-            </Grid>}
+            {item.diffValue !== undefined && (
+              <Grid item xs={12}>
+                <ListItemText
+                  className={classes.itemDiffValueTxt}
+                  style={{ background: item.diffValue > 0 ? '#62C8BA' : item.diffValue === 0 ? '#C4C4C4' : '#EC5D5C' }}
+                >{`${item.diffValue > 0 ? '+' : ''}${item.diffValue}%`}</ListItemText>
+              </Grid>
+            )}
             <Grid item xs={12} className={classes.itemLast}>
               <ListItemText
                 className={clsx(classes.itemPreviousTxt, item.name === IMPACT_SCORE_TXT && classes.whiteFontTxt)}
               >
                 {`From previous period (${
                   item.name === 'Commits/day' ? item.previousPeriod.toFixed(1) : item.previousPeriod
-                })`}
+                }${item.name === IMPACT_SCORE_TXT ? ' pts' : ''})`}
               </ListItemText>
             </Grid>
           </Grid>
@@ -338,7 +487,7 @@ function WeeklyImpact(props) {
     } else {
       return (
         <Grid key={item.name} item xs={3} className={clsx(classes.gridItem, classes.subGridItem)}>
-          <Grid container style={{ height: '100%' }}>
+          <Grid container style={{ height: '32vh' }}>
             <Grid item xs={12}>
               <ListItemText className={classes.itemNameTxt}>{item.name}</ListItemText>
             </Grid>
@@ -363,15 +512,20 @@ function WeeklyImpact(props) {
     }
   })
 
+  const iSFocusHavingData = response && (chartItems.findIndex(item => response[item.fieldName].currentPeriod !== 0) !== -1)
+
   const developerFocusSession = (
     <Grid container className={classes.subContainer}>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <ListItemText disableTypography className={classes.developmentFocusHeader}>
           Development Focus
         </ListItemText>
-        <ListItemText disableTypography className={classes.developmentFocusDesc}>
+        {iSFocusHavingData && <ListItemText disableTypography className={classes.developmentFocusDesc}>
           {`Team focused most on ${calculateFocusData(response, chartItems)} in last week`}
-        </ListItemText>
+        </ListItemText>}
+        {!iSFocusHavingData && <ListItemText disableTypography className={classes.developmentFocusDesc}>
+          {`There was no activity recorded in the last week`}
+        </ListItemText>}
       </Grid>
       <Grid item xs={4}>
         <Grid container className={classes.subContainer}>
@@ -379,7 +533,7 @@ function WeeklyImpact(props) {
             chartItems.map((chartItem) => {
               const data = calculateChartData(response[chartItem.fieldName], chartItem)
               return (
-                <Grid key={chartItem.fieldName} item xs={6}>
+                <Grid key={chartItem.fieldName} item xs={4}>
                   <Chart
                     chartType={chartTypeEnum.BAR}
                     data={data}
@@ -399,10 +553,85 @@ function WeeklyImpact(props) {
     </Grid>
   )
 
+  const reasonsSession = (
+    <Grid container className={classes.subContainer}>
+      <Grid item xs={12}>
+        <ListItemText disableTypography className={classes.developmentFocusHeader}>
+          Why did the impact score{' '}
+          {(response && response.impactScore.currentPeriod < response.impactScore.previousPeriod) > 0
+            ? 'drop'
+            : 'increase'}
+          ?
+        </ListItemText>
+      </Grid>
+      <Grid item xs={12}>
+        <Paper className={classes.reasonRoot}>
+          <List>
+            {reasoneImpactScore.map((item, index) => (
+              <>
+                <ListItemText disableTypography className={classes.reasonTxt}>
+                  {item}
+                </ListItemText>
+                {index !== reasoneImpactScore.length - 1 && <Divider />}
+              </>
+            ))}
+          </List>
+        </Paper>
+      </Grid>
+    </Grid>
+  )
+
+  const unsualFilesView = (unsualFiles && unsualFiles.length > 0) ? (
+    <Grid item xs={12} className={classes.gridItem}>
+      <Grid container style={{ width: '100%' }}>
+        <Grid item xs={12}>
+          <Grid container style={{ alignItems: 'center' }}>
+            <Grid item className={classes.tooltipIcon}>
+              <ListItemText className={classes.descriptionTxt}>Unsual files</ListItemText>
+            </Grid>
+            <Grid item className={classes.tooltipIcon} style={{ marginLeft: '0.5vw' }}>
+              <Tooltip
+                title={'Files with exceptionally high number of additions in lines of code'}
+                placement="bottom-start"
+                enterDelay={500}
+                enterNextDelay={500}
+                classes={{ tooltip: classes.toolTipTxt }}
+              >
+                <InfoOutlinedIcon />
+              </Tooltip>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.reasonRoot}>
+            <List>
+              {unsualFiles.map((unsualFile, index) => (
+                <>
+                  <ListItemText disableTypography className={classes.reasonTxt}>
+                    {unsualFile.fileName}
+                  </ListItemText>
+                  {index !== unsualFiles.length - 1 && <Divider />}
+                </>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Grid>
+  ) : undefined
+
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Weekly Impact</PageTitle>
       <Grid container className={classes.root}>
+        <Grid item xs={4} style={{ marginBottom: '2vh' }}>
+          <DatePicker
+            label="Date Range"
+            customDisabledDays={{ daysOfWeek: [0, 2, 3, 4, 5, 6], after: new Date() }}
+            customDayClick={handleDayClick}
+            initDateRange={dateRange}
+          />
+        </Grid>
         <Grid item xs={12} className={classes.gridItem}>
           <ListItemText className={classes.descriptionTxt}>
             Team accomplishment for the week of {period.dateFrom} to {period.dateTo}
@@ -412,6 +641,10 @@ function WeeklyImpact(props) {
           <Grid container className={classes.subContainer}>
             {impactSession}
           </Grid>
+        </Grid>
+        {unsualFilesView}
+        <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
+          {reasonsSession}
         </Grid>
         <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
           {developerFocusSession}
