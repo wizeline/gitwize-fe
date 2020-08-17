@@ -629,6 +629,28 @@ function WeeklyImpact(props) {
     </Grid>
   ) : undefined
 
+  const weeklyImpactView = (response && 
+    <>
+      <Grid item xs={12} className={classes.gridItem}>
+        <ListItemText className={classes.descriptionTxt}>
+          Team accomplishment for the week of {period.dateFrom} to {period.dateTo}
+        </ListItemText>
+      </Grid>
+      <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
+        <Grid container className={classes.subContainer}>
+          {impactSession}
+        </Grid>
+      </Grid>
+      {unsualFilesView}
+      <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
+        {reasonsSession}
+      </Grid>
+      <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
+        {developerFocusSession}
+      </Grid>
+    </>
+  )
+
   return (
     <div style={{ width: '100%' }}>
       <PageTitle information={information}>Weekly Impact</PageTitle>
@@ -641,23 +663,7 @@ function WeeklyImpact(props) {
             initDateRange={dateRange}
           />
         </Grid>
-        <Grid item xs={12} className={classes.gridItem}>
-          <ListItemText className={classes.descriptionTxt}>
-            Team accomplishment for the week of {period.dateFrom} to {period.dateTo}
-          </ListItemText>
-        </Grid>
-        <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
-          <Grid container className={classes.subContainer}>
-            {impactSession}
-          </Grid>
-        </Grid>
-        {unsualFilesView}
-        <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
-          {reasonsSession}
-        </Grid>
-        <Grid item xs={12} className={classes.gridItem} style={{ marginTop: '5vh' }}>
-          {developerFocusSession}
-        </Grid>
+        {weeklyImpactView}
       </Grid>
     </div>
   )
