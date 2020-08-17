@@ -581,7 +581,7 @@ function WeeklyImpact(props) {
     </Grid>
   )
 
-  const unsualFilesView = unsualFiles ? (
+  const unsualFilesView = (unsualFiles && unsualFiles.length > 0) ? (
     <Grid item xs={12} className={classes.gridItem}>
       <Grid container style={{ width: '100%' }}>
         <Grid item xs={12}>
