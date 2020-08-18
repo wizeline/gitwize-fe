@@ -32,9 +32,13 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .DayPicker-Day--start': {
       borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
+      background: '#EC5D5C',
+      color: 'white !important'
     },
     '& .DayPicker-Day--end': {
       borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
+      background: '#EC5D5C',
+      color: 'white !important'
     },
     '& .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside)': {
       opacity: 0.9,
