@@ -376,6 +376,10 @@ const buildImpactScoreReasonSession = (response) => {
           currentValue = response[item.fieldName[0]].currentPeriod + response[item.fieldName[1]].currentPeriod
         }
 
+        if(previousValue === currentValue) {
+          return ''
+        }
+
         if (item.name === 'old codes' || item.name === 'new codes') {
           previousValue = `${previousValue.toFixed(2)}%`
           currentValue = `${currentValue.toFixed(2)}%`
