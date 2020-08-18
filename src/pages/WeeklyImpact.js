@@ -175,6 +175,7 @@ const ChartToolTip = styled('div')(({ theme }) => ({
     borderRadius: '10px',
     fontFamily: 'Poppins',
     pointerEvents: 'none',
+    maxWidth: '20vw'
   },
   '& li span': {
     width: '12px',
@@ -284,13 +285,15 @@ const customToolTip = (tooltipModel, chartRef) => {
         let label
         switch (tooltipItems[0].label) {
           case 'Churn':
-            label = 'What percentage of total changes was churn. Churn is the code that was changed within 21 days of writing.'
+            label =
+              'What percentage of total changes was churn. Churn is the code that was changed within 21 days of writing.'
             break
           case 'New Code':
             label = 'What percentage of total changes is new lines of code'
             break
           case 'Legacy refactor':
-            label = 'What percentage of total changes was refactoring. Legacy refactor is the code that was changed after 21 days of writing.'
+            label =
+              'What percentage of total changes was refactoring. Legacy refactor is the code that was changed after 21 days of writing.'
             break
           default:
             label = ''
@@ -316,6 +319,15 @@ const customToolTip = (tooltipModel, chartRef) => {
     tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px'
   }
 }
+
+const CustomOverLay = styled('div')(({ theme }) => ({
+  '&': { 
+    width: '100%', 
+    borderBottom: '2px solid #000000', 
+    textAlign: 'center', 
+    fontSize: '1vw', 
+    padding: '1.5vh 0px' },
+}))
 
 const calculateFocusData = (response, chartItems) => {
   if (response) {
@@ -364,13 +376,13 @@ const buildImpactScoreReasonSession = (response) => {
           currentValue = response[item.fieldName[0]].currentPeriod + response[item.fieldName[1]].currentPeriod
         }
 
-        if(item.name === 'old codes' || item.name === 'new codes') {
-          previousValue = previousValue.toFixed(2)
-          currentValue = currentValue.toFixed(2)
+        if (item.name === 'old codes' || item.name === 'new codes') {
+          previousValue = `${previousValue.toFixed(2)}%`
+          currentValue = `${currentValue.toFixed(2)}%`
         }
 
         if (isDropped === (currentValue < previousValue)) {
-          return `${item[isDropped ? 'dropDescription' : 'increaseDescription']} (${previousValue} - ${currentValue})`
+          return `${item[isDropped ? 'dropDescription' : 'increaseDescription']} (${previousValue} vs ${currentValue})`
         }
         return ''
       })
@@ -378,6 +390,8 @@ const buildImpactScoreReasonSession = (response) => {
     return impactReasoneResult.filter((item) => item !== '')
   }
 }
+
+const customTitleOverLay = <CustomOverLay >Select The first day (Monday only)</CustomOverLay>
 
 const initDateRangeValue = () => {
   const monDayOfCurrentWeek = getDayStartOfCurrentWeek()
@@ -521,7 +535,8 @@ function WeeklyImpact(props) {
     }
   })
 
-  const iSFocusHavingData = response && (chartItems.findIndex(item => response[item.fieldName].currentPeriod !== 0) !== -1)
+  const iSFocusHavingData =
+    response && chartItems.findIndex((item) => response[item.fieldName].currentPeriod !== 0) !== -1
 
   const developerFocusSession = (
     <Grid container className={classes.subContainer}>
@@ -529,12 +544,16 @@ function WeeklyImpact(props) {
         <ListItemText disableTypography className={classes.developmentFocusHeader}>
           Development Focus
         </ListItemText>
-        {iSFocusHavingData && <ListItemText disableTypography className={classes.developmentFocusDesc}>
-          {`Team focused most on ${calculateFocusData(response, chartItems)} in last week`}
-        </ListItemText>}
-        {!iSFocusHavingData && <ListItemText disableTypography className={classes.developmentFocusDesc}>
-          {`There was no activity recorded in the last week`}
-        </ListItemText>}
+        {iSFocusHavingData && (
+          <ListItemText disableTypography className={classes.developmentFocusDesc}>
+            {`Team focused most on ${calculateFocusData(response, chartItems)} in last week`}
+          </ListItemText>
+        )}
+        {!iSFocusHavingData && (
+          <ListItemText disableTypography className={classes.developmentFocusDesc}>
+            {`There was no activity recorded in the last week`}
+          </ListItemText>
+        )}
       </Grid>
       <Grid item xs={4}>
         <Grid container className={classes.subContainer}>
@@ -590,46 +609,47 @@ function WeeklyImpact(props) {
     </Grid>
   )
 
-  const unsualFilesView = (unsualFiles && unsualFiles.length > 0) ? (
-    <Grid item xs={12} className={classes.gridItem}>
-      <Grid container style={{ width: '100%' }}>
-        <Grid item xs={12}>
-          <Grid container style={{ alignItems: 'center' }}>
-            <Grid item className={classes.tooltipIcon}>
-              <ListItemText className={classes.descriptionTxt}>Unsual files</ListItemText>
-            </Grid>
-            <Grid item className={classes.tooltipIcon} style={{ marginLeft: '0.5vw' }}>
-              <Tooltip
-                title={'Files with exceptionally high number of additions in lines of code'}
-                placement="bottom-start"
-                enterDelay={500}
-                enterNextDelay={500}
-                classes={{ tooltip: classes.toolTipTxt }}
-              >
-                <InfoOutlinedIcon />
-              </Tooltip>
+  const unsualFilesView =
+    unsualFiles && unsualFiles.length > 0 ? (
+      <Grid item xs={12} className={classes.gridItem}>
+        <Grid container style={{ width: '100%' }}>
+          <Grid item xs={12}>
+            <Grid container style={{ alignItems: 'center' }}>
+              <Grid item className={classes.tooltipIcon}>
+                <ListItemText className={classes.descriptionTxt}>Unsual files</ListItemText>
+              </Grid>
+              <Grid item className={classes.tooltipIcon} style={{ marginLeft: '0.5vw' }}>
+                <Tooltip
+                  title={'Files with exceptionally high number of additions in lines of code'}
+                  placement="bottom-start"
+                  enterDelay={500}
+                  enterNextDelay={500}
+                  classes={{ tooltip: classes.toolTipTxt }}
+                >
+                  <InfoOutlinedIcon />
+                </Tooltip>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Paper className={classes.reasonRoot}>
-            <List>
-              {unsualFiles.map((unsualFile, index) => (
-                <>
-                  <ListItemText disableTypography className={classes.reasonTxt}>
-                    {unsualFile.fileName}
-                  </ListItemText>
-                  {index !== unsualFiles.length - 1 && <Divider />}
-                </>
-              ))}
-            </List>
-          </Paper>
+          <Grid item xs={12}>
+            <Paper className={classes.reasonRoot}>
+              <List>
+                {unsualFiles.map((unsualFile, index) => (
+                  <>
+                    <ListItemText disableTypography className={classes.reasonTxt}>
+                      {unsualFile.fileName}
+                    </ListItemText>
+                    {index !== unsualFiles.length - 1 && <Divider />}
+                  </>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
-  ) : undefined
+    ) : undefined
 
-  const weeklyImpactView = (response && 
+  const weeklyImpactView = response && (
     <>
       <Grid item xs={12} className={classes.gridItem}>
         <ListItemText className={classes.descriptionTxt}>
@@ -658,9 +678,10 @@ function WeeklyImpact(props) {
         <Grid item xs={4} style={{ marginBottom: '2vh' }}>
           <DatePicker
             label="Date Range"
-            customDisabledDays={[{ daysOfWeek: [2, 3, 4, 5, 6]}, {after: new Date()}]}
+            customDisabledDays={[{ daysOfWeek: [0, 2, 3, 4, 5, 6] }, { after: new Date() }]}
             customDayClick={handleDayClick}
             initDateRange={dateRange}
+            customTitleOverLay={customTitleOverLay}
           />
         </Grid>
         {weeklyImpactView}

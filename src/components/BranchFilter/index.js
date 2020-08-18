@@ -26,7 +26,7 @@ export default function BranchPicker(props) {
   const mainLayoutContext = useContext(MainLayoutContex)
   const styles = useStyles()
   const defaultItemSize = 2;
-  const datePickerSize = 3;
+  const datePickerSize = 4;
   let branchFilterSize =  12 - (customFilters.length*2 + defaultItemSize + datePickerSize);
   branchFilterSize = branchFilterSize < 2 ? 2 : branchFilterSize;
   const listBranch = ['master']

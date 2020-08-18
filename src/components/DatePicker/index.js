@@ -6,8 +6,10 @@ import FormControl from '@material-ui/core/FormControl'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import moment from 'moment'
 
 const ONEHUNDRED_PERCENT_IMPORTANT = '100% !important'
+const DATE_FORMAT = 'ddd DD MMMM YYYY'
 const useStyles = makeStyles((theme) => ({
   formControl: {
     marginTop: theme.spacing(2),
@@ -30,9 +32,13 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .DayPicker-Day--start': {
       borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
+      background: '#EC5D5C',
+      color: 'white !important'
     },
     '& .DayPicker-Day--end': {
       borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
+      background: '#EC5D5C',
+      color: 'white !important'
     },
     '& .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside)': {
       opacity: 0.9,
@@ -54,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 const today = new Date()
 
 export default function DatePicker(props) {
-  const { label, onChange, customDisabledDays, customDayClick, initDateRange } = props
+  const { label, onChange, customDisabledDays, customDayClick, initDateRange, customTitleOverLay } = props
   const [pickedDate, setPickedDate] = useState(
     initDateRange
       ? initDateRange
@@ -92,7 +98,10 @@ export default function DatePicker(props) {
     }
   }
 
-  const handleCustomDayClick = (day) => {
+  const handleCustomDayClick = (day, modifiers = {}) => {
+    if (modifiers.disabled) {
+      return;
+    }
     const pickedDate = customDayClick(day)
     setPickedDate(pickedDate)
     if (pickedDate.from !== undefined && pickedDate.to !== undefined) {
@@ -113,7 +122,7 @@ export default function DatePicker(props) {
     }
 
     if (from && to) {
-      return `Selected from ${from.toLocaleDateString()} - ${to.toLocaleDateString()}`
+      return `${moment(from).format(DATE_FORMAT)} - ${moment(to).format(DATE_FORMAT)}`
     }
 
     return ''
@@ -134,6 +143,7 @@ export default function DatePicker(props) {
 
         <div className="RangeExample">
           <Paper style={{ display: `${openDayPickerTable ? 'block' : 'none'}` }} className={styles.datePicker}>
+            {customTitleOverLay}
             <DayPicker
               className={styles.selectable}
               numberOfMonths={2}
