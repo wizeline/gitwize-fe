@@ -386,7 +386,7 @@ const buildImpactScoreReasonSession = (response) => {
         }
 
         if (isDropped === (currentValue < previousValue)) {
-          return `${item[isDropped ? 'dropDescription' : 'increaseDescription']} (${previousValue} vs ${currentValue})`
+          return `${item[isDropped ? 'dropDescription' : 'increaseDescription']} (${currentValue} vs ${previousValue})`
         }
         return ''
       })
