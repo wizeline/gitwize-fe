@@ -30,12 +30,12 @@ const useStyles = makeStyles((theme) => ({
     '& .DayPicker-Month': {
       width: '100%',
     },
-    '& .DayPicker-Day--start': {
+    '& .DayPicker-Day--start:not(.DayPicker-Day--outside)': {
       borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
       background: '#EC5D5C',
       color: 'white !important'
     },
-    '& .DayPicker-Day--end': {
+    '& .DayPicker-Day--end:not(.DayPicker-Day--outside)': {
       borderRadius: ONEHUNDRED_PERCENT_IMPORTANT,
       background: '#EC5D5C',
       color: 'white !important'
