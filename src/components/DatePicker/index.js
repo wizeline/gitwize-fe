@@ -94,7 +94,10 @@ export default function DatePicker(props) {
     }
   }
 
-  const handleCustomDayClick = (day) => {
+  const handleCustomDayClick = (day, modifiers = {}) => {
+    if (modifiers.disabled) {
+      return;
+    }
     const pickedDate = customDayClick(day)
     setPickedDate(pickedDate)
     if (pickedDate.from !== undefined && pickedDate.to !== undefined) {

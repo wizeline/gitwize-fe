@@ -255,7 +255,7 @@ const customToolTip = (tooltipModel, chartRef) => {
 
   // Hide if no tooltip
   if (tooltipModel.opacity === 0) {
-    tooltipEl.style.opacity = 1
+    tooltipEl.style.opacity = 0
     return
   }
 
