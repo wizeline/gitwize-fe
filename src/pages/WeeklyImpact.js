@@ -31,26 +31,26 @@ const impactScoreItems = [
   {
     name: 'files',
     fieldName: 'fileChanged',
-    dropDescription: 'Fewer number of files was changed',
-    increaseDescription: 'More number of files was changed',
+    dropDescription: 'Fewer number of files were changed',
+    increaseDescription: 'More number of files were changed',
   },
   {
     name: 'insertions points',
     fieldName: 'insertionPoints',
     dropDescription: 'There were lesser number of insertion points',
-    increaseDescription: 'There was more number of insertion points',
+    increaseDescription: 'There were more number of insertion points',
   },
   {
     name: 'old codes',
     fieldName: ['legacyPercentage', 'churnPercentage'],
-    dropDescription: 'Lesser edits was made to old code',
-    increaseDescription: 'More edits was made to old code',
+    dropDescription: 'Lesser edits were made to old code',
+    increaseDescription: 'More edits were made to old code',
   },
   {
     name: 'new codes',
     fieldName: 'newCodePercentage',
-    dropDescription: 'Lesser new code was written',
-    increaseDescription: 'More new code was written',
+    dropDescription: 'Lesser new code were written',
+    increaseDescription: 'More new code were written',
   },
   {
     name: 'lines of code',
@@ -164,7 +164,7 @@ const useStyles = makeStyles(() => ({
 const chartItems = [
   { name: 'New Code', color: '#62C8BA', fieldName: 'newCodePercentage', chartLegendId: 'chart-legend-1' },
   { name: 'Churn', color: '#EC5D5C', fieldName: 'churnPercentage', chartLegendId: 'chart-legend-2' },
-  { name: 'Legacy refactor', color: '#9F55E2', fieldName: 'legacyPercentage', chartLegendId: 'chart-legend-3' },
+  // { name: 'Legacy refactor', color: '#9F55E2', fieldName: 'legacyPercentage', chartLegendId: 'chart-legend-3' },
 ]
 
 const ChartToolTip = styled('div')(({ theme }) => ({
@@ -376,13 +376,13 @@ const buildImpactScoreReasonSession = (response) => {
           currentValue = response[item.fieldName[0]].currentPeriod + response[item.fieldName[1]].currentPeriod
         }
 
-        if(previousValue === currentValue) {
-          return ''
+        if (item.name === 'old codes' || item.name === 'new codes') {
+          previousValue = `${previousValue.toFixed(0)}%`
+          currentValue = `${currentValue.toFixed(0)}%`
         }
 
-        if (item.name === 'old codes' || item.name === 'new codes') {
-          previousValue = `${previousValue.toFixed(2)}%`
-          currentValue = `${currentValue.toFixed(2)}%`
+        if(previousValue === currentValue) {
+          return ''
         }
 
         if (isDropped === (currentValue < previousValue)) {

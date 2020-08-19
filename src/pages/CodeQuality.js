@@ -31,6 +31,13 @@ const qualityItems = [
         tooltip: `A coding error that will break your code and needs to be fixed immediately.`,
         isRating: true,
         fieldName: 'bugs',
+        ratingTooltip: {
+          A: 'Reliability rating is A when there are no bugs.',
+          B: 'Reliability rating is B when there is at least 1 minor bug',
+          C: 'Reliability rating is C when there is at least one major bug.',
+          D: 'Reliability rating is D when there is at least 1 critical bug',
+          E: 'Reliability rating is E when there is at least 1 blocker bug'
+        }
       },
     ],
   },
@@ -43,6 +50,13 @@ const qualityItems = [
         tooltip: `Code that can be exploited by hackers.`,
         isRating: true,
         fieldName: 'vulnerabilities',
+        ratingTooltip: {
+          A: 'Security rating is A when there are no vulnerabilities.',
+          B: 'Security rating is B when there is at least 1 minor vulnerability.',
+          C: 'Security rating is C when there is at least 1 major vulnerability.',
+          D: 'Security rating is D when there is at least 1 critical vulnerability',
+          E: 'Security rating is E when there is at least 1 blocker vulnerability',
+        }
       },
       {
         name: 'Security Hotspots',
@@ -60,7 +74,14 @@ const qualityItems = [
         tooltip: `The estimated time it will take to fix all Code Smells.`,
         isRating: true,
         fieldName: 'technicalDebt',
-        unit: 'hr'
+        unit: 'hr',
+        ratingTooltip: {
+          A: 'Maintainability rating is A when the technical debt ratio is less than 5.0%',
+          B: 'Maintainability rating is B when the technical debt ratio is between 6 to 10%',
+          C: 'Maintainability rating is C when the technical debt ratio is between 11 to 20%',
+          D: 'Maintainability rating is D when the technical debt ratio is between 21 to 50%',
+          E: 'Maintainability rating is E when the technical debt ratio is over 50%'
+        }
       },
       {
         name: 'Code Smells',
@@ -77,6 +98,7 @@ const qualityItems = [
         name: 'Coverage',
         tooltip: `The percentage of lines of code covered by tests.`,
         fieldName: 'codeCoveragePercentage',
+        unit: '%',
       },
     ],
   },
@@ -88,6 +110,7 @@ const qualityItems = [
         name: 'Duplications',
         tooltip: `Identical lines of code.`,
         fieldName: 'duplicationPercentage',
+        unit: '%',
       },
       {
         name: 'Duplicated blocks',
@@ -279,12 +302,14 @@ function CodeQuality(props) {
                                     </Grid>
                                     <Grid item>
                                       {child.isRating && (
-                                        <Avatar
-                                          className={classes.ratingIcon}
-                                          style={{ background: backGroundColorRating[rating] }}
-                                        >
-                                          {rating}
-                                        </Avatar>
+                                        <Tooltip title={child.ratingTooltip[rating]} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: classes.tooltip}}>
+                                          <Avatar
+                                            className={classes.ratingIcon}
+                                            style={{ background: backGroundColorRating[rating] }}
+                                          >
+                                            {rating}
+                                          </Avatar>
+                                        </Tooltip>
                                       )}
                                     </Grid>
                                   </Grid>
@@ -328,7 +353,7 @@ function CodeQuality(props) {
         <Grid item style={{ marginLeft: '3vw' }}>
           <Chip
             size="small"
-            label={response.qualityGates}
+            label={response.qualityGates === 'failed' ? 'Failed' : 'Passed'}
             classes={{ sizeSmall: classes.qualityGateChip }}
             style={{ background: response.qualityGates === 'failed' ? '#EC5D5C' : '#62C8BA' }}
           />
