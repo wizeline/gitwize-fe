@@ -36,8 +36,8 @@ const qualityItems = [
           B: 'Reliability rating is B when there is at least 1 minor bug',
           C: 'Reliability rating is C when there is at least one major bug.',
           D: 'Reliability rating is D when there is at least 1 critical bug',
-          E: 'Reliability rating is E when there is at least 1 blocker bug'
-        }
+          E: 'Reliability rating is E when there is at least 1 blocker bug',
+        },
       },
     ],
   },
@@ -56,7 +56,7 @@ const qualityItems = [
           C: 'Security rating is C when there is at least 1 major vulnerability.',
           D: 'Security rating is D when there is at least 1 critical vulnerability',
           E: 'Security rating is E when there is at least 1 blocker vulnerability',
-        }
+        },
       },
       {
         name: 'Security Hotspots',
@@ -80,8 +80,8 @@ const qualityItems = [
           B: 'Maintainability rating is B when the technical debt ratio is between 6 to 10%',
           C: 'Maintainability rating is C when the technical debt ratio is between 11 to 20%',
           D: 'Maintainability rating is D when the technical debt ratio is between 21 to 50%',
-          E: 'Maintainability rating is E when the technical debt ratio is over 50%'
-        }
+          E: 'Maintainability rating is E when the technical debt ratio is over 50%',
+        },
       },
       {
         name: 'Code Smells',
@@ -211,7 +211,25 @@ const useStyles = makeStyles(() => ({
   accordionSummaryContent: {
     alignItems: 'center',
   },
+  ratingIconToolTip: {
+    color: 'white',
+    width: '2vh',
+    height: '2vh',
+    fontSize: '1vh',
+    float: 'left'
+  }
 }))
+
+const buildTooltipRating = (ratingTxt, ratingType, classes) => {
+  return (
+    <>
+      <Avatar className={classes.ratingIconToolTip} style={{ background: backGroundColorRating[ratingType] }}>
+        {ratingType}
+      </Avatar>
+      <div style={{marginLeft: '1.5vw'}}>{ratingTxt}</div>
+    </>
+  )
+}
 
 function CodeQuality(props) {
   const { pageTitle } = props
@@ -270,8 +288,8 @@ function CodeQuality(props) {
                           value = response[child.fieldName]
                         }
 
-                        if(child.name === 'Technical Debt') {
-                          value = (value / 60).toFixed(1) 
+                        if (child.name === 'Technical Debt') {
+                          value = (value / 60).toFixed(1)
                         }
                         return (
                           <Grid key={child.name} item xs={xsSize}>
@@ -302,7 +320,13 @@ function CodeQuality(props) {
                                     </Grid>
                                     <Grid item>
                                       {child.isRating && (
-                                        <Tooltip title={child.ratingTooltip[rating]} placement='bottom-start' enterDelay={500} enterNextDelay={500} classes={{tooltip: classes.tooltip}}>
+                                        <Tooltip
+                                          title={buildTooltipRating(child.ratingTooltip[rating], rating, classes)}
+                                          placement="bottom-start"
+                                          enterDelay={500}
+                                          enterNextDelay={500}
+                                          classes={{ tooltip: classes.tooltip }}
+                                        >
                                           <Avatar
                                             className={classes.ratingIcon}
                                             style={{ background: backGroundColorRating[rating] }}
