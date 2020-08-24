@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef} from 'react'
-import { useOktaAuth } from '@okta/okta-react'
 import cloneDeep from 'lodash/cloneDeep';
 
 import PageTitle from '../components/PageTitle'
@@ -12,6 +11,7 @@ import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext';
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
+import { useAuth } from '../hooks/authService';
 
 const apiClient = new ApiClient()
 const NET_CHANGE = 'Net change'
@@ -137,7 +137,7 @@ function ContributorStatsPage(props) {
   const [chartOptions, setChartOptions] = useState()
   const [data, setData] = useState([]);
   const [userFilterList, setUserFilterList] = useState([]);
-  const { authService } = useOktaAuth();
+  const { authService } = useAuth();
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [{ dateRange }] = useContext(PageContext)
   const classes = useStyles();
@@ -179,6 +179,7 @@ function ContributorStatsPage(props) {
     setChartOptions(chartOptionsInit)
     setChosenUser(userName)
   }
+  apiClient.setAuthService(authService)
 
   const handleOnTableView = (isOnTableView) => {
     setOnTableView(isOnTableView)
@@ -192,7 +193,6 @@ function ContributorStatsPage(props) {
                       </Grid>);
 
   useEffect(() => {
-    apiClient.setAuthService(authService)
     mainLayout.current.handleChangeRepositoryId(id)
     setChartOptions(chartOptionsInit)
     apiClient.contributor.getContributorStats(id, dateRange).then((respone) => {
@@ -219,7 +219,7 @@ function ContributorStatsPage(props) {
       setData(respone)
       setChartOptions(chartOptionsInit)
     })
-  }, [id, mainLayout, dateRange, chosenUser, authService])
+  }, [id, mainLayout, dateRange, chosenUser])
 
   return (
     <div style={{ width: '100%' }}>

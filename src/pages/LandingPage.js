@@ -2,9 +2,10 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button } from '@material-ui/core'
-import { useOktaAuth } from '@okta/okta-react'
 
 import LandingPageImage from '../assets/images/landingpage.png'
+import {useAuth} from '../hooks/authService'
+import SocialLoginButton from '../components/SocialLoginButton'
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -81,10 +82,18 @@ const useStyles = makeStyles(() => ({
 
 export default function LandingPage() {
   const styles = useStyles()
-  const { authService } = useOktaAuth()
+  const {authService} = useAuth()
 
-  const login = async () => {
-    authService.login('/')
+  const login = async (userInfor) => {
+    //TODO: Redirect to login pages 
+  }
+
+  const handleSocialLoginSuccess = (user) => {
+    authService.login(user)
+  }
+   
+  const handleSocialLoginFailure = (err) => {
+    console.error(err)
   }
 
   return (
@@ -110,6 +119,14 @@ export default function LandingPage() {
               <Button className={styles.button} onClick={login}>
                 Get Started
               </Button>
+              <SocialLoginButton
+                provider='google'
+                appId='391481526966-n0boprgjj46fj8nslcpbh3h05v3rqci7.apps.googleusercontent.com'
+                onLoginSuccess={handleSocialLoginSuccess}
+                onLoginFailure={handleSocialLoginFailure}
+                >
+                Login with Google
+              </SocialLoginButton>
             </Grid>
             <Grid item xs={6}>
               <img src={LandingPageImage} className={styles.image} alt='landing page'/>

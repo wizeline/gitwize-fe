@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useContext, useState } from 'react'
-import { useOktaAuth } from '@okta/okta-react'
 
 import PageTitle from '../components/PageTitle'
 import { makeStyles, styled } from '@material-ui/core/styles'
@@ -14,6 +13,7 @@ import { buildChartOptionsBasedOnMaxValue } from '../utils/chartUtils'
 import DatePicker from '../components/DatePicker'
 import { getDayStartOfCurrentWeek, addNumberOfDays, getDayStartOfWeekPointOfTime } from '../utils/dateUtils'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
+import { useAuth } from '../hooks/authService'
 
 const information = `Impact measures the magnitude of code changes, and our inhouse formula takes into consideration more than just lines of code`
 const IMPACT_SCORE_TXT = 'Impact score'
@@ -410,7 +410,7 @@ const initDateRangeValue = () => {
 function WeeklyImpact(props) {
   const { id } = props.match.params
   const classes = useStyles()
-  const { authService } = useOktaAuth()
+  const { authService } = useAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [gridItemsState, setGridItems] = useState([])
   const [response, setResponse] = useState()
@@ -418,9 +418,9 @@ function WeeklyImpact(props) {
   const [period, setPeriod] = useState({})
   const [unsualFiles, setUnsualFiles] = useState([])
   const [dateRange, setDateRange] = useState(initDateRangeValue())
+  apiClient.setAuthService(authService)
 
   useEffect(() => {
-    apiClient.setAuthService(authService)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.weeklyImpact.getWeeklyImpactStats(id, dateRange).then((response) => {
       setGridItems(buildGridItemsWeeklyImpact(response, gridItems))
@@ -429,7 +429,7 @@ function WeeklyImpact(props) {
       setUnsualFiles(response.unusualFiles)
       setResponse(response)
     })
-  }, [id, mainLayout, authService, dateRange])
+  }, [id, mainLayout, dateRange])
 
   const handleDayClick = (day) => {
     const dateFrom = getDayStartOfWeekPointOfTime(day)

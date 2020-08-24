@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import clsx from 'clsx'
-import { useOktaAuth } from '@okta/okta-react'
 import { Button } from '@material-ui/core'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
 import AppsRoundedIcon from '@material-ui/icons/AppsRounded';
@@ -15,6 +14,7 @@ import AddRepositoryDialog from './AddRepositoryDialog'
 import MessageNotification from '../components/MesageNotification'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import MainLayoutContex from '../contexts/MainLayoutContext';
+import { useAuth } from '../hooks/authService';
 
 const FLEX_ALIGN = 'flex-start'
 
@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function RepositoryList() {
-  const { authService } = useOktaAuth()
+  const { authService } = useAuth()
   const mainLayoutContext = useRef(useContext(MainLayoutContex))
   const [isDisplayColumnGrid, setColumnLayout] = useState(false);
   const [repoList, setRepoList] = useState()
@@ -113,14 +113,14 @@ export default function RepositoryList() {
   const [isLoading, setLoading] = useState(false)
   const [searchedRepo, setSearchedRepo] = useState(null)
   const styles = useStyles()
+  apiClient.setAuthService(authService)
 
   useEffect(() => {
-    apiClient.setAuthService(authService)
       apiClient.repos.listRepo().then((repo) => {
         setRepoList(repo)
         mainLayoutContext.current.handleChangeRepoList(repo)
       })
-  }, [authService])
+  }, [])
 
   const handleAddDialog = () => {
     setOpen(true)

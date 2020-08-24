@@ -135,7 +135,7 @@ function Navbar (props) {
   const repoId = mainLayout.repositoryId
   const repoList = mainLayout.repoList;
   const showNavbar = mainLayout.showNavbar
-  const {handleLogout, userInfor, subMenuItems} = props;
+  const {handleLogout, userInfor={}, subMenuItems} = props;
   const classes = useStyles()
   const [repositoryName, setRepositoryName] = useState()
   const [isDisplayDashBoard, setStateDashBoard] = useState(false)
@@ -218,7 +218,7 @@ function Navbar (props) {
         </Link>
         <ListItem style={{marginBottom: 20}}>
           <Button className={classes.button}>
-            <Avatar alt="Logo" className={classes.avatar} src='/images/wizeline_logo.png' />
+            <Avatar alt="Logo" className={classes.avatar} src={userInfor.profilePicURL} />
             <ListItemText classes={{primary: classes.userText}} primary={userInfor.name}/>
           </Button>
         </ListItem>

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useContext, useState } from 'react'
-import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
 import MainLayoutContex from '../contexts/MainLayoutContext'
@@ -12,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
+import { useAuth } from '../hooks/authService'
 
 const information = `This section displays following insights from SonarQube
 \n- Overall code quality rating
@@ -234,18 +234,18 @@ const buildTooltipRating = (ratingTxt, ratingType, classes) => {
 function CodeQuality(props) {
   const { pageTitle } = props
   const { id } = props.match.params
-  const { authService } = useOktaAuth()
+  const { authService } = useAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const [response, setResponse] = useState()
   const classes = useStyles()
+  apiClient.setAuthService(authService)
 
   useEffect(() => {
-    apiClient.setAuthService(authService)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.codeQuality.getCodeQualityStats(id).then((response) => {
       setResponse(response)
     })
-  }, [id, authService])
+  }, [id])
 
   const buildCodeQuality = () => {
     if (response) {

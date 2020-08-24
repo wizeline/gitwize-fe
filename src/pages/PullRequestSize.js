@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { makeStyles, styled } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
-import { useOktaAuth } from '@okta/okta-react'
 
 import { ApiClient } from '../apis'
 import { transformDataForBubbleChart } from '../utils/dataUtils'
@@ -11,6 +10,7 @@ import BranchFilter from '../components/BranchFilter'
 import PageTitle from '../components/PageTitle'
 import Chart, { chartTypeEnum } from '../components/Chart'
 import { buildCustomToolTipPullRequestSize } from '../utils/chartUtils'
+import { useAuth } from '../hooks/authService'
 
 const apiClient = new ApiClient()
 const showDate = ['Last 7 Days', 'Last 14 Days', 'Last 21 Days', 'Last 30 Days', 'Custom']
@@ -181,7 +181,7 @@ function PullRequestSize(props) {
   const {pageTitle} = props
   const [headerTxt, setHeaderTxt] = useState(showDate[0])
   const [chartData, setChartData] = useState()
-  const { authService } = useOktaAuth()
+  const { authService } = useAuth()
   const [{ dateRange }] = useContext(PageContext)
   const classes = useStyles()
   const mainLayout = useRef(useContext(MainLayoutContex))
@@ -190,15 +190,15 @@ function PullRequestSize(props) {
   const customToolTip = (tooltipModel, chartRef) => {
     buildCustomToolTipPullRequestSize(tooltipModel, chartRef)
   }
+  apiClient.setAuthService(authService)
 
   useEffect(() => {
-    apiClient.setAuthService(authService)
     apiClient.pullRequestSize.getPullRequestSize(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const transformedData = transformDataForBubbleChart(data)
       setChartData(transformedData)
     })
-  }, [dateRange, id, mainLayout, authService])
+  }, [dateRange, id, mainLayout])
 
   const handleChangeHeaderTxt = (headerText) => {
     setHeaderTxt(headerText)
