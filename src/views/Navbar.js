@@ -17,10 +17,10 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import {Link} from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
+import { GoogleLogout } from 'react-google-login';
 
 import clsx from 'clsx'
 import {SubMenuItemLeaf, SubMenuItemNode} from './SubMenuItem';
-
 
 const drawerWidth = (256)
 
@@ -218,7 +218,7 @@ function Navbar (props) {
         </Link>
         <ListItem style={{marginBottom: 20}}>
           <Button className={classes.button}>
-            <Avatar alt="Logo" className={classes.avatar} src={userInfor.profilePicURL} />
+            <Avatar alt="Logo" className={classes.avatar} src={userInfor.imageUrl} />
             <ListItemText classes={{primary: classes.userText}} primary={userInfor.name}/>
           </Button>
         </ListItem>
@@ -230,9 +230,18 @@ function Navbar (props) {
       </Collapse>
       <List  style={{marginTop: 'auto'}}>
         <ListItem>
-          <Button className={classes.button} onClick={handleLogout}>
-            <CallToActionIcon className={clsx(classes.icon, classes.iconRotate)} />
-          </Button>
+          <GoogleLogout
+            clientId="391481526966-n0boprgjj46fj8nslcpbh3h05v3rqci7.apps.googleusercontent.com"
+            buttonText="Logout"
+            onLogoutSuccess={handleLogout}
+            render={renderProps => (
+              <Button className={classes.button} onClick={renderProps.onClick}>
+                <CallToActionIcon className={clsx(classes.icon, classes.iconRotate)} />
+              </Button>
+            )}
+            cookiePolicy={'single_host_origin'}
+            isSignedIn={true}
+          />
         </ListItem>
       </List>
     </Drawer>

@@ -1,6 +1,7 @@
 import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { styled } from '@material-ui/core/styles'
+import SocialLoginButton from '../SocialLoginButton';
 
 const LoadingCircle = styled(CircularProgress)({
   position: 'absolute',
@@ -13,6 +14,17 @@ const LoadingCircle = styled(CircularProgress)({
 })
 
 
-export default function Loading() {
-  return <LoadingCircle />
+export default function Loading(props) {
+  const {handleInitAuthWithLoginSuccess, handleInitAuthWithLoginFailure} = props
+  return (
+    <>
+    <SocialLoginButton
+      disabled={true}
+      handleLoginSuccess={handleInitAuthWithLoginSuccess}
+      handleLoginFailure={handleInitAuthWithLoginFailure}
+      style={{display: 'none'}}
+    />
+    <LoadingCircle />
+    </>
+  )
 }

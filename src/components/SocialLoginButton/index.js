@@ -1,15 +1,23 @@
 import React from 'react'
-import SocialLogin from 'react-social-login'
+import { GoogleLogin } from 'react-google-login';
  
-function SocialButton(props) {
+function SocialLoginButton(props) {
 
-  const { children, triggerLogin } = props
+  const {handleLoginSuccess, handleLoginFailure, style, disabled=false, customRender} = props
 
   return (
-      <button onClick={triggerLogin}>
-        { children }
-      </button>
+      <GoogleLogin
+        clientId="391481526966-n0boprgjj46fj8nslcpbh3h05v3rqci7.apps.googleusercontent.com"
+        buttonText="Login With Google"
+        onSuccess={handleLoginSuccess}
+        onFailure={handleLoginFailure}
+        cookiePolicy={'single_host_origin'}
+        isSignedIn={true}
+        disabled={disabled}
+        disabledStyle={style}
+        render={customRender ? customRender : null}
+      />
   );
 }
  
-export default SocialLogin(SocialButton);
+export default SocialLoginButton;

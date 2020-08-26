@@ -4,9 +4,23 @@ import NotFoundError404 from '../pages/NotFoundError404'
 import Home from '../pages/Home'
 import LandingPage from '../pages/LandingPage'
 import {useAuth} from '../hooks/authService'
+import Loading from '../components/Loading'
 
 export default function AppRouteAuthen() {
-  const { authState } = useAuth()
+  const { authState, authService } = useAuth()
+
+  const initAuth = (response) => {
+    authService.login(response)
+  }
+
+  const initAuthFailure = (response) => {
+    console.log(response)
+    authService.logout()
+  }
+
+  if(authState.isPending) {
+    return <Loading handleInitAuthWithLoginSuccess={initAuth} handleInitAuthWithLoginFailure={initAuthFailure}/>
+  }
 
   return (
     <Router>

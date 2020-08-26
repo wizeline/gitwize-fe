@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { CssBaseline } from '@material-ui/core'
 import {  createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import AppRouteAuthen from './views/AppRouteAuthen'
-import {AuthenticationContextProvider, isTokenValidate} from './hooks/authService'
+import {AuthenticationContextProvider, isTokenValidate, isAuthPending} from './hooks/authService'
 
 const theme = createMuiTheme({  
   overrides: {
@@ -20,36 +20,46 @@ const theme = createMuiTheme({
   },
 });
 
-const tokenInitValue = JSON.parse(localStorage.getItem('tokenObject'))
+const userInitValue = JSON.parse(localStorage.getItem('userProfile'))
 
 function App() {
-  const [userInfor, setUserInfor] = useState(tokenInitValue)
+  const [userInfor, setUserInfor] = useState(userInitValue)
+  const [tokenObj, setTokenObj] = useState()
+  const [authResponse, setAuthResponse] = useState()
   const authenticationContextValue = {
     authenticationState: {
-      isAuthenticated: isTokenValidate(localStorage.getItem('tokenExpirationTime')),
+      isAuthenticated: isTokenValidate(tokenObj),
+      isPending: isAuthPending(authResponse),
     },
     userInfor: userInfor,
-    login: (userInfor) => {
-      console.log('login', userInfor)
-      handleLogin(userInfor)
+    authResponse: authResponse,
+    tokenObj: tokenObj,
+    login: (response) => {
+      console.log('login', response)
+      handleLogin(response)
     },
-    logout: () => {
+    logout: (redirectUri) => {
       console.log('logout')
-      handleLogout()
+      handleLogout(redirectUri)
     }
   }
   
-  const handleLogin = (userInfor) => {
-    localStorage.setItem('token', userInfor.token.idToken);
-    localStorage.setItem('tokenExpirationTime', userInfor.token.expiresAt);
-    localStorage.setItem('tokenObject', JSON.stringify(userInfor))
-    setUserInfor(userInfor)
+  const handleLogin = (response) => {
+    localStorage.setItem('token', response.tokenObj.id_token);
+    // localStorage.setItem('tokenExpirationTime', response.tokenObj.expires_at);
+    localStorage.setItem('userProfile', JSON.stringify(response.profileObj))
+    setUserInfor(response.profileObj)
+    setTokenObj(response.tokenObj)
+    setAuthResponse(response)
   }
   
-  const handleLogout = () => {
+  const handleLogout = (redirectUri) => {
+    setAuthResponse(null)
+    setUserInfor(null)
+    setTokenObj(null)
     localStorage.clear()
     sessionStorage.clear()
-    setUserInfor(null)
+    window.location = redirectUri
   }
 
   return (

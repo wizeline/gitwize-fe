@@ -1,27 +1,40 @@
 import React, { useContext } from 'react'
 
 
-export const isTokenValidate = (tokenExpireTime) => {
-  if(tokenExpireTime && tokenExpireTime > (new Date()).getTime()) {
-    return true
-  } else {
-    return false
+export const isTokenValidate = (tokenObject) => {
+  console.log(tokenObject)
+  if(tokenObject) {
+    const tokenExpireTime = tokenObject.expires_at
+    if(tokenExpireTime && tokenExpireTime > (new Date()).getTime()) {
+      return true
+    } else {
+      return false
+    }
   }
+  return false
+}
+
+export const isAuthPending = (authResponse) => {
+  const tokenStorage = localStorage.getItem('token')
+  return (tokenStorage && !authResponse) ? true : false
 }
 
 const initialValue = {
   authenticationState: {
-    isAuthenticated: isTokenValidate(localStorage.getItem('tokenExpiretime'))
+    isAuthenticated: () => {},
+    isPending: () => {}
   },
   userInfor: null,
+  tokenObj: null,
+  authResponse: null,
   login: () => {},
   logout: () => {}
 }
 const AuthenticationContext = React.createContext(initialValue)
 
-const handleRenewToken = (accessToken) => {
-  //TODO: Implement refresh token
-  return Promise.resolve('token')
+const handleRenewToken = (authResponse) => {
+  const newAuth = authResponse.reloadAuthResponse()
+  return Promise.resolve(newAuth)
 }
 
 export const AuthenticationContextProvider = AuthenticationContext.Provider
@@ -39,17 +52,14 @@ export const useAuth = () => {
       },
       getTokenManager: () => {
         return {
-          get: (key) => {
-            return Promise.resolve(authenticationContext.userInfor._token[key])
-          },
           getToken: () => {
             return Promise.resolve({
-              token: authenticationContext.userInfor._token['idToken'],
-              expireTime: authenticationContext.userInfor._token['expiresAt'],
+              token: authenticationContext.tokenObj['id_token'],
+              expireTime: authenticationContext.tokenObj['expires_at'],
             })
           },
-          renew: (key) => {
-            return handleRenewToken(authenticationContext.userInfor._token[key])
+          renew: () => {
+            return handleRenewToken(authenticationContext.authResponse)
           }
         }
       }

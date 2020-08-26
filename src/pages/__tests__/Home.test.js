@@ -1,10 +1,11 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { PageProvider } from '../../contexts/PageContext'
-import * as oktaLib from '@okta/okta-react'
 import Home from '../Home'
+import {} from ''
+import { useAuth } from '../../hooks/authService'
 
-jest.mock('@okta/okta-react')
+jest.mock('../../hooks/authService')
 jest.mock('../../apis', () => {
   const mockResponse = {
     id: 1,
@@ -18,20 +19,27 @@ jest.mock('../../apis', () => {
     ApiClient: jest.fn().mockImplementation(() => ({
       repos: {
         getRepoDetail: jest.fn().mockReturnValue(Promise.resolve(mockResponse)),
+        listRepo: jest.fn().mockReturnValue(Promise.resolve([mockResponse]))
       },
       setAccessToken: jest.fn(),
+      setAuthService: jest.fn()
     })),
   }
 })
 
 describe('Home page', () => {
   beforeEach(() => {
-    oktaLib.useOktaAuth.mockImplementation(() => {
+    useAuth.mockImplementation(() => {
       return {
-        authState: {},
+        authState: {
+          isAuthenticated: true
+        },
         authService: {
           getTokenManager: ()=> {
             return 'token'
+          },
+          getUser: () => {
+            return 'test'
           }
         },
       }
@@ -40,7 +48,7 @@ describe('Home page', () => {
   it('render without crashing component', () => {
     const wrapper = mount(
       <PageProvider>
-        <Home />
+        <Home/>
       </PageProvider>
 		)
 		expect(wrapper.length).toBe(1)

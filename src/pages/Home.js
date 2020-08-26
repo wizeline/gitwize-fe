@@ -125,10 +125,11 @@ const Home = () => {
   const [repositoryList, setRepositoryList] = useState()
   const [showNavbar, setShowNavbar] = useState(true)
   const classes = useStyles()
+  apiClient.setAuthService(authService)
 
   useEffect(() => {
     if (!authState.isAuthenticated) {
-      setUserInfo(null)
+      setUserInfo({})
     } else {
       const info = authService.getUser()
       setUserInfo(info)
@@ -137,14 +138,13 @@ const Home = () => {
 
   useEffect(() => {
     if(repositoryId) {
-      apiClient.setAuthService(authService)
       if(repositoryList === undefined) {
         apiClient.repos.getRepoDetail(repositoryId).then((data) => {
           setRepositoryList([data])
         })
       }
     }
-  }, [repositoryId, repositoryList, authService])
+  }, [repositoryId, repositoryList])
 
   const logout = async () => {
     authService.logout('/')
@@ -183,7 +183,7 @@ const Home = () => {
       <MuiThemeProvider theme={theme}>
       <MainLayoutContexProvider value={mainLayOutContextValue}>
       <Router>
-        <Navbar subMenuItems={subMenuItems} userInfor={userInfo._profile} handleLogout={logout} />
+        <Navbar subMenuItems={subMenuItems} userInfor={userInfo} handleLogout={logout} />
         <Container>
           <Switch>
             <Route path="/" exact component={RepositoryList} />

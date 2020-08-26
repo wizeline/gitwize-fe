@@ -84,12 +84,12 @@ export default function LandingPage() {
   const styles = useStyles()
   const {authService} = useAuth()
 
-  const login = async (userInfor) => {
-    //TODO: Redirect to login pages 
-  }
+  // const login = async (userInfor) => {
+  //   //TODO: Redirect to login pages 
+  // }
 
-  const handleSocialLoginSuccess = (user) => {
-    authService.login(user)
+  const handleSocialLoginSuccess = (response) => {
+    authService.login(response)
   }
    
   const handleSocialLoginFailure = (err) => {
@@ -116,17 +116,15 @@ export default function LandingPage() {
                 Gitwize turns data from commits, pull requests and code into insights you can use to drive engineering
                 productivity. Make data-backed decision based on a complete understanding of how your team is working.
               </div>
-              <Button className={styles.button} onClick={login}>
-                Get Started
-              </Button>
               <SocialLoginButton
-                provider='google'
-                appId='391481526966-n0boprgjj46fj8nslcpbh3h05v3rqci7.apps.googleusercontent.com'
-                onLoginSuccess={handleSocialLoginSuccess}
-                onLoginFailure={handleSocialLoginFailure}
-                >
-                Login with Google
-              </SocialLoginButton>
+                handleLoginSuccess={handleSocialLoginSuccess}
+                handleLoginFailure={handleSocialLoginFailure}
+                customRender={renderProps => (
+                  <Button className={styles.button} onClick={renderProps.onClick}>
+                    Get Started
+                  </Button>
+                )}
+              />
             </Grid>
             <Grid item xs={6}>
               <img src={LandingPageImage} className={styles.image} alt='landing page'/>
