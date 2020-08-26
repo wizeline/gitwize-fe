@@ -1,5 +1,6 @@
 import React from 'react'
 import { GoogleLogin } from 'react-google-login';
+import {AppIds} from '../../config'
  
 function SocialLoginButton(props) {
 
@@ -7,7 +8,7 @@ function SocialLoginButton(props) {
 
   return (
       <GoogleLogin
-        clientId="391481526966-n0boprgjj46fj8nslcpbh3h05v3rqci7.apps.googleusercontent.com"
+        clientId={AppIds.GOOGLE_ID}
         buttonText="Login With Google"
         onSuccess={handleLoginSuccess}
         onFailure={handleLoginFailure}

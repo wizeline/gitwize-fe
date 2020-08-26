@@ -21,6 +21,7 @@ import { GoogleLogout } from 'react-google-login';
 
 import clsx from 'clsx'
 import {SubMenuItemLeaf, SubMenuItemNode} from './SubMenuItem';
+import { AppIds } from '../config';
 
 const drawerWidth = (256)
 
@@ -231,7 +232,7 @@ function Navbar (props) {
       <List  style={{marginTop: 'auto'}}>
         <ListItem>
           <GoogleLogout
-            clientId="391481526966-n0boprgjj46fj8nslcpbh3h05v3rqci7.apps.googleusercontent.com"
+            clientId={AppIds.GOOGLE_ID}
             buttonText="Logout"
             onLogoutSuccess={handleLogout}
             render={renderProps => (
