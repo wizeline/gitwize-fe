@@ -20,7 +20,7 @@
     "lodash": "^4.17.15",
     "luxon": "^1.24.1",
     "material-table": "^1.59.0",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "papaparse": "^5.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
