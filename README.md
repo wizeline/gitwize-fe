@@ -1,69 +1,130 @@
 # gitwize-fe
-GitWize - Engineering Intelligence Tool - FrontEnd
 
-## Available Scripts
+![gitwizestats](images/gitwize-fe.png)
 
-In the project directory, you can run:
+This repository contains the frontend code of the GitWize project, which is a ReactJs-based application 
 
-### `yarn start`
+---
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Table of Contents
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- [Introduction](#introduction)
+- [Local Installation](#local-installation)
+  - [Prerequisites](#prerequisites)
+  - [Run the Project Locally](#run-the-project-locally)
+- [Deployment](#deployment)
+- [Contribution](#contribution)
+  - [Branching Model](#branching-model)
+  - [Review Process](#review-process)
+- [Versions](#versions)
+- [Licenses](#licenses)
 
-### `yarn test`
+---
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Introduction
 
-### `yarn build`
+GitWize is an AWS cloud-based application that allows you to extract valuable insights and metrics from a single GitHub repository using git commit logs. Currently, GitWize integrates Okta as the primary identity management service for end-users. Either if you’re a delivery manager, engineering lead, or engineering manager, GitWize will enable you to:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Improve your software quality
+- Track your project’s progress on a daily, monthly, or quarterly basis 
+- Track your team’s productivity, performance, and health
+- Identify early potential risks and take early measures that can save money, time, and stress
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Once you add a GitHub repository to GitWize, you will unlock the following features:
+- Analyze PR statistics such as average PR size and PR rejection rate
+- Calculate code change velocity over time in terms of the number of commits
+- Display reports in either tabular or chart format.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+[⇧ back to top](#table-of-contents)
 
-### `yarn eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Local Installation
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To set up this project on you local machine, follow the next linux-based instructions.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Prerequisites
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Ensure you comply with the following prerequisites before you follow the rest of the instructions
 
-## Learn More
+- Install [Node.js](https://nodejs.org/en/) v13.11.0 or above \
+  As of August 2022, v16.16.0 is functional. To check your Node.js version, type in your terminal: `node -v`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Run the Project Locally
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To run the frontend project on your machine:
 
-### Code Splitting
+1. Clone the `gitwize-fe` repository
+2. Go to the `gitwize-fe` root directory
+3. In your terminal, run `npm install`  \
+This command installs the project’s dependencies located in the `package.json` file. If vulnerabilities are prompted after this installation step, type `npm node fix` to address related issues that do not require attention 
+4. Run `yarn start` \
+This command runs the project locally in a browser on [http://localhost:8080/](http://localhost:8080/). If prompted with the error `yarn: command not found` install the yarn package globally by running `sudo npm install --location=global yarn` and restart your terminal.
+5. Run `yarn test` \
+To launch the test runner in the interactive watch mode. 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+[⇧ back to top](#table-of-contents)
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## Deployment
 
-### Making a Progressive Web App
+To deploy the project locally, follow these steps:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+1. Run `yarn build` \
+To create a production build. 
+2. Deploy the project \
+The easiest way to deploy the content in the `build` folder is to install [serve](https://github.com/vercel/serve). In your terminal, type the following commands:
+        ```
+        sudo npm install --location=global serve
+        serve -s build -l 8080
+        ```
+If you want to run the project in HTTPs, you’ll need an SSL certificate. For more details, consult [How to Use SSL in a Create-React-App Application](https://www.makeuseof.com/create-react-app-ssl-https/).
 
-### Advanced Configuration
+[⇧ back to top](#table-of-contents)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+---
 
-### Deployment
+## Contribution
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+We encourage you to contribute to GitWize! Please check out our [Contributing guide](CONTRIBUTING)
 
-### `yarn build` fails to minify
+[⇧ back to top](#table-of-contents)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### Branching Model
+
+The branching model follows this convention: `<feature|bugfix>-<ticket-id>-<short-description>`  \
+Example: `feature/GW-1-skeleton-code` and `bugfix/GW-10-some-blocker`
+
+[⇧ back to top](#table-of-contents)
+
+
+### Review Process
+
+When sending a PR, ensure you include the following information:
+```
+What does this PR do?
+Where should the reviewer start?
+Screenshots & link (if appropriate)
+Questions
+```
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Versions
+
+Versioning follows this convention: `<major>.<minor>.<buildnumber>` \
+Example: 1.0.1 and 1.0.11
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Licenses
+
+@[MIT](LICENSE) and @[CLA](CLA)
+
+[⇧ back to top](#table-of-contents)
