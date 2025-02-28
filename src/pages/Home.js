@@ -1,4 +1,3 @@
-import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
 import { PageProvider } from '../contexts/PageContext'
 import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles'
@@ -14,11 +13,11 @@ import {MainLayoutContexProvider} from '../contexts/MainLayoutContext'
 import ContributorStatsPage from '../pages/ContributorStatsPage'
 import NotFoundError404 from '../pages/NotFoundError404'
 import Navbar from '../views/Navbar'
-import Loading from '../components/Loading'
 import { ApiClient } from '../apis'
 import CodeChangeVelocity from './CodeChangeVelocity';
 import WeeklyImpact from './WeeklyImpact';
 import CodeQuality from './CodeQuality';
+import { useAuth } from '../hooks/authService';
 
 const theme = createMuiTheme({
   typography: {
@@ -120,33 +119,32 @@ const buildRoutPath = (menuItems, baseURI='') => {
 }
 
 const Home = () => {
-  const { authState, authService } = useOktaAuth()
-  const [userInfo, setUserInfo] = useState(null)
+  const { authState, authService} = useAuth()
+  const [userInfo, setUserInfo] = useState({})
   const [repositoryId, setRepositoryId] = useState()
   const [repositoryList, setRepositoryList] = useState()
   const [showNavbar, setShowNavbar] = useState(true)
   const classes = useStyles()
+  apiClient.setAuthService(authService)
 
   useEffect(() => {
     if (!authState.isAuthenticated) {
-      setUserInfo(null)
+      setUserInfo({})
     } else {
-      authService.getUser().then((info) => {
-        setUserInfo(info)
-      })
+      const info = authService.getUser()
+      setUserInfo(info)
     }
   }, [authState, authService])
 
   useEffect(() => {
     if(repositoryId) {
-      apiClient.setAuthService(authService)
       if(repositoryList === undefined) {
         apiClient.repos.getRepoDetail(repositoryId).then((data) => {
           setRepositoryList([data])
         })
       }
     }
-  }, [repositoryId, repositoryList, authService])
+  }, [repositoryId, repositoryList])
 
   const logout = async () => {
     authService.logout('/')
@@ -177,10 +175,6 @@ const Home = () => {
 
     repoList: repositoryList,
     handleChangeRepoList: handleChangeRepoList
-  }
-
-  if (authState.isPending || userInfo === null) {
-    return <Loading />
   }
 
   return (

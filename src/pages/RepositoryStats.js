@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { useOktaAuth } from '@okta/okta-react'
 
 import PageTitle from '../components/PageTitle'
 import { ApiClient } from '../apis'
@@ -14,6 +13,7 @@ import MainLayoutContex from '../contexts/MainLayoutContext'
 import PageContext from '../contexts/PageContext'
 import DataStats from '../views/DataStats'
 import { cloneDeep } from 'lodash'
+import { useAuth } from '../hooks/authService'
 
 const apiClient = new ApiClient()
 
@@ -95,13 +95,13 @@ function RepositoryStats(props) {
   const {pageTitle} = props
   const [repoData, setRepoData] = useState([])
   const [chartData, setChartData] = useState([])
-  const { authService } = useOktaAuth()
+  const { authService } = useAuth()
   const [{ dateRange }] = useContext(PageContext)
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
+  apiClient.setAuthService(authService)
 
   useEffect(() => {
-    apiClient.setAuthService(authService)
     apiClient.stats.getRepoStats(id, dateRange).then((data) => {
       mainLayout.current.handleChangeRepositoryId(id)
       const dataTransformed = transformMetricsDataApiResponse(data.metric, dateRange)
@@ -110,7 +110,7 @@ function RepositoryStats(props) {
       setRepoData(tableData)
       setChartData(chartRawData)
     })
-  }, [id, dateRange, authService])
+  }, [id, dateRange])
 
   return (
     <div style={{ width: '100%' }}>

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useContext } from 'react'
-import { useOktaAuth } from '@okta/okta-react'
 import PageTitle from '../components/PageTitle'
 import { Grid, List, ListItem, ListItemText } from '@material-ui/core'
 import { makeStyles, styled } from '@material-ui/core/styles'
@@ -14,6 +13,7 @@ import 'chartjs-plugin-datalabels'
 import {
   buildCustomToolTipQuarterlyTrendAndCodeChangeVelocity,
   buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity } from '../utils/chartUtils'
+import { useAuth } from '../hooks/authService'
 
 const FLEX_ALIGN = 'flex-start'
 
@@ -106,7 +106,7 @@ function CodeChangeVelocity(props) {
   const [hightLightState, setHightLightState] = useState({})
   const [chartData, setChartData] = useState()
   const [responseData, setResponseData] = useState()
-  const { authService } = useOktaAuth()
+  const { authService } = useAuth()
   const mainLayout = useRef(useContext(MainLayoutContex))
   const { id } = props.match.params
   const classes = useStyles()
@@ -174,9 +174,9 @@ function CodeChangeVelocity(props) {
   }
 
   const customPlugins = buildCustomPluginQuarterlyTrendsAndCodeChangeVelocity(chartData)
+  apiClient.setAuthService(authService)
 
   useEffect(() => {
-    apiClient.setAuthService(authService)
     mainLayout.current.handleChangeRepositoryId(id)
     apiClient.codeChangeVelocity.getCodeChangeVelocityStats(id, dateRange).then((data) => {
       setHightLightState(calculateHightLightState(data, dateFrom, dateTo, chartItems))
@@ -188,7 +188,7 @@ function CodeChangeVelocity(props) {
         setResponseData(data)
       }
     })
-  }, [id, dateFrom, dateTo, authService])
+  }, [id, dateFrom, dateTo])
 
   return (
     <div style={{ width: '100%' }}>

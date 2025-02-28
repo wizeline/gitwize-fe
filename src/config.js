@@ -3,7 +3,12 @@ const {
   REACT_APP_OKTA_CLIENT_ID,
   REACT_APP_OKTA_ISSUER,
   REACT_APP_OKTA_DISABLE_HTTPS_CHECK,
+  REACT_APP_GOOGLE_APP_ID
 } = process.env
+
+export const AppIds = {
+  GOOGLE_ID: REACT_APP_GOOGLE_APP_ID
+}
 
 export default {
   oidc: {

@@ -30,6 +30,7 @@ export default function PageTitle({ children, information }) {
                     <InfoOutlinedIcon/>        
                   </Tooltip>)
   }
+
   return (
     <Grid container>
       <Grid item xs={10}>

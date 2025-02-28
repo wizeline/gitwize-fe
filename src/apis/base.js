@@ -26,6 +26,8 @@ export class ApiHttpClient extends HttpClient {
     request.headers = {
       ...request.headers,
       Authorization: `Bearer ${token}`,
+      //TODO: Remove when backend ready for parse from google token
+      AuthenticatedUser: 'nhan.nguyen'
     }
   }
 
@@ -33,9 +35,9 @@ export class ApiHttpClient extends HttpClient {
     return new Promise((resolve, reject) => {
       this.authService
         .getTokenManager()
-        .renew('accessToken')
+        .renew('idToken')
         .then((token) => {
-          resolve(token.accessToken)
+          resolve(token)
         })
         .catch((err) => {
           reject(err)
@@ -69,18 +71,18 @@ export class ApiHttpClient extends HttpClient {
 
   sessionExpireHandler = () => {
     window.alert('Your session has expired. Please login again')
-    this.authService.login('/')
+    this.authService.logout()
   }
 
   authInterceptor = async (config) => {
     await this.authService
       .getTokenManager()
-      .get('accessToken')
-      .then((token) => {
-        if (token === undefined) {
+      .getToken()
+      .then((tokenObject) => {
+        if (tokenObject === undefined || tokenObject.expireTime < (new Date()).getTime()) {
           this.sessionExpireHandler()
         } else {
-          this.attachTokenToRequest(config, token.accessToken)
+          this.attachTokenToRequest(config, tokenObject.token)
         }
       })
 

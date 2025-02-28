@@ -8,6 +8,7 @@ import { ApiHttpClient } from './base'
 const BASE_URL = 'https://example.com'
 const ACCESS_TOKEN = 'eyJraWQiOiJKaDdOZF9md25vdE9ZeWw4QVp4djNOWjdNbTZRdzIwOU9QR'
 const NEW_ACCESS_TOKEN = 'eyJraWQiOiJKaDdkgkfngkfgnskfnsdkfnsdkfnsdfkjNOWjdNbTZRdzIwOU9QR'
+const EXPIRETIME = new Date().getTime() + (5 * 60 * 1000)
 
 describe('ApiHttpClient', () => {
   const apiHttpClient = new ApiHttpClient({ baseURL: BASE_URL })
@@ -20,6 +21,12 @@ describe('ApiHttpClient', () => {
             resolve({
               accessToken: ACCESS_TOKEN,
             })
+          })
+        },
+        getToken: () => {
+          return Promise.resolve({
+            token: ACCESS_TOKEN,
+            expireTime: EXPIRETIME,
           })
         },
         renew: function (accessToken) {

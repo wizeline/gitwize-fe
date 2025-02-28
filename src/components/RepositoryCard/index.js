@@ -4,12 +4,12 @@ import CardContent from '@material-ui/core/CardContent'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { makeStyles } from '@material-ui/core/styles'
-import { useOktaAuth } from '@okta/okta-react'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { DateTime } from 'luxon'
 import { ApiClient } from '../../apis'
 import ConfirmationDialog from '../ConfirmationDialog'
+import { useAuth } from '../../hooks/authService';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -80,7 +80,8 @@ function RepositoryCard(props) {
   const statsPage = "impact/weekly-impact"
   const { repo, handleDeletionOK, handleDeletionCancel } = props
   const styles = useStyles()
-  const { authService } = useOktaAuth()
+  const { authService } = useAuth()
+  apiClient.setAuthService(authService)
   const [deletionConfirmOpen, setDeletionConfirmOpen] = useState(false)
 
   const alertHeader = "Repository Deletion"
@@ -88,7 +89,6 @@ function RepositoryCard(props) {
 
 
   const handleDeletionConfirmationOK = async (repoDetail = {}) => {
-    apiClient.setAuthService(authService)
     await apiClient.repos.deleteRepo(repo.id)
     // TODO error handling
     handleDeletionOK(repo)
